@@ -4,6 +4,11 @@
 FOLDER_CONFIG="$HOME/.config/tts-biglinux"
 mkdir -p ~/.config/tts-biglinux
 
+if ! [ -e "$HOME/.config/speech-dispatcher/speechd.conf" ]; then
+    mkdir -p ~/.config/speech-dispatcher
+    echo 'AudioOutputMethod "alsa"' > ~/.config/speech-dispatcher/speechd.conf
+fi
+
 RATE="$(cat ${FOLDER_CONFIG}/rate)"
 PITCH="$(cat ${FOLDER_CONFIG}/pitch)"
 VOLUME="$(cat ${FOLDER_CONFIG}/volume)"
@@ -26,7 +31,7 @@ fi
 
 if [ "$VOICE" = "" ]; then
 
-    if ["$(echo "$LANG" | grep pt)" != "" ]; then
+    if [ "$(echo "$LANG" | grep pt)" != "" ]; then
         VOICE="Letícia-F123"
     else
         VOICE="Evgeniy-Eng"

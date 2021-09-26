@@ -4,25 +4,49 @@
 FOLDER_CONFIG="$HOME/.config/tts-biglinux"
 mkdir -p ~/.config/tts-biglinux
 
+if ! [ -e "$HOME/.config/speech-dispatcher/speechd.conf" ]; then
+    mkdir -p ~/.config/speech-dispatcher
+    echo 'AudioOutputMethod "alsa"' > ~/.config/speech-dispatcher/speechd.conf
+fi
+
 RATE="$(cat ${FOLDER_CONFIG}/rate)"
 PITCH="$(cat ${FOLDER_CONFIG}/pitch)"
 VOLUME="$(cat ${FOLDER_CONFIG}/volume)"
+VOICE="$(cat ${FOLDER_CONFIG}/voice)"
 
 if [ "$RATE" = "" ]; then
-    echo "-25" > ${FOLDER_CONFIG}/rate
+    RATE="-25"
+    echo "$RATE" > ${FOLDER_CONFIG}/rate
 fi
 
 if [ "$PITCH" = "" ]; then
-    echo "-25" > ${FOLDER_CONFIG}/pitch
+    PITCH="-25"
+    echo "$PITCH" > ${FOLDER_CONFIG}/pitch
+fi
+
+if [ "$VOLUME" = "" ]; then
+    VOLUME="0"
+    echo "$VOLUME" > ${FOLDER_CONFIG}/volume
+fi
+
+if [ "$VOICE" = "" ]; then
+
+    if [ "$(echo "$LANG" | grep pt)" != "" ]; then
+        VOICE="Letícia-F123"
+    else
+        VOICE="Evgeniy-Eng"
+    fi
+
+    echo "$VOICE" > ${FOLDER_CONFIG}/voice
 fi
 
 if [ "$(ps -e | grep spd-say)" != "" ]; then
     killall spd-say sd_rhvoice
 else
-    if [ "$(echo $LANG | grep pt_BR)" != "" ]; then
-        xsel -o | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123  -r -25 -p -25
+    if [ "$VOICE" = "Letícia-F123" ]; then
+        xsel -o | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123 -r $RATE -p $PITCH
     else
-        xsel -o | spd-say --wait -e -o rhvoice -y Letícia-F123  -r $RATE -p $PITCH
+        xsel -o | spd-say --wait -e -o rhvoice -y $VOICE -r $RATE -p $PITCH
     fi
 fi
 

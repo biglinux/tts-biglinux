@@ -6,3 +6,4 @@ Categories=Utility;
 StartupNotify=true
 Name=Speech or stop selected text
 Name[pt]=Falar ou parar o texto selecionado
+X-KDE-Shortcuts=Alt+V
