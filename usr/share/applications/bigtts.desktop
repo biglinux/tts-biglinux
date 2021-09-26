@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=tts-selected-text
+Icon=preferences-desktop-text-to-speech
+Categories=Utility;
+StartupNotify=true
+Name=Speech or stop selected text
+Name[pt]=Falar ou parar o texto selecionado

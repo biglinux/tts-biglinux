@@ -1,0 +1,9 @@
+#!/bin/bash
+
+VOICE="$(cat $HOME/.config/tts-biglinux/voice)"
+
+if [ "$VOICE" = "Letícia-F123" ]; then
+    tts-text "Testando a fala"
+else
+    tts-text "Testing speech"
+fi

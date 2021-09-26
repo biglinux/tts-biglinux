@@ -1,0 +1,30 @@
+#!/bin/sh
+
+
+FOLDER_CONFIG="$HOME/.config/tts-biglinux"
+mkdir -p ~/.config/tts-biglinux
+
+RATE="$(cat ${FOLDER_CONFIG}/rate)"
+PITCH="$(cat ${FOLDER_CONFIG}/pitch)"
+VOLUME="$(cat ${FOLDER_CONFIG}/volume)"
+
+if [ "$RATE" = "" ]; then
+    echo "-25" > ${FOLDER_CONFIG}/rate
+fi
+
+if [ "$PITCH" = "" ]; then
+    echo "-25" > ${FOLDER_CONFIG}/pitch
+fi
+
+if [ "$(ps -e | grep spd-say)" != "" ]; then
+    killall spd-say sd_rhvoice
+else
+    if [ "$(echo $LANG | grep pt_BR)" != "" ]; then
+        xsel -o | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123  -r -25 -p -25
+    else
+        xsel -o | spd-say --wait -e -o rhvoice -y Letícia-F123  -r $RATE -p $PITCH
+    fi
+fi
+
+# Google
+# gtts-cli 'Se você tem um minimodem, faça o teste agora!' -l pt | mpg123 -
