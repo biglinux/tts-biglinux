@@ -16,6 +16,8 @@ PITCH="$(cat ${FOLDER_CONFIG}/pitch)"
 VOLUME="$(cat ${FOLDER_CONFIG}/volume)"
 VOICE="$(cat ${FOLDER_CONFIG}/voice)"
 
+addRemoveVoice=$"Vozes - Abrir BigStore"
+
 if [ "$RATE" = "" ]; then
     RATE="-25"
     echo "$RATE" > ${FOLDER_CONFIG}/rate
@@ -48,44 +50,108 @@ fi
 # http://materializecss.com/
 . /usr/share/bigbashview/bcc/shell/base.sh
 
-  echo '
-  <body>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/usr/share/bigbashview/bcc/css/base.css">
-    <link rel="stylesheet" type="text/css" href="/usr/share/bigbashview/bcc/materialize/css/materialize.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="/usr/share/bigbashview/bcc/materialize/js/jquery.js"></script>
-    <script src="/usr/share/bigbashview/bcc/materialize/js/materialize.js"></script>
-    <script src="/usr/share/bigbashview/bcc/js/big.js"></script>
-  </head>'
-  echo '<title>' $"Texto para voz" '</title>'
-  echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
+cat << EOF
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+EOF
+ 
+    echo '<title>' $"Voice Configuration" '</title>'
+
+cat << EOF
+
+  <link rel="stylesheet" href="./style.css">
+  <script src="/usr/share/bigbashview/bcc/materialize/js/jquery.js"></script>
+  <script src="/usr/share/bigbashview/bcc/js/big.js"></script>
+</head>
+EOF
+
+# Get body tag with color light or not
+/usr/share/bigbashview/bcc/shell/getbgcolor.sh
+
+OIFS=$IFS
+IFS=$'\n'
+
+cat << EOF
+
+<div class="dark-light">
+  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+  </svg>
+</div>
+<div class="login">
+  <div class="wrap">
+    <div class="user">
+
+      <div class="logo">
+        <a href="#"><img src="https://www.biglinux.com.br/wp-content/uploads/2022/01/logo-big-trans-branco.png" alt=""></a>
+      </div>
+
+      <div class="user">
+        <div class="form-wrap"> 
+          <div class="form-wrap tabs-content">
+          
+EOF
+  echo '<h2>'
+  echo $"Configurar voz"
+  echo '</h2>'
+cat << EOF   
+          
+          </div>
+          <!-- TABS CONTENT -->
+          <div class="tabs-content">
+            <!-- INICIO TABS CONTENT LIST -->
+            <div id="list-tab-content" class="fc-card active">
+
+              <div class="centretext" style="margin-bottom: 30px;">
+                <div id="desc"><h5>
+EOF
+
+  echo $"Para falar um texto selecionado use o atalho "
+  echo '<span style="color: #00ffff;">'
+  echo $"[Alt] + [V]"
+  echo '</span>'  
+  echo $"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o atalho ou ícone."
+
+cat << EOF
+
+</h5>
+                </div>
+              </div>
+              <form name=noise action=make.sh.htm>
+              <div class="content-section" style="margin-top: 0px;"> 
+                <div style="text-align: center; margin: auto; padding: auto;">
+                  <div class="content-section-title" style="text-align: center;"></div>
 
 
+                  <div class="biglinux-dashboard">
+                    <div class="biglinux-center-panel">
 
-echo '<div id=page2>'
-echo '<div id="middle" class="bar"><h1>'
-
-  echo $"Para falar um texto selecionado você pode utilizar o atalho tecla [Alt do lado esquerdo do teclado] + [V]. Outra opção é utilizar o ícone que está na sessão Utilitários no menu do sistema."
-  echo "<br><br>"
-  echo $"Você pode utilizar o mesmo ícone ou atalho para interromper um texto que está sendo falado."
-  echo "<br><br>"
-  echo $"Selecione as configurações de sua preferência:"
-  echo "<br><br>"
+EOF
+  echo '<h4>'
+  echo $"Selecione as configurações de sua preferência"
+  echo '</h4>'
+cat << EOF                    
+                    
+                      <form action="run.sh.htm" method="get">
+                      <div class="biglinux-card">
+                        <ul>
+                          <li> 
   
-  echo "<form name=noise action=make.sh.htm>"
-
-
+EOF
+  
 
 #################
 # Speed
 #################
 tooltiprate=$"Números maiores deixam a voz mais rápida, o padrão é: -25"
 
-echo "<div id=content>"
-echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltiprate\">"
-echo "<label>" $"Velocidade" "</label>"
+echo "" $"Velocidade" ""
+echo "<label for=\"s0\" style=\"margin:0px; padding:0px; width: 100%; text-align:right;\"></label>"
+
 echo "<select class=browser-default id=RATE name=RATE>"
 
 for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30" "25" "20" "15" "10" "5" "0" "-5" "-10" "-15" "-20" "-25" "-30" "-35" "-40" "-45" "-50" "-55" "-60" "-65" "-70" "-75" "-80" "-85" "-90" "-95" "-100"; do
@@ -98,17 +164,22 @@ for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30"
 
 done
 echo '</select>'
-echo "</div>"
 
+cat << EOF
 
+</li>
+<li>
+
+EOF
 
 #################
 # Pitch
 #################
 tooltipitch=$"Números maiores deixam a voz mais aguda, o padrão é: -25"
 
-echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltipitch\">"
-echo "<label>" $"Tom" "</label>"
+echo "" $"Tom" ""
+echo "<label for=\"s0\" style=\"margin:0px; padding:0px; width: 100%; text-align:right;\"></label>"
+
 echo "<select class=browser-default id=PITCH name=PITCH>"
 
 for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30" "25" "20" "15" "10" "5" "0" "-5" "-10" "-15" "-20" "-25" "-30" "-35" "-40" "-45" "-50" "-55" "-60" "-65" "-70" "-75" "-80" "-85" "-90" "-95" "-100"; do
@@ -121,16 +192,23 @@ for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30"
 
 done
 echo '</select>'
-echo "</div>"
 
+cat << EOF
+
+</li>
+<li>
+
+EOF
 
 #################
 # Volume
 #################
 tooltipvolume=$"O padrão é: 0."
 
-echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltipvolume\">"
-echo "<label>" $"Volume" "</label>"
+
+echo "" $"Volume" ""
+echo "<label for=\"s0\" style=\"margin:0px; padding:0px; width: 100%; text-align:right;\"></label>"
+
 echo "<select class=browser-default id=VOLUME name=VOLUME>"
 
 for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30" "25" "20" "15" "10" "5" "0" "-5" "-10" "-15" "-20" "-25" "-30" "-35" "-40" "-45" "-50" "-55" "-60" "-65" "-70" "-75" "-80" "-85" "-90" "-95" "-100"; do
@@ -143,17 +221,21 @@ for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30"
 
 done
 echo '</select>'
-echo "</div></div>"
 
+cat << EOF
+
+</li>
+<li>
+
+EOF
 
 #################
 # Voice
 #################
 tooltipvoice=$"As vozes são otimizadas para idiomas expecíficos."
 
-
-echo "<div id=center class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltipvoice\">"
-echo "<label>" $"Voz" "</label>"
+echo "" $"Voz" ""
+echo "<label for=\"s0\" style=\"margin:0px; padding:0px; width: 100%; text-align:right;\"> </label>"
 echo "<select class=browser-default id=VOICE name=VOICE>"
 
 OIFS=$IFS
@@ -173,19 +255,41 @@ LANG_ITEM="$(echo "$i" | awk  '{print $2}')"
 done
 
 echo '</select>'
-echo "</div>"
 
 
-echo "<div id=buttons>"
-
-tooltipinstall=$"Após instalar ou remover uma voz abra novamente este configurador"
-echo "<div id=theme2-2 class=\"tooltipped with-gap\" data-position=\"top\" data-delay=\"250\" data-tooltip=\"$tooltipinstall\">
-<a class=\"waves-effect waves-light btn-large\" href=\"#\" onclick=\"_run('big-store rhvoice-voice')\">" $"Instalar ou remover vozes" '</a>
-</form>'
-
-
-# run bash scripts
 cat << EOF
+
+</li>                          
+                        </ul>                          
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <br style="clear: left;" />
+                </div>
+              </div>
+
+
+              <div id="desc">   
+                  <div style="text-align: center; display:inline-block;" id=theme2-2 class="tooltipped with-gap" data-position="top" data-delay="250" data-tooltip="$tooltipinstall">
+                    <label for="Aplicar"><input type="button" class="button" value="$addRemoveVoice" style="margin-right:10px;" onclick="_run('big-store rhvoice-voice')"></label>
+                  </div> 
+              </div>       
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+EOF
+
+cat << EOF
+<!-- partial -->
+  <script  src="./script.js"></script>
+
 <script>
 \$('#PITCH').on('change', function() {
     _run('./pitch.run ' + \$(this).find(":selected").val());
@@ -203,9 +307,10 @@ cat << EOF
     _run('./voice.run ' + \$(this).find(":selected").val());
 });
 
-</script>
+</script>  
+  
+</body>
+</html>
 EOF
 
-
-echo "</div></div>"
 IFS=$OIFS
