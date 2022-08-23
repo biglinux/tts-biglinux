@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the tts-biglinux package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: tts-biglinux\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: attranslate\n"
+
+msgid "Configurações de texto para voz"
+msgstr "텍스트 음성 설정"
+
+msgid "Vozes - Abrir BigStore"
+msgstr "음성 - 오픈 빅스토어"
+
+msgid "Voice Configuration"
+msgstr "음성 구성"
+
+msgid "Configurar voz"
+msgstr "음성 설정"
+
+msgid "Para falar um texto selecionado use o atalho "
+msgstr "선택한 텍스트를 말하려면 바로 가기를 사용하십시오. "
+
+msgid "[Alt] + [V]"
+msgstr "[Alt] + [V]"
+
+msgid ""
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"atalho ou ícone."
+msgstr "또는 시스템 메뉴의 유틸리티 세션에 있는 아이콘입니다. 읽기를 중지하려면 바로 가기 또는 아이콘을 사용합니다."
+
+msgid "Selecione as configurações de sua preferência"
+msgstr "원하는 설정 선택"
+
+msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
+msgstr "숫자가 클수록 음성이 더 빨라지며 기본값은 -25입니다."
+
+msgid "Velocidade"
+msgstr "속도"
+
+msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
+msgstr "숫자가 클수록 음성이 더 급성으로 남고 패턴은 -25입니다."
+
+msgid "Tom"
+msgstr "성조"
+
+msgid "O padrão é: 0."
+msgstr "기본값은 0입니다."
+
+msgid "Volume"
+msgstr "음량"
+
+msgid "As vozes são otimizadas para idiomas expecíficos."
+msgstr "음성은 노하우 언어에 최적화되어 있습니다."
+
+msgid "Voz"
+msgstr "목소리"
