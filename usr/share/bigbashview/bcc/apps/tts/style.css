@@ -39,6 +39,10 @@
   --footer-bg-color: #2a303a;
   --box-color-shadow-01: rgba(0, 0, 0, 0.2);
   --text-a-color: #ccc;
+  --text-neon-color: #00ffff;
+  --tit-tooltip: #1d2028;
+  --text-green-color: #00cd00;
+  --text-red-color: #ff0000;  
 }
 
 .light-mode {
@@ -68,6 +72,10 @@
   --footer-bg-color: #6c6d6d;
   --box-color-shadow-01: rgba(0, 0, 0, 0.2);
   --text-a-color: #444;
+  --text-neon-color: #0047ff;
+  --tit-tooltip: #c1c2c4;
+  --text-green-color: #188f18;
+  --text-red-color: #e51212;  
 }
 
 .dark-light {
@@ -460,7 +468,7 @@ a.button:hover {
   height: auto;
   margin: 5px;
   overflow: hidden;
-  background: #171b26;
+  background: var(--theme-bg-color);
   border-radius: 10px;
 }
 
@@ -471,23 +479,27 @@ a.button:hover {
 }
 
 /* LOGO */
+.logo-biglinux {
+    filter: var(--logo-big);
+}
 .logo {
-  z-index: 2;
-  position: absolute;
-  top: 91%;
-  left: 10px;
-  width: 40px;
-  height: 40px;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 100%;
+    display: block;
 }
 
 .logo img {
   position: absolute;
-  margin: auto;
+  margin-top: auto;
   top: 0;
   right: 0;
-  bottom: 0;
-  left: 0;
-  width: 30px;
+  bottom: 20px;
+  left: 20px;
+  width: 40px
 }
 
 .logo a {
@@ -495,6 +507,7 @@ a.button:hover {
   height: 100%;
   display: block;
 }
+
 
 /* USER (FORM WRAPPER) */
 .form-wrap {
@@ -1199,7 +1212,7 @@ input {
 
 .biglinux-center-panel {
   background-color: var(--theme-bg-color);
-  border-radius: 10px;
+  border-radius: 15px;
   width: 29rem;
   margin-right: 1rem;
   flex-shrink: 0;
@@ -1668,28 +1681,29 @@ li img {
   margin-bottom: 14px;
 }
 .content-section ul {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: space-around;
-  background-color: var(--content-bg);
-  padding-left: 0;
-  margin: 0;
-  border-radius: 14px;
-  border: 1px solid var(--theme-bg-color);
-  cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    background-color: var(--content-bg);
+    padding-left: 0;
+    margin: 0;
+    border-radius: 14px;
+    box-shadow: 0px 0px 1px 1px var(--border-box);
+    border: 1px solid var(--theme-bg-color);
+    cursor: default;
 }
 .content-section ul li {
-  list-style: none;
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  width: 100%;
-  height: 100%;
-  white-space: nowrap;
-  transition: 0.3s;
+    list-style: none;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+    transition: 0.3s;
 }
 .content-section ul li:hover {
   background-color: var(--theme-bg-color);
@@ -1701,25 +1715,32 @@ li img {
   border-radius: 0 0 13px 13px;
 }
 .content-section ul li + li {
-  border-top: 1px solid var(--border-color);
+  /*border-left: 1px solid var(--border-color);*/
+  border-top: 1px solid var(--border-box);
 }
 .content-section ul svg {
   width: 28px;
-  border-radius: 6px;
-  margin-right: 16px;
+  /*border-radius: 6px;*/
+  margin-right: 20px;
   flex-shrink: 0;
 }
 
 .products {
   /* font-size: 0.5vw;*/
-  display: flex;
+/*  display: flex;
   align-items: center;
-  width: 290px;
-  height: 45px;
+  width: 250px;
+  height: 45px;*/
   /* @media screen and (min-width: 480px) {
     width: 300px;
     font-size: 1.1vw;
    }*/
+  
+    display: flex;
+    align-items: center;
+    width: 100px;
+    height: 45px;
+    min-width: 105px;  
 }
 
 .icone {
@@ -1917,3 +1938,9 @@ li img {
   text-align: center;
 }
 
+select {
+    border-radius: 5px;
+    font-weight: bold;
+    height: 30px;
+    text-align: end;
+}
