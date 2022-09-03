@@ -86,9 +86,10 @@ cat << EOF
   <div class="wrap">
     <div class="user">
 
+
       <div class="logo">
-        <a href="#"><img src="https://www.biglinux.com.br/wp-content/uploads/2022/01/logo-big-trans-branco.png" alt=""></a>
-      </div>
+        <img src="logo.png" alt="logo" class="logo-biglinux">
+      </div>    
 
       <div class="user">
         <div class="form-wrap"> 
@@ -111,7 +112,7 @@ cat << EOF
 EOF
 
   echo $"Para falar um texto selecionado use o atalho "
-  echo '<span style="color: #00ffff;">'
+  echo '<span style="color: var(--text-neon-color);">'
   echo $"[Alt] + [V]"
   echo '</span>'  
   echo $"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o atalho ou ícone."
