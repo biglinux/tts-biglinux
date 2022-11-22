@@ -7,7 +7,7 @@ arch=('any')
 license=('GPL')
 url="https://github.com/biglinux/tts-biglinux"
 pkgdesc="Text to speech with graphical configuration and very easy to use"
-depends=('bigcontrolcenter' 'rhvoice' 'xsel')
+depends=('rhvoice' 'xsel')
 optdepends=('rhvoice-voice-leticia-f123'
             'rhvoice-voice-evgeniy-eng'
             'rhvoice-brazilian-portuguese-complementary-dict-biglinux')
