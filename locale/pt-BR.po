@@ -15,6 +15,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Configurações de texto para voz"
+msgstr "Configurações de texto para voz"
+
 msgid "Vozes - Abrir BigStore"
 msgstr "Vozes - Abrir BigStore"
 
@@ -63,6 +66,3 @@ msgstr "As vozes são otimizadas para idiomas expecíficos."
 
 msgid "Voz"
 msgstr "Voz"
-
-msgid "Configurações de texto para voz"
-msgstr "Configurações de texto para voz"
