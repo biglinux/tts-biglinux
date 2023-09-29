@@ -14,9 +14,6 @@ msgstr  "Project-Id-Version: tts-biglinux\n"
         "Content-Type: text/plain; charset=UTF-8\n"
         "Content-Transfer-Encoding: 8bit\n"
 
-msgid   "Configurações de texto para voz"
-msgstr  ""
-
 msgid   "Vozes - Abrir BigStore"
 msgstr  ""
 
@@ -61,4 +58,7 @@ msgid   "As vozes são otimizadas para idiomas expecíficos."
 msgstr  ""
 
 msgid   "Voz"
+msgstr  ""
+
+msgid   "Configurações de texto para voz"
 msgstr  ""
