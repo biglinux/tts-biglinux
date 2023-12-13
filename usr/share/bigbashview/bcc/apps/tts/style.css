@@ -1,6 +1,7 @@
 * {
   outline: none;
   box-sizing: border-box;
+  user-select: none;
 }
 
 * {
@@ -499,7 +500,8 @@ a.button:hover {
   right: 0;
   bottom: 20px;
   left: 20px;
-  width: 40px
+  width: 40px;
+  pointer-events: none;
 }
 
 .logo a {
