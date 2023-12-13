@@ -1945,4 +1945,6 @@ select {
     font-weight: bold;
     height: 30px;
     text-align: end;
+    color: var(--theme-color);
+    background-color: var(--theme-bg-color);
 }
