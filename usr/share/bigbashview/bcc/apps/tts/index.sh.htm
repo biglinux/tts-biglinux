@@ -66,6 +66,7 @@ cat << EOF
   <link rel="stylesheet" href="./style.css">
   <script src="/usr/share/bigbashview/bcc/materialize/js/jquery.js"></script>
   <script src="/usr/share/bigbashview/bcc/js/big.js"></script>
+  <script  src="./js/script.js" type="module"></script>
 </head>
 EOF
 
@@ -287,29 +288,7 @@ cat << EOF
 
 EOF
 
-cat << EOF
-<!-- partial -->
-  <script  src="./script.js"></script>
-
-<script>
-\$('#PITCH').on('change', function() {
-    _run('./pitch.run ' + \$(this).find(":selected").val());
-});
-
-\$('#RATE').on('change', function() {
-    _run('./rate.run ' + \$(this).find(":selected").val());
-});
-
-\$('#VOLUME').on('change', function() {
-    _run('./volume.run ' + \$(this).find(":selected").val());
-});
-
-\$('#VOICE').on('change', function() {
-    _run('./voice.run ' + \$(this).find(":selected").val());
-});
-
-</script>  
-  
+cat << EOF   
 </body>
 </html>
 EOF
