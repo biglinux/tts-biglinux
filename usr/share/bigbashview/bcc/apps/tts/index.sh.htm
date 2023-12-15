@@ -180,20 +180,10 @@ EOF
 tooltipitch=$"Números maiores deixam a voz mais aguda, o padrão é: -25"
 
 echo "" $"Tom" ""
-echo "<label for=\"s0\" style=\"margin:0px; padding:0px; width: 100%; text-align:right;\"></label>"
-
-echo "<select class=browser-default id=PITCH name=PITCH>"
-
-for i  in "100" "95" "90" "85" "75" "70" "65" "60" "55" "50" "45" "40" "35" "30" "25" "20" "15" "10" "5" "0" "-5" "-10" "-15" "-20" "-25" "-30" "-35" "-40" "-45" "-50" "-55" "-60" "-65" "-70" "-75" "-80" "-85" "-90" "-95" "-100"; do
-
-	if [ "$i" = "$PITCH" ]; then
-		    echo "<option value=\"$i\" selected>$i</option>"
-	else
-	    echo "<option value=\"$i\">$i</option>"
-	fi
-
-done
-echo '</select>'
+echo '<div> 
+        <input type="range" min="-100" max="100" step="5" value="'$PITCH'" id="pitch-range">
+        <input type="number" min="-100" max="100" step="5" maxlength="3" value="'$PITCH'" id="pitch" readonly>
+      </div>'
 
 cat << EOF
 
