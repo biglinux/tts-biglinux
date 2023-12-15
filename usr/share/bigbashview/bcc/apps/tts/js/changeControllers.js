@@ -1,14 +1,7 @@
 import { API } from "./API.js"
 
-// /** @type {HTMLSelectElement} */
-// const RATESelect = document.querySelector('#RATE')
-
 /** @type {HTMLSelectElement} */
 const VOICESelect = document.querySelector('#VOICE')
-
-// RATESelect.addEventListener("change", () => {
-//     API.setRate(RATESelect.value)
-// })
 
 VOICESelect.addEventListener("change", () => {
     API.setVoice(VOICESelect.value)
