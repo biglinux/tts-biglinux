@@ -1,14 +1,14 @@
 import { API } from "./API.js"
 
-/** @type {HTMLSelectElement} */
-const RATESelect = document.querySelector('#RATE')
+// /** @type {HTMLSelectElement} */
+// const RATESelect = document.querySelector('#RATE')
 
 /** @type {HTMLSelectElement} */
 const VOICESelect = document.querySelector('#VOICE')
 
-RATESelect.addEventListener("change", () => {
-    API.setRate(RATESelect.value)
-})
+// RATESelect.addEventListener("change", () => {
+//     API.setRate(RATESelect.value)
+// })
 
 VOICESelect.addEventListener("change", () => {
     API.setVoice(VOICESelect.value)
@@ -23,6 +23,11 @@ const volumeInput = document.querySelector("#volume")
 const pitchRangeInput = document.querySelector("#pitch-range")
 /** @type {HTMLInputElement} */
 const pitchInput = document.querySelector("#pitch")
+
+/** @type {HTMLInputElement} */
+const rateRangeInput = document.querySelector("#rate-range")
+/** @type {HTMLInputElement} */
+const rateInput = document.querySelector("#rate")
 
 const shouldChange = (input1, input2) => input1.value !== input2.value
 
@@ -44,4 +49,14 @@ pitchRangeInput.addEventListener("change", () => {
 
 pitchRangeInput.addEventListener("change", () => {
     API.setPitch(pitchRangeInput.value)
+})
+
+rateRangeInput.addEventListener("change", () => {
+    if (shouldChange(rateInput, rateRangeInput)) {
+        rateInput.value = rateRangeInput.value
+    }
+})
+
+rateRangeInput.addEventListener("change", () => {
+    API.setRate(rateRangeInput.value)
 })
