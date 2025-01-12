@@ -40,14 +40,13 @@ if [ "$VOICE" = "" ]; then
     echo "$VOICE" > ${FOLDER_CONFIG}/voice
 fi
 
-if [ "$(ps -e | grep spd-say)" != "" ]; then
-    killall spd-say sd_rhvoice
+# Cancela qualquer fala em andamento do spd-say
+spd-say -C
+
+if [ "$VOICE" = "Letícia-F123" ]; then
+    echo "$*" | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123 -r $RATE -p $PITCH -i $VOLUME
 else
-    if [ "$VOICE" = "Letícia-F123" ]; then
-        echo "$*" | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123 -r $RATE -p $PITCH -i $VOLUME
-    else
-        echo "$*" | spd-say --wait -e -o rhvoice -y $VOICE -r $RATE -p $PITCH -i $VOLUME
-    fi
+    echo "$*" | spd-say -S --wait -e -o rhvoice -y $VOICE -r $RATE -p $PITCH -i $VOLUME
 fi
 
 # Google
