@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Nastavení převodu textu na hlas"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Hlasy - Otevřít BigStore"
-
 msgid "Voice Configuration"
 msgstr "Konfigurace hlasu"
-
 msgid "Configurar voz"
 msgstr "Nastavení hlasu"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Chcete-li vyslovit vybraný text, použijte zkratku "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamente o "
 "atalho ou ícone."
 msgstr ""
-"nebo ikonu v relaci Utility v systémové nabídce. Chcete-li zastavit čtení, použijte zástupce nebo "
-"ikonu."
-
+"Najděte ikonu v sekci Nástroje v systémovém menu. Pro zastavení čtení znovu použijte klávesovou "
+"zkratku nebo ikonu."
 msgid "Selecione as configurações de sua preferência"
 msgstr "Vyberte upřednostňovaná nastavení"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Větší čísla zrychlují hlas, výchozí hodnota je: -25"
-
 msgid "Velocidade"
 msgstr "Rychlost"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Větší čísla zanechávají hlas ostřejší, vzor je: -25"
-
 msgid "Tom"
 msgstr "Tón"
-
 msgid "O padrão é: 0."
 msgstr "Výchozí hodnota je: 0."
-
 msgid "Volume"
 msgstr "Hlasitost"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Hlasy jsou optimalizovány pro jazyky know-how."
-
 msgid "Voz"
 msgstr "Hlas"

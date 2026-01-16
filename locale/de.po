@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Text-zu-Stimme-Einstellungen"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Stimmen - Öffnen Sie BigStore"
-
 msgid "Voice Configuration"
 msgstr "Sprachkonfiguration"
-
 msgid "Configurar voz"
 msgstr "Einrichten der Spracherkennung"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Um markierten Text zu sprechen, verwenden Sie die Tastenkombination "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamente o "
 "atalho ou ícone."
 msgstr ""
-"oder das Symbol in der Sitzung Dienstprogramme im Systemmenü. Um das Lesen zu beenden, verwenden "
-"Sie die Verknüpfung oder das Symbol."
-
+"Sie finden das Symbol im Bereich Dienstprogramme im Systemmenü. Um die Wiedergabe zu stoppen, "
+"verwenden Sie erneut die Tastenkombination oder das Symbol."
 msgid "Selecione as configurações de sua preferência"
 msgstr "Wählen Sie Ihre bevorzugten Einstellungen"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Größere Zahlen machen die Stimme schneller, der Standard ist: -25"
-
 msgid "Velocidade"
 msgstr "Geschwindigkeit"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Größere Zahlen lassen die Stimme schärfer, das Muster ist: -25"
-
 msgid "Tom"
 msgstr "Ton"
-
 msgid "O padrão é: 0."
 msgstr "Der Standardwert ist: 0."
-
 msgid "Volume"
 msgstr "Volumen"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Stimmen sind für Know-how-Sprachen optimiert."
-
 msgid "Voz"
 msgstr "Stimme"
