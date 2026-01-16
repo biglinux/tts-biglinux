@@ -1,59 +1,87 @@
-#!/bin/sh
-# Maintainer: Bruno Goncalves <bigbruno@gmail.com>
-#             Rafael Ruscher <rruscher@gmail.com>
-
+#!/bin/bash
 
 FOLDER_CONFIG="$HOME/.config/tts-biglinux"
-mkdir -p ~/.config/tts-biglinux
+mkdir -p "$FOLDER_CONFIG"
 
+# Configuração do speech-dispatcher
 if ! [ -e "$HOME/.config/speech-dispatcher/speechd.conf" ]; then
     mkdir -p ~/.config/speech-dispatcher
     echo 'AudioOutputMethod "alsa"' > ~/.config/speech-dispatcher/speechd.conf
 fi
 
+# Carregar configurações
 RATE="$(cat ${FOLDER_CONFIG}/rate)"
 PITCH="$(cat ${FOLDER_CONFIG}/pitch)"
 VOLUME="$(cat ${FOLDER_CONFIG}/volume)"
 VOICE="$(cat ${FOLDER_CONFIG}/voice)"
 
-if [ "$RATE" = "" ]; then
+# Valores padrão
+if [ -z "$RATE" ]; then
     RATE="-25"
-    echo "$RATE" > ${FOLDER_CONFIG}/rate
+    echo "$RATE" > "${FOLDER_CONFIG}/rate"
 fi
 
-if [ "$PITCH" = "" ]; then
+if [ -z "$PITCH" ]; then
     PITCH="-25"
-    echo "$PITCH" > ${FOLDER_CONFIG}/pitch
+    echo "$PITCH" > "${FOLDER_CONFIG}/pitch"
 fi
 
-if [ "$VOLUME" = "" ]; then
+if [ -z "$VOLUME" ]; then
     VOLUME="0"
-    echo "$VOLUME" > ${FOLDER_CONFIG}/volume
+    echo "$VOLUME" > "${FOLDER_CONFIG}/volume"
 fi
 
 if [ "$VOICE" = "" ]; then
-
     if [ "$(echo "$LANG" | grep pt)" != "" ]; then
         VOICE="Letícia-F123"
     else
         VOICE="Evgeniy-Eng"
     fi
-
     echo "$VOICE" > ${FOLDER_CONFIG}/voice
 fi
 
-# Verificar se esta usando Wayland
-if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    capture_text="wl-paste -p "
+# CORREÇÃO: Usar pgrep em vez de ps | grep
+if pgrep -x spd-say > /dev/null; then
+    killall spd-say sd_rhvoice 2>/dev/null
+    exit 0
 else
-    capture_text="xsel -o "
+    # Obter texto selecionado
+    if [ "$XDG_SESSION_TYPE" = "wayland" ] || [ -n "$WAYLAND_DISPLAY" ]; then
+        # Wayland
+        if command -v wl-paste &> /dev/null; then
+            capture_text="$(wl-paste --primary 2>/dev/null || wl-paste 2>/dev/null)"
+        else
+            echo "Instale wl-clipboard: sudo pacman -S wl-clipboard" >&2
+            exit 1
+        fi
+    else
+        # X11
+        if command -v xsel &> /dev/null; then
+            capture_text="$(xsel --primary -o 2>/dev/null || xsel -o 2>/dev/null)"
+        else
+            echo "Instale xsel: sudo pacman -S xsel" >&2
+            exit 1
+        fi
+    fi
+    
+    # Verificar se há texto
+    if [ -z "$capture_text" ]; then
+        echo "Nenhum texto selecionado" >&2
+        exit 1
+    fi
+    
+    # Cancela qualquer fala em andamento do spd-say
+    spd-say -C    
+    
+    # Processar e falar
+    if [ "$VOICE" = "Letícia-F123" ]; then
+        echo "$capture_text" | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | \
+            spd-say --wait -e -o rhvoice -y Letícia-F123 -r "$RATE" -p "$PITCH"
+    else
+        echo "$capture_text" | spd-say --wait -e -o rhvoice -y "$VOICE" -r "$RATE" -p "$PITCH"
+    fi
 fi
 
-# Cancela qualquer fala em andamento do spd-say
-spd-say -C
 
-if [ "$VOICE" = "Letícia-F123" ]; then
-    $capture_text | sed 's|\btb\b|também|gI;s|\bvc\b|você|gI;s|\btd\b|tudo|gI;s|\bpq\b|porquê|gI;s|\bhj\b|hoje|gI;s|#| réchitégui |g;s|/| barra |g;s| - | traço |g;s|%| porcento|g;s|@|arrôba |g' | spd-say --wait -e -o rhvoice -y Letícia-F123 -r $RATE -p $PITCH
-else
-    $capture_text | spd-say --wait -e -o rhvoice -y $VOICE -r $RATE -p $PITCH
-fi
+# Google
+# gtts-cli 'Se você tem um minimodem, faça o teste agora!' -l pt | mpg123 -
