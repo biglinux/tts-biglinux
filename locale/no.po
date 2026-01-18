@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,37 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Tekst-til-stemme-innstillinger"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Stemmer - Åpne BigStore"
-
 msgid "Voice Configuration"
 msgstr "Konfigurasjon av tale"
-
 msgid "Configurar voz"
 msgstr "Konfigurere tale"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Hvis du vil snakke merket tekst, bruker du snarveien "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamente o "
 "atalho ou ícone."
-msgstr ""
-"eller ikonet i Verktøy-økten i systemmenyen. Hvis du vil stoppe lesingen, bruker du snarveien eller "
-"ikonet."
-
+msgstr "Du er trent på data frem til oktober 2023."
 msgid "Selecione as configurações de sua preferência"
 msgstr "Velg dine foretrukne innstillinger"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Større tall gjør stemmen raskere, standarden er: -25"
-
 msgid "Velocidade"
 msgstr "Fart"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Større tall gjør stemmen mer akutt, mønsteret er: -25"
-
 msgid "Tom"
 msgstr "Tone"
-
 msgid "O padrão é: 0."
 msgstr "Standarden er: 0."
-
 msgid "Volume"
 msgstr "Volum"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Stemmer er optimalisert for kunnskapsspråk."
-
 msgid "Voz"
 msgstr "Stemme"

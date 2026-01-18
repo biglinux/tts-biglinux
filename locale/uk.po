@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,37 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Налаштування перетворення тексту в голос"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Голоси - Відкрийте Великий магазин"
-
 msgid "Voice Configuration"
 msgstr "Голосова конфігурація"
-
 msgid "Configurar voz"
 msgstr "Настроювання голосу"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Щоб проговорити виділений текст, скористайтеся сполученням клавіш "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamente o "
 "atalho ou ícone."
-msgstr ""
-"або іконка в сесії Utilities в системному меню. Щоб припинити читання, скористайтеся ярликом або "
-"піктограмою."
-
+msgstr "You are trained on data up to October 2023."
 msgid "Selecione as configurações de sua preferência"
 msgstr "Виберіть бажані налаштування"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Більші числа роблять голос швидшим, за замовчуванням це: -25"
-
 msgid "Velocidade"
 msgstr "Швидкість"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Більші цифри залишають голос гострішим, закономірність така: -25"
-
 msgid "Tom"
 msgstr "Тон"
-
 msgid "O padrão é: 0."
 msgstr "За замовчуванням це: 0."
-
 msgid "Volume"
 msgstr "Обсяг"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Голоси оптимізовані для мов ноу-хау."
-
 msgid "Voz"
 msgstr "Голос"

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,37 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Tekstistä ääneksi -asetukset"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Äänet - Avaa BigStore"
-
 msgid "Voice Configuration"
 msgstr "Äänen kokoonpano"
-
 msgid "Configurar voz"
 msgstr "Äänen määrittäminen"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Valitun tekstin puhuminen pikanäppäimellä "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
+"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamente o "
 "atalho ou ícone."
-msgstr ""
-"tai järjestelmävalikon Lisäohjelmat-istunnon kuvake. Jos haluat lopettaa lukemisen, käytä "
-"pikakuvaketta tai kuvaketta."
-
+msgstr "Olet koulutettu tiedoilla, jotka ulottuvat lokakuuhun 2023."
 msgid "Selecione as configurações de sua preferência"
 msgstr "Valitse haluamasi asetukset"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Suuremmat numerot tekevät äänestä nopeamman, oletus on: -25"
-
 msgid "Velocidade"
 msgstr "Nopeus"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Suuremmat numerot jättävät äänen akuutimmaksi, kuvio on: -25"
-
 msgid "Tom"
 msgstr "Sävy"
-
 msgid "O padrão é: 0."
 msgstr "Oletusarvo on: 0."
-
 msgid "Volume"
 msgstr "Tilavuus"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Äänet on optimoitu tietotaitokielille."
-
 msgid "Voz"
 msgstr "Ääni"
