@@ -120,10 +120,8 @@ class TTSService:
             backend = voice.backend
             output_module = voice.output_module
 
-        logger.debug(
-            "speak() → backend=%s, voice_id=%s, module=%s, text=%r",
-            backend, voice_id, output_module, text[:80],
-        )
+        print(f"★ speak() → backend={backend!r}, voice_id={voice_id!r}, module={output_module!r}")
+        print(f"★ speak() text={text[:80]!r}, volume={volume}")
 
         # Process text
         processed = process_text(
@@ -141,6 +139,7 @@ class TTSService:
         logger.debug("Processed text: %r", processed[:80])
 
         # Speak via appropriate backend
+        print(f"★ Dispatching to backend={backend!r} (spd={TTSBackend.SPEECH_DISPATCHER.value!r}, espeak={TTSBackend.ESPEAK_NG.value!r}, piper={TTSBackend.PIPER.value!r})")
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
             success = self._speak_spd(processed, voice_id, output_module, rate, pitch, volume)
         elif backend == TTSBackend.ESPEAK_NG.value:
@@ -148,9 +147,11 @@ class TTSService:
         elif backend == TTSBackend.PIPER.value:
             success = self._speak_piper(processed, voice_id, rate, pitch, volume)
         else:
+            print(f"★ UNKNOWN BACKEND: {backend!r}")
             logger.error("Unknown backend: %s", backend)
             return False
 
+        print(f"★ Backend result: success={success}")
         if success:
             self._set_state(TTSState.SPEAKING)
             self._start_watch()
@@ -370,13 +371,17 @@ class TTSService:
         cmd.extend(["-p", str(max(0, min(99, esp_pitch)))])
 
         # espeak volume is 0-200 (default 100)
-        esp_vol = int(volume * 2)
-        cmd.extend(["-a", str(max(0, min(200, esp_vol)))])
+        # Ensure minimum audible volume (10) to avoid silent output
+        esp_vol = max(10, int(volume * 2)) if volume > 0 else 10
+        cmd.extend(["-a", str(min(200, esp_vol))])
 
         # espeak-ng takes text as positional argument
         cmd.append(text)
 
-        return self._start_process_no_stdin(cmd)
+        print(f"★ espeak-ng CMD: {cmd}")
+        result = self._start_process_no_stdin(cmd)
+        print(f"★ espeak-ng started: {result}, PID={self._process.pid if self._process else 'None'}")
+        return result
 
     def _speak_piper(self, text: str, voice_id: str, rate: int, pitch: int, volume: int) -> bool:
         """Speak via Piper neural TTS.
@@ -440,7 +445,13 @@ class TTSService:
         # Convert volume (0..100) to aplay-compatible format
         # aplay doesn't have volume control, so we use paplay or
         # pipe through sox for volume adjustment
-        vol_factor = max(0.0, min(2.0, volume / 50.0))  # 0.0 .. 2.0
+        # Ensure minimum audible volume (0.2) to avoid silent output
+        vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
+
+        logger.info(
+            "Piper: bin=%s, model=%s, vol_factor=%.2f, cmd=%s",
+            piper_bin, model_path, vol_factor, cmd_piper,
+        )
 
         try:
             piper_proc = subprocess.Popen(
@@ -518,6 +529,7 @@ class TTSService:
             # Store both processes for cleanup
             self._piper_proc = piper_proc
             self._process = play_proc
+            print(f"★ Piper STARTED: piper_pid={piper_proc.pid}, play_pid={play_proc.pid}, text={text[:60]!r}")
             return True
 
         except (FileNotFoundError, OSError) as e:
@@ -567,8 +579,13 @@ class TTSService:
             return False
 
     def _kill_backends(self) -> None:
-        """Kill any lingering TTS backend processes."""
-        for proc_name in ["spd-say", "sd_rhvoice", "espeak-ng", "piper"]:
+        """Kill any lingering TTS backend processes owned by us.
+
+        Only kills espeak-ng and piper processes (which we launch directly).
+        Never kills speech-dispatcher components (sd_rhvoice, spd-say) as
+        those are managed by the speech-dispatcher daemon.
+        """
+        for proc_name in ["espeak-ng", "piper-tts"]:
             try:
                 subprocess.run(
                     ["pkill", "-f", proc_name],
