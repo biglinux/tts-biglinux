@@ -689,7 +689,6 @@ class MainView(Adw.NavigationPage):
         """Toggle visibility of the speak action in the app launcher and taskbar."""
         from pathlib import Path
         import re
-        import configparser
 
         if self._updating_ui:
             return
@@ -701,6 +700,9 @@ class MainView(Adw.NavigationPage):
         local_apps.mkdir(parents=True, exist_ok=True)
         desktop_dst = local_apps / "bigtts.desktop"
         launcher_id = "applications:bigtts.desktop"
+
+        # Ensure icon is available (handle old→new name transition)
+        self._ensure_icon_available()
 
         if active:
             # 1. Create a local .desktop without NoDisplay
@@ -727,13 +729,22 @@ class MainView(Adw.NavigationPage):
                         "Name=Speech or stop selected text\n"
                         "Name[pt_BR]=Narrador de texto\n"
                     )
+                # Remove NoDisplay and any Desktop Actions junk
                 content = re.sub(r"^NoDisplay=.*\n?", "", content, flags=re.MULTILINE)
+                content = re.sub(r"\nActions=.*(?:\n\[Desktop Action [^\]]+\].*)*$", "", content, flags=re.DOTALL)
+                # Ensure Exec points to the correct command
+                content = re.sub(r"^Exec=.*$", "Exec=biglinux-tts-speak", content, flags=re.MULTILINE)
+                # Ensure Icon uses the correct name
+                content = re.sub(r"^Icon=.*$", "Icon=biglinux-tts", content, flags=re.MULTILINE)
                 desktop_dst.write_text(content)
             except OSError as e:
                 logger.warning("Could not create launcher entry: %s", e)
 
-            # 2. Pin to KDE Plasma taskbar
+            # 2. Pin to KDE Plasma taskbar (as last item, nearest to clock)
             self._pin_to_plasma_taskbar(launcher_id, pin=True)
+
+            # 3. Update desktop database
+            self._update_desktop_database()
         else:
             # 1. Add NoDisplay back
             try:
@@ -750,6 +761,59 @@ class MainView(Adw.NavigationPage):
 
             # 2. Unpin from KDE Plasma taskbar
             self._pin_to_plasma_taskbar(launcher_id, pin=False)
+            self._update_desktop_database()
+
+    @staticmethod
+    def _ensure_icon_available() -> None:
+        """Ensure the biglinux-tts icon is resolvable.
+
+        Handles the transition from old icon name (tts-biglinux) to new
+        (biglinux-tts) by creating a local symlink if the system only
+        has the old icon installed.
+        """
+        from pathlib import Path
+
+        icon_dirs = [
+            Path("/usr/share/icons/hicolor/scalable/apps"),
+        ]
+        new_name = "biglinux-tts.svg"
+        old_name = "tts-biglinux.svg"
+        local_icon_dir = Path.home() / ".local" / "share" / "icons" / "hicolor" / "scalable" / "apps"
+
+        # Check if the new icon already exists anywhere
+        for d in icon_dirs:
+            if (d / new_name).exists():
+                return
+
+        # Check if local icon already set up
+        if (local_icon_dir / new_name).exists():
+            return
+
+        # Check if old icon exists and create a symlink with new name
+        for d in icon_dirs:
+            old_path = d / old_name
+            if old_path.exists():
+                local_icon_dir.mkdir(parents=True, exist_ok=True)
+                try:
+                    (local_icon_dir / new_name).symlink_to(old_path)
+                    logger.info("Created icon symlink: %s -> %s", local_icon_dir / new_name, old_path)
+                except OSError as e:
+                    logger.warning("Could not create icon symlink: %s", e)
+                return
+
+    @staticmethod
+    def _update_desktop_database() -> None:
+        """Update the desktop file database so KDE picks up changes."""
+        from pathlib import Path
+
+        local_apps = Path.home() / ".local" / "share" / "applications"
+        try:
+            subprocess.run(
+                ["update-desktop-database", str(local_apps)],
+                timeout=5, check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
 
     def _pin_to_plasma_taskbar(self, launcher_id: str, *, pin: bool) -> None:
         """Add or remove a launcher from all KDE Plasma icontasks panels."""
@@ -784,15 +848,12 @@ class MainView(Adw.NavigationPage):
                 config_path.write_text("\n".join(lines) + "\n")
                 logger.info("Plasma taskbar %s: %s", "pinned" if pin else "unpinned", launcher_id)
 
-                # Reload Plasma panel
-                try:
-                    subprocess.run(
-                        ["dbus-send", "--type=signal", "--session",
-                         "/PlasmaShell", "org.kde.PlasmaShell.refreshCurrentDesktop"],
-                        timeout=5, check=False,
-                    )
-                except (OSError, subprocess.TimeoutExpired):
-                    pass
+                # Reload Plasma panel to reflect changes
+                subprocess.run(
+                    ["qdbus6", "org.kde.plasmashell", "/PlasmaShell",
+                     "org.kde.PlasmaShell.refreshCurrentShell"],
+                    timeout=10, check=False,
+                )
         except OSError as e:
             logger.warning("Could not update Plasma taskbar: %s", e)
 
@@ -1114,43 +1175,34 @@ class MainView(Adw.NavigationPage):
             self._on_toast(_("Type some text to test"), 2)
             return
 
-        print(f"\n★ TEST VOICE: phrase = {phrase!r}")
-
         # Get selected voice
         voice = None
         idx = self._voice_combo.get_selected()
         if self._voice_list and 0 <= idx < len(self._voice_list):
             voice = self._voice_list[idx]
-            print(f"★ Voice: id={voice.voice_id}, backend={voice.backend}, module={voice.output_module}")
-        else:
-            print(f"★ No voice selected! voice_list={len(self._voice_list)}, idx={idx}")
 
         settings = self._settings.speech
-        print(f"★ Settings: backend={settings.backend}, module={settings.output_module}, voice={settings.voice_id}")
-        print(f"★ Rate={settings.rate}, Pitch={settings.pitch}, Volume={settings.volume}")
 
-        logger.debug(
-            "Test voice: backend=%s, voice_id=%s, text=%r",
-            self._settings.speech.backend, self._settings.speech.voice_id, phrase[:60],
+        # Warn if volume is at zero
+        test_volume = settings.volume
+        if test_volume <= 0:
+            self._on_toast(_("Volume is at zero — increasing to minimum for test"), 3)
+            test_volume = 10
+
+        logger.info(
+            "Test voice: backend=%s, voice_id=%s, volume=%d, text=%r",
+            voice.backend if voice else settings.backend,
+            voice.voice_id if voice else settings.voice_id,
+            test_volume,
+            phrase[:60],
         )
 
-        # Get selected voice
-        voice = None
-        idx = self._voice_combo.get_selected()
-        if self._voice_list and 0 <= idx < len(self._voice_list):
-            voice = self._voice_list[idx]
-            logger.debug(
-                "Test voice sending: voice_id=%s, backend=%s, module=%s",
-                voice.voice_id, voice.backend, voice.output_module,
-            )
-
-        settings = self._settings.speech
         success = self._tts.speak(
             phrase,
             voice=voice,
             rate=settings.rate,
             pitch=settings.pitch,
-            volume=settings.volume,
+            volume=test_volume,
             backend=settings.backend,
             output_module=settings.output_module,
             voice_id=settings.voice_id,
