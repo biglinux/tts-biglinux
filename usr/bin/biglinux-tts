@@ -1,0 +1,18 @@
+#!/bin/bash
+# BigLinux TTS — GUI Launcher
+
+export GTK_USE_PORTAL=1
+
+# Try running as Python module first
+exec python3 -m biglinux_tts "$@" 2>/dev/null
+
+# Fallback: search for installed module and run main.py directly
+for py_version in $(seq 25 -1 10); do
+    MODULE_PATH="/usr/lib/python3.${py_version}/site-packages/biglinux_tts"
+    if [[ -d "$MODULE_PATH" ]]; then
+        exec python3 "$MODULE_PATH/main.py" "$@"
+    fi
+done
+
+echo "Error: biglinux_tts module not found" >&2
+exit 1

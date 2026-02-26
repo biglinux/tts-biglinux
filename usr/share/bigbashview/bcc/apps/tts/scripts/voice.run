@@ -1,6 +1,0 @@
-#!/bin/bash
-
-mkdir -p ~/.config/tts-biglinux
-echo "$1" > $HOME/.config/tts-biglinux/voice
-
-./test.run

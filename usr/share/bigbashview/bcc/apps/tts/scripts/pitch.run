@@ -1,7 +1,0 @@
-#!/bin/bash
-
-FOLDER_CONFIG="$HOME/.config/tts-biglinux"
-mkdir -p ~/.config/tts-biglinux
-echo $1 > $HOME/.config/tts-biglinux/pitch
-
-./test.run

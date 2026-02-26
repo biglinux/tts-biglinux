@@ -1,9 +1,10 @@
 [Desktop Entry]
 Type=Application
-Exec=tts-selected-text
-Icon=/usr/share/bigbashview/bcc/apps/tts/icon-grid-texto-fala-tts.svg
-Categories=Utility;
-StartupNotify=true
+Exec=biglinux-tts-speak
+Icon=biglinux-tts
+Categories=Utility;Accessibility;
+StartupNotify=false
+NoDisplay=true
 Name=Speech or stop selected text
 Name[bg]=Говорете или спрете избрания текст
 Name[cs]=Předčítání nebo zastavení vybraného textu

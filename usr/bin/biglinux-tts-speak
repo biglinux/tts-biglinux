@@ -1,0 +1,190 @@
+#!/bin/bash
+# BigLinux TTS — Speak selected text (CLI)
+# Toggle: if speaking, stop; if idle, speak selected text.
+# Triggered by Alt+V keyboard shortcut.
+
+set -euo pipefail
+
+CONFIG_DIR="$HOME/.config/biglinux-tts"
+SETTINGS_FILE="$CONFIG_DIR/settings.json"
+PID_FILE="/tmp/biglinux-tts-$(whoami).pid"
+
+# ── Check if already speaking and toggle ──────────────────────────
+
+if [[ -f "$PID_FILE" ]]; then
+    OLD_PID="$(cat "$PID_FILE" 2>/dev/null || true)"
+    if [[ -n "$OLD_PID" ]] && kill -0 "$OLD_PID" 2>/dev/null; then
+        # Already speaking — stop
+        kill "$OLD_PID" 2>/dev/null || true
+        spd-say -C 2>/dev/null || true
+        pkill -f "spd-say" 2>/dev/null || true
+        pkill -f "sd_rhvoice" 2>/dev/null || true
+        pkill -f "espeak-ng" 2>/dev/null || true
+        pkill -f "piper" 2>/dev/null || true
+        rm -f "$PID_FILE"
+        exit 0
+    fi
+    rm -f "$PID_FILE"
+fi
+
+# ── Read settings from JSON ──────────────────────────────────────
+
+RATE="-25"
+PITCH="-25"
+VOLUME="75"
+VOICE_ID=""
+BACKEND="speech-dispatcher"
+OUTPUT_MODULE="rhvoice"
+EXPAND_ABBR="true"
+PROCESS_CHARS="true"
+MAX_CHARS="10000"
+
+if [[ -f "$SETTINGS_FILE" ]] && command -v python3 &>/dev/null; then
+    eval "$(python3 -c "
+import json, sys
+try:
+    with open('$SETTINGS_FILE') as f:
+        s = json.load(f)
+    sp = s.get('speech', {})
+    tx = s.get('text', {})
+    print(f'RATE={sp.get(\"rate\", -25)}')
+    print(f'PITCH={sp.get(\"pitch\", -25)}')
+    print(f'VOLUME={sp.get(\"volume\", 75)}')
+    print(f'VOICE_ID=\"{sp.get(\"voice_id\", \"\")}\"')
+    print(f'BACKEND=\"{sp.get(\"backend\", \"speech-dispatcher\")}\"')
+    print(f'OUTPUT_MODULE=\"{sp.get(\"output_module\", \"rhvoice\")}\"')
+    print(f'EXPAND_ABBR={str(tx.get(\"expand_abbreviations\", True)).lower()}')
+    print(f'PROCESS_CHARS={str(tx.get(\"process_special_chars\", True)).lower()}')
+    print(f'MAX_CHARS={tx.get(\"max_chars\", 10000)}')
+except Exception:
+    pass
+" 2>/dev/null)"
+fi
+
+# ── Capture selected text ─────────────────────────────────────────
+
+capture_text=""
+if [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]] || [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+    if command -v wl-paste &>/dev/null; then
+        capture_text="$(wl-paste --primary 2>/dev/null || wl-paste 2>/dev/null || true)"
+    fi
+else
+    if command -v xsel &>/dev/null; then
+        capture_text="$(xsel --primary -o 2>/dev/null || xsel -o 2>/dev/null || true)"
+    elif command -v xclip &>/dev/null; then
+        capture_text="$(xclip -selection primary -o 2>/dev/null || xclip -selection clipboard -o 2>/dev/null || true)"
+    fi
+fi
+
+# No text selected — exit silently
+if [[ -z "${capture_text// /}" ]]; then
+    exit 0
+fi
+
+# Truncate if needed
+if [[ "${#capture_text}" -gt "$MAX_CHARS" ]]; then
+    capture_text="${capture_text:0:$MAX_CHARS}"
+fi
+
+# ── Text processing (basic abbreviations for PT) ─────────────────
+
+if [[ "$EXPAND_ABBR" == "true" ]] && [[ "${LANG:-}" == pt* ]]; then
+    capture_text="$(echo "$capture_text" | sed \
+        's|\btb\b|também|gI;
+         s|\btbm\b|também|gI;
+         s|\bvc\b|você|gI;
+         s|\bvcs\b|vocês|gI;
+         s|\btd\b|tudo|gI;
+         s|\bpq\b|porque|gI;
+         s|\bhj\b|hoje|gI;
+         s|\bmt\b|muito|gI;
+         s|\bmto\b|muito|gI;
+         s|\bqd\b|quando|gI;
+         s|\bqdo\b|quando|gI;
+         s|\boq\b|o que|gI;
+         s|\bdps\b|depois|gI;
+         s|\bvlw\b|valeu|gI;
+         s|\bblz\b|beleza|gI;
+         s|\bmsg\b|mensagem|gI;
+         s|\bobg\b|obrigado|gI;
+         s|\bcmg\b|comigo|gI;
+         s|\bctg\b|contigo|gI;
+         s|\bmsm\b|mesmo|gI;
+         s|\bngm\b|ninguém|gI;
+         s|\bpfv\b|por favor|gI;
+         s|\bpf\b|por favor|gI;
+         s|\bagr\b|agora|gI;
+         s|\bdnv\b|de novo|gI;
+         s|\bctz\b|certeza|gI;
+         s|\bvdd\b|verdade|gI')"
+fi
+
+if [[ "$PROCESS_CHARS" == "true" ]]; then
+    if [[ "${LANG:-}" == pt* ]]; then
+        capture_text="$(echo "$capture_text" | sed \
+            's|#| cerquilha |g;
+             s|@| arroba |g;
+             s|%| por cento|g;
+             s| - | traço |g')"
+    else
+        capture_text="$(echo "$capture_text" | sed \
+            's|#| hash |g;
+             s|@| at |g;
+             s|%| percent|g;
+             s| - | dash |g')"
+    fi
+fi
+
+# ── Cancel any existing speech ────────────────────────────────────
+
+spd-say -C 2>/dev/null || true
+
+# ── Speak ─────────────────────────────────────────────────────────
+
+(
+    echo "$$" > "$PID_FILE"
+
+    case "$BACKEND" in
+        "speech-dispatcher")
+            CMD=(spd-say --wait -e)
+            [[ -n "$OUTPUT_MODULE" ]] && CMD+=(-o "$OUTPUT_MODULE")
+            [[ -n "$VOICE_ID" ]] && CMD+=(-y "$VOICE_ID")
+            [[ "$RATE" != "0" ]] && CMD+=(-r "$RATE")
+            [[ "$PITCH" != "0" ]] && CMD+=(-p "$PITCH")
+            echo "$capture_text" | "${CMD[@]}"
+            ;;
+        "espeak-ng")
+            VOICE_ARG="${VOICE_ID#espeak-}"
+            CMD=(espeak-ng)
+            [[ -n "$VOICE_ARG" ]] && CMD+=(-v "$VOICE_ARG")
+            WPM=$((175 + RATE * 3 / 2))
+            [[ "$WPM" -lt 80 ]] && WPM=80
+            [[ "$WPM" -gt 450 ]] && WPM=450
+            CMD+=(-s "$WPM")
+            ESP_PITCH=$((50 + PITCH / 2))
+            [[ "$ESP_PITCH" -lt 0 ]] && ESP_PITCH=0
+            [[ "$ESP_PITCH" -gt 99 ]] && ESP_PITCH=99
+            CMD+=(-p "$ESP_PITCH")
+            ESP_VOL=$((VOLUME * 2))
+            CMD+=(-a "$ESP_VOL")
+            echo "$capture_text" | "${CMD[@]}"
+            ;;
+        "piper")
+            MODEL_NAME="${VOICE_ID#piper-}"
+            MODEL_PATH=""
+            for DIR in /usr/share/piper-voices /usr/local/share/piper-voices "$HOME/.local/share/piper-voices" /usr/share/piper/voices; do
+                if [[ -f "$DIR/$MODEL_NAME.onnx" ]]; then
+                    MODEL_PATH="$DIR/$MODEL_NAME.onnx"
+                    break
+                fi
+            done
+            if [[ -n "$MODEL_PATH" ]]; then
+                echo "$capture_text" | piper --model "$MODEL_PATH" --output-raw | aplay -r 22050 -f S16_LE -t raw -
+            fi
+            ;;
+    esac
+
+    rm -f "$PID_FILE"
+) &
+
+exit 0

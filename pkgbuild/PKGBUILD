@@ -7,10 +7,26 @@ arch=('any')
 license=('GPL')
 url="https://github.com/biglinux/tts-biglinux"
 pkgdesc="Text to speech with graphical configuration and very easy to use"
-depends=('rhvoice' 'xsel' 'wl-clipboard')
-optdepends=('rhvoice-voice-leticia-f123'
-            'rhvoice-voice-evgeniy-eng'
-            'rhvoice-brazilian-portuguese-complementary-dict-biglinux')
+depends=(
+    'python'
+    'python-gobject'
+    'gtk4'
+    'libadwaita'
+    'speech-dispatcher'
+    'espeak-ng'
+    'xsel'
+    'wl-clipboard-rs'
+    'alsa-utils'
+)
+optdepends=(
+    'rhvoice: high-quality multilingual TTS engine'
+    'rhvoice-voice-leticia-f123: Brazilian Portuguese female voice'
+    'rhvoice-voice-evgeniy-eng: English male voice'
+    'rhvoice-brazilian-portuguese-complementary-dict-biglinux: dictionary complement'
+    'piper-tts-bin: neural TTS engine (high quality, offline)'
+    'piper-voices-pt-BR: Brazilian Portuguese neural voices for Piper'
+    'sox: volume control for Piper audio output'
+)
 source=("git+https://github.com/biglinux/tts-biglinux.git")
 md5sums=(SKIP)
 
@@ -22,20 +38,29 @@ package() {
         InternalDir="${srcdir}/${pkgname}"
     fi
 
-    # Copy files
-    if [ -d "${InternalDir}/usr" ]; then
-        cp -r "${InternalDir}/usr" "${pkgdir}/"
+    # Detect Python version for site-packages
+    local _pyver
+    _pyver=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+
+    # Install Python module
+    install -d "${pkgdir}/usr/lib/python${_pyver}/site-packages/"
+    if [ -d "${InternalDir}/src/biglinux_tts" ]; then
+        cp -r "${InternalDir}/src/biglinux_tts" "${pkgdir}/usr/lib/python${_pyver}/site-packages/"
     fi
 
-    if [ -d "${InternalDir}/etc" ]; then
-        cp -r "${InternalDir}/etc" "${pkgdir}/"
+    # Install executables
+    install -d "${pkgdir}/usr/bin"
+    if [ -d "${InternalDir}/usr/bin" ]; then
+        install -m755 "${InternalDir}/usr/bin/"* "${pkgdir}/usr/bin/"
     fi
 
-    if [ -d "${InternalDir}/opt" ]; then
-        cp -r "${InternalDir}/opt" "${pkgdir}/"
+    # Install share files (desktop entries, icons, locale)
+    if [ -d "${InternalDir}/usr/share" ]; then
+        cp -r "${InternalDir}/usr/share" "${pkgdir}/usr/"
     fi
 
-    # Add link
+    # KDE global shortcut link
     mkdir -p "${pkgdir}/usr/share/kglobalaccel/"
-    ln -s "${pkgdir}/usr/share/applications/bigtts.desktop" "${pkgdir}/usr/share/kglobalaccel/"
+    ln -s "/usr/share/applications/bigtts.desktop" \
+        "${pkgdir}/usr/share/kglobalaccel/bigtts.desktop"
 }

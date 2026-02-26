@@ -1,0 +1,141 @@
+/* BigLinux TTS — Custom Adwaita Styles */
+
+/* ── Hero Section ────────────────────────────────────────────────── */
+
+.hero-section {
+    padding: 24px;
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        alpha(@accent_bg_color, 0.15),
+        alpha(@accent_bg_color, 0.05)
+    );
+    margin-bottom: 6px;
+}
+
+.hero-status-icon {
+    font-size: 48px;
+    min-width: 64px;
+    min-height: 64px;
+}
+
+.hero-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.hero-subtitle {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+/* ── Speaking Animation ──────────────────────────────────────────── */
+
+@keyframes pulse-speaking {
+    0%   { opacity: 1.0; }
+    50%  { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+
+.speaking-indicator {
+    animation: pulse-speaking 1.2s ease-in-out infinite;
+}
+
+.status-idle .hero-section {
+    background: linear-gradient(
+        135deg,
+        alpha(@accent_bg_color, 0.12),
+        alpha(@accent_bg_color, 0.04)
+    );
+}
+
+.status-speaking .hero-section {
+    background: linear-gradient(
+        135deg,
+        alpha(@success_bg_color, 0.20),
+        alpha(@success_bg_color, 0.08)
+    );
+}
+
+.status-error .hero-section {
+    background: linear-gradient(
+        135deg,
+        alpha(@error_bg_color, 0.15),
+        alpha(@error_bg_color, 0.05)
+    );
+}
+
+/* ── Test Button ─────────────────────────────────────────────────── */
+
+.test-button {
+    min-height: 36px;
+    min-width: 140px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* ── Voice Card ──────────────────────────────────────────────────── */
+
+.voice-quality-badge {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: alpha(@accent_bg_color, 0.15);
+    color: @accent_fg_color;
+}
+
+.voice-quality-neural {
+    background: alpha(@success_bg_color, 0.2);
+    color: @success_color;
+}
+
+/* ── Info Banner ─────────────────────────────────────────────────── */
+
+.info-banner {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: alpha(@accent_bg_color, 0.1);
+    margin: 6px 0;
+}
+
+.info-banner label {
+    opacity: 0.85;
+}
+
+/* ── Scale Marks ─────────────────────────────────────────────────── */
+
+scale marks mark label {
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+
+.narrow-layout .hero-section {
+    padding: 16px;
+}
+
+.narrow-layout .hero-title {
+    font-size: 16px;
+}
+
+/* ── Status Colors ───────────────────────────────────────────────── */
+
+.status-success {
+    color: @success_color;
+}
+
+.status-warning {
+    color: @warning_color;
+}
+
+.status-error {
+    color: @error_color;
+}
+
+/* ── Install Button ──────────────────────────────────────────────── */
+
+.install-voices-button {
+    margin-top: 6px;
+}
