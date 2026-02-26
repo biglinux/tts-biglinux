@@ -399,6 +399,10 @@ msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
 msgid "Failed to install Piper — check permissions"
 msgstr "Piper'i installimine ebaõnnestus — kontrollige õigusi"

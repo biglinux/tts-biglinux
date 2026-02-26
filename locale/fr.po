@@ -406,6 +406,12 @@ msgid "Failed to install Piper — check permissions"
 msgstr "Échec de l'installation de Piper — vérifiez les autorisations"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
+msgid "Type some text to test"
+msgstr "Tapez du texte pour tester"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 # 
