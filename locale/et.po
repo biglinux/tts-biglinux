@@ -197,6 +197,12 @@ msgid "Expand abbreviations"
 msgstr "Laiendage lühendeid"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgid "Replace common abbreviations with full words"
+msgstr "Asenda tavalised lühendid täis sõnadega."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
 # 
@@ -395,6 +401,10 @@ msgstr "Installi"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
 # 
