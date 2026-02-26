@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Setări text-voce"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Voci - Deschide BigStore"
-
 msgid "Voice Configuration"
 msgstr "Configurare voce"
-
 msgid "Configurar voz"
 msgstr "Configurarea vocii"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Pentru a rosti textul selectat, utilizați comanda rapidă "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
 "ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
 "atalho ou ícone."
 msgstr ""
 "sau pictograma din sesiunea Utilitare din meniul sistemului. Pentru a opri citirea, utilizați "
 "comanda rapidă sau pictograma."
-
 msgid "Selecione as configurações de sua preferência"
 msgstr "Selectați setările preferate"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Numerele mai mari fac vocea mai rapidă, valoarea implicită este: -25"
-
 msgid "Velocidade"
 msgstr "Viteză"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Numerele mai mari lasă vocea mai acută, modelul este: -25"
-
 msgid "Tom"
 msgstr "Ton"
-
 msgid "O padrão é: 0."
 msgstr "Valoarea implicită este: 0."
-
 msgid "Volume"
 msgstr "Volum"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Vocile sunt optimizate pentru limbaje de know-how."
-
 msgid "Voz"
 msgstr "Voce"
