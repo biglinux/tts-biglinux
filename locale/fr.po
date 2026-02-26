@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Paramètres de synthèse vocale"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Voix - Ouvrez BigStore"
-
 msgid "Voice Configuration"
 msgstr "Configuration vocale"
-
 msgid "Configurar voz"
 msgstr "Configurer la voix"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Pour parler le texte sélectionné, utilisez le raccourci "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
 "ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
 "atalho ou ícone."
 msgstr ""
 "ou l’icône dans la session Utilitaires dans le menu système. Pour arrêter la lecture, utilisez le "
 "raccourci ou l’icône."
-
 msgid "Selecione as configurações de sua preferência"
 msgstr "Sélectionnez vos paramètres préférés"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Des nombres plus grands rendent la voix plus rapide, la valeur par défaut est: -25"
-
 msgid "Velocidade"
 msgstr "Vitesse"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Les plus grands nombres laissent la voix plus aiguë, le modèle est: -25"
-
 msgid "Tom"
 msgstr "Ton"
-
 msgid "O padrão é: 0."
 msgstr "La valeur par défaut est : 0."
-
 msgid "Volume"
 msgstr "Volume"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Les voix sont optimisées pour les langages de savoir-faire."
-
 msgid "Voz"
 msgstr "Voix"

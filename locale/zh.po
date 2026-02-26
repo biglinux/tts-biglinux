@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,53 +14,37 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "文本到语音转换设置"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "声音 - 打开大商店"
-
 msgid "Voice Configuration"
 msgstr "语音配置"
-
 msgid "Configurar voz"
 msgstr "设置语音"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "要朗读所选文本，请使用快捷方式 "
-
 msgid "[Alt] + [V]"
 msgstr "[备选案文] + [五]"
-
 msgid ""
 "ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
 "atalho ou ícone."
 msgstr "或系统菜单中“实用程序”会话中的图标。要停止阅读，请使用快捷方式或图标。"
-
 msgid "Selecione as configurações de sua preferência"
 msgstr "选择您的首选设置"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "数字越大，语音越快，默认值为：-25"
-
 msgid "Velocidade"
 msgstr "速度"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "数字越大，声音越尖锐，模式为：-25"
-
 msgid "Tom"
 msgstr "语气"
-
 msgid "O padrão é: 0."
 msgstr "默认值为：0。"
-
 msgid "Volume"
 msgstr "卷"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "语音针对专有语言进行了优化。"
-
 msgid "Voz"
 msgstr "声音"

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the tts-biglinux package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -15,55 +14,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Configurações de texto para voz"
 msgstr "Tekst-naar-spraak-instellingen"
-
 msgid "Vozes - Abrir BigStore"
 msgstr "Stemmen - Open BigStore"
-
 msgid "Voice Configuration"
 msgstr "Spraakconfiguratie"
-
 msgid "Configurar voz"
 msgstr "Stem instellen"
-
 msgid "Para falar um texto selecionado use o atalho "
 msgstr "Als u geselecteerde tekst wilt uitspreken, gebruikt u de snelkoppeling "
-
 msgid "[Alt] + [V]"
 msgstr "[Alt] + [V]"
-
 msgid ""
 "ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
 "atalho ou ícone."
 msgstr ""
 "of het pictogram in de sessie Hulpprogramma's in het systeemmenu. Als u wilt stoppen met lezen, "
 "gebruikt u de snelkoppeling of het pictogram."
-
 msgid "Selecione as configurações de sua preferência"
 msgstr "Selecteer uw voorkeursinstellingen"
-
 msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
 msgstr "Grotere getallen maken de stem sneller, de standaard is: -25"
-
 msgid "Velocidade"
 msgstr "Snelheid"
-
 msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
 msgstr "Grotere getallen laten de stem acuter, het patroon is: -25"
-
 msgid "Tom"
 msgstr "Toon"
-
 msgid "O padrão é: 0."
 msgstr "De standaardwaarde is: 0."
-
 msgid "Volume"
 msgstr "Volume"
-
 msgid "As vozes são otimizadas para idiomas expecíficos."
 msgstr "Stemmen zijn geoptimaliseerd voor know-how talen."
-
 msgid "Voz"
 msgstr "Stem"
