@@ -197,6 +197,10 @@ msgid "Expand abbreviations"
 msgstr "Udvid forkortelser"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgid "Replace common abbreviations with full words"
+msgstr "Erstat almindelige forkortelser med fulde ord."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 

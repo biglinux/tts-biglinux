@@ -194,6 +194,14 @@ msgstr "קיצורים, עיצוב, מגבלות"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgid "Replace common abbreviations with full words"
+msgstr "החלף קיצורים נפוצים במילים מלאות"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
