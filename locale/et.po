@@ -395,6 +395,10 @@ msgstr "Installi"
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
@@ -406,6 +410,10 @@ msgstr "Piper'i installimine ebaõnnestus — kontrollige õigusi"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 msgid "Type some text to test"
 msgstr "Sisestage testimiseks mõni tekst."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "Heli on null — tõstmine miinimumini testi jaoks"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"

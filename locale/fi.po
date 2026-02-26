@@ -409,6 +409,10 @@ msgstr "Asennus epäonnistui: Tarkista käyttöoikeudet."
 msgid "Type some text to test"
 msgstr "Kirjoita tekstiä testataksesi"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "Äänenvoimakkuus on nolla — nostetaan minimitasolle testiä varten"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Ei voitu toistaa testiä — tarkista, onko TTS-moottori asennettuna."

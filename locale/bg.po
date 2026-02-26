@@ -409,6 +409,10 @@ msgstr "Неуспешна инсталация на Piper — проверет�
 msgid "Type some text to test"
 msgstr "Тествайте текст."
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "Обемът е на нула — увеличаване до минимум за теста"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Не можа да се възпроизведе теста — проверете дали е инсталиран TTS двигател."

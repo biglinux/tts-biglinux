@@ -200,6 +200,14 @@ msgstr "קיצורים, עיצוב, מגבלות"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "הרחב קיצורים טקסטיים"
@@ -215,6 +223,10 @@ msgstr "דבר סמלים כמו # @ % בשם"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
 msgid "Read special characters aloud"
 msgstr "קרא תווים מיוחדים בקול"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgid "Remove formatting"
+msgstr "הסרת עיצוב"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
 # 
@@ -405,6 +417,10 @@ msgstr "התקנה של פייפר נכשלה - בדוק הרשאות"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 msgid "Type some text to test"
 msgstr "הקלד טקסט כלשהו כדי לבדוק"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "הווליום הוא אפס - מעלה למינימום לבדיקה"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"

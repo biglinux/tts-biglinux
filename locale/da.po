@@ -200,6 +200,10 @@ msgstr "Udvid forkortelser"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Udvid tekstforkortelser"
@@ -405,6 +409,10 @@ msgstr "Fejl ved installation af Piper — tjek tilladelser"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 msgid "Type some text to test"
 msgstr "Skriv noget tekst for at teste"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "Lydstyrken er nul — øger til minimum for test"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"

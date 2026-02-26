@@ -409,6 +409,10 @@ msgstr "Error al instalar Piper: verifique los permisos."
 msgid "Type some text to test"
 msgstr "Escribe algún texto para probar."
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "El volumen está en cero — aumentando al mínimo para la prueba."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "No se pudo reproducir la prueba: verifique si hay un motor TTS instalado."
