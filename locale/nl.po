@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Dutch translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Tekst-naar-spraak-instellingen"
-msgid "Vozes - Abrir BigStore"
-msgstr "Stemmen - Open BigStore"
-msgid "Voice Configuration"
-msgstr "Spraakconfiguratie"
-msgid "Configurar voz"
-msgstr "Stem instellen"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Als u geselecteerde tekst wilt uitspreken, gebruikt u de snelkoppeling "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"of het pictogram in de sessie Hulpprogramma's in het systeemmenu. Als u wilt stoppen met lezen, "
-"gebruikt u de snelkoppeling of het pictogram."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Selecteer uw voorkeursinstellingen"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Grotere getallen maken de stem sneller, de standaard is: -25"
-msgid "Velocidade"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Selecteer tekst en druk op Alt+V om voor te lezen"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Dit is een test, welkom bij BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Typ tekst om te testen…"
+
+msgid "Test voice"
+msgstr "Stem testen"
+
+msgid "Test the selected voice"
+msgstr "De geselecteerde stem testen"
+
+msgid "Voice settings"
+msgstr "Steminstellingen"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Kies een stem en pas spraakparameters aan"
+
+msgid "Voice"
+msgstr "Stem"
+
+msgid "Loading voices..."
+msgstr "Stemmen laden..."
+
+msgid "Detecting installed voices..."
+msgstr "Geïnstalleerde stemmen detecteren..."
+
+msgid "Select TTS voice"
+msgstr "TTS-stem selecteren"
+
+msgid "Speed"
 msgstr "Snelheid"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Grotere getallen laten de stem acuter, het patroon is: -25"
-msgid "Tom"
-msgstr "Toon"
-msgid "O padrão é: 0."
-msgstr "De standaardwaarde is: 0."
+
+msgid "Speech rate"
+msgstr "Spreeksnelheid"
+
+msgid "Slow"
+msgstr "Langzaam"
+
+msgid "Normal"
+msgstr "Normaal"
+
+msgid "Fast"
+msgstr "Snel"
+
+msgid "Speech speed"
+msgstr "Spreeksnelheid"
+
+msgid "Pitch"
+msgstr "Toonhoogte"
+
+msgid "Voice tone"
+msgstr "Stemtoon"
+
+msgid "Low"
+msgstr "Laag"
+
+msgid "High"
+msgstr "Hoog"
+
+msgid "Voice pitch"
+msgstr "Stemhoogte"
+
 msgid "Volume"
 msgstr "Volume"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Stemmen zijn geoptimaliseerd voor know-how talen."
-msgid "Voz"
-msgstr "Stem"
+
+msgid "Speech volume"
+msgstr "Spraakvolume"
+
+msgid "Mute"
+msgstr "Dempen"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "TTS Engine"
+msgstr "TTS-engine"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Kies welke tekst-naar-spraak-engine je wilt gebruiken"
+
+msgid "Engine"
+msgstr "Engine"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTS-backend"
+
+msgid "Engine used for speech synthesis"
+msgstr "Engine gebruikt voor spraaksynthese"
+
+msgid "Select TTS engine"
+msgstr "TTS-engine selecteren"
+
+msgid "Output module"
+msgstr "Uitvoermodule"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Spraaksynthesizer gebruikt door speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Uitvoermodule selecteren"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Checking..."
+msgstr "Controleren..."
+
+msgid "Text processing"
+msgstr "Tekstverwerking"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hoe tekst wordt opgeschoond en voorbereid vóór het voorlezen"
+
+msgid "Processing options"
+msgstr "Verwerkingsopties"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Afkortingen, opmaak, limieten"
+
+msgid "Expand abbreviations"
+msgstr "Afkortingen uitbreiden"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Veelgebruikte afkortingen vervangen door volledige woorden"
+
+msgid "Expand text abbreviations"
+msgstr "Tekstafkortingen uitbreiden"
+
+msgid "Read special characters"
+msgstr "Speciale tekens voorlezen"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Symbolen zoals # @ % bij naam uitspreken"
+
+msgid "Read special characters aloud"
+msgstr "Speciale tekens hardop voorlezen"
+
+msgid "Remove formatting"
+msgstr "Opmaak verwijderen"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Markdown en HTML verwijderen vóór het voorlezen"
+
+msgid "Remove text formatting"
+msgstr "Tekstopmaak verwijderen"
+
+msgid "Read URLs"
+msgstr "URL's voorlezen"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Webadressen hardop voorlezen in plaats van overslaan"
+
+msgid "Read URLs aloud"
+msgstr "URL's hardop voorlezen"
+
+msgid "Unlimited"
+msgstr "Onbeperkt"
+
+msgid "Character limit"
+msgstr "Tekenlimiet"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Maximaal aantal tekens om in één keer voor te lezen"
+
+msgid "Maximum character limit"
+msgstr "Maximale tekenlimiet"
+
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+msgid "Advanced options"
+msgstr "Geavanceerde opties"
+
+msgid "Shortcut, behavior settings"
+msgstr "Sneltoets, gedragsinstellingen"
+
+msgid "Keyboard shortcut"
+msgstr "Sneltoets"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Selecteer tekst overal en druk op de sneltoets om voor te lezen. "
+"Druk nogmaals om te stoppen."
+
+msgid "Change"
+msgstr "Wijzigen"
+
+msgid "Show speak button in app launcher"
+msgstr "Voorleesknop tonen in app-launcher"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Voegt een launcher-item toe dat je aan de taakbalk kunt vastzetten"
+
+msgid "Set new shortcut"
+msgstr "Nieuwe sneltoets instellen"
+
+msgid "Press the new shortcut"
+msgstr "Druk op de nieuwe sneltoets"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Houd modificatietoetsen (Alt, Ctrl, Shift, Super) ingedrukt\n"
+"en druk op een letter of toets.\n"
+"\n"
+"Druk op Escape om te annuleren."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Houd modificatietoetsen ingedrukt</b> (Alt, Ctrl, Shift, Super)\n"
+"en druk op een letter of toets.\n"
+"\n"
+"<small>Druk op Escape om te annuleren</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Sneltoets gewijzigd naar {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Geen stemmen gevonden — installeer rhvoice of espeak-ng"
+
+msgid "No voices available"
+msgstr "Geen stemmen beschikbaar"
+
+msgid "No TTS voices installed"
+msgstr "Geen TTS-stemmen geïnstalleerd"
+
+msgid "No voices available for this engine"
+msgstr "Geen stemmen beschikbaar voor deze engine"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Installeer eerst {engine}-stemmen"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} stemmen beschikbaar"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Geen stemmen gevonden voor {engine} — installeer het eerst"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Piper Neural TTS installeren?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper is niet geïnstalleerd. Het biedt hoogwaardige neurale stemmen voor het voorlezen van tekst.\n"
+"\n"
+"De volgende pakketten worden geïnstalleerd:\n"
+"• piper-tts-bin (TTS-engine)\n"
+"• piper-voices-pt-BR (Portugese stemmen)\n"
+"\n"
+"Dit vereist beheerdersmachtigingen."
+
+msgid "Cancel"
+msgstr "Annuleren"
+
+msgid "Install"
+msgstr "Installeren"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Piper TTS installeren — dit kan even duren…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper succesvol geïnstalleerd! Stemmen ontdekken…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Installatie van Piper mislukt — controleer machtigingen"
+
+msgid "Type some text to test"
+msgstr "Typ tekst om te testen"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Kan test niet afspelen — controleer of een TTS-engine geïnstalleerd is"
+
+msgid "Press Alt+V to stop"
+msgstr "Druk op Alt+V om te stoppen"
+
+msgid "Stop"
+msgstr "Stoppen"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Kan spraak niet afspelen — controleer TTS-engine"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Beschikbaar: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Geen TTS-engine gevonden — installeer speech-dispatcher of espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Instellingen hersteld naar standaardwaarden"
+
+msgid "Restore Defaults"
+msgstr "Standaardwaarden herstellen"
+
+msgid "About"
+msgstr "Over"
+
+msgid "Quit"
+msgstr "Afsluiten"
+
+msgid "Main menu"
+msgstr "Hoofdmenu"
+
+msgid "Restore settings?"
+msgstr "Instellingen herstellen?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Dit zal alle aanpassingen terugzetten naar de oorspronkelijke standaardwaarden."
+
+msgid "Restore"
+msgstr "Herstellen"
+
+msgid "Technologies used"
+msgstr "Gebruikte technologieën"
+
+msgid "License"
+msgstr "Licentie"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Deze interface is gelicentieerd onder GPL-3.0. TTS-engines hebben hun eigen licenties."

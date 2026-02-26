@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Italian translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Italian\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Impostazioni da testo a voce"
-msgid "Vozes - Abrir BigStore"
-msgstr "Voci - Apri BigStore"
-msgid "Voice Configuration"
-msgstr "Configurazione vocale"
-msgid "Configurar voz"
-msgstr "Configurare la voce"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Per pronunciare il testo selezionato, utilizzare il collegamento "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"o l'icona nella sessione Utilità nel menu di sistema. Per interrompere la lettura utilizzare il "
-"collegamento o l'icona."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Seleziona le tue impostazioni preferite"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Numeri più grandi rendono la voce più veloce, l'impostazione predefinita è: -25"
-msgid "Velocidade"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Seleziona il testo e premi Alt+V per leggere ad alta voce"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Questo è un test, benvenuto su BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Digita un testo da testare…"
+
+msgid "Test voice"
+msgstr "Testa la voce"
+
+msgid "Test the selected voice"
+msgstr "Testa la voce selezionata"
+
+msgid "Voice settings"
+msgstr "Impostazioni voce"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Scegli la voce e regola i parametri vocali"
+
+msgid "Voice"
+msgstr "Voce"
+
+msgid "Loading voices..."
+msgstr "Caricamento voci..."
+
+msgid "Detecting installed voices..."
+msgstr "Rilevamento voci installate..."
+
+msgid "Select TTS voice"
+msgstr "Seleziona la voce TTS"
+
+msgid "Speed"
 msgstr "Velocità"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Numeri più grandi lasciano la voce più acuta, il modello è: -25"
-msgid "Tom"
-msgstr "Tono"
-msgid "O padrão é: 0."
-msgstr "Il valore predefinito è: 0."
+
+msgid "Speech rate"
+msgstr "Velocità del parlato"
+
+msgid "Slow"
+msgstr "Lento"
+
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr "Veloce"
+
+msgid "Speech speed"
+msgstr "Velocità del parlato"
+
+msgid "Pitch"
+msgstr "Tonalità"
+
+msgid "Voice tone"
+msgstr "Tono della voce"
+
+msgid "Low"
+msgstr "Basso"
+
+msgid "High"
+msgstr "Alto"
+
+msgid "Voice pitch"
+msgstr "Tonalità della voce"
+
 msgid "Volume"
 msgstr "Volume"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Le voci sono ottimizzate per le lingue di know-how."
-msgid "Voz"
-msgstr "Voce"
+
+msgid "Speech volume"
+msgstr "Volume del parlato"
+
+msgid "Mute"
+msgstr "Muto"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "TTS Engine"
+msgstr "Motore TTS"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Scegli quale motore di sintesi vocale utilizzare"
+
+msgid "Engine"
+msgstr "Motore"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "Motore TTS"
+
+msgid "Engine used for speech synthesis"
+msgstr "Motore utilizzato per la sintesi vocale"
+
+msgid "Select TTS engine"
+msgstr "Seleziona il motore TTS"
+
+msgid "Output module"
+msgstr "Modulo di uscita"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Sintetizzatore vocale utilizzato da speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Seleziona il modulo di uscita"
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Checking..."
+msgstr "Verifica..."
+
+msgid "Text processing"
+msgstr "Elaborazione del testo"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Come il testo viene pulito e preparato prima della lettura"
+
+msgid "Processing options"
+msgstr "Opzioni di elaborazione"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Abbreviazioni, formattazione, limiti"
+
+msgid "Expand abbreviations"
+msgstr "Espandi le abbreviazioni"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Sostituisci le abbreviazioni comuni con le parole complete"
+
+msgid "Expand text abbreviations"
+msgstr "Espandi le abbreviazioni di testo"
+
+msgid "Read special characters"
+msgstr "Leggi i caratteri speciali"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Pronuncia i simboli come # @ % per nome"
+
+msgid "Read special characters aloud"
+msgstr "Leggi i caratteri speciali ad alta voce"
+
+msgid "Remove formatting"
+msgstr "Rimuovi la formattazione"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Rimuovi Markdown e HTML prima della lettura"
+
+msgid "Remove text formatting"
+msgstr "Rimuovi la formattazione del testo"
+
+msgid "Read URLs"
+msgstr "Leggi gli URL"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Leggi gli indirizzi web ad alta voce invece di saltarli"
+
+msgid "Read URLs aloud"
+msgstr "Leggi gli URL ad alta voce"
+
+msgid "Unlimited"
+msgstr "Illimitato"
+
+msgid "Character limit"
+msgstr "Limite di caratteri"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Numero massimo di caratteri da leggere alla volta"
+
+msgid "Maximum character limit"
+msgstr "Limite massimo di caratteri"
+
+msgid "Advanced"
+msgstr "Avanzate"
+
+msgid "Advanced options"
+msgstr "Opzioni avanzate"
+
+msgid "Shortcut, behavior settings"
+msgstr "Scorciatoia, impostazioni di comportamento"
+
+msgid "Keyboard shortcut"
+msgstr "Scorciatoia da tastiera"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Seleziona il testo ovunque e premi la scorciatoia per leggere ad alta voce. "
+"Premi di nuovo per interrompere."
+
+msgid "Change"
+msgstr "Modifica"
+
+msgid "Show speak button in app launcher"
+msgstr "Mostra il pulsante di lettura nel lanciatore applicazioni"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Aggiunge una voce nel lanciatore che puoi fissare alla barra delle applicazioni"
+
+msgid "Set new shortcut"
+msgstr "Imposta nuova scorciatoia"
+
+msgid "Press the new shortcut"
+msgstr "Premi la nuova scorciatoia"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Tieni premuti i tasti modificatori (Alt, Ctrl, Shift, Super)\n"
+"e premi una lettera o un tasto.\n"
+"\n"
+"Premi Escape per annullare."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Tieni premuti i tasti modificatori</b> (Alt, Ctrl, Shift, Super)\n"
+"e premi una lettera o un tasto.\n"
+"\n"
+"<small>Premi Escape per annullare</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Scorciatoia modificata in {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nessuna voce trovata — installa rhvoice o espeak-ng"
+
+msgid "No voices available"
+msgstr "Nessuna voce disponibile"
+
+msgid "No TTS voices installed"
+msgstr "Nessuna voce TTS installata"
+
+msgid "No voices available for this engine"
+msgstr "Nessuna voce disponibile per questo motore"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Installa prima le voci di {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} voci disponibili"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nessuna voce trovata per {engine} — installalo prima"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Installare Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper non è installato. Fornisce voci neurali di alta qualità per la lettura del testo.\n"
+"\n"
+"Verranno installati i seguenti pacchetti:\n"
+"• piper-tts-bin (motore TTS)\n"
+"• piper-voices-pt-BR (voci portoghesi)\n"
+"\n"
+"Sono necessari i permessi di amministratore."
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Install"
+msgstr "Installa"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Installazione di Piper TTS — potrebbe richiedere un momento…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper installato con successo! Scoperta delle voci…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Installazione di Piper fallita — controlla i permessi"
+
+msgid "Type some text to test"
+msgstr "Digita del testo per testare"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Impossibile riprodurre il test — verifica che un motore TTS sia installato"
+
+msgid "Press Alt+V to stop"
+msgstr "Premi Alt+V per interrompere"
+
+msgid "Stop"
+msgstr "Interrompi"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Impossibile riprodurre il parlato — controlla il motore TTS"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Disponibili: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nessun motore TTS trovato — installa speech-dispatcher o espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Impostazioni ripristinate ai valori predefiniti"
+
+msgid "Restore Defaults"
+msgstr "Ripristina valori predefiniti"
+
+msgid "About"
+msgstr "Informazioni"
+
+msgid "Quit"
+msgstr "Esci"
+
+msgid "Main menu"
+msgstr "Menu principale"
+
+msgid "Restore settings?"
+msgstr "Ripristinare le impostazioni?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Questo riporterà tutte le regolazioni ai valori predefiniti originali."
+
+msgid "Restore"
+msgstr "Ripristina"
+
+msgid "Technologies used"
+msgstr "Tecnologie utilizzate"
+
+msgid "License"
+msgstr "Licenza"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Questa interfaccia è sotto licenza GPL-3.0. I motori TTS hanno le proprie licenze."

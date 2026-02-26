@@ -1,50 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Japanese translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "テキストから音声への設定"
-msgid "Vozes - Abrir BigStore"
-msgstr "ボイス - オープンビッグストア"
-msgid "Voice Configuration"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "テキストを選択してAlt+Vを押すと音声で読み上げます"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "これはテストです。BigLinuxへようこそ！"
+
+msgid "Type text to test…"
+msgstr "テスト用のテキストを入力…"
+
+msgid "Test voice"
+msgstr "音声テスト"
+
+msgid "Test the selected voice"
+msgstr "選択した音声をテスト"
+
+msgid "Voice settings"
 msgstr "音声設定"
-msgid "Configurar voz"
-msgstr "音声を設定する"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "選択したテキストを読み上げるには、ショートカットを使用します。 "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr "または、システムメニューのユーティリティセッションのアイコン。読み取りを停止するには、ショートカットまたはアイコンを使用します。"
-msgid "Selecione as configurações de sua preferência"
-msgstr "お好みの設定を選択してください"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "数値が大きいほど音声が速くなり、デフォルトは -25 です。"
-msgid "Velocidade"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "音声を選んでパラメーターを調整"
+
+msgid "Voice"
+msgstr "音声"
+
+msgid "Loading voices..."
+msgstr "音声を読み込み中..."
+
+msgid "Detecting installed voices..."
+msgstr "インストール済みの音声を検出中..."
+
+msgid "Select TTS voice"
+msgstr "TTS音声を選択"
+
+msgid "Speed"
 msgstr "速度"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "数字が大きいほど声はより鋭く、パターンは-25です"
-msgid "Tom"
-msgstr "トーン"
-msgid "O padrão é: 0."
-msgstr "デフォルトは 0 です。"
+
+msgid "Speech rate"
+msgstr "読み上げ速度"
+
+msgid "Slow"
+msgstr "遅い"
+
+msgid "Normal"
+msgstr "標準"
+
+msgid "Fast"
+msgstr "速い"
+
+msgid "Speech speed"
+msgstr "読み上げ速度"
+
+msgid "Pitch"
+msgstr "ピッチ"
+
+msgid "Voice tone"
+msgstr "声のトーン"
+
+msgid "Low"
+msgstr "低い"
+
+msgid "High"
+msgstr "高い"
+
+msgid "Voice pitch"
+msgstr "声の高さ"
+
 msgid "Volume"
-msgstr "容積"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "音声はノウハウ言語に最適化されています。"
-msgid "Voz"
-msgstr "声"
+msgstr "音量"
+
+msgid "Speech volume"
+msgstr "読み上げ音量"
+
+msgid "Mute"
+msgstr "ミュート"
+
+msgid "Max"
+msgstr "最大"
+
+msgid "TTS Engine"
+msgstr "TTSエンジン"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "使用する音声合成エンジンを選択"
+
+msgid "Engine"
+msgstr "エンジン"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTSバックエンド"
+
+msgid "Engine used for speech synthesis"
+msgstr "音声合成に使用するエンジン"
+
+msgid "Select TTS engine"
+msgstr "TTSエンジンを選択"
+
+msgid "Output module"
+msgstr "出力モジュール"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "speech-dispatcherが使用する音声合成エンジン"
+
+msgid "Select output module"
+msgstr "出力モジュールを選択"
+
+msgid "Status"
+msgstr "状態"
+
+msgid "Checking..."
+msgstr "確認中..."
+
+msgid "Text processing"
+msgstr "テキスト処理"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "読み上げ前のテキストの処理方法"
+
+msgid "Processing options"
+msgstr "処理オプション"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "略語、書式、制限"
+
+msgid "Expand abbreviations"
+msgstr "略語を展開"
+
+msgid "Replace common abbreviations with full words"
+msgstr "一般的な略語を完全な表記に置き換え"
+
+msgid "Expand text abbreviations"
+msgstr "テキストの略語を展開"
+
+msgid "Read special characters"
+msgstr "特殊文字を読み上げ"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "# @ % などの記号を名前で読み上げ"
+
+msgid "Read special characters aloud"
+msgstr "特殊文字を音声で読み上げ"
+
+msgid "Remove formatting"
+msgstr "書式を除去"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "読み上げ前にMarkdownとHTMLを除去"
+
+msgid "Remove text formatting"
+msgstr "テキストの書式を除去"
+
+msgid "Read URLs"
+msgstr "URLを読み上げ"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "ウェブアドレスをスキップせず音声で読み上げ"
+
+msgid "Read URLs aloud"
+msgstr "URLを音声で読み上げ"
+
+msgid "Unlimited"
+msgstr "無制限"
+
+msgid "Character limit"
+msgstr "文字数制限"
+
+msgid "Maximum number of characters to read at once"
+msgstr "一度に読み上げる最大文字数"
+
+msgid "Maximum character limit"
+msgstr "最大文字数制限"
+
+msgid "Advanced"
+msgstr "詳細設定"
+
+msgid "Advanced options"
+msgstr "詳細オプション"
+
+msgid "Shortcut, behavior settings"
+msgstr "ショートカット、動作設定"
+
+msgid "Keyboard shortcut"
+msgstr "キーボードショートカット"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"テキストを選択してショートカットを押すと音声で読み上げます。"
+"もう一度押すと停止します。"
+
+msgid "Change"
+msgstr "変更"
+
+msgid "Show speak button in app launcher"
+msgstr "アプリランチャーに読み上げボタンを表示"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "タスクバーに固定できるランチャーエントリーを追加"
+
+msgid "Set new shortcut"
+msgstr "新しいショートカットを設定"
+
+msgid "Press the new shortcut"
+msgstr "新しいショートカットを押してください"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"修飾キー（Alt、Ctrl、Shift、Super）を押しながら\n"
+"文字またはキーを押してください。\n"
+"\n"
+"Escapeでキャンセルします。"
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>修飾キーを押しながら</b>（Alt、Ctrl、Shift、Super）\n"
+"文字またはキーを押してください。\n"
+"\n"
+"<small>Escapeでキャンセル</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "ショートカットが{keys}に変更されました"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "音声が見つかりません — rhvoiceまたはespeak-ngをインストールしてください"
+
+msgid "No voices available"
+msgstr "利用可能な音声がありません"
+
+msgid "No TTS voices installed"
+msgstr "TTS音声がインストールされていません"
+
+msgid "No voices available for this engine"
+msgstr "このエンジンで利用可能な音声がありません"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "先に{engine}の音声をインストールしてください"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count}個の音声が利用可能"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "{engine}の音声が見つかりません — 先にインストールしてください"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Piper Neural TTSをインストールしますか？"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piperがインストールされていません。高品質なニューラル音声でテキストを読み上げます。\n"
+"\n"
+"以下のパッケージがインストールされます：\n"
+"• piper-tts-bin（TTSエンジン）\n"
+"• piper-voices-pt-BR（ポルトガル語音声）\n"
+"\n"
+"管理者権限が必要です。"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Install"
+msgstr "インストール"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Piper TTSをインストール中 — しばらくお待ちください…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piperのインストールが完了しました！音声を検出中…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Piperのインストールに失敗しました — 権限を確認してください"
+
+msgid "Type some text to test"
+msgstr "テスト用のテキストを入力してください"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "テストを再生できません — TTSエンジンがインストールされているか確認してください"
+
+msgid "Press Alt+V to stop"
+msgstr "Alt+Vで停止"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "音声を再生できません — TTSエンジンを確認してください"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "利用可能: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "TTSエンジンが見つかりません — speech-dispatcherまたはespeak-ngをインストールしてください"
+
+msgid "Settings restored to defaults"
+msgstr "設定をデフォルトに復元しました"
+
+msgid "Restore Defaults"
+msgstr "デフォルトに復元"
+
+msgid "About"
+msgstr "このアプリについて"
+
+msgid "Quit"
+msgstr "終了"
+
+msgid "Main menu"
+msgstr "メインメニュー"
+
+msgid "Restore settings?"
+msgstr "設定を復元しますか？"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "すべての設定がデフォルト値に戻ります。"
+
+msgid "Restore"
+msgstr "復元"
+
+msgid "Technologies used"
+msgstr "使用している技術"
+
+msgid "License"
+msgstr "ライセンス"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "このインターフェースはGPL-3.0でライセンスされています。TTSエンジンにはそれぞれのライセンスがあります。"

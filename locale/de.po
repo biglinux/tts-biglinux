@@ -142,7 +142,7 @@ msgstr "Motor"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
 msgid "speech-dispatcher"
-msgstr "Sprach-Dispatcher"
+msgstr "speech-dispatcher"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
 msgid "TTS Backend"
@@ -162,7 +162,7 @@ msgstr "Ausgabemodul"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Sprachsynthesizer, der von Speech-Dispatcher verwendet wird."
+msgstr "Sprachsynthesizer, der von speech-dispatcher verwendet wird"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
 msgid "Select output module"
@@ -432,7 +432,7 @@ msgstr "Verfügbar: {engines}"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "Kein TTS-Engine gefunden — installieren Sie Speech-Dispatcher oder espeak-ng"
+msgstr "Kein TTS-Engine gefunden — installieren Sie speech-dispatcher oder espeak-ng"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"

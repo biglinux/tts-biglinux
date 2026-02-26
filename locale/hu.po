@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Hungarian translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Szöveg-hang beállítások"
-msgid "Vozes - Abrir BigStore"
-msgstr "Hangok - Nyissa meg a BigStore-t"
-msgid "Voice Configuration"
-msgstr "Hang konfiguráció"
-msgid "Configurar voz"
-msgstr "Hang beállítása"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "A kijelölt szöveg kimondásához használja a parancsikont "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"vagy a rendszermenü Segédprogramok munkamenetének ikonja. Az olvasás leállításához használja a "
-"parancsikont vagy ikont."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Válassza ki a kívánt beállításokat"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "A nagyobb számok gyorsabbá teszik a hangot, az alapértelmezett: -25"
-msgid "Velocidade"
-msgstr "Sebesség"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "A nagyobb számok élesebbé teszik a hangot, a minta: -25"
-msgid "Tom"
-msgstr "Tónus"
-msgid "O padrão é: 0."
-msgstr "Az alapértelmezett érték: 0."
-msgid "Volume"
-msgstr "Térfogat"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "A hangok a know-how nyelvekre vannak optimalizálva."
-msgid "Voz"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Jelöljön ki szöveget, és nyomja meg az Alt+V billentyűt a felolvasáshoz"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Ez egy teszt, üdvözöljük a BigLinuxban!"
+
+msgid "Type text to test…"
+msgstr "Írjon be szöveget a teszteléshez…"
+
+msgid "Test voice"
+msgstr "Hang tesztelése"
+
+msgid "Test the selected voice"
+msgstr "A kiválasztott hang tesztelése"
+
+msgid "Voice settings"
+msgstr "Hangbeállítások"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Válasszon hangot és állítsa be a beszédparamétereket"
+
+msgid "Voice"
 msgstr "Hang"
+
+msgid "Loading voices..."
+msgstr "Hangok betöltése..."
+
+msgid "Detecting installed voices..."
+msgstr "Telepített hangok felismerése..."
+
+msgid "Select TTS voice"
+msgstr "TTS-hang kiválasztása"
+
+msgid "Speed"
+msgstr "Sebesség"
+
+msgid "Speech rate"
+msgstr "Beszédhelyzet"
+
+msgid "Slow"
+msgstr "Lassú"
+
+msgid "Normal"
+msgstr "Normál"
+
+msgid "Fast"
+msgstr "Gyors"
+
+msgid "Speech speed"
+msgstr "Beszédsebesség"
+
+msgid "Pitch"
+msgstr "Hangmagasság"
+
+msgid "Voice tone"
+msgstr "Hangtónus"
+
+msgid "Low"
+msgstr "Mély"
+
+msgid "High"
+msgstr "Magas"
+
+msgid "Voice pitch"
+msgstr "Hangmagasság"
+
+msgid "Volume"
+msgstr "Hangerő"
+
+msgid "Speech volume"
+msgstr "Beszéd hangereje"
+
+msgid "Mute"
+msgstr "Néma"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "TTS Engine"
+msgstr "TTS-motor"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Válassza ki a használni kívánt szövegfelolvasó motort"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTS-motor"
+
+msgid "Engine used for speech synthesis"
+msgstr "Beszédszintézishez használt motor"
+
+msgid "Select TTS engine"
+msgstr "TTS-motor kiválasztása"
+
+msgid "Output module"
+msgstr "Kimeneti modul"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "A speech-dispatcher által használt beszédszintetizátor"
+
+msgid "Select output module"
+msgstr "Kimeneti modul kiválasztása"
+
+msgid "Status"
+msgstr "Állapot"
+
+msgid "Checking..."
+msgstr "Ellenőrzés..."
+
+msgid "Text processing"
+msgstr "Szövegfeldolgozás"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hogyan tisztítjuk és készítjük elő a szöveget olvasás előtt"
+
+msgid "Processing options"
+msgstr "Feldolgozási beállítások"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Rövidítések, formázás, korlátok"
+
+msgid "Expand abbreviations"
+msgstr "Rövidítések kibontása"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Gyakori rövidítések cseréje teljes szavakra"
+
+msgid "Expand text abbreviations"
+msgstr "Szöveges rövidítések kibontása"
+
+msgid "Read special characters"
+msgstr "Speciális karakterek felolvasása"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Szimbólumok, mint # @ %, kimondása névvel"
+
+msgid "Read special characters aloud"
+msgstr "Speciális karakterek hangos felolvasása"
+
+msgid "Remove formatting"
+msgstr "Formázás eltávolítása"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Markdown és HTML eltávolítása olvasás előtt"
+
+msgid "Remove text formatting"
+msgstr "Szövegformázás eltávolítása"
+
+msgid "Read URLs"
+msgstr "URL-ek felolvasása"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Webcímek hangos felolvasása átugrás helyett"
+
+msgid "Read URLs aloud"
+msgstr "URL-ek hangos felolvasása"
+
+msgid "Unlimited"
+msgstr "Korlátlan"
+
+msgid "Character limit"
+msgstr "Karakterkorlát"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Egyszerre felolvasható karakterek maximális száma"
+
+msgid "Maximum character limit"
+msgstr "Maximális karakterkorlát"
+
+msgid "Advanced"
+msgstr "Speciális"
+
+msgid "Advanced options"
+msgstr "Speciális beállítások"
+
+msgid "Shortcut, behavior settings"
+msgstr "Billentyűparancs, viselkedési beállítások"
+
+msgid "Keyboard shortcut"
+msgstr "Billentyűparancs"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Jelöljön ki szöveget bárhol, és nyomja meg a billentyűparancsot a felolvasáshoz. "
+"Nyomja meg újra a leállításhoz."
+
+msgid "Change"
+msgstr "Módosítás"
+
+msgid "Show speak button in app launcher"
+msgstr "Felolvasás gomb megjelenítése az alkalmazásindítóban"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Hozzáad egy indítóbejegyzést, amelyet rögzíthet a tálcán"
+
+msgid "Set new shortcut"
+msgstr "Új billentyűparancs beállítása"
+
+msgid "Press the new shortcut"
+msgstr "Nyomja meg az új billentyűparancsot"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Tartsa lenyomva a módosító billentyűket (Alt, Ctrl, Shift, Super)\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
+"\n"
+"Nyomja meg az Escape-et a megszakításhoz."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Tartsa lenyomva a módosító billentyűket</b> (Alt, Ctrl, Shift, Super)\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
+"\n"
+"<small>Nyomja meg az Escape-et a megszakításhoz</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Billentyűparancs megváltoztatva: {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nem található hang — telepítse a rhvoice-ot vagy espeak-ng-t"
+
+msgid "No voices available"
+msgstr "Nincs elérhető hang"
+
+msgid "No TTS voices installed"
+msgstr "Nincs telepített TTS-hang"
+
+msgid "No voices available for this engine"
+msgstr "Nincs elérhető hang ehhez a motorhoz"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Először telepítse a(z) {engine} hangokat"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} hang elérhető"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nem találhatók hangok a(z) {engine} számára — először telepítse"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Telepíti a Piper Neural TTS-t?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"A Piper nincs telepítve. Kiváló minőségű neurális hangokat biztosít szöveg felolvasásához.\n"
+"\n"
+"A következő csomagok kerülnek telepítésre:\n"
+"• piper-tts-bin (TTS-motor)\n"
+"• piper-voices-pt-BR (portugál hangok)\n"
+"\n"
+"Ehhez rendszergazdai jogosultságok szükségesek."
+
+msgid "Cancel"
+msgstr "Mégse"
+
+msgid "Install"
+msgstr "Telepítés"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Piper TTS telepítése — ez eltarthat egy ideig…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "A Piper sikeresen telepítve! Hangok keresése…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "A Piper telepítése sikertelen — ellenőrizze a jogosultságokat"
+
+msgid "Type some text to test"
+msgstr "Írjon be szöveget a teszteléshez"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Nem sikerült lejátszani a tesztet — ellenőrizze, hogy telepítve van-e TTS-motor"
+
+msgid "Press Alt+V to stop"
+msgstr "Nyomja meg az Alt+V-t a leállításhoz"
+
+msgid "Stop"
+msgstr "Leállítás"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Nem sikerült lejátszani a beszédet — ellenőrizze a TTS-motort"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Elérhető: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nem található TTS-motor — telepítse a speech-dispatcher-t vagy espeak-ng-t"
+
+msgid "Settings restored to defaults"
+msgstr "Beállítások visszaállítva az alapértékekre"
+
+msgid "Restore Defaults"
+msgstr "Alapértékek visszaállítása"
+
+msgid "About"
+msgstr "Névjegy"
+
+msgid "Quit"
+msgstr "Kilépés"
+
+msgid "Main menu"
+msgstr "Főmenü"
+
+msgid "Restore settings?"
+msgstr "Visszaállítja a beállításokat?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Ez visszaállítja az összes beállítást az eredeti alapértékekre."
+
+msgid "Restore"
+msgstr "Visszaállítás"
+
+msgid "Technologies used"
+msgstr "Használt technológiák"
+
+msgid "License"
+msgstr "Licenc"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Ez a felület GPL-3.0 licenc alatt áll. A TTS-motoroknak saját licencük van."

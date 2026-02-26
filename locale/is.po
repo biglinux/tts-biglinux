@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Icelandic translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Icelandic\n"
+"Language: is\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Texta-til-raddstillingar"
-msgid "Vozes - Abrir BigStore"
-msgstr "Raddir - Opna BigStore"
-msgid "Voice Configuration"
-msgstr "Raddstilling"
-msgid "Configurar voz"
-msgstr "Setja upp rödd"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Til að tala valinn texta skaltu nota flýtileiðina "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"eða táknið í Veitulotunni í kerfisvalmyndinni. Til að hætta að lesa skaltu nota flýtileiðina eða "
-"táknið."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Veldu valinn stillingar"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Stærri tölur gera röddina hraðari, sjálfgefið er: -25"
-msgid "Velocidade"
-msgstr "Hraði"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Stærri tölur skilja röddina eftir bráðari, mynstrið er: -25"
-msgid "Tom"
-msgstr "Tónn"
-msgid "O padrão é: 0."
-msgstr "Sjálfgefið er: 0."
-msgid "Volume"
-msgstr "Bindi"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Raddir eru fínstilltar fyrir tungumál sem eru kunnátta."
-msgid "Voz"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Veldu texta og ýttu á Alt+V til að lesa upphátt"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Þetta er prófun, velkomin í BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Sláðu inn texta til að prófa…"
+
+msgid "Test voice"
+msgstr "Prófa rödd"
+
+msgid "Test the selected voice"
+msgstr "Prófa valda rödd"
+
+msgid "Voice settings"
+msgstr "Raddstillingar"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Veldu rödd og stilltu talbreytur"
+
+msgid "Voice"
 msgstr "Rödd"
+
+msgid "Loading voices..."
+msgstr "Hleð röddum..."
+
+msgid "Detecting installed voices..."
+msgstr "Greini uppsettar raddir..."
+
+msgid "Select TTS voice"
+msgstr "Veldu TTS-rödd"
+
+msgid "Speed"
+msgstr "Hraði"
+
+msgid "Speech rate"
+msgstr "Talhraði"
+
+msgid "Slow"
+msgstr "Hægt"
+
+msgid "Normal"
+msgstr "Venjulegt"
+
+msgid "Fast"
+msgstr "Hratt"
+
+msgid "Speech speed"
+msgstr "Talhraði"
+
+msgid "Pitch"
+msgstr "Tónhæð"
+
+msgid "Voice tone"
+msgstr "Raddtónn"
+
+msgid "Low"
+msgstr "Lágt"
+
+msgid "High"
+msgstr "Hátt"
+
+msgid "Voice pitch"
+msgstr "Raddtónhæð"
+
+msgid "Volume"
+msgstr "Hljóðstyrkur"
+
+msgid "Speech volume"
+msgstr "Hljóðstyrkur tals"
+
+msgid "Mute"
+msgstr "Hljóðlaust"
+
+msgid "Max"
+msgstr "Hámark"
+
+msgid "TTS Engine"
+msgstr "TTS-vél"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Veldu hvaða texta-í-tal vél á að nota"
+
+msgid "Engine"
+msgstr "Vél"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTS-vél"
+
+msgid "Engine used for speech synthesis"
+msgstr "Vél notuð til talsmíðar"
+
+msgid "Select TTS engine"
+msgstr "Veldu TTS-vél"
+
+msgid "Output module"
+msgstr "Úttakseining"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Talsmíð notuð af speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Veldu úttakseiningu"
+
+msgid "Status"
+msgstr "Staða"
+
+msgid "Checking..."
+msgstr "Athuga..."
+
+msgid "Text processing"
+msgstr "Textavinnsla"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hvernig texti er hreinsaður og undirbúinn áður en hann er lesinn"
+
+msgid "Processing options"
+msgstr "Vinnslustillingar"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Skammstafanir, snið, takmörk"
+
+msgid "Expand abbreviations"
+msgstr "Útvíkka skammstafanir"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Skipta algengum skammstöfunum út fyrir heil orð"
+
+msgid "Expand text abbreviations"
+msgstr "Útvíkka textaskammstafanir"
+
+msgid "Read special characters"
+msgstr "Lesa sérstafi"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Segja tákn eins og # @ % eftir nafni"
+
+msgid "Read special characters aloud"
+msgstr "Lesa sérstafi upphátt"
+
+msgid "Remove formatting"
+msgstr "Fjarlægja snið"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Fjarlægja Markdown og HTML áður en lesið er"
+
+msgid "Remove text formatting"
+msgstr "Fjarlægja textasnið"
+
+msgid "Read URLs"
+msgstr "Lesa vefslóðir"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Lesa vefföng upphátt í stað þess að sleppa þeim"
+
+msgid "Read URLs aloud"
+msgstr "Lesa vefslóðir upphátt"
+
+msgid "Unlimited"
+msgstr "Ótakmarkað"
+
+msgid "Character limit"
+msgstr "Stafatakmörk"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Hámarksfjöldi stafa til að lesa í einu"
+
+msgid "Maximum character limit"
+msgstr "Hámarks stafatakmörk"
+
+msgid "Advanced"
+msgstr "Ítarlegt"
+
+msgid "Advanced options"
+msgstr "Ítarlegar stillingar"
+
+msgid "Shortcut, behavior settings"
+msgstr "Flýtilykill, hegðunarstillingar"
+
+msgid "Keyboard shortcut"
+msgstr "Flýtilykill"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Veldu texta hvar sem er og ýttu á flýtilykilinn til að lesa upphátt. "
+"Ýttu aftur til að stöðva."
+
+msgid "Change"
+msgstr "Breyta"
+
+msgid "Show speak button in app launcher"
+msgstr "Sýna talhreyfingu í forritaræsi"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Bætir við ræsifærslu sem hægt er að festa á verkefnastikuna"
+
+msgid "Set new shortcut"
+msgstr "Stilla nýjan flýtilykil"
+
+msgid "Press the new shortcut"
+msgstr "Ýttu á nýja flýtilykilinn"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Haltu niðri breytilyklum (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á staf eða lykil.\n"
+"\n"
+"Ýttu á Escape til að hætta við."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Haltu niðri breytilyklum</b> (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á staf eða lykil.\n"
+"\n"
+"<small>Ýttu á Escape til að hætta við</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Flýtilykli breytt í {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Engar raddir fundust — settu upp rhvoice eða espeak-ng"
+
+msgid "No voices available"
+msgstr "Engar raddir tiltækar"
+
+msgid "No TTS voices installed"
+msgstr "Engar TTS-raddir uppsettar"
+
+msgid "No voices available for this engine"
+msgstr "Engar raddir tiltækar fyrir þessa vél"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Settu fyrst upp raddir fyrir {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} raddir tiltækar"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Engar raddir fundust fyrir {engine} — settu hana upp fyrst"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Setja upp Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper er ekki uppsett. Það býður upp á hágæða taugnetaraddir til að lesa texta.\n"
+"\n"
+"Eftirfarandi pakkar verða settir upp:\n"
+"• piper-tts-bin (TTS-vél)\n"
+"• piper-voices-pt-BR (portúgalskar raddir)\n"
+"\n"
+"Þetta krefst kerfisstjóraheimilda."
+
+msgid "Cancel"
+msgstr "Hætta við"
+
+msgid "Install"
+msgstr "Setja upp"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Set upp Piper TTS — þetta getur tekið smástund…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper sett upp! Leita að röddum…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Uppsetnig Piper mistókst — athugaðu heimildir"
+
+msgid "Type some text to test"
+msgstr "Sláðu inn texta til að prófa"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Gat ekki spilað prófun — athugaðu hvort TTS-vél sé uppsett"
+
+msgid "Press Alt+V to stop"
+msgstr "Ýttu á Alt+V til að stöðva"
+
+msgid "Stop"
+msgstr "Stöðva"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Gat ekki spilað tal — athugaðu TTS-vélina"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Tiltækt: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Engin TTS-vél fannst — settu upp speech-dispatcher eða espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Stillingum endurstillt á sjálfgefin gildi"
+
+msgid "Restore Defaults"
+msgstr "Endurstilla sjálfgefin gildi"
+
+msgid "About"
+msgstr "Um"
+
+msgid "Quit"
+msgstr "Hætta"
+
+msgid "Main menu"
+msgstr "Aðalvalmynd"
+
+msgid "Restore settings?"
+msgstr "Endurstilla stillingar?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Þetta mun færa allar breytingar aftur í upprunaleg sjálfgefin gildi."
+
+msgid "Restore"
+msgstr "Endurstilla"
+
+msgid "Technologies used"
+msgstr "Notuð tækni"
+
+msgid "License"
+msgstr "Leyfi"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Þetta viðmót er gefið út undir GPL-3.0. TTS-vélar hafa sín eigin leyfi."

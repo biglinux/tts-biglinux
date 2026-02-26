@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Slovak translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Slovak\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Nastavenia prevodu textu na hlas"
-msgid "Vozes - Abrir BigStore"
-msgstr "Hlasy - Otvorte BigStore"
-msgid "Voice Configuration"
-msgstr "Konfigurácia hlasu"
-msgid "Configurar voz"
-msgstr "Nastavenie hlasu"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Ak chcete hovoriť vybratým textom, použite skratku "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"alebo ikona v relácii Utility v systémovej ponuke. Ak chcete čítať zastaviť, použite skratku alebo "
-"ikonu."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Vyberte preferované nastavenia"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Vďaka väčším číslam je hlas rýchlejší, predvolená hodnota je: -25"
-msgid "Velocidade"
-msgstr "Rýchlosť"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Väčšie čísla nechávajú hlas akútnejším, vzor je: -25"
-msgid "Tom"
-msgstr "Tón"
-msgid "O padrão é: 0."
-msgstr "Predvolená hodnota je: 0."
-msgid "Volume"
-msgstr "Objem"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Hlasy sú optimalizované pre know-how jazyky."
-msgid "Voz"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Vyberte text a stlačte Alt+V na čítanie nahlas"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Toto je test, vitajte v BigLinuxe!"
+
+msgid "Type text to test…"
+msgstr "Zadajte text na testovanie…"
+
+msgid "Test voice"
+msgstr "Otestovať hlas"
+
+msgid "Test the selected voice"
+msgstr "Otestovať vybraný hlas"
+
+msgid "Voice settings"
+msgstr "Nastavenia hlasu"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Vyberte hlas a upravte parametre reči"
+
+msgid "Voice"
 msgstr "Hlas"
+
+msgid "Loading voices..."
+msgstr "Načítavanie hlasov..."
+
+msgid "Detecting installed voices..."
+msgstr "Zisťovanie nainštalovaných hlasov..."
+
+msgid "Select TTS voice"
+msgstr "Výber TTS hlasu"
+
+msgid "Speed"
+msgstr "Rýchlosť"
+
+msgid "Speech rate"
+msgstr "Rýchlosť reči"
+
+msgid "Slow"
+msgstr "Pomaly"
+
+msgid "Normal"
+msgstr "Normálne"
+
+msgid "Fast"
+msgstr "Rýchlo"
+
+msgid "Speech speed"
+msgstr "Rýchlosť reči"
+
+msgid "Pitch"
+msgstr "Výška"
+
+msgid "Voice tone"
+msgstr "Tón hlasu"
+
+msgid "Low"
+msgstr "Nízky"
+
+msgid "High"
+msgstr "Vysoký"
+
+msgid "Voice pitch"
+msgstr "Výška hlasu"
+
+msgid "Volume"
+msgstr "Hlasitosť"
+
+msgid "Speech volume"
+msgstr "Hlasitosť reči"
+
+msgid "Mute"
+msgstr "Stlmiť"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "TTS Engine"
+msgstr "TTS motor"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Vyberte motor na prevod textu na reč"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTS motor"
+
+msgid "Engine used for speech synthesis"
+msgstr "Motor používaný na syntézu reči"
+
+msgid "Select TTS engine"
+msgstr "Výber TTS motora"
+
+msgid "Output module"
+msgstr "Výstupný modul"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Syntetizátor reči používaný programom speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Výber výstupného modulu"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Checking..."
+msgstr "Kontrolujem..."
+
+msgid "Text processing"
+msgstr "Spracovanie textu"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Ako sa text čistí a pripravuje pred čítaním"
+
+msgid "Processing options"
+msgstr "Možnosti spracovania"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Skratky, formátovanie, limity"
+
+msgid "Expand abbreviations"
+msgstr "Rozvinúť skratky"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Nahradiť bežné skratky celými slovami"
+
+msgid "Expand text abbreviations"
+msgstr "Rozvinúť textové skratky"
+
+msgid "Read special characters"
+msgstr "Čítať špeciálne znaky"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Vysloviť symboly ako # @ % podľa názvu"
+
+msgid "Read special characters aloud"
+msgstr "Čítať špeciálne znaky nahlas"
+
+msgid "Remove formatting"
+msgstr "Odstrániť formátovanie"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Odstrániť Markdown a HTML pred čítaním"
+
+msgid "Remove text formatting"
+msgstr "Odstrániť formátovanie textu"
+
+msgid "Read URLs"
+msgstr "Čítať URL adresy"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Čítať webové adresy nahlas namiesto ich preskakovania"
+
+msgid "Read URLs aloud"
+msgstr "Čítať URL adresy nahlas"
+
+msgid "Unlimited"
+msgstr "Neobmedzene"
+
+msgid "Character limit"
+msgstr "Limit znakov"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Maximálny počet znakov na čítanie naraz"
+
+msgid "Maximum character limit"
+msgstr "Maximálny limit znakov"
+
+msgid "Advanced"
+msgstr "Rozšírené"
+
+msgid "Advanced options"
+msgstr "Rozšírené možnosti"
+
+msgid "Shortcut, behavior settings"
+msgstr "Skratka, nastavenia správania"
+
+msgid "Keyboard shortcut"
+msgstr "Klávesová skratka"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Vyberte text kdekoľvek a stlačte skratku na čítanie nahlas. "
+"Stlačte znova na zastavenie."
+
+msgid "Change"
+msgstr "Zmeniť"
+
+msgid "Show speak button in app launcher"
+msgstr "Zobraziť tlačidlo čítania v spúšťači aplikácií"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Pridá položku spúšťača, ktorú môžete pripnúť na panel úloh"
+
+msgid "Set new shortcut"
+msgstr "Nastaviť novú skratku"
+
+msgid "Press the new shortcut"
+msgstr "Stlačte novú skratku"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Podržte modifikačné klávesy (Alt, Ctrl, Shift, Super)\n"
+"a stlačte písmeno alebo kláves.\n"
+"\n"
+"Stlačte Escape na zrušenie."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Podržte modifikačné klávesy</b> (Alt, Ctrl, Shift, Super)\n"
+"a stlačte písmeno alebo kláves.\n"
+"\n"
+"<small>Stlačte Escape na zrušenie</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Skratka zmenená na {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nenašli sa hlasy — nainštalujte rhvoice alebo espeak-ng"
+
+msgid "No voices available"
+msgstr "Nie sú dostupné hlasy"
+
+msgid "No TTS voices installed"
+msgstr "Nie sú nainštalované TTS hlasy"
+
+msgid "No voices available for this engine"
+msgstr "Nie sú dostupné hlasy pre tento motor"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Najprv nainštalujte hlasy pre {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} hlasov dostupných"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nenašli sa hlasy pre {engine} — najprv ho nainštalujte"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Nainštalovať Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper nie je nainštalovaný. Poskytuje vysokokvalitné neurónové hlasy na čítanie textu.\n"
+"\n"
+"Nasledujúce balíčky budú nainštalované:\n"
+"• piper-tts-bin (TTS motor)\n"
+"• piper-voices-pt-BR (portugalské hlasy)\n"
+"\n"
+"Toto vyžaduje oprávnenia správcu."
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "Install"
+msgstr "Nainštalovať"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Inštalácia Piper TTS — môže to chvíľu trvať…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper úspešne nainštalovaný! Zisťujem hlasy…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Inštalácia Piper zlyhala — skontrolujte oprávnenia"
+
+msgid "Type some text to test"
+msgstr "Zadajte text na testovanie"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Nepodarilo sa prehrať test — skontrolujte, či je TTS motor nainštalovaný"
+
+msgid "Press Alt+V to stop"
+msgstr "Stlačte Alt+V na zastavenie"
+
+msgid "Stop"
+msgstr "Zastaviť"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Nepodarilo sa prehrať reč — skontrolujte TTS motor"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Dostupné: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nebol nájdený TTS motor — nainštalujte speech-dispatcher alebo espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Nastavenia obnovené na predvolené hodnoty"
+
+msgid "Restore Defaults"
+msgstr "Obnoviť predvolené hodnoty"
+
+msgid "About"
+msgstr "O programe"
+
+msgid "Quit"
+msgstr "Ukončiť"
+
+msgid "Main menu"
+msgstr "Hlavné menu"
+
+msgid "Restore settings?"
+msgstr "Obnoviť nastavenia?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Toto vráti všetky úpravy na pôvodné predvolené hodnoty."
+
+msgid "Restore"
+msgstr "Obnoviť"
+
+msgid "Technologies used"
+msgstr "Použité technológie"
+
+msgid "License"
+msgstr "Licencia"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Toto rozhranie je licencované pod GPL-3.0. TTS motory majú vlastné licencie."

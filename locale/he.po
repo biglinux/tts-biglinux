@@ -1,50 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Hebrew translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Hebrew\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "הגדרות טקסט לקול"
-msgid "Vozes - Abrir BigStore"
-msgstr "קולות - פתח את ביגסטור"
-msgid "Voice Configuration"
-msgstr "תצורת קול"
-msgid "Configurar voz"
-msgstr "הגדרת קול"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "כדי לדבר טקסט שנבחר, השתמש בקיצור הדרך "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr "או הסמל בהפעלה 'כלי עזר' בתפריט המערכת. כדי להפסיק לקרוא השתמש בקיצור הדרך או בסמל."
-msgid "Selecione as configurações de sua preferência"
-msgstr "בחר את ההגדרות המועדפות עליך"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "מספרים גדולים יותר הופכים את הקול למהיר יותר, ברירת המחדל היא: -25"
-msgid "Velocidade"
-msgstr "מהירות"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "מספרים גדולים יותר משאירים את הקול חריף יותר, הדפוס הוא: -25"
-msgid "Tom"
-msgstr "ניקוד"
-msgid "O padrão é: 0."
-msgstr "ברירת המחדל היא: 0."
-msgid "Volume"
-msgstr "נפח"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "קולות ממוטבים לשפות ידע."
-msgid "Voz"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "בחרו טקסט ולחצו Alt+V כדי להקריא בקול"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "זהו מבחן, ברוכים הבאים ל-BigLinux!"
+
+msgid "Type text to test…"
+msgstr "הקלידו טקסט לבדיקה…"
+
+msgid "Test voice"
+msgstr "בדיקת קול"
+
+msgid "Test the selected voice"
+msgstr "בדיקת הקול שנבחר"
+
+msgid "Voice settings"
+msgstr "הגדרות קול"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "בחרו קול והתאימו פרמטרים של דיבור"
+
+msgid "Voice"
 msgstr "קול"
+
+msgid "Loading voices..."
+msgstr "טוען קולות..."
+
+msgid "Detecting installed voices..."
+msgstr "מזהה קולות מותקנים..."
+
+msgid "Select TTS voice"
+msgstr "בחירת קול TTS"
+
+msgid "Speed"
+msgstr "מהירות"
+
+msgid "Speech rate"
+msgstr "קצב דיבור"
+
+msgid "Slow"
+msgstr "איטי"
+
+msgid "Normal"
+msgstr "רגיל"
+
+msgid "Fast"
+msgstr "מהיר"
+
+msgid "Speech speed"
+msgstr "מהירות דיבור"
+
+msgid "Pitch"
+msgstr "גובה צליל"
+
+msgid "Voice tone"
+msgstr "טון קול"
+
+msgid "Low"
+msgstr "נמוך"
+
+msgid "High"
+msgstr "גבוה"
+
+msgid "Voice pitch"
+msgstr "גובה הקול"
+
+msgid "Volume"
+msgstr "עוצמה"
+
+msgid "Speech volume"
+msgstr "עוצמת דיבור"
+
+msgid "Mute"
+msgstr "השתקה"
+
+msgid "Max"
+msgstr "מקס"
+
+msgid "TTS Engine"
+msgstr "מנוע TTS"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "בחרו באיזה מנוע טקסט-לדיבור להשתמש"
+
+msgid "Engine"
+msgstr "מנוע"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "מנוע TTS"
+
+msgid "Engine used for speech synthesis"
+msgstr "מנוע המשמש לסינתזת דיבור"
+
+msgid "Select TTS engine"
+msgstr "בחירת מנוע TTS"
+
+msgid "Output module"
+msgstr "מודול פלט"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "מסנתז דיבור המשמש את speech-dispatcher"
+
+msgid "Select output module"
+msgstr "בחירת מודול פלט"
+
+msgid "Status"
+msgstr "מצב"
+
+msgid "Checking..."
+msgstr "בודק..."
+
+msgid "Text processing"
+msgstr "עיבוד טקסט"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "כיצד הטקסט מנוקה ומוכן לפני הקראה"
+
+msgid "Processing options"
+msgstr "אפשרויות עיבוד"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "קיצורים, עיצוב, מגבלות"
+
+msgid "Expand abbreviations"
+msgstr "הרחבת קיצורים"
+
+msgid "Replace common abbreviations with full words"
+msgstr "החלפת קיצורים נפוצים במילים מלאות"
+
+msgid "Expand text abbreviations"
+msgstr "הרחבת קיצורי טקסט"
+
+msgid "Read special characters"
+msgstr "קריאת תווים מיוחדים"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "הגייה של סמלים כמו # @ % לפי שמם"
+
+msgid "Read special characters aloud"
+msgstr "קריאת תווים מיוחדים בקול"
+
+msgid "Remove formatting"
+msgstr "הסרת עיצוב"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "הסרת Markdown ו-HTML לפני הקראה"
+
+msgid "Remove text formatting"
+msgstr "הסרת עיצוב טקסט"
+
+msgid "Read URLs"
+msgstr "קריאת כתובות URL"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "קריאת כתובות אינטרנט בקול במקום לדלג עליהן"
+
+msgid "Read URLs aloud"
+msgstr "קריאת כתובות URL בקול"
+
+msgid "Unlimited"
+msgstr "ללא הגבלה"
+
+msgid "Character limit"
+msgstr "מגבלת תווים"
+
+msgid "Maximum number of characters to read at once"
+msgstr "מספר מרבי של תווים להקראה בבת אחת"
+
+msgid "Maximum character limit"
+msgstr "מגבלת תווים מרבית"
+
+msgid "Advanced"
+msgstr "מתקדם"
+
+msgid "Advanced options"
+msgstr "אפשרויות מתקדמות"
+
+msgid "Shortcut, behavior settings"
+msgstr "קיצור דרך, הגדרות התנהגות"
+
+msgid "Keyboard shortcut"
+msgstr "קיצור מקלדת"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"בחרו טקסט בכל מקום ולחצו על קיצור המקלדת כדי להקריא בקול. "
+"לחצו שוב כדי לעצור."
+
+msgid "Change"
+msgstr "שינוי"
+
+msgid "Show speak button in app launcher"
+msgstr "הצגת כפתור הקראה במפעיל היישומים"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "מוסיף פריט מפעיל שניתן להצמיד לשורת המשימות"
+
+msgid "Set new shortcut"
+msgstr "הגדרת קיצור חדש"
+
+msgid "Press the new shortcut"
+msgstr "לחצו על הקיצור החדש"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"החזיקו מקשי שינוי (Alt, Ctrl, Shift, Super)\n"
+"ולחצו על אות או מקש.\n"
+"\n"
+"לחצו Escape לביטול."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>החזיקו מקשי שינוי</b> (Alt, Ctrl, Shift, Super)\n"
+"ולחצו על אות או מקש.\n"
+"\n"
+"<small>לחצו Escape לביטול</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "הקיצור שונה ל-{keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "לא נמצאו קולות — התקינו rhvoice או espeak-ng"
+
+msgid "No voices available"
+msgstr "אין קולות זמינים"
+
+msgid "No TTS voices installed"
+msgstr "לא הותקנו קולות TTS"
+
+msgid "No voices available for this engine"
+msgstr "אין קולות זמינים למנוע זה"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "התקינו קודם קולות {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} קולות זמינים"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "לא נמצאו קולות ל-{engine} — התקינו אותו קודם"
+
+msgid "Install Piper Neural TTS?"
+msgstr "להתקין את Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper אינו מותקן. הוא מספק קולות נוירונים באיכות גבוהה להקראת טקסט.\n"
+"\n"
+"החבילות הבאות יותקנו:\n"
+"• piper-tts-bin (מנוע TTS)\n"
+"• piper-voices-pt-BR (קולות פורטוגזיים)\n"
+"\n"
+"נדרשות הרשאות מנהל."
+
+msgid "Cancel"
+msgstr "ביטול"
+
+msgid "Install"
+msgstr "התקנה"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "מתקין את Piper TTS — זה עלול לקחת רגע…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper הותקן בהצלחה! מאתר קולות…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "התקנת Piper נכשלה — בדקו הרשאות"
+
+msgid "Type some text to test"
+msgstr "הקלידו טקסט לבדיקה"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "לא ניתן להפעיל בדיקה — בדקו אם מנוע TTS מותקן"
+
+msgid "Press Alt+V to stop"
+msgstr "לחצו Alt+V לעצירה"
+
+msgid "Stop"
+msgstr "עצירה"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "לא ניתן להפעיל דיבור — בדקו את מנוע TTS"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "זמינים: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "לא נמצא מנוע TTS — התקינו speech-dispatcher או espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "ההגדרות שוחזרו לברירת המחדל"
+
+msgid "Restore Defaults"
+msgstr "שחזור ברירות מחדל"
+
+msgid "About"
+msgstr "אודות"
+
+msgid "Quit"
+msgstr "יציאה"
+
+msgid "Main menu"
+msgstr "תפריט ראשי"
+
+msgid "Restore settings?"
+msgstr "לשחזר הגדרות?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "פעולה זו תחזיר את כל ההתאמות לברירות המחדל המקוריות."
+
+msgid "Restore"
+msgstr "שחזור"
+
+msgid "Technologies used"
+msgstr "טכנולוגיות בשימוש"
+
+msgid "License"
+msgstr "רישיון"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "ממשק זה מורשה תחת GPL-3.0. למנועי TTS יש רישיונות משלהם."

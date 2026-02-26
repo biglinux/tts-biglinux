@@ -93,6 +93,7 @@ class TTSApplication(Adw.Application):
         self._create_actions()
         GLib.set_application_name(_(APP_NAME))
         Gtk.Window.set_default_icon_name("biglinux-tts")
+        self._ensure_shortcut_registered()
 
     def _on_activate(self, app: Adw.Application) -> None:
         """Application activate — create or present window."""
@@ -168,3 +169,85 @@ class TTSApplication(Adw.Application):
         """Quit the application."""
         logger.info("Quit action triggered")
         self.quit()
+
+    # ── Shortcut Registration ────────────────────────────────────────
+
+    def _ensure_shortcut_registered(self) -> None:
+        """Register Alt+V shortcut with KGlobalAccel if not already registered."""
+        import subprocess
+        from pathlib import Path
+
+        rc_path = Path.home() / ".config" / "kglobalshortcutsrc"
+        shortcut = self.settings.shortcut.keybinding
+
+        # Convert GTK accelerator to KDE format
+        kde_shortcut = shortcut
+        kde_shortcut = kde_shortcut.replace("<Control>", "Ctrl+")
+        kde_shortcut = kde_shortcut.replace("<Shift>", "Shift+")
+        kde_shortcut = kde_shortcut.replace("<Alt>", "Alt+")
+        kde_shortcut = kde_shortcut.replace("<Super>", "Meta+")
+        if "+" in kde_shortcut:
+            parts = kde_shortcut.rsplit("+", 1)
+            kde_shortcut = parts[0] + "+" + parts[1].upper()
+        else:
+            kde_shortcut = kde_shortcut.upper()
+
+        # Check if already registered
+        already_registered = False
+        if rc_path.exists():
+            try:
+                content = rc_path.read_text(encoding="utf-8")
+                if "[bigtts.desktop]" in content:
+                    already_registered = True
+            except OSError:
+                pass
+
+        if already_registered:
+            logger.debug("Shortcut already registered in kglobalshortcutsrc")
+            return
+
+        logger.info("Registering global shortcut: %s", kde_shortcut)
+
+        # Ensure kglobalaccel symlink exists locally
+        local_kga = Path.home() / ".local" / "share" / "kglobalaccel"
+        local_kga.mkdir(parents=True, exist_ok=True)
+        symlink_path = local_kga / "bigtts.desktop"
+        system_desktop = Path("/usr/share/applications/bigtts.desktop")
+        local_desktop = Path.home() / ".local" / "share" / "applications" / "bigtts.desktop"
+
+        target = local_desktop if local_desktop.exists() else system_desktop
+        if target.exists() and not symlink_path.exists():
+            try:
+                symlink_path.symlink_to(target)
+                logger.info("Created kglobalaccel symlink: %s -> %s", symlink_path, target)
+            except OSError as e:
+                logger.warning("Could not create kglobalaccel symlink: %s", e)
+
+        # Register via kwriteconfig6
+        try:
+            subprocess.run(
+                [
+                    "kwriteconfig6",
+                    "--file", "kglobalshortcutsrc",
+                    "--group", "bigtts.desktop",
+                    "--key", "_launch",
+                    f"{kde_shortcut}\t,{kde_shortcut}\t,Speech or stop selected text",
+                ],
+                timeout=5,
+                check=False,
+            )
+            logger.info("Shortcut registered in kglobalshortcutsrc")
+        except (OSError, subprocess.TimeoutExpired) as e:
+            logger.warning("Could not register shortcut: %s", e)
+
+        # Notify KGlobalAccel to reload
+        try:
+            subprocess.run(
+                ["dbus-send", "--type=signal", "--session",
+                 "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
+                 "int32:3", "int32:0"],
+                timeout=5,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass

@@ -142,7 +142,7 @@ msgstr "Motor"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
 msgid "speech-dispatcher"
-msgstr "hlasový-dispečer"
+msgstr "speech-dispatcher"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
 msgid "TTS Backend"

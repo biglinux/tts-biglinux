@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Romanian translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Romanian\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Setări text-voce"
-msgid "Vozes - Abrir BigStore"
-msgstr "Voci - Deschide BigStore"
-msgid "Voice Configuration"
-msgstr "Configurare voce"
-msgid "Configurar voz"
-msgstr "Configurarea vocii"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Pentru a rosti textul selectat, utilizați comanda rapidă "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"sau pictograma din sesiunea Utilitare din meniul sistemului. Pentru a opri citirea, utilizați "
-"comanda rapidă sau pictograma."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Selectați setările preferate"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Numerele mai mari fac vocea mai rapidă, valoarea implicită este: -25"
-msgid "Velocidade"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Selectați text și apăsați Alt+V pentru a citi cu voce tare"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Acesta este un test, bine ați venit în BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Introduceți text pentru testare…"
+
+msgid "Test voice"
+msgstr "Testare voce"
+
+msgid "Test the selected voice"
+msgstr "Testează vocea selectată"
+
+msgid "Voice settings"
+msgstr "Setări voce"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Alegeți vocea și ajustați parametrii de vorbire"
+
+msgid "Voice"
+msgstr "Voce"
+
+msgid "Loading voices..."
+msgstr "Se încarcă vocile..."
+
+msgid "Detecting installed voices..."
+msgstr "Se detectează vocile instalate..."
+
+msgid "Select TTS voice"
+msgstr "Selectare voce TTS"
+
+msgid "Speed"
 msgstr "Viteză"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Numerele mai mari lasă vocea mai acută, modelul este: -25"
-msgid "Tom"
-msgstr "Ton"
-msgid "O padrão é: 0."
-msgstr "Valoarea implicită este: 0."
+
+msgid "Speech rate"
+msgstr "Viteza vorbirii"
+
+msgid "Slow"
+msgstr "Lent"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Rapid"
+
+msgid "Speech speed"
+msgstr "Viteza vorbirii"
+
+msgid "Pitch"
+msgstr "Înălțime"
+
+msgid "Voice tone"
+msgstr "Tonul vocii"
+
+msgid "Low"
+msgstr "Grav"
+
+msgid "High"
+msgstr "Înalt"
+
+msgid "Voice pitch"
+msgstr "Înălțimea vocii"
+
 msgid "Volume"
 msgstr "Volum"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Vocile sunt optimizate pentru limbaje de know-how."
-msgid "Voz"
-msgstr "Voce"
+
+msgid "Speech volume"
+msgstr "Volumul vorbirii"
+
+msgid "Mute"
+msgstr "Mut"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "TTS Engine"
+msgstr "Motor TTS"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Alegeți motorul text-în-vorbire de utilizat"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "Motor TTS"
+
+msgid "Engine used for speech synthesis"
+msgstr "Motorul utilizat pentru sinteza vocii"
+
+msgid "Select TTS engine"
+msgstr "Selectare motor TTS"
+
+msgid "Output module"
+msgstr "Modul de ieșire"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Sintetizatorul de voce utilizat de speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Selectare modul de ieșire"
+
+msgid "Status"
+msgstr "Stare"
+
+msgid "Checking..."
+msgstr "Se verifică..."
+
+msgid "Text processing"
+msgstr "Procesare text"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Cum este curățat și pregătit textul înainte de citire"
+
+msgid "Processing options"
+msgstr "Opțiuni de procesare"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Abrevieri, formatare, limite"
+
+msgid "Expand abbreviations"
+msgstr "Extindere abrevieri"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Înlocuirea abrevierilor comune cu cuvinte complete"
+
+msgid "Expand text abbreviations"
+msgstr "Extindere abrevieri text"
+
+msgid "Read special characters"
+msgstr "Citire caractere speciale"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Pronunțare simboluri precum # @ % după nume"
+
+msgid "Read special characters aloud"
+msgstr "Citire caractere speciale cu voce tare"
+
+msgid "Remove formatting"
+msgstr "Eliminare formatare"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Eliminare Markdown și HTML înainte de citire"
+
+msgid "Remove text formatting"
+msgstr "Eliminare formatare text"
+
+msgid "Read URLs"
+msgstr "Citire URL-uri"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Citiți adresele web cu voce tare în loc să le omiteți"
+
+msgid "Read URLs aloud"
+msgstr "Citire URL-uri cu voce tare"
+
+msgid "Unlimited"
+msgstr "Nelimitat"
+
+msgid "Character limit"
+msgstr "Limită de caractere"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Numărul maxim de caractere citite odată"
+
+msgid "Maximum character limit"
+msgstr "Limită maximă de caractere"
+
+msgid "Advanced"
+msgstr "Avansat"
+
+msgid "Advanced options"
+msgstr "Opțiuni avansate"
+
+msgid "Shortcut, behavior settings"
+msgstr "Scurtătură, setări de comportament"
+
+msgid "Keyboard shortcut"
+msgstr "Scurtătură de tastatură"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Selectați text oriunde și apăsați scurtătura pentru a citi cu voce tare. "
+"Apăsați din nou pentru a opri."
+
+msgid "Change"
+msgstr "Modificare"
+
+msgid "Show speak button in app launcher"
+msgstr "Afișare buton de citire în lansatorul de aplicații"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Adaugă o intrare în lansator pe care o puteți fixa în bara de activități"
+
+msgid "Set new shortcut"
+msgstr "Setare scurtătură nouă"
+
+msgid "Press the new shortcut"
+msgstr "Apăsați scurtătura nouă"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Țineți apăsate tastele modificatoare (Alt, Ctrl, Shift, Super)\n"
+"și apăsați o literă sau tastă.\n"
+"\n"
+"Apăsați Escape pentru a anula."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Țineți apăsate tastele modificatoare</b> (Alt, Ctrl, Shift, Super)\n"
+"și apăsați o literă sau tastă.\n"
+"\n"
+"<small>Apăsați Escape pentru a anula</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Scurtătura schimbată în {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nu s-au găsit voci — instalați rhvoice sau espeak-ng"
+
+msgid "No voices available"
+msgstr "Nu sunt voci disponibile"
+
+msgid "No TTS voices installed"
+msgstr "Nu sunt instalate voci TTS"
+
+msgid "No voices available for this engine"
+msgstr "Nu sunt voci disponibile pentru acest motor"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Instalați mai întâi vocile {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} voci disponibile"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nu s-au găsit voci pentru {engine} — instalați-l mai întâi"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Instalați Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper nu este instalat. Oferă voci neurale de înaltă calitate pentru citirea textului.\n"
+"\n"
+"Următoarele pachete vor fi instalate:\n"
+"• piper-tts-bin (motor TTS)\n"
+"• piper-voices-pt-BR (voci portugheze)\n"
+"\n"
+"Acest lucru necesită permisiuni de administrator."
+
+msgid "Cancel"
+msgstr "Anulare"
+
+msgid "Install"
+msgstr "Instalare"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Se instalează Piper TTS — poate dura un moment…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper instalat cu succes! Se descoperă vocile…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Instalarea Piper a eșuat — verificați permisiunile"
+
+msgid "Type some text to test"
+msgstr "Introduceți text pentru testare"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Nu s-a putut reda testul — verificați dacă un motor TTS este instalat"
+
+msgid "Press Alt+V to stop"
+msgstr "Apăsați Alt+V pentru a opri"
+
+msgid "Stop"
+msgstr "Oprire"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Nu s-a putut reda vorbirea — verificați motorul TTS"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Disponibil: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nu s-a găsit niciun motor TTS — instalați speech-dispatcher sau espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Setările au fost restaurate la valorile implicite"
+
+msgid "Restore Defaults"
+msgstr "Restaurare valori implicite"
+
+msgid "About"
+msgstr "Despre"
+
+msgid "Quit"
+msgstr "Ieșire"
+
+msgid "Main menu"
+msgstr "Meniu principal"
+
+msgid "Restore settings?"
+msgstr "Restaurați setările?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Aceasta va readuce toate ajustările la valorile implicite originale."
+
+msgid "Restore"
+msgstr "Restaurare"
+
+msgid "Technologies used"
+msgstr "Tehnologii utilizate"
+
+msgid "License"
+msgstr "Licență"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Această interfață este licențiată sub GPL-3.0. Motoarele TTS au propriile lor licențe."

@@ -1,50 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Russian translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Настройки преобразования текста в голос"
-msgid "Vozes - Abrir BigStore"
-msgstr "Голоса - Открыть БигСтор"
-msgid "Voice Configuration"
-msgstr "Конфигурация голоса"
-msgid "Configurar voz"
-msgstr "Настройка голоса"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Чтобы произнести выделенный текст, используйте ярлык "
-msgid "[Alt] + [V]"
-msgstr "[Альтернативный вариант] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr "или значок в сеансе Утилиты в системном меню. Чтобы прекратить чтение, используйте ярлык или значок."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Выберите предпочтительные настройки"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Большие числа делают голос быстрее, по умолчанию: -25"
-msgid "Velocidade"
-msgstr "Скорость"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Большие числа оставляют голос более острым, картина такова: -25"
-msgid "Tom"
-msgstr "Тон"
-msgid "O padrão é: 0."
-msgstr "Значение по умолчанию: 0."
-msgid "Volume"
-msgstr "Том"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Голоса оптимизированы для языков ноу-хау."
-msgid "Voz"
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Выделите текст и нажмите Alt+V для чтения вслух"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Это тест, добро пожаловать в BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Введите текст для проверки…"
+
+msgid "Test voice"
+msgstr "Проверить голос"
+
+msgid "Test the selected voice"
+msgstr "Проверить выбранный голос"
+
+msgid "Voice settings"
+msgstr "Настройки голоса"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Выберите голос и настройте параметры речи"
+
+msgid "Voice"
 msgstr "Голос"
+
+msgid "Loading voices..."
+msgstr "Загрузка голосов..."
+
+msgid "Detecting installed voices..."
+msgstr "Обнаружение установленных голосов..."
+
+msgid "Select TTS voice"
+msgstr "Выбрать голос TTS"
+
+msgid "Speed"
+msgstr "Скорость"
+
+msgid "Speech rate"
+msgstr "Скорость речи"
+
+msgid "Slow"
+msgstr "Медленно"
+
+msgid "Normal"
+msgstr "Нормально"
+
+msgid "Fast"
+msgstr "Быстро"
+
+msgid "Speech speed"
+msgstr "Скорость речи"
+
+msgid "Pitch"
+msgstr "Тон"
+
+msgid "Voice tone"
+msgstr "Тон голоса"
+
+msgid "Low"
+msgstr "Низкий"
+
+msgid "High"
+msgstr "Высокий"
+
+msgid "Voice pitch"
+msgstr "Тон голоса"
+
+msgid "Volume"
+msgstr "Громкость"
+
+msgid "Speech volume"
+msgstr "Громкость речи"
+
+msgid "Mute"
+msgstr "Без звука"
+
+msgid "Max"
+msgstr "Макс"
+
+msgid "TTS Engine"
+msgstr "Движок TTS"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Выберите движок синтеза речи"
+
+msgid "Engine"
+msgstr "Движок"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "Движок TTS"
+
+msgid "Engine used for speech synthesis"
+msgstr "Движок, используемый для синтеза речи"
+
+msgid "Select TTS engine"
+msgstr "Выбрать движок TTS"
+
+msgid "Output module"
+msgstr "Модуль вывода"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Синтезатор речи, используемый speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Выбрать модуль вывода"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Checking..."
+msgstr "Проверка..."
+
+msgid "Text processing"
+msgstr "Обработка текста"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Как текст очищается и подготавливается перед чтением"
+
+msgid "Processing options"
+msgstr "Параметры обработки"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Сокращения, форматирование, ограничения"
+
+msgid "Expand abbreviations"
+msgstr "Раскрывать сокращения"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Заменять распространённые сокращения полными словами"
+
+msgid "Expand text abbreviations"
+msgstr "Раскрывать текстовые сокращения"
+
+msgid "Read special characters"
+msgstr "Читать специальные символы"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Произносить символы # @ % по названию"
+
+msgid "Read special characters aloud"
+msgstr "Читать специальные символы вслух"
+
+msgid "Remove formatting"
+msgstr "Удалить форматирование"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Удалять Markdown и HTML перед чтением"
+
+msgid "Remove text formatting"
+msgstr "Удалить форматирование текста"
+
+msgid "Read URLs"
+msgstr "Читать URL-адреса"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Читать веб-адреса вслух вместо пропуска"
+
+msgid "Read URLs aloud"
+msgstr "Читать URL-адреса вслух"
+
+msgid "Unlimited"
+msgstr "Без ограничений"
+
+msgid "Character limit"
+msgstr "Лимит символов"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Максимальное количество символов для чтения за раз"
+
+msgid "Maximum character limit"
+msgstr "Максимальный лимит символов"
+
+msgid "Advanced"
+msgstr "Дополнительно"
+
+msgid "Advanced options"
+msgstr "Дополнительные параметры"
+
+msgid "Shortcut, behavior settings"
+msgstr "Горячая клавиша, настройки поведения"
+
+msgid "Keyboard shortcut"
+msgstr "Горячая клавиша"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Выделите текст в любом месте и нажмите горячую клавишу для чтения вслух. "
+"Нажмите снова, чтобы остановить."
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Show speak button in app launcher"
+msgstr "Показать кнопку чтения в меню приложений"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Добавляет ярлык, который можно закрепить на панели задач"
+
+msgid "Set new shortcut"
+msgstr "Назначить новую клавишу"
+
+msgid "Press the new shortcut"
+msgstr "Нажмите новую комбинацию клавиш"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Удерживайте клавиши-модификаторы (Alt, Ctrl, Shift, Super)\n"
+"и нажмите букву или клавишу.\n"
+"\n"
+"Нажмите Escape для отмены."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Удерживайте клавиши-модификаторы</b> (Alt, Ctrl, Shift, Super)\n"
+"и нажмите букву или клавишу.\n"
+"\n"
+"<small>Нажмите Escape для отмены</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Горячая клавиша изменена на {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Голоса не найдены — установите rhvoice или espeak-ng"
+
+msgid "No voices available"
+msgstr "Нет доступных голосов"
+
+msgid "No TTS voices installed"
+msgstr "Голоса TTS не установлены"
+
+msgid "No voices available for this engine"
+msgstr "Нет доступных голосов для этого движка"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Сначала установите голоса {engine}"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} голосов доступно"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Голоса для {engine} не найдены — сначала установите"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Установить Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper не установлен. Он предоставляет нейронные голоса высокого качества для чтения текста.\n"
+"\n"
+"Будут установлены следующие пакеты:\n"
+"• piper-tts-bin (движок TTS)\n"
+"• piper-voices-pt-BR (португальские голоса)\n"
+"\n"
+"Для этого требуются права администратора."
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Install"
+msgstr "Установить"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Установка Piper TTS — это может занять некоторое время…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper успешно установлен! Поиск голосов…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Не удалось установить Piper — проверьте права доступа"
+
+msgid "Type some text to test"
+msgstr "Введите текст для проверки"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Не удалось воспроизвести тест — проверьте, установлен ли движок TTS"
+
+msgid "Press Alt+V to stop"
+msgstr "Нажмите Alt+V для остановки"
+
+msgid "Stop"
+msgstr "Остановить"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Не удалось воспроизвести речь — проверьте движок TTS"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Доступно: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Движок TTS не найден — установите speech-dispatcher или espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Настройки восстановлены по умолчанию"
+
+msgid "Restore Defaults"
+msgstr "Восстановить по умолчанию"
+
+msgid "About"
+msgstr "О программе"
+
+msgid "Quit"
+msgstr "Выход"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "Restore settings?"
+msgstr "Восстановить настройки?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Все настройки будут возвращены к значениям по умолчанию."
+
+msgid "Restore"
+msgstr "Восстановить"
+
+msgid "Technologies used"
+msgstr "Используемые технологии"
+
+msgid "License"
+msgstr "Лицензия"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Этот интерфейс лицензирован под GPL-3.0. Движки TTS имеют собственные лицензии."

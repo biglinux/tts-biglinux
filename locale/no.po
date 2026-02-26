@@ -1,52 +1,365 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Norwegian translation for tts-biglinux
+# Copyright (C) 2025 BigLinux Team
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: BigLinux Team\n"
+"Language-Team: Norwegian\n"
+"Language: no\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Tekst-til-stemme-innstillinger"
-msgid "Vozes - Abrir BigStore"
-msgstr "Stemmer - Åpne BigStore"
-msgid "Voice Configuration"
-msgstr "Konfigurasjon av tale"
-msgid "Configurar voz"
-msgstr "Konfigurere tale"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Hvis du vil snakke merket tekst, bruker du snarveien "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"eller ikonet i Verktøy-økten i systemmenyen. Hvis du vil stoppe lesingen, bruker du snarveien eller "
-"ikonet."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Velg dine foretrukne innstillinger"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Større tall gjør stemmen raskere, standarden er: -25"
-msgid "Velocidade"
-msgstr "Fart"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Større tall gjør stemmen mer akutt, mønsteret er: -25"
-msgid "Tom"
-msgstr "Tone"
-msgid "O padrão é: 0."
-msgstr "Standarden er: 0."
+
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Merk tekst og trykk Alt+V for å lese høyt"
+
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Dette er en test, velkommen til BigLinux!"
+
+msgid "Type text to test…"
+msgstr "Skriv inn tekst for å teste…"
+
+msgid "Test voice"
+msgstr "Test stemme"
+
+msgid "Test the selected voice"
+msgstr "Test den valgte stemmen"
+
+msgid "Voice settings"
+msgstr "Stemmeinnstillinger"
+
+msgid "Choose voice and adjust speech parameters"
+msgstr "Velg stemme og juster taleparametre"
+
+msgid "Voice"
+msgstr "Stemme"
+
+msgid "Loading voices..."
+msgstr "Laster stemmer..."
+
+msgid "Detecting installed voices..."
+msgstr "Oppdager installerte stemmer..."
+
+msgid "Select TTS voice"
+msgstr "Velg TTS-stemme"
+
+msgid "Speed"
+msgstr "Hastighet"
+
+msgid "Speech rate"
+msgstr "Talehastighet"
+
+msgid "Slow"
+msgstr "Sakte"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Rask"
+
+msgid "Speech speed"
+msgstr "Talehastighet"
+
+msgid "Pitch"
+msgstr "Tonehøyde"
+
+msgid "Voice tone"
+msgstr "Stemmetone"
+
+msgid "Low"
+msgstr "Lav"
+
+msgid "High"
+msgstr "Høy"
+
+msgid "Voice pitch"
+msgstr "Stemmetoneøyde"
+
 msgid "Volume"
 msgstr "Volum"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Stemmer er optimalisert for kunnskapsspråk."
-msgid "Voz"
-msgstr "Stemme"
+
+msgid "Speech volume"
+msgstr "Talevolum"
+
+msgid "Mute"
+msgstr "Dempe"
+
+msgid "Max"
+msgstr "Maks"
+
+msgid "TTS Engine"
+msgstr "TTS-motor"
+
+msgid "Choose which text-to-speech engine to use"
+msgstr "Velg hvilken tekst-til-tale-motor som skal brukes"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "TTS Backend"
+msgstr "TTS-motor"
+
+msgid "Engine used for speech synthesis"
+msgstr "Motor brukt for talesyntese"
+
+msgid "Select TTS engine"
+msgstr "Velg TTS-motor"
+
+msgid "Output module"
+msgstr "Utgangsmodul"
+
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Talesyntesiser brukt av speech-dispatcher"
+
+msgid "Select output module"
+msgstr "Velg utgangsmodul"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Checking..."
+msgstr "Sjekker..."
+
+msgid "Text processing"
+msgstr "Tekstbehandling"
+
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hvordan tekst renses og forberedes før lesing"
+
+msgid "Processing options"
+msgstr "Behandlingsalternativer"
+
+msgid "Abbreviations, formatting, limits"
+msgstr "Forkortelser, formatering, begrensninger"
+
+msgid "Expand abbreviations"
+msgstr "Utvid forkortelser"
+
+msgid "Replace common abbreviations with full words"
+msgstr "Erstatt vanlige forkortelser med fulle ord"
+
+msgid "Expand text abbreviations"
+msgstr "Utvid tekstforkortelser"
+
+msgid "Read special characters"
+msgstr "Les spesialtegn"
+
+msgid "Speak symbols like # @ % by name"
+msgstr "Si symboler som # @ % ved navn"
+
+msgid "Read special characters aloud"
+msgstr "Les spesialtegn høyt"
+
+msgid "Remove formatting"
+msgstr "Fjern formatering"
+
+msgid "Strip Markdown and HTML before reading"
+msgstr "Fjern Markdown og HTML før lesing"
+
+msgid "Remove text formatting"
+msgstr "Fjern tekstformatering"
+
+msgid "Read URLs"
+msgstr "Les URL-er"
+
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Les nettadresser høyt i stedet for å hoppe over dem"
+
+msgid "Read URLs aloud"
+msgstr "Les URL-er høyt"
+
+msgid "Unlimited"
+msgstr "Ubegrenset"
+
+msgid "Character limit"
+msgstr "Tegngrense"
+
+msgid "Maximum number of characters to read at once"
+msgstr "Maksimalt antall tegn som leses om gangen"
+
+msgid "Maximum character limit"
+msgstr "Maksimal tegngrense"
+
+msgid "Advanced"
+msgstr "Avansert"
+
+msgid "Advanced options"
+msgstr "Avanserte alternativer"
+
+msgid "Shortcut, behavior settings"
+msgstr "Snarvei, atferdsinnstillinger"
+
+msgid "Keyboard shortcut"
+msgstr "Tastatursnarvei"
+
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press "
+"again to stop."
+msgstr ""
+"Merk tekst hvor som helst og trykk snarveien for å lese høyt. "
+"Trykk igjen for å stoppe."
+
+msgid "Change"
+msgstr "Endre"
+
+msgid "Show speak button in app launcher"
+msgstr "Vis taleknapp i programstarteren"
+
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Legger til en oppstartsoppføring du kan feste til oppgavelinjen"
+
+msgid "Set new shortcut"
+msgstr "Angi ny snarvei"
+
+msgid "Press the new shortcut"
+msgstr "Trykk den nye snarveien"
+
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Hold nede modifikasjonstastene (Alt, Ctrl, Shift, Super)\n"
+"og trykk en bokstav eller tast.\n"
+"\n"
+"Trykk Escape for å avbryte."
+
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Hold nede modifikasjonstastene</b> (Alt, Ctrl, Shift, Super)\n"
+"og trykk en bokstav eller tast.\n"
+"\n"
+"<small>Trykk Escape for å avbryte</small>"
+
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Snarvei endret til {keys}"
+
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Ingen stemmer funnet — installer rhvoice eller espeak-ng"
+
+msgid "No voices available"
+msgstr "Ingen stemmer tilgjengelig"
+
+msgid "No TTS voices installed"
+msgstr "Ingen TTS-stemmer installert"
+
+msgid "No voices available for this engine"
+msgstr "Ingen stemmer tilgjengelig for denne motoren"
+
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Installer {engine}-stemmer først"
+
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} stemmer tilgjengelig"
+
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Ingen stemmer funnet for {engine} — installer den først"
+
+msgid "Install Piper Neural TTS?"
+msgstr "Installere Piper Neural TTS?"
+
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper er ikke installert. Det gir nevrale stemmer av høy kvalitet for tekstlesing.\n"
+"\n"
+"Følgende pakker vil bli installert:\n"
+"• piper-tts-bin (TTS-motor)\n"
+"• piper-voices-pt-BR (portugisiske stemmer)\n"
+"\n"
+"Dette krever administratortillatelser."
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid "Install"
+msgstr "Installer"
+
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Installerer Piper TTS — dette kan ta et øyeblikk…"
+
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper installert! Oppdager stemmer…"
+
+msgid "Failed to install Piper — check permissions"
+msgstr "Installasjon av Piper mislyktes — sjekk tillatelser"
+
+msgid "Type some text to test"
+msgstr "Skriv inn tekst for å teste"
+
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Kunne ikke spille av test — sjekk om en TTS-motor er installert"
+
+msgid "Press Alt+V to stop"
+msgstr "Trykk Alt+V for å stoppe"
+
+msgid "Stop"
+msgstr "Stopp"
+
+msgid "Could not play speech — check TTS engine"
+msgstr "Kunne ikke spille av tale — sjekk TTS-motoren"
+
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Tilgjengelig: {engines}"
+
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Ingen TTS-motor funnet — installer speech-dispatcher eller espeak-ng"
+
+msgid "Settings restored to defaults"
+msgstr "Innstillinger tilbakestilt til standard"
+
+msgid "Restore Defaults"
+msgstr "Tilbakestill til standard"
+
+msgid "About"
+msgstr "Om"
+
+msgid "Quit"
+msgstr "Avslutt"
+
+msgid "Main menu"
+msgstr "Hovedmeny"
+
+msgid "Restore settings?"
+msgstr "Tilbakestille innstillinger?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Dette vil tilbakestille alle justeringer til de opprinnelige standardverdiene."
+
+msgid "Restore"
+msgstr "Tilbakestill"
+
+msgid "Technologies used"
+msgstr "Teknologier brukt"
+
+msgid "License"
+msgstr "Lisens"
+
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Dette grensesnittet er lisensiert under GPL-3.0. TTS-motorer har egne lisenser."

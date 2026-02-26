@@ -63,4 +63,19 @@ package() {
     mkdir -p "${pkgdir}/usr/share/kglobalaccel/"
     ln -s "/usr/share/applications/bigtts.desktop" \
         "${pkgdir}/usr/share/kglobalaccel/bigtts.desktop"
+
+    # KHotkeys config for Plasma 5 compatibility
+    if [ -d "${InternalDir}/usr/share/khotkeys" ]; then
+        mkdir -p "${pkgdir}/usr/share/khotkeys/"
+        install -m644 "${InternalDir}/usr/share/khotkeys/"* \
+            "${pkgdir}/usr/share/khotkeys/"
+    fi
+
+    # Icon compatibility symlink (old name → new name)
+    mkdir -p "${pkgdir}/usr/share/icons/hicolor/scalable/apps/"
+    if [ -f "${pkgdir}/usr/share/icons/hicolor/scalable/apps/biglinux-tts.svg" ] && \
+       [ ! -f "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg" ]; then
+        ln -s "biglinux-tts.svg" \
+            "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg"
+    fi
 }
