@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Exec=biglinux-tts
-Icon=biglinux-tts
+Icon=tts-biglinux
 Categories=Settings;Utility;Accessibility;
 StartupNotify=true
 Terminal=false

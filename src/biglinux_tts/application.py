@@ -92,7 +92,7 @@ class TTSApplication(Adw.Application):
         load_css()
         self._create_actions()
         GLib.set_application_name(_(APP_NAME))
-        Gtk.Window.set_default_icon_name("biglinux-tts")
+        Gtk.Window.set_default_icon_name("tts-biglinux")
         self._ensure_shortcut_registered()
 
     def _on_activate(self, app: Adw.Application) -> None:
@@ -138,7 +138,7 @@ class TTSApplication(Adw.Application):
         about.set_license_type(Gtk.License.GPL_3_0)
         about.set_website(APP_WEBSITE)
         about.set_issue_url(APP_ISSUE_URL)
-        about.set_application_icon("biglinux-tts")
+        about.set_application_icon("tts-biglinux")
 
         about.add_credit_section(
             _("Technologies used"),

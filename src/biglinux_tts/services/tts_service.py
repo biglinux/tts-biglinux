@@ -326,6 +326,7 @@ class TTSService:
     def _try_restart_speechd(self) -> bool:
         """Try to restart the speech-dispatcher daemon."""
         import time
+        # Try systemctl first
         try:
             subprocess.run(
                 ["systemctl", "--user", "restart", "speech-dispatcher"],
@@ -333,7 +334,19 @@ class TTSService:
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
             time.sleep(1)
-            logger.info("Restarted speech-dispatcher service")
+            logger.info("Restarted speech-dispatcher via systemctl")
+            return True
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+        # Fallback: kill existing and let socket activation restart
+        try:
+            subprocess.run(
+                ["pkill", "-f", "speech-dispatcher"],
+                timeout=3, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            time.sleep(2)
+            logger.info("Killed speech-dispatcher for auto-restart")
             return True
         except (OSError, subprocess.TimeoutExpired):
             return False
@@ -419,9 +432,7 @@ class TTSService:
         # espeak-ng takes text as positional argument
         cmd.append(text)
 
-        print(f"★ espeak-ng CMD: {cmd}")
         result = self._start_process_no_stdin(cmd)
-        print(f"★ espeak-ng started: {result}, PID={self._process.pid if self._process else 'None'}")
         return result
 
     def _speak_piper(self, text: str, voice_id: str, rate: int, pitch: int, volume: int) -> bool:
