@@ -359,6 +359,10 @@ msgstr "먼저 {engine} 음성을 설치하세요"
 msgid "{count} voices available"
 msgstr "{count}개의 음성 사용 가능"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "음성 발신기를 재시작하는 중…"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"

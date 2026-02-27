@@ -430,6 +430,10 @@ msgstr "Először telepítse a(z) {engine} hangokat"
 msgid "{count} voices available"
 msgstr "{count} hang elérhető"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "A beszédszolgáltató újraindítása…"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: window.py
 #, python-brace-format

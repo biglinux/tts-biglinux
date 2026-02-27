@@ -430,6 +430,10 @@ msgstr "Сначала установите голоса {engine}"
 msgid "{count} voices available"
 msgstr "{count} голосов доступно"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "Перезапуск службы синтеза речи..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: 79
 #, python-brace-format

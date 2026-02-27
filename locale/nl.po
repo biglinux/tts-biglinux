@@ -428,6 +428,10 @@ msgstr "Installeer eerst stemmen voor {engine}"
 msgid "{count} voices available"
 msgstr "{count} stemmen beschikbaar"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "Herstarten van spraak-dispatcher…"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: 79
 #, python-brace-format

@@ -428,6 +428,10 @@ msgstr "Prvo instalirajte glasove za {engine}"
 msgid "{count} voices available"
 msgstr "{count} glasova dostupno"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "Ponovno pokretanje govornog poslužitelja…"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: src/biglinux_tts/services/voice_manager.py
 #, python-brace-format

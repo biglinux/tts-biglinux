@@ -362,6 +362,10 @@ msgstr "Installa prima le voci di {engine}"
 msgid "{count} voices available"
 msgstr "{count} voci disponibili"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 978
+msgid "Restarting speech-dispatcher…"
+msgstr "Riavviando il dispatcher vocale…"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
