@@ -720,7 +720,7 @@ class MainView(Adw.NavigationPage):
                         "[Desktop Entry]\n"
                         "Type=Application\n"
                         "Exec=biglinux-tts-speak\n"
-                        "Icon=biglinux-tts\n"
+                        "Icon=tts-biglinux\n"
                         "Categories=Utility;Accessibility;\n"
                         "StartupNotify=false\n"
                         f"X-KDE-Shortcuts={kde_key}\n"
@@ -731,13 +731,13 @@ class MainView(Adw.NavigationPage):
                 content = re.sub(r"^NoDisplay=.*\n?", "", content, flags=re.MULTILINE)
                 content = re.sub(r"\nActions=.*(?:\n\[Desktop Action [^\]]+\].*)*$", "", content, flags=re.DOTALL)
                 content = re.sub(r"^Exec=.*$", "Exec=biglinux-tts-speak", content, flags=re.MULTILINE)
-                content = re.sub(r"^Icon=.*$", "Icon=biglinux-tts", content, flags=re.MULTILINE)
+                content = re.sub(r"^Icon=.*$", "Icon=tts-biglinux", content, flags=re.MULTILINE)
                 desktop_dst.write_text(content)
             except OSError as e:
                 logger.warning("Could not create launcher entry: %s", e)
 
             self._update_desktop_database()
-            self._on_toast(_("Added to app launcher — may need re-login to appear in panel"), 4)
+            self._ask_restart_plasma()
         else:
             try:
                 if desktop_dst.exists():
@@ -753,43 +753,60 @@ class MainView(Adw.NavigationPage):
 
             self._update_desktop_database()
 
+    def _ask_restart_plasma(self) -> None:
+        """Ask user if they want to restart Plasma Shell for icon changes to take effect."""
+        dialog = Adw.AlertDialog.new(
+            _("Restart Plasma Shell?"),
+            _(
+                "The icon was added to the app launcher.\n\n"
+                "To make it appear in the panel, the Plasma Shell "
+                "needs to be restarted. This will briefly close "
+                "and reopen the desktop panels.\n\n"
+                "Restart now?"
+            ),
+        )
+        dialog.add_response("later", _("Later"))
+        dialog.add_response("restart", _("Restart"))
+        dialog.set_response_appearance("restart", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("restart")
+        dialog.set_close_response("later")
+        dialog.connect("response", self._on_restart_plasma_response)
+        window = self.get_root()
+        dialog.present(window)
+
+    def _on_restart_plasma_response(self, _dialog: Adw.AlertDialog, response: str) -> None:
+        """Handle restart Plasma Shell dialog response."""
+        if response != "restart":
+            self._on_toast(_("Icon added — restart Plasma or re-login for it to appear"), 4)
+            return
+        try:
+            subprocess.Popen(
+                ["sh", "-c", "kquitapp6 plasmashell; sleep 1; kstart plasmashell"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            self._on_toast(_("Restarting Plasma Shell..."), 3)
+        except OSError as e:
+            logger.warning("Could not restart plasmashell: %s", e)
+            self._on_toast(_("Could not restart Plasma Shell — please re-login"), 4)
+
     @staticmethod
     def _ensure_icon_available() -> None:
-        """Ensure the biglinux-tts icon is resolvable.
-
-        Handles the transition from old icon name (tts-biglinux) to new
-        (biglinux-tts) by creating a local symlink if the system only
-        has the old icon installed.
-        """
+        """Ensure the tts-biglinux icon is resolvable in user's icon theme."""
         from pathlib import Path
 
-        icon_dirs = [
-            Path("/usr/share/icons/hicolor/scalable/apps"),
-        ]
-        new_name = "biglinux-tts.svg"
-        old_name = "tts-biglinux.svg"
+        system_icon = Path("/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg")
         local_icon_dir = Path.home() / ".local" / "share" / "icons" / "hicolor" / "scalable" / "apps"
+        local_icon = local_icon_dir / "tts-biglinux.svg"
 
-        # Check if the new icon already exists anywhere
-        for d in icon_dirs:
-            if (d / new_name).exists():
-                return
-
-        # Check if local icon already set up
-        if (local_icon_dir / new_name).exists():
+        if local_icon.exists() or not system_icon.exists():
             return
 
-        # Check if old icon exists and create a symlink with new name
-        for d in icon_dirs:
-            old_path = d / old_name
-            if old_path.exists():
-                local_icon_dir.mkdir(parents=True, exist_ok=True)
-                try:
-                    (local_icon_dir / new_name).symlink_to(old_path)
-                    logger.info("Created icon symlink: %s -> %s", local_icon_dir / new_name, old_path)
-                except OSError as e:
-                    logger.warning("Could not create icon symlink: %s", e)
-                return
+        local_icon_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            local_icon.symlink_to(system_icon)
+            logger.info("Created icon symlink: %s -> %s", local_icon, system_icon)
+        except OSError as e:
+            logger.warning("Could not create icon symlink: %s", e)
 
     @staticmethod
     def _update_desktop_database() -> None:
@@ -832,6 +849,14 @@ class MainView(Adw.NavigationPage):
         # Filter voices by selected backend
         current_backend = self._settings.speech.backend
         filtered = catalog.get_by_backend(current_backend)
+
+        # For speech-dispatcher, also filter by output module
+        if current_backend == TTSBackend.SPEECH_DISPATCHER.value:
+            current_module = self._settings.speech.output_module
+            if current_module:
+                module_filtered = [v for v in filtered if v.output_module == current_module]
+                if module_filtered:
+                    filtered = module_filtered
 
         if not filtered:
             # No voices for selected backend
@@ -947,6 +972,10 @@ class MainView(Adw.NavigationPage):
         }
         backend = backend_map.get(index, TTSBackend.SPEECH_DISPATCHER.value)
         logger.debug("Backend selected: index=%d → %s", index, backend)
+
+        # Stop any active speech before switching
+        self._tts.stop()
+
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
 
@@ -960,6 +989,10 @@ class MainView(Adw.NavigationPage):
 
         # Show/hide output module based on backend
         self._module_combo.set_visible(backend == TTSBackend.SPEECH_DISPATCHER.value)
+
+        # Restart speech-dispatcher daemon when switching back to it
+        if backend == TTSBackend.SPEECH_DISPATCHER.value:
+            self._tts._try_restart_speechd()
 
         # Refresh voices for new backend
         if self._catalog:
@@ -1083,10 +1116,15 @@ class MainView(Adw.NavigationPage):
 
     def _on_module_selected(self, index: int) -> None:
         """Handle output module selection."""
+        if self._updating_ui:
+            return
         modules = ["rhvoice", "espeak-ng", "espeak", "pico", "festival"]
         if 0 <= index < len(modules):
             self._settings.speech.output_module = modules[index]
             self._settings_service.save(self._settings)
+            # Refresh voice list for the new module
+            if self._catalog:
+                self._on_voices_discovered(self._catalog)
 
     def _on_abbreviations_toggled(self, active: bool) -> None:
         self._settings.text.expand_abbreviations = active
