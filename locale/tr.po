@@ -1,411 +1,366 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Turkish translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1247
+
+#: 2
 msgid "Select text and press Alt+V to read aloud"
-msgstr "Metni seçin ve sesli okumak için Alt+V tuşlarına basın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "Metin seçin ve sesli okumak için Alt+V tuşuna basın"
+
+#: 3
 msgid "This is a test, welcome to BigLinux!"
-msgstr "Bu bir test, BigLinux'e hoş geldiniz!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+msgstr "Bu bir testtir, BigLinux'a hoş geldiniz!"
+
+#: 4
 msgid "Type text to test…"
-msgstr "Metin yazın…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1238
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1249
+msgstr "Test etmek için metin yazın…"
+
+#: 5
 msgid "Test voice"
-msgstr "Ses testi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "Sesi test et"
+
+#: 6
 msgid "Test the selected voice"
-msgstr "Seçilen sesi test et"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgstr "Seçili sesi test et"
+
+#: 7
 msgid "Voice settings"
 msgstr "Ses ayarları"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+
+#: 8
 msgid "Choose voice and adjust speech parameters"
-msgstr "Ses seçin ve konuşma parametrelerini ayarlayın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "Ses seçin ve konuşma parametrelerini ayarlayın"
+
+#: 9
 msgid "Voice"
 msgstr "Ses"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: 10
 msgid "Loading voices..."
 msgstr "Sesler yükleniyor..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+
+#: 11
 msgid "Detecting installed voices..."
-msgstr "Yüklenmiş sesler tespit ediliyor..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "Yüklü sesler algılanıyor..."
+
+#: 12
 msgid "Select TTS voice"
-msgstr "TTS sesi seçin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgstr "TTS sesini seçin"
+
+#: 13
 msgid "Speed"
 msgstr "Hız"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: 14
 msgid "Speech rate"
 msgstr "Konuşma hızı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 15
 msgid "Slow"
 msgstr "Yavaş"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 16
 msgid "Normal"
 msgstr "Normal"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 17
 msgid "Fast"
 msgstr "Hızlı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+
+#: 18
 msgid "Speech speed"
 msgstr "Konuşma hızı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+
+#: 19
 msgid "Pitch"
-msgstr "Teklif"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "Perde"
+
+#: 20
 msgid "Voice tone"
 msgstr "Ses tonu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 21
 msgid "Low"
 msgstr "Düşük"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 22
 msgid "High"
 msgstr "Yüksek"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+
+#: 23
 msgid "Voice pitch"
-msgstr "Ses tonu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+msgstr "Ses perdesi"
+
+#: 24
 msgid "Volume"
-msgstr "Hacim"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "Ses düzeyi"
+
+#: 25
 msgid "Speech volume"
-msgstr "Konuşma sesi seviyesi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Konuşma ses düzeyi"
+
+#: 26
 msgid "Mute"
-msgstr "Susturmak"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Sessiz"
+
+#: 27
 msgid "Max"
-msgstr "Max"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+msgstr "Maks"
+
+#: 28
 msgid "TTS Engine"
 msgstr "TTS Motoru"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+
+#: 29
 msgid "Choose which text-to-speech engine to use"
-msgstr "Hangi metinden sese motorunu kullanacağınızı seçin."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "Hangi metin-konuşma motorunun kullanılacağını seçin"
+
+#: 30
 msgid "Engine"
 msgstr "Motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+
+#: 31
 msgid "speech-dispatcher"
-msgstr "konuşma-dağıtıcı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: 32
 msgid "TTS Backend"
-msgstr "TTS Arka Uç"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgstr "TTS Arka Ucu"
+
+#: 33
 msgid "Engine used for speech synthesis"
 msgstr "Konuşma sentezi için kullanılan motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+
+#: 34
 msgid "Select TTS engine"
 msgstr "TTS motorunu seçin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+
+#: 35
 msgid "Output module"
-msgstr "Çıktı modülü"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+msgstr "Çıkış modülü"
+
+#: 36
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Konuşma dağıtımcısı tarafından kullanılan konuşma sentezleyici"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "speech-dispatcher tarafından kullanılan konuşma sentezleyicisi"
+
+#: 37
 msgid "Select output module"
-msgstr "Çıktı modülünü seçin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgstr "Çıkış modülünü seçin"
+
+#: 38
 msgid "Status"
 msgstr "Durum"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+
+#: 39
 msgid "Checking..."
 msgstr "Kontrol ediliyor..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+
+#: 40
 msgid "Text processing"
 msgstr "Metin işleme"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+
+#: 41
 msgid "How text is cleaned and prepared before reading"
-msgstr "Metin, okunmadan önce nasıl temizlenir ve hazırlanır."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgstr "Metnin okuma öncesinde nasıl temizlenip hazırlandığı"
+
+#: 42
 msgid "Processing options"
-msgstr "İşlem seçenekleri"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+msgstr "İşleme seçenekleri"
+
+#: 43
 msgid "Abbreviations, formatting, limits"
 msgstr "Kısaltmalar, biçimlendirme, sınırlar"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+
+#: 44
 msgid "Expand abbreviations"
-msgstr "Kısaltmaları genişletin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgstr "Kısaltmaları genişlet"
+
+#: 45
 msgid "Replace common abbreviations with full words"
-msgstr "Yaygın kısaltmaları tam kelimelerle değiştirin."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+msgstr "Yaygın kısaltmaları tam sözcüklerle değiştir"
+
+#: 46
 msgid "Expand text abbreviations"
-msgstr "Metin kısaltmalarını genişlet."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "Metin kısaltmalarını genişlet"
+
+#: 47
 msgid "Read special characters"
 msgstr "Özel karakterleri oku"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+
+#: 48
 msgid "Speak symbols like # @ % by name"
-msgstr "Semboller # @ % olarak adlandırın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "# @ % gibi sembolleri adlarıyla oku"
+
+#: 49
 msgid "Read special characters aloud"
-msgstr "Özel karakterleri sesli okuyun"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgstr "Özel karakterleri sesli oku"
+
+#: 50
 msgid "Remove formatting"
-msgstr "Biçimlendirmeyi kaldırın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+msgstr "Biçimlendirmeyi kaldır"
+
+#: 51
 msgid "Strip Markdown and HTML before reading"
-msgstr "Okumadan önce Markdown ve HTML'yi kaldır."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+msgstr "Okumadan önce Markdown ve HTML'yi kaldır"
+
+#: 52
 msgid "Remove text formatting"
-msgstr "Metin biçimlendirmesini kaldırın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+msgstr "Metin biçimlendirmesini kaldır"
+
+#: 53
 msgid "Read URLs"
 msgstr "URL'leri oku"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+
+#: 54
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "Web adreslerini atlamak yerine sesli okuyun."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "Web adreslerini atlamak yerine sesli oku"
+
+#: 55
 msgid "Read URLs aloud"
 msgstr "URL'leri sesli oku"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+
+#: 56
 msgid "Unlimited"
 msgstr "Sınırsız"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+
+#: 57
 msgid "Character limit"
 msgstr "Karakter sınırı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+
+#: 58
 msgid "Maximum number of characters to read at once"
 msgstr "Bir seferde okunacak maksimum karakter sayısı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+
+#: 59
 msgid "Maximum character limit"
 msgstr "Maksimum karakter sınırı"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+
+#: 60
 msgid "Advanced"
 msgstr "Gelişmiş"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+
+#: 61
 msgid "Advanced options"
 msgstr "Gelişmiş seçenekler"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+
+#: 62
 msgid "Shortcut, behavior settings"
 msgstr "Kısayol, davranış ayarları"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+
+#: 63
 msgid "Keyboard shortcut"
 msgstr "Klavye kısayolu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
-msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr "Herhangi bir yerden metin seçin ve sesli okumak için kısayola basın. Durdurmak için tekrar basın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+
+#: 64
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press again to "
+"stop."
+msgstr ""
+"Herhangi bir yerde metin seçin ve sesli okumak için kısayola basın. "
+"Durdurmak için tekrar basın."
+
+#: 65
 msgid "Change"
 msgstr "Değiştir"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+
+#: 66
 msgid "Show speak button in app launcher"
-msgstr "Uygulama başlatıcısında konuşma düğmesini göster"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "Görev çubuğunda okuma düğmesini göster"
+
+#: 67
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Görev çubuğuna sabitleyebileceğiniz bir başlatıcı girişi ekler."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "Görev çubuğuna sabitleyebileceğiniz bir simge ekler"
+
+#: 68
 msgid "Set new shortcut"
 msgstr "Yeni kısayol ayarla"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+
+#: 69
 msgid "Press the new shortcut"
-msgstr "Yeni kısayolu basın"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "Yeni kısayola basın"
+
+#: 70
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"Modifier tuşlarını (Alt, Ctrl, Shift, Super) basılı tutun ve bir harf veya tuşa basın.\n"
+"Değiştirici tuşları (Alt, Ctrl, Shift, Super) basılı tutun\n"
+"ve bir harf veya tuşa basın.\n"
 "\n"
 "İptal etmek için Escape tuşuna basın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+
+#: 71
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>Modifikatör tuşlarını basılı tutun</b> (Alt, Ctrl, Shift, Super)\n"
+"<b>Değiştirici tuşları basılı tutun</b> (Alt, Ctrl, Shift, Super)\n"
 "ve bir harf veya tuşa basın.\n"
 "\n"
 "<small>İptal etmek için Escape tuşuna basın</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+
+#: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "Kısayol {keys} olarak değiştirildi."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
-msgid "Restart Plasma Shell?"
-msgstr "Plasma Shell'i yeniden başlat?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Simge uygulama başlatıcısına eklendi.\n"
-"\n"
-"Panelde görünmesi için Plasma Shell'in yeniden başlatılması gerekiyor. Bu, masaüstü panellerini "
-"kısa bir süreliğine kapatıp yeniden açacaktır.\n"
-"\n"
-"Şimdi yeniden başlatılsın mı?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
-msgid "Later"
-msgstr "Sonra"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
-msgid "Restart"
-msgstr "Yeniden Başlat"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Simge eklendi — görünmesi için Plasma'yı yeniden başlatın veya tekrar oturum açın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
-msgid "Restarting Plasma Shell..."
-msgstr "Plasma Shell yeniden başlatılıyor..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Plasma Shell yeniden başlatılamadı — lütfen tekrar giriş yapın."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
+msgstr "Kısayol {keys} olarak değiştirildi"
+
+#: 73
 msgid "No voices found — install rhvoice or espeak-ng"
-msgstr "Ses bulunamadı — rhvoice veya espeak-ng'yi yükleyin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 869
+msgstr "Ses bulunamadı — rhvoice veya espeak-ng yükleyin"
+
+#: 74
 msgid "No voices available"
-msgstr "Ses yok."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 872
+msgstr "Kullanılabilir ses yok"
+
+#: 75
 msgid "No TTS voices installed"
-msgstr "TTS sesleri yüklü değil"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 884
+msgstr "TTS sesi yüklü değil"
+
+#: 76
 msgid "No voices available for this engine"
-msgstr "Bu motor için mevcut ses yok."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 887
+msgstr "Bu motor için kullanılabilir ses yok"
+
+#: 77
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "Öncelikle {engine} seslerini yükleyin."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 914
+msgstr "Önce {engine} seslerini yükleyin"
+
+#: 78
 #, python-brace-format
 msgid "{count} voices available"
-msgstr "{count} ses mevcut"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1015
+msgstr "{count} ses kullanılabilir"
+
+#: 79
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "{engine} için ses bulunamadı — önce yükleyin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1025
+
+#: 80
 msgid "Install Piper Neural TTS?"
-msgstr "Piper Neural TTS'yi yükle?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1027
+msgstr "Piper Neural TTS yüklensin mi?"
+
+#: 81
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -413,111 +368,108 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"Piper yüklü değil. Metin okumak için yüksek kaliteli sinirsel sesler sağlar.\n"
+"Piper yüklü değil. Metin okuma için yüksek kaliteli sinirsel sesler "
+"sunar.\n"
 "\n"
-"Aşağıdaki paketler yüklenecek:\n"
+"Aşağıdaki paketler yüklenecektir:\n"
 "• piper-tts-bin (TTS motoru)\n"
 "• piper-voices-pt-BR (Portekizce sesler)\n"
 "\n"
-"Bu, yönetici izinleri gerektirir."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1035
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+"Bu işlem yönetici izni gerektirir."
+
+#: 82
 msgid "Cancel"
-msgstr "İptal et"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1036
+msgstr "İptal"
+
+#: 83
 msgid "Install"
-msgstr "Kurulum"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1063
+msgstr "Yükle"
+
+#: 84
 msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Piper TTS kuruluyor — bu bir süre alabilir…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+msgstr "Piper TTS yükleniyor — bu biraz zaman alabilir…"
+
+#: 85
 msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper başarıyla yüklendi! Sesler keşfediliyor…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
+msgstr "Piper başarıyla yüklendi! Sesler algılanıyor…"
+
+#: 86
 msgid "Failed to install Piper — check permissions"
-msgstr "Piper'ı yükleme başarısız oldu - izinleri kontrol edin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
+msgstr "Piper yüklenemedi — izinleri kontrol edin"
+
+#: 87
 msgid "Type some text to test"
-msgstr "Metin yazın ve test edin."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
-msgid "Volume is at zero — increasing to minimum for test"
-msgstr "Ses seviyesi sıfır — test için minimuma artırılıyor."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1214
+msgstr "Test etmek için metin yazın"
+
+#: 88
 msgid "Could not play test — check if a TTS engine is installed"
-msgstr "Test oynatılamadı — bir TTS motorunun kurulu olup olmadığını kontrol edin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1228
+msgstr "Test oynatılamadı — TTS motorunun yüklü olup olmadığını kontrol edin"
+
+#: 89
 msgid "Press Alt+V to stop"
-msgstr "Alt+V tuşlarına basarak durdurun."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1229
+msgstr "Durdurmak için Alt+V tuşuna basın"
+
+#: 90
 msgid "Stop"
 msgstr "Durdur"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1237
+
+#: 91
 msgid "Could not play speech — check TTS engine"
-msgstr "Konuşma oynatılamadı - TTS motorunu kontrol edin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1271
+msgstr "Konuşma oynatılamadı — TTS motorunu kontrol edin"
+
+#: 92
 #, python-brace-format
 msgid "Available: {engines}"
-msgstr "Mevcut: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1275
+msgstr "Kullanılabilir: {engines}"
+
+#: 93
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "TTS motoru bulunamadı — speech-dispatcher veya espeak-ng'yi yükleyin."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1286
+msgstr "TTS motoru bulunamadı — speech-dispatcher veya espeak-ng yükleyin"
+
+#: 94
 msgid "Settings restored to defaults"
-msgstr "Ayarlar varsayılanlara geri yüklendi."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgstr "Ayarlar varsayılanlara geri yüklendi"
+
+#: 95
 msgid "Restore Defaults"
-msgstr "Varsayılanları Geri Yükle"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "Varsayılanları geri yükle"
+
+#: 96
 msgid "About"
 msgstr "Hakkında"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+
+#: 97
 msgid "Quit"
-msgstr "Çıkış yap"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+msgstr "Çıkış"
+
+#: 98
 msgid "Main menu"
 msgstr "Ana menü"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: 99
 msgid "Restore settings?"
-msgstr "Ayarları geri yükle?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgstr "Ayarlar geri yüklensin mi?"
+
+#: 100
 msgid "This will return all adjustments to their original defaults."
-msgstr "Bu, tüm ayarlamaları orijinal varsayılanlarına döndürecektir."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "Bu, tüm ayarları orijinal varsayılan değerlerine döndürecektir."
+
+#: 101
 msgid "Restore"
-msgstr "Geri Yükle"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
+msgstr "Geri yükle"
+
+#: 102
 msgid "Technologies used"
 msgstr "Kullanılan teknolojiler"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
+
+#: 103
 msgid "License"
 msgstr "Lisans"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Bu arayüz GPL-3.0 lisansı altındadır. TTS motorlarının kendi lisansları vardır."
+
+#: 104
+msgid ""
+"This interface is licensed under GPL-3.0. TTS engines have their own "
+"licenses."
+msgstr ""
+"Bu arayüz GPL-3.0 altında lisanslanmıştır. TTS motorlarının kendi "
+"lisansları vardır."

@@ -120,9 +120,6 @@ class TTSService:
             backend = voice.backend
             output_module = voice.output_module
 
-        print(f"★ speak() → backend={backend!r}, voice_id={voice_id!r}, module={output_module!r}")
-        print(f"★ speak() text={text[:80]!r}, volume={volume}")
-
         # Process text
         processed = process_text(
             text,
@@ -139,7 +136,6 @@ class TTSService:
         logger.debug("Processed text: %r", processed[:80])
 
         # Speak via appropriate backend
-        print(f"★ Dispatching to backend={backend!r} (spd={TTSBackend.SPEECH_DISPATCHER.value!r}, espeak={TTSBackend.ESPEAK_NG.value!r}, piper={TTSBackend.PIPER.value!r})")
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
             success = self._speak_spd(processed, voice_id, output_module, rate, pitch, volume)
         elif backend == TTSBackend.ESPEAK_NG.value:
@@ -147,11 +143,9 @@ class TTSService:
         elif backend == TTSBackend.PIPER.value:
             success = self._speak_piper(processed, voice_id, rate, pitch, volume)
         else:
-            print(f"★ UNKNOWN BACKEND: {backend!r}")
             logger.error("Unknown backend: %s", backend)
             return False
 
-        print(f"★ Backend result: success={success}")
         if success:
             self._set_state(TTSState.SPEAKING)
             self._start_watch()
@@ -581,7 +575,6 @@ class TTSService:
             # Store both processes for cleanup
             self._piper_proc = piper_proc
             self._process = play_proc
-            print(f"★ Piper STARTED: piper_pid={piper_proc.pid}, play_pid={play_proc.pid}, text={text[:60]!r}")
             return True
 
         except (FileNotFoundError, OSError) as e:

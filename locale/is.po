@@ -1,456 +1,362 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Icelandic translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Icelandic\n"
+"Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1247
+
+#: 2
 msgid "Select text and press Alt+V to read aloud"
-msgstr "Veldu texta og ýttu á Alt+V til að lesa upphátt."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "Veldu texta og ýttu á Alt+V til að lesa upphátt"
+
+#: 3
 msgid "This is a test, welcome to BigLinux!"
-msgstr "Þetta er próf, velkomin í BigLinux!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+msgstr "Þetta er prufa, velkomin í BigLinux!"
+
+#: 4
 msgid "Type text to test…"
-msgstr "Type text to test…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1238
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1249
+msgstr "Sláðu inn texta til að prófa…"
+
+#: 5
 msgid "Test voice"
-msgstr "Prófa radd."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "Prófa rödd"
+
+#: 6
 msgid "Test the selected voice"
-msgstr "Prófaðu valdaða röddu."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgstr "Prófa valda rödd"
+
+#: 7
 msgid "Voice settings"
-msgstr "Röddstillingar"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+msgstr "Raddstillingar"
+
+#: 8
 msgid "Choose voice and adjust speech parameters"
-msgstr "Veldu radd og stilltu talparametra."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "Veldu rödd og stilltu talmælisbreytur"
+
+#: 9
 msgid "Voice"
 msgstr "Rödd"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: 10
 msgid "Loading voices..."
-msgstr "Hlaða raddum..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+msgstr "Hleð röddum..."
+
+#: 11
 msgid "Detecting installed voices..."
-msgstr "Að greina uppsettar raddir..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "Greini uppsettar raddir..."
+
+#: 12
 msgid "Select TTS voice"
-msgstr "Veldu TTS radd."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgstr "Veldu TTS rödd"
+
+#: 13
 msgid "Speed"
 msgstr "Hraði"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: 14
 msgid "Speech rate"
-msgstr "Tala hraði"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+msgstr "Talhraði"
+
+#: 15
 msgid "Slow"
-msgstr "Hægur"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Hægt"
+
+#: 16
 msgid "Normal"
 msgstr "Venjulegt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 17
 msgid "Fast"
-msgstr "Hraður"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+msgstr "Hratt"
+
+#: 18
 msgid "Speech speed"
-msgstr "Tala hraði"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+msgstr "Talhraði"
+
+#: 19
 msgid "Pitch"
-msgstr "Kynning"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "Tónhæð"
+
+#: 20
 msgid "Voice tone"
-msgstr "Rödd tónn"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Raddbragð"
+
+#: 21
 msgid "Low"
-msgstr "Lágur"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Lágt"
+
+#: 22
 msgid "High"
-msgstr "Hár."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+msgstr "Hátt"
+
+#: 23
 msgid "Voice pitch"
-msgstr "Röddstyrka"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+msgstr "Tónhæð raddar"
+
+#: 24
 msgid "Volume"
-msgstr "Bindi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "Hljóðstyrkur"
+
+#: 25
 msgid "Speech volume"
-msgstr "Tala hljóðstyrkur"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Hljóðstyrkur tals"
+
+#: 26
 msgid "Mute"
-msgstr "Þöggun"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Hljóðlaust"
+
+#: 27
 msgid "Max"
-msgstr "Max"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+msgstr "Hámark"
+
+#: 28
 msgid "TTS Engine"
-msgstr "TTS vélgerð"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+msgstr "TTS vél"
+
+#: 29
 msgid "Choose which text-to-speech engine to use"
-msgstr "Veldu hvaða texta-í-tal vél þú vilt nota"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "Veldu hvaða texta-í-tal vél á að nota"
+
+#: 30
 msgid "Engine"
-msgstr "Vélgengur"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+msgstr "Vél"
+
+#: 31
 msgid "speech-dispatcher"
-msgstr "tala-úthafari"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: 32
 msgid "TTS Backend"
 msgstr "TTS bakendi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+
+#: 33
 msgid "Engine used for speech synthesis"
-msgstr "Vél engine notaður fyrir talmyndun"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+msgstr "Vél notuð til talsmíðunar"
+
+#: 34
 msgid "Select TTS engine"
-msgstr "Veldu TTS vélina"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgstr "Veldu TTS vél"
+
+#: 35
 msgid "Output module"
-msgstr "Útgangsmodul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+msgstr "Úttakseining"
+
+#: 36
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Tala hljóðgervill notaður af tal-útsendara"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "Talgervill notaður af speech-dispatcher"
+
+#: 37
 msgid "Select output module"
-msgstr "Veldu úttaksmódúl."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgstr "Veldu úttakseiningu"
+
+#: 38
 msgid "Status"
 msgstr "Staða"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+
+#: 39
 msgid "Checking..."
-msgstr "Athugun..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+msgstr "Athuga..."
+
+#: 40
 msgid "Text processing"
-msgstr "Text vinnsla"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+msgstr "Textavinnsla"
+
+#: 41
 msgid "How text is cleaned and prepared before reading"
-msgstr "Hvernig er texti hreinsaður og undirbúinn áður en hann er lesinn"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgstr "Hvernig texti er hreinsaður og undirbúinn áður en lesið er"
+
+#: 42
 msgid "Processing options"
-msgstr "Vinnslumöguleikar"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+msgstr "Vinnsluvalkostir"
+
+#: 43
 msgid "Abbreviations, formatting, limits"
-msgstr "Skammstafanir, snið, takmarkanir"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "Skammstafanir, snið, takmörk"
+
+#: 44
+msgid "Expand abbreviations"
+msgstr "Víkka skammstafanir"
+
+#: 45
+msgid "Replace common abbreviations with full words"
+msgstr "Skipta algengum skammstöfunum út fyrir heil orð"
+
+#: 46
+msgid "Expand text abbreviations"
+msgstr "Víkka textaskammstafanir"
+
+#: 47
 msgid "Read special characters"
-msgstr "Lesa sértæk tákn"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgstr "Lesa sérstafi"
+
+#: 48
 msgid "Speak symbols like # @ % by name"
-msgstr "Tala tákn eins og # @ % með nafni"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "Segja tákn eins og # @ % eftir nafni"
+
+#: 49
 msgid "Read special characters aloud"
-msgstr "Lesa sérstaka táknin hátt."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgstr "Lesa sérstafi upphátt"
+
+#: 50
 msgid "Remove formatting"
-msgstr "Fjarlægðu snið."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+msgstr "Fjarlægja snið"
+
+#: 51
 msgid "Strip Markdown and HTML before reading"
-msgstr "Fjarlægðu Markdown og HTML áður en þú lest."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+msgstr "Fjarlægja Markdown og HTML áður en lesið er"
+
+#: 52
 msgid "Remove text formatting"
-msgstr "Fjarlægðu textaformun"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+msgstr "Fjarlægja textasnið"
+
+#: 53
 msgid "Read URLs"
 msgstr "Lesa vefslóðir"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+
+#: 54
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "Lesa vefslóðir hátt í stað þess að sleppa þeim"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "Lesa vefföng upphátt í stað þess að sleppa þeim"
+
+#: 55
 msgid "Read URLs aloud"
-msgstr "Lesa vefsíður upphátt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgstr "Lesa vefslóðir upphátt"
+
+#: 56
 msgid "Unlimited"
-msgstr "Ótakmarkaður"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+msgstr "Ótakmarkað"
+
+#: 57
 msgid "Character limit"
-msgstr "Takmark á karakterum"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+msgstr "Stafatakmörk"
+
+#: 58
 msgid "Maximum number of characters to read at once"
-msgstr "Hámarksfjöldi tákna til að lesa í einu."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgstr "Hámarksfjöldi stafa til að lesa í einu"
+
+#: 59
 msgid "Maximum character limit"
-msgstr "Hámarkstakmark fyrir stafi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+msgstr "Hámarks stafatakmörk"
+
+#: 60
 msgid "Advanced"
-msgstr "Ítarlega"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+msgstr "Ítarlegt"
+
+#: 61
 msgid "Advanced options"
-msgstr "Fyrirlestrarvalkostir"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+msgstr "Ítarlegir valkostir"
+
+#: 62
 msgid "Shortcut, behavior settings"
-msgstr "Skammstafir, hegðunarskilmálar"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+msgstr "Flýtileið, hegðunarstillingar"
+
+#: 63
 msgid "Keyboard shortcut"
-msgstr "Takkar á lyklaborði"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
+msgstr "Flýtilykill"
+
+#: 64
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr "Veldu texta hvar sem er og ýttu á flýtilykilinn til að lesa upphátt. Ýttu aftur til að stoppa."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+msgstr "Veldu texta hvar sem er og ýttu á flýtilykil til að lesa upphátt. Ýttu aftur til að stöðva."
+
+#: 65
 msgid "Change"
 msgstr "Breyta"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+
+#: 66
 msgid "Show speak button in app launcher"
-msgstr "Sýna tala hnapp í forritaskipti"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "Sýna talhnappp á verkefnastiku"
+
+#: 67
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Bætir við skotpunkti sem þú getur fest á verkstikuna."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "Bætir við tákni sem þú getur fest á verkefnastiku"
+
+#: 68
 msgid "Set new shortcut"
-msgstr "Settu nýjan flýtilykil"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgstr "Setja nýjan flýtilykil"
+
+#: 69
 msgid "Press the new shortcut"
-msgstr "Þú þarft að ýta á nýja flýtilykilinn."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "Ýttu á nýja flýtilykilinn"
+
+#: 70
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"Haltu á breytivöktum (Alt, Ctrl, Shift, Super) og ýttu á staf eða takka.\n"
+"Haltu niðri breytilyklum (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á bókstaf eða lykil.\n"
 "\n"
-"Ýttu á Escape til að hætta."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+"Ýttu á Escape til að hætta við."
+
+#: 71
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>Hafðu niðurtalningarlyklana</b> (Alt, Ctrl, Shift, Super) niðri og ýttu á staf eða lykil.\n"
+"<b>Haltu niðri breytilyklum</b> (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á bókstaf eða lykil.\n"
 "\n"
-"<small>Ýttu á Escape til að hætta</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+"<small>Ýttu á Escape til að hætta við</small>"
+
+#: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "Skammstafur breyttist í {keys}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
-msgid "Restart Plasma Shell?"
-msgstr "Endurræsa Plasma skel?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Íkonin var bætt við forritaskjáinn.\n"
-"\n"
-"Til að láta það birtast á panelnum þarf að endurræsa Plasma Shell. Þetta mun loka og opna "
-"skrifborðspanelana í stuttan tíma.\n"
-"\n"
-"Viltu endurræsa núna?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
-msgid "Later"
-msgstr "Síðar"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
-msgid "Restart"
-msgstr "Endurræsa"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Tákn bætt við — endurræstu Plasma eða skráðu þig inn aftur til að það birtist"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
-msgid "Restarting Plasma Shell..."
-msgstr "Endurheimta Plasma Shell..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Gat ekki að endurræsa Plasma Shell — vinsamlegast skráðu þig aftur inn."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
+msgstr "Flýtilykli breytt í {keys}"
+
+#: 73
 msgid "No voices found — install rhvoice or espeak-ng"
-msgstr "Engin hljóðs fannst ekki - settu upp rhvoice eða espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 869
+msgstr "Engar raddir fundust — settu upp rhvoice eða espeak-ng"
+
+#: 74
 msgid "No voices available"
-msgstr "Engin ekki tiltæk."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 872
+msgstr "Engar raddir tiltækar"
+
+#: 75
 msgid "No TTS voices installed"
-msgstr "Engin TTS ekki uppsett."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 884
+msgstr "Engar TTS raddir uppsettar"
+
+#: 76
 msgid "No voices available for this engine"
-msgstr "Engininn hefur engar raddir tiltækar."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 887
+msgstr "Engar raddir tiltækar fyrir þessa vél"
+
+#: 77
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "Fyrstðu {engine} raddirnar fyrst"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 914
+msgstr "Settu fyrst upp raddir fyrir {engine}"
+
+#: 78
 #, python-brace-format
 msgid "{count} voices available"
-msgstr "{count} raddir í boði"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1015
+msgstr "{count} raddir tiltækar"
+
+#: 79
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
-msgstr "Engin {engine} fannst ekki - settu það fyrst upp"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1025
+msgstr "Engar raddir fundust fyrir {engine} — settu það fyrst upp"
+
+#: 80
 msgid "Install Piper Neural TTS?"
-msgstr "Settuðu Piper Neural TTS?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1027
+msgstr "Setja upp Piper Neural TTS?"
+
+#: 81
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -458,127 +364,104 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"Piper er ekki uppsett. Það veitir hágæða taugavísur til að lesa texta.\n"
+"Piper er ekki uppsett. Það býður upp á hágæða taugakerfsraddir til að lesa "
+"texta.\n"
 "\n"
-"Eftirfarandi pakka verður sett upp:\n"
+"Eftirfarandi pakkar verða settir upp:\n"
 "• piper-tts-bin (TTS vél)\n"
 "• piper-voices-pt-BR (portúgalskar raddir)\n"
 "\n"
 "Þetta krefst stjórnandaheimilda."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1035
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+
+#: 82
 msgid "Cancel"
 msgstr "Hætta við"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1036
+
+#: 83
 msgid "Install"
 msgstr "Setja upp"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1063
+
+#: 84
 msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Að setja upp Piper TTS — þetta gæti tekið smá tíma…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+msgstr "Set upp Piper TTS — þetta gæti tekið smá stund…"
+
+#: 85
 msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper var sett upp með góðum árangri! Að uppgötva raddir…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
+msgstr "Piper sett upp! Greini raddir…"
+
+#: 86
 msgid "Failed to install Piper — check permissions"
-msgstr "Ekki tókst að setja upp Piper — athugaðu heimildir."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1170
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1170
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1168
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1168
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
-msgid "Volume is at zero — increasing to minimum for test"
-msgstr "Hljóðstyrkur er núll — eykst í lágmark fyrir próf"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1214
+msgstr "Ekki tókst að setja upp Piper — athugaðu heimildir"
+
+#: 87
+msgid "Type some text to test"
+msgstr "Sláðu inn texta til að prófa"
+
+#: 88
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Gat ekki spilað próf — athugaðu hvort TTS vél sé uppsett"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1228
+
+#: 89
 msgid "Press Alt+V to stop"
-msgstr "Pressa Alt+V til að stöðva"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1229
+msgstr "Ýttu á Alt+V til að stöðva"
+
+#: 90
 msgid "Stop"
-msgstr "Stoppuð"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1237
+msgstr "Stöðva"
+
+#: 91
 msgid "Could not play speech — check TTS engine"
-msgstr "Gat ekki að spila tal — athugaðu TTS vélina"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1271
+msgstr "Gat ekki spilað tal — athugaðu TTS vél"
+
+#: 92
 #, python-brace-format
 msgid "Available: {engines}"
-msgstr "Tiltæk: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1275
+msgstr "Tiltækt: {engines}"
+
+#: 93
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "Engin TTS ekki fundin — settu upp speech-dispatcher eða espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1286
+msgstr "Engin TTS vél fannst — settu upp speech-dispatcher eða espeak-ng"
+
+#: 94
 msgid "Settings restored to defaults"
-msgstr "Stillingar endurstilltar á sjálfgefið."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgstr "Stillingum endurstillt á sjálfgildi"
+
+#: 95
 msgid "Restore Defaults"
-msgstr "Endurðu sjálfgefin gildi"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "Endurstilla sjálfgildi"
+
+#: 96
 msgid "About"
-msgstr "Um umfjöllun"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+msgstr "Um"
+
+#: 97
 msgid "Quit"
-msgstr "Hætta við"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+msgstr "Hætta"
+
+#: 98
 msgid "Main menu"
 msgstr "Aðalvalmynd"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: 99
 msgid "Restore settings?"
-msgstr "Endur stillingar?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgstr "Endurstilla stillingar?"
+
+#: 100
 msgid "This will return all adjustments to their original defaults."
-msgstr "Þetta mun skila öllum aðlögunum í upprunaleg gildi sín."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "Þetta mun færa allar stillingar til baka í upprunaleg sjálfgildi."
+
+#: 101
 msgid "Restore"
-msgstr "Endurheimta"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
+msgstr "Endurstilla"
+
+#: 102
 msgid "Technologies used"
-msgstr "Tækni sem notuð er"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
+msgstr "Notuð tækni"
+
+#: 103
 msgid "License"
 msgstr "Leyfi"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
+
+#: 104
 msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Þetta viðmót er leyfisskylt samkvæmt GPL-3.0. TTS vélar hafa sín eigin leyfi."
+msgstr "Þetta viðmót er gefið út undir GPL-3.0 leyfi. TTS vélar hafa sín eigin leyfi."

@@ -1,409 +1,362 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Slovak translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Slovak\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1247
+
+#: 2
 msgid "Select text and press Alt+V to read aloud"
-msgstr "Vyberte text a stlačte Alt+V na čítanie nahlas."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "Vyberte text a stlačte Alt+V na prečítanie nahlas"
+
+#: 3
 msgid "This is a test, welcome to BigLinux!"
-msgstr "Toto je test, vitajte v BigLinux!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+msgstr "Toto je test, vitajte v BigLinuxe!"
+
+#: 4
 msgid "Type text to test…"
-msgstr "Zadajte text na testovanie…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1238
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1249
+msgstr "Napíšte text na otestovanie…"
+
+#: 5
 msgid "Test voice"
-msgstr "Test hlasu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "Otestovať hlas"
+
+#: 6
 msgid "Test the selected voice"
-msgstr "Otestujte vybraný hlas."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgstr "Otestovať vybraný hlas"
+
+#: 7
 msgid "Voice settings"
 msgstr "Nastavenia hlasu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+
+#: 8
 msgid "Choose voice and adjust speech parameters"
-msgstr "Vyberte hlas a upravte parametre reči."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "Vyberte hlas a upravte parametre reči"
+
+#: 9
 msgid "Voice"
 msgstr "Hlas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: 10
 msgid "Loading voices..."
-msgstr "Načítanie hlasov..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+msgstr "Načítavanie hlasov..."
+
+#: 11
 msgid "Detecting installed voices..."
-msgstr "Detekovanie nainštalovaných hlasov..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "Zisťovanie nainštalovaných hlasov..."
+
+#: 12
 msgid "Select TTS voice"
 msgstr "Vyberte hlas TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+
+#: 13
 msgid "Speed"
 msgstr "Rýchlosť"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: 14
 msgid "Speech rate"
 msgstr "Rýchlosť reči"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 15
 msgid "Slow"
-msgstr "Pomalý"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Pomaly"
+
+#: 16
 msgid "Normal"
-msgstr "Normálny"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+msgstr "Normálne"
+
+#: 17
 msgid "Fast"
-msgstr "Rýchly"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+msgstr "Rýchlo"
+
+#: 18
 msgid "Speech speed"
 msgstr "Rýchlosť reči"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+
+#: 19
 msgid "Pitch"
-msgstr "Návrh"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "Výška tónu"
+
+#: 20
 msgid "Voice tone"
-msgstr "Hlasový tón"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Tón hlasu"
+
+#: 21
 msgid "Low"
-msgstr "Nízka"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Nízky"
+
+#: 22
 msgid "High"
 msgstr "Vysoký"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+
+#: 23
 msgid "Voice pitch"
-msgstr "Hlasová výška"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+msgstr "Výška hlasu"
+
+#: 24
 msgid "Volume"
-msgstr "Objem"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "Hlasitosť"
+
+#: 25
 msgid "Speech volume"
 msgstr "Hlasitosť reči"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+
+#: 26
 msgid "Mute"
 msgstr "Stlmiť"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+
+#: 27
 msgid "Max"
 msgstr "Max"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+
+#: 28
 msgid "TTS Engine"
 msgstr "TTS motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+
+#: 29
 msgid "Choose which text-to-speech engine to use"
-msgstr "Vyberte, ktorý engine na prevod textu na reč chcete použiť."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "Vyberte, ktorý motor na prevod textu na reč použiť"
+
+#: 30
 msgid "Engine"
 msgstr "Motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+
+#: 31
 msgid "speech-dispatcher"
-msgstr "hlasový odosielateľ"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: 32
 msgid "TTS Backend"
 msgstr "TTS backend"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+
+#: 33
 msgid "Engine used for speech synthesis"
 msgstr "Motor používaný na syntézu reči"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+
+#: 34
 msgid "Select TTS engine"
-msgstr "Vyberte TTS engine"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgstr "Vyberte motor TTS"
+
+#: 35
 msgid "Output module"
 msgstr "Výstupný modul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+
+#: 36
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Hlasový syntetizátor používaný hlasovým rozosielateľom"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "Syntetizátor reči používaný modulom speech-dispatcher"
+
+#: 37
 msgid "Select output module"
 msgstr "Vyberte výstupný modul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+
+#: 38
 msgid "Status"
 msgstr "Stav"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+
+#: 39
 msgid "Checking..."
 msgstr "Kontrolujem..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+
+#: 40
 msgid "Text processing"
 msgstr "Spracovanie textu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+
+#: 41
 msgid "How text is cleaned and prepared before reading"
 msgstr "Ako sa text čistí a pripravuje pred čítaním"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+
+#: 42
 msgid "Processing options"
 msgstr "Možnosti spracovania"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+
+#: 43
 msgid "Abbreviations, formatting, limits"
 msgstr "Skratky, formátovanie, limity"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+
+#: 44
 msgid "Expand abbreviations"
-msgstr "Rozšíriť skratky"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgstr "Rozbaliť skratky"
+
+#: 45
 msgid "Replace common abbreviations with full words"
-msgstr "Nahradiť bežné skratky celými slovami."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+msgstr "Nahradiť bežné skratky úplnými slovami"
+
+#: 46
 msgid "Expand text abbreviations"
-msgstr "Rozšíriť textové skratky"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "Rozbaliť textové skratky"
+
+#: 47
 msgid "Read special characters"
-msgstr "Čítajte špeciálne znaky"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgstr "Čítať špeciálne znaky"
+
+#: 48
 msgid "Speak symbols like # @ % by name"
-msgstr "Hovorte symboly ako # @ % podľa názvu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "Vysloviť symboly ako # @ % podľa názvu"
+
+#: 49
 msgid "Read special characters aloud"
-msgstr "Prečítajte špeciálne znaky nahlas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgstr "Čítať špeciálne znaky nahlas"
+
+#: 50
 msgid "Remove formatting"
 msgstr "Odstrániť formátovanie"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+
+#: 51
 msgid "Strip Markdown and HTML before reading"
 msgstr "Odstrániť Markdown a HTML pred čítaním"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+
+#: 52
 msgid "Remove text formatting"
 msgstr "Odstrániť formátovanie textu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+
+#: 53
 msgid "Read URLs"
-msgstr "Čítaj URL adresy"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+msgstr "Čítať URL adresy"
+
+#: 54
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "Nahlasujte webové adresy namiesto ich preskakovania."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "Čítať webové adresy nahlas namiesto ich preskakovania"
+
+#: 55
 msgid "Read URLs aloud"
-msgstr "Prečítajte URL nahlas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgstr "Čítať URL adresy nahlas"
+
+#: 56
 msgid "Unlimited"
 msgstr "Neobmedzené"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+
+#: 57
 msgid "Character limit"
-msgstr "Obmedzenie znakov"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+msgstr "Limit znakov"
+
+#: 58
 msgid "Maximum number of characters to read at once"
-msgstr "Maximálny počet znakov na čítanie naraz"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgstr "Maximálny počet znakov na prečítanie naraz"
+
+#: 59
 msgid "Maximum character limit"
 msgstr "Maximálny limit znakov"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+
+#: 60
 msgid "Advanced"
 msgstr "Pokročilé"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+
+#: 61
 msgid "Advanced options"
 msgstr "Pokročilé možnosti"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+
+#: 62
 msgid "Shortcut, behavior settings"
-msgstr "Klávesová skratka, nastavenia správania"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+msgstr "Skratka, nastavenia správania"
+
+#: 63
 msgid "Keyboard shortcut"
 msgstr "Klávesová skratka"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
+
+#: 64
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr "Vyberte text kdekoľvek a stlačte klávesovú skratku na čítanie nahlas. Stlačte znova na zastavenie."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+msgstr "Vyberte text kdekoľvek a stlačte skratku na prečítanie nahlas. Stlačte znova na zastavenie."
+
+#: 65
 msgid "Change"
 msgstr "Zmeniť"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+
+#: 66
 msgid "Show speak button in app launcher"
-msgstr "Zobraziť tlačidlo hovoru v spúšťači aplikácií"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "Zobraziť tlačidlo čítania na paneli úloh"
+
+#: 67
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Pridáva položku spúšťača, ktorú môžete pripnúť na panel úloh."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "Pridá ikonu, ktorú môžete pripnúť na panel úloh"
+
+#: 68
 msgid "Set new shortcut"
-msgstr "Nastaviť novú klávesovú skratku"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgstr "Nastaviť novú skratku"
+
+#: 69
 msgid "Press the new shortcut"
-msgstr "Stlačte novú klávesovú skratku"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "Stlačte novú skratku"
+
+#: 70
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"Držte klávesy modifikátorov (Alt, Ctrl, Shift, Super) a stlačte písmeno alebo kláves.\n"
+"Podržte modifikačné klávesy (Alt, Ctrl, Shift, Super)\n"
+"a stlačte písmeno alebo kláves.\n"
 "\n"
 "Stlačte Escape na zrušenie."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+
+#: 71
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>Držte modifikačné klávesy</b> (Alt, Ctrl, Shift, Super)\n"
+"<b>Podržte modifikačné klávesy</b> (Alt, Ctrl, Shift, Super)\n"
 "a stlačte písmeno alebo kláves.\n"
 "\n"
 "<small>Stlačte Escape na zrušenie</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+
+#: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "Klávesová skratka bola zmenená na {keys}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
-msgid "Restart Plasma Shell?"
-msgstr "Reštartovať Plasma Shell?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Ikona bola pridaná do spúšťača aplikácií.\n"
-"\n"
-"Aby sa objavila na paneli, je potrebné reštartovať Plasma Shell. To na chvíľu zatvorí a znovu "
-"otvorí panely pracovnej plochy.\n"
-"\n"
-"Reštartovať teraz?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
-msgid "Later"
-msgstr "Neskôr"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
-msgid "Restart"
-msgstr "Reštartovať"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Ikona bola pridaná — reštartujte Plasma alebo sa znovu prihláste, aby sa zobrazila."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
-msgid "Restarting Plasma Shell..."
-msgstr "Reštartovanie Plasma Shell..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Nepodarilo sa reštartovať Plasma Shell — prosím, prihláste sa znova."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
+msgstr "Skratka zmenená na {keys}"
+
+#: 73
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Nenašli sa žiadne hlasy — nainštalujte rhvoice alebo espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 869
+
+#: 74
 msgid "No voices available"
-msgstr "Žiadne hlasy nie sú k dispozícii."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 872
+msgstr "Žiadne hlasy nie sú dostupné"
+
+#: 75
 msgid "No TTS voices installed"
-msgstr "Žiadne TTS hlasy nie sú nainštalované."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 884
+msgstr "Žiadne TTS hlasy nie sú nainštalované"
+
+#: 76
 msgid "No voices available for this engine"
-msgstr "Pre túto službu nie sú k dispozícii žiadne hlasy."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 887
+msgstr "Žiadne hlasy nie sú dostupné pre tento motor"
+
+#: 77
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "Najprv nainštalujte hlasy {engine}."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 914
+msgstr "Najskôr nainštalujte hlasy {engine}"
+
+#: 78
 #, python-brace-format
 msgid "{count} voices available"
-msgstr "{count} dostupných hlasov"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1015
+msgstr "{count} hlasov dostupných"
+
+#: 79
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
-msgstr "Nenašli sa žiadne hlasy pre {engine} — najprv ho nainštalujte"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1025
+msgstr "Nenašli sa hlasy pre {engine} — najskôr ho nainštalujte"
+
+#: 80
 msgid "Install Piper Neural TTS?"
 msgstr "Nainštalovať Piper Neural TTS?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1027
+
+#: 81
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -411,111 +364,104 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"Piper nie je nainštalovaný. Poskytuje kvalitné neurónové hlasy na čítanie textu.\n"
+"Piper nie je nainštalovaný. Poskytuje vysokokvalitné neurónové hlasy na "
+"čítanie textu.\n"
 "\n"
-"Nasledujúce balíky budú nainštalované:\n"
-"• piper-tts-bin (TTS engine)\n"
+"Budú nainštalované nasledujúce balíky:\n"
+"• piper-tts-bin (motor TTS)\n"
 "• piper-voices-pt-BR (portugalské hlasy)\n"
 "\n"
-"Toto vyžaduje administrátorské oprávnenia."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1035
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+"Vyžaduje sa oprávnenie správcu."
+
+#: 82
 msgid "Cancel"
 msgstr "Zrušiť"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1036
+
+#: 83
 msgid "Install"
-msgstr "Nainštalovať"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1063
+msgstr "Inštalovať"
+
+#: 84
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Inštalácia Piper TTS — môže to chvíľu trvať…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+
+#: 85
 msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper bol úspešne nainštalovaný! Objavovanie hlasov…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
+msgstr "Piper úspešne nainštalovaný! Zisťovanie hlasov…"
+
+#: 86
 msgid "Failed to install Piper — check permissions"
-msgstr "Inštalácia Piper zlyhala — skontrolujte povolenia"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
+msgstr "Inštalácia Piperu zlyhala — skontrolujte oprávnenia"
+
+#: 87
 msgid "Type some text to test"
-msgstr "Zadajte nejaký text na testovanie"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
-msgid "Volume is at zero — increasing to minimum for test"
-msgstr "Hlasitosť je na nule — zvyšuje sa na minimum pre test."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1214
+msgstr "Napíšte text na otestovanie"
+
+#: 88
 msgid "Could not play test — check if a TTS engine is installed"
-msgstr "Nepodarilo sa prehrať test — skontrolujte, či je nainštalovaný engine TTS."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1228
+msgstr "Nepodarilo sa prehrať test — skontrolujte, či je motor TTS nainštalovaný"
+
+#: 89
 msgid "Press Alt+V to stop"
 msgstr "Stlačte Alt+V na zastavenie"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1229
+
+#: 90
 msgid "Stop"
-msgstr "Zastavte"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1237
+msgstr "Zastaviť"
+
+#: 91
 msgid "Could not play speech — check TTS engine"
-msgstr "Nepodarilo sa prehrávať reč — skontrolujte TTS engine"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1271
+msgstr "Nepodarilo sa prehrať reč — skontrolujte motor TTS"
+
+#: 92
 #, python-brace-format
 msgid "Available: {engines}"
 msgstr "Dostupné: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1275
+
+#: 93
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "Nenašiel sa žiadny TTS engine — nainštalujte speech-dispatcher alebo espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1286
+msgstr "Nenašiel sa motor TTS — nainštalujte speech-dispatcher alebo espeak-ng"
+
+#: 94
 msgid "Settings restored to defaults"
-msgstr "Nastavenia boli obnovené na predvolené hodnoty."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgstr "Nastavenia obnovené na predvolené hodnoty"
+
+#: 95
 msgid "Restore Defaults"
-msgstr "Obnovi predvolené nastavenia"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "Obnoviť predvolené"
+
+#: 96
 msgid "About"
-msgstr "O aplikácii"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+msgstr "O programe"
+
+#: 97
 msgid "Quit"
 msgstr "Ukončiť"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+
+#: 98
 msgid "Main menu"
 msgstr "Hlavné menu"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: 99
 msgid "Restore settings?"
 msgstr "Obnoviť nastavenia?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+
+#: 100
 msgid "This will return all adjustments to their original defaults."
-msgstr "Toto vráti všetky úpravy na ich pôvodné predvolené hodnoty."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "Toto vráti všetky úpravy na pôvodné predvolené hodnoty."
+
+#: 101
 msgid "Restore"
 msgstr "Obnoviť"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
+
+#: 102
 msgid "Technologies used"
 msgstr "Použité technológie"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
+
+#: 103
 msgid "License"
 msgstr "Licencia"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
+
+#: 104
 msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Tento rozhranie je licencované pod GPL-3.0. TTS motory majú svoje vlastné licencie."
+msgstr "Toto rozhranie je licencované pod GPL-3.0. Motory TTS majú vlastné licencie."

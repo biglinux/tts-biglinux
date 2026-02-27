@@ -686,7 +686,7 @@ class MainView(Adw.NavigationPage):
     # ── Launcher toggle ────────────────────────────────────────────
 
     def _on_launcher_toggle(self, active: bool) -> None:
-        """Toggle visibility of the speak action in the app launcher."""
+        """Pin/unpin speak button in KDE Plasma taskbar (icontasks)."""
         from pathlib import Path
         import re
 
@@ -696,62 +696,90 @@ class MainView(Adw.NavigationPage):
         self._settings.shortcut.show_in_launcher = active
         self._settings_service.save()
 
+        # Ensure desktop file exists with NoDisplay=true (hidden from menu)
         local_apps = Path.home() / ".local" / "share" / "applications"
         local_apps.mkdir(parents=True, exist_ok=True)
         desktop_dst = local_apps / "bigtts.desktop"
 
-        # Ensure icon is available (handle old→new name transition)
         self._ensure_icon_available()
+        self._ensure_desktop_file(desktop_dst)
 
-        if active:
-            desktop_src = Path("/usr/share/applications/bigtts.desktop")
-            try:
-                if desktop_src.exists():
-                    content = desktop_src.read_text()
-                elif desktop_dst.exists():
-                    content = desktop_dst.read_text()
-                else:
-                    accel = self._settings.shortcut.keybinding
-                    kde_key = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
-                    if "+" in kde_key:
-                        parts = kde_key.rsplit("+", 1)
-                        kde_key = parts[0] + "+" + parts[1].upper()
-                    content = (
-                        "[Desktop Entry]\n"
-                        "Type=Application\n"
-                        "Exec=biglinux-tts-speak\n"
-                        "Icon=tts-biglinux\n"
-                        "Categories=Utility;Accessibility;\n"
-                        "StartupNotify=false\n"
-                        f"X-KDE-Shortcuts={kde_key}\n"
-                        "Name=Speech or stop selected text\n"
-                        "Name[pt_BR]=Narrador de texto\n"
-                    )
-                # Remove NoDisplay and any Desktop Actions junk
-                content = re.sub(r"^NoDisplay=.*\n?", "", content, flags=re.MULTILINE)
-                content = re.sub(r"\nActions=.*(?:\n\[Desktop Action [^\]]+\].*)*$", "", content, flags=re.DOTALL)
-                content = re.sub(r"^Exec=.*$", "Exec=biglinux-tts-speak", content, flags=re.MULTILINE)
-                content = re.sub(r"^Icon=.*$", "Icon=tts-biglinux", content, flags=re.MULTILINE)
-                desktop_dst.write_text(content)
-            except OSError as e:
-                logger.warning("Could not create launcher entry: %s", e)
+        # Pin/unpin in KDE Plasma icontasks
+        launcher_entry = "applications:bigtts.desktop"
+        plasma_cfg = Path.home() / ".config" / "plasma-org.kde.plasma.desktop-appletsrc"
 
-            self._update_desktop_database()
-            self._ask_restart_plasma()
+        if not plasma_cfg.exists():
+            logger.warning("Plasma config not found: %s", plasma_cfg)
+            return
+
+        try:
+            lines = plasma_cfg.read_text().splitlines()
+            changed = False
+            for i, line in enumerate(lines):
+                if not line.startswith("launchers="):
+                    continue
+                launchers = line.split("=", 1)[1]
+                entries = [e.strip() for e in launchers.split(",") if e.strip()]
+
+                if active and launcher_entry not in entries:
+                    entries.append(launcher_entry)
+                    lines[i] = "launchers=" + ",".join(entries)
+                    changed = True
+                elif not active and launcher_entry in entries:
+                    entries.remove(launcher_entry)
+                    lines[i] = "launchers=" + ",".join(entries)
+                    changed = True
+
+            if changed:
+                plasma_cfg.write_text("\n".join(lines) + "\n")
+                self._ask_restart_plasma()
+        except OSError as e:
+            logger.warning("Could not update Plasma launchers: %s", e)
+
+    def _ensure_desktop_file(self, desktop_dst: "Path") -> None:
+        """Ensure bigtts.desktop exists locally with NoDisplay=true."""
+        from pathlib import Path
+        import re
+
+        if desktop_dst.exists():
+            content = desktop_dst.read_text()
+            if "NoDisplay=true" in content:
+                return
+
+        desktop_src = Path("/usr/share/applications/bigtts.desktop")
+        if desktop_src.exists():
+            content = desktop_src.read_text()
+        elif desktop_dst.exists():
+            content = desktop_dst.read_text()
         else:
-            try:
-                if desktop_dst.exists():
-                    content = desktop_dst.read_text()
-                    if "NoDisplay" not in content:
-                        content = content.replace(
-                            "StartupNotify=false",
-                            "StartupNotify=false\nNoDisplay=true",
-                        )
-                        desktop_dst.write_text(content)
-            except OSError as e:
-                logger.warning("Could not hide launcher entry: %s", e)
+            accel = self._settings.shortcut.keybinding
+            kde_key = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
+            if "+" in kde_key:
+                parts = kde_key.rsplit("+", 1)
+                kde_key = parts[0] + "+" + parts[1].upper()
+            content = (
+                "[Desktop Entry]\n"
+                "Type=Application\n"
+                "Exec=biglinux-tts-speak\n"
+                "Icon=tts-biglinux\n"
+                "Categories=Utility;Accessibility;\n"
+                "StartupNotify=false\n"
+                "NoDisplay=true\n"
+                f"X-KDE-Shortcuts={kde_key}\n"
+                "Name=Speech or stop selected text\n"
+                "Name[pt_BR]=Narrador de texto\n"
+            )
+            desktop_dst.write_text(content)
+            return
 
-            self._update_desktop_database()
+        # Clean up and ensure NoDisplay=true
+        content = re.sub(r"^NoDisplay=.*\n?", "", content, flags=re.MULTILINE)
+        content = re.sub(r"\n+Actions=.*", "", content, flags=re.DOTALL)
+        content = re.sub(r"^Exec=.*$", "Exec=biglinux-tts-speak", content, flags=re.MULTILINE)
+        content = re.sub(r"^Icon=.*$", "Icon=tts-biglinux", content, flags=re.MULTILINE)
+        # Insert NoDisplay=true after [Desktop Entry]
+        content = content.replace("[Desktop Entry]\n", "[Desktop Entry]\nNoDisplay=true\n")
+        desktop_dst.write_text(content)
 
     def _ask_restart_plasma(self) -> None:
         """Ask user if they want to restart Plasma Shell for icon changes to take effect."""

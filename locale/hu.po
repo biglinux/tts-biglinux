@@ -1,414 +1,366 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Hungarian translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: window.py
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1247
+
+#: window.py
 msgid "Select text and press Alt+V to read aloud"
-msgstr "Jelöljön ki szöveget, és nyomja meg az Alt+V billentyűt az olvasáshoz."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "Jelöljön ki szöveget, és nyomja meg az Alt+V billentyűt a felolvasáshoz"
+
+#: window.py
 msgid "This is a test, welcome to BigLinux!"
 msgstr "Ez egy teszt, üdvözöljük a BigLinuxban!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+
+#: window.py
 msgid "Type text to test…"
-msgstr "Írj be szöveget a teszteléshez…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1238
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1249
+msgstr "Írjon szöveget a teszteléshez…"
+
+#: window.py
 msgid "Test voice"
-msgstr "Teszt hang"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "Hang tesztelése"
+
+#: window.py
 msgid "Test the selected voice"
-msgstr "Tesztelje a kiválasztott hangot."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgstr "A kiválasztott hang tesztelése"
+
+#: window.py
 msgid "Voice settings"
 msgstr "Hangbeállítások"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+
+#: window.py
 msgid "Choose voice and adjust speech parameters"
-msgstr "Válassza ki a hangot és állítsa be a beszédparamétereket."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "Válasszon hangot, és állítsa be a beszédparamétereket"
+
+#: window.py
 msgid "Voice"
 msgstr "Hang"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: window.py
 msgid "Loading voices..."
 msgstr "Hangok betöltése..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+
+#: window.py
 msgid "Detecting installed voices..."
-msgstr "Telepített hangok észlelése..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "Telepített hangok felderítése..."
+
+#: window.py
 msgid "Select TTS voice"
-msgstr "Válassza ki a TTS hangot"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgstr "TTS hang kiválasztása"
+
+#: window.py
 msgid "Speed"
 msgstr "Sebesség"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: window.py
 msgid "Speech rate"
 msgstr "Beszédsebesség"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: window.py
 msgid "Slow"
 msgstr "Lassú"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: window.py
 msgid "Normal"
 msgstr "Normál"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: window.py
 msgid "Fast"
 msgstr "Gyors"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+
+#: window.py
 msgid "Speech speed"
 msgstr "Beszédsebesség"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+
+#: window.py
 msgid "Pitch"
-msgstr "Javaslat"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "Hangmagasság"
+
+#: window.py
 msgid "Voice tone"
 msgstr "Hangszín"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: window.py
 msgid "Low"
-msgstr "Alacsony"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "Mély"
+
+#: window.py
 msgid "High"
 msgstr "Magas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+
+#: window.py
 msgid "Voice pitch"
 msgstr "Hangmagasság"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+
+#: window.py
 msgid "Volume"
-msgstr "Térfogat"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "Hangerő"
+
+#: window.py
 msgid "Speech volume"
-msgstr "Beszédhangereje"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Beszéd hangereje"
+
+#: window.py
 msgid "Mute"
 msgstr "Némítás"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+
+#: window.py
 msgid "Max"
 msgstr "Max"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+
+#: window.py
 msgid "TTS Engine"
 msgstr "TTS motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+
+#: window.py
 msgid "Choose which text-to-speech engine to use"
-msgstr "Válassza ki, melyik szövegfelolvasó motort szeretné használni."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "Válassza ki a használni kívánt szövegfelolvasó motort"
+
+#: window.py
 msgid "Engine"
 msgstr "Motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+
+#: window.py
 msgid "speech-dispatcher"
-msgstr "beszéd-kiszolgáló"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: window.py
 msgid "TTS Backend"
-msgstr "TTS Háttér"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgstr "TTS háttérrendszer"
+
+#: window.py
 msgid "Engine used for speech synthesis"
-msgstr "Beszédszintetizáló motor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+msgstr "Beszédszintézishez használt motor"
+
+#: window.py
 msgid "Select TTS engine"
-msgstr "Válassza ki a TTS motort"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgstr "TTS motor kiválasztása"
+
+#: window.py
 msgid "Output module"
 msgstr "Kimeneti modul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+
+#: window.py
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "A beszédszintetizátor, amelyet a beszédkiszolgáló használ."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "A speech-dispatcher által használt beszédszintetizátor"
+
+#: window.py
 msgid "Select output module"
-msgstr "Válassza ki a kimeneti modult"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgstr "Kimeneti modul kiválasztása"
+
+#: window.py
 msgid "Status"
 msgstr "Állapot"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+
+#: window.py
 msgid "Checking..."
 msgstr "Ellenőrzés..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+
+#: window.py
 msgid "Text processing"
 msgstr "Szövegfeldolgozás"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+
+#: window.py
 msgid "How text is cleaned and prepared before reading"
-msgstr "Hogyan tisztítják és készítik elő a szöveget olvasás előtt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgstr "Hogyan történik a szöveg tisztítása és előkészítése az olvasás előtt"
+
+#: window.py
 msgid "Processing options"
 msgstr "Feldolgozási lehetőségek"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+
+#: window.py
 msgid "Abbreviations, formatting, limits"
 msgstr "Rövidítések, formázás, korlátok"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+
+#: window.py
 msgid "Expand abbreviations"
-msgstr "Bővítse a rövidítéseket"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgstr "Rövidítések kibontása"
+
+#: window.py
 msgid "Replace common abbreviations with full words"
-msgstr "Cserélje ki a gyakori rövidítéseket teljes szavakra."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+msgstr "Gyakori rövidítések cseréje teljes szavakra"
+
+#: window.py
 msgid "Expand text abbreviations"
-msgstr "Bővítse a szöveg rövidítéseit"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "Szöveges rövidítések kibontása"
+
+#: window.py
 msgid "Read special characters"
-msgstr "Olvassa el a speciális karaktereket"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgstr "Speciális karakterek felolvasása"
+
+#: window.py
 msgid "Speak symbols like # @ % by name"
-msgstr "Beszélj a szimbólumokról, mint például # @ % néven."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "Szimbólumok felolvasása név szerint, mint # @ %"
+
+#: window.py
 msgid "Read special characters aloud"
-msgstr "Olvasd fel a speciális karaktereket."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgstr "Speciális karakterek felolvasása hangosan"
+
+#: window.py
 msgid "Remove formatting"
 msgstr "Formázás eltávolítása"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+
+#: window.py
 msgid "Strip Markdown and HTML before reading"
-msgstr "Távolítsa el a Markdown és HTML formázást az olvasás előtt."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+msgstr "Markdown és HTML eltávolítása olvasás előtt"
+
+#: window.py
 msgid "Remove text formatting"
 msgstr "Szövegformázás eltávolítása"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+
+#: window.py
 msgid "Read URLs"
-msgstr "URL-ek olvasása"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+msgstr "URL-ek felolvasása"
+
+#: window.py
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "Olvasd fel a webcímeket ahelyett, hogy átugornád őket."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "Webcímek felolvasása kihagyás helyett"
+
+#: window.py
 msgid "Read URLs aloud"
-msgstr "Olvasd fel az URL-eket."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgstr "URL-ek felolvasása hangosan"
+
+#: window.py
 msgid "Unlimited"
 msgstr "Korlátlan"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+
+#: window.py
 msgid "Character limit"
 msgstr "Karakterkorlát"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+
+#: window.py
 msgid "Maximum number of characters to read at once"
-msgstr "Maximális karakterek száma, amelyet egyszerre olvashat."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgstr "Egyszerre felolvasható karakterek maximális száma"
+
+#: window.py
 msgid "Maximum character limit"
 msgstr "Maximális karakterkorlát"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+
+#: window.py
 msgid "Advanced"
-msgstr "Fejlett"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+msgstr "Speciális"
+
+#: window.py
 msgid "Advanced options"
-msgstr "Fejlett beállítások"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+msgstr "Speciális beállítások"
+
+#: window.py
 msgid "Shortcut, behavior settings"
 msgstr "Gyorsbillentyű, viselkedési beállítások"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+
+#: window.py
 msgid "Keyboard shortcut"
-msgstr "Billentyűparancs"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
-msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
+msgstr "Gyorsbillentyű"
+
+#: window.py
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press again to "
+"stop."
 msgstr ""
-"Jelölj ki szöveget bárhol, és nyomd meg a gyorsbillentyűt az olvasáshoz. Nyomd meg újra a "
-"leállításhoz."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+"Jelöljön ki szöveget bárhol, és nyomja meg a gyorsbillentyűt a "
+"felolvasáshoz. Nyomja meg újra a leállításhoz."
+
+#: window.py
 msgid "Change"
-msgstr "Változtatás"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+msgstr "Módosítás"
+
+#: window.py
 msgid "Show speak button in app launcher"
-msgstr "Beszédgomb megjelenítése az alkalmazásindítóban"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "Felolvasás gomb megjelenítése a tálcán"
+
+#: window.py
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Hozzáad egy indítóbejegyzést, amelyet a tálcához rögzíthet."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "Hozzáad egy ikont, amelyet a tálcára rögzíthet"
+
+#: window.py
 msgid "Set new shortcut"
 msgstr "Új gyorsbillentyű beállítása"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+
+#: window.py
 msgid "Press the new shortcut"
-msgstr "Nyomja meg az új gyorsbillentyűt."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "Nyomja meg az új gyorsbillentyűt"
+
+#: window.py
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"Tartsd lenyomva a módosító billentyűket (Alt, Ctrl, Shift, Super) és nyomj meg egy betűt vagy "
-"billentyűt.\n"
+"Tartsa lenyomva a módosító billentyűket (Alt, Ctrl, Shift, Super),\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
 "\n"
-"Nyomj Escape-et a megszakításhoz."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+"Nyomja meg az Escape-et a megszakításhoz."
+
+#: window.py
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>Tartsd lenyomva a módosító billentyűket</b> (Alt, Ctrl, Shift, Super)\n"
-"és nyomj meg egy betűt vagy billentyűt.\n"
+"<b>Tartsa lenyomva a módosító billentyűket</b> (Alt, Ctrl, Shift, Super),\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
 "\n"
-"<small>Nyomj Escape-et a megszakításhoz</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+"<small>Nyomja meg az Escape-et a megszakításhoz</small>"
+
+#: window.py
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "A gyorsbillentyű megváltozott erre: {keys}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
-msgid "Restart Plasma Shell?"
-msgstr "Újraindítja a Plasma Shell-t?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Az ikon hozzáadva az alkalmazásindítóhoz.\n"
-"\n"
-"Ahhoz, hogy megjelenjen a panelen, a Plasma Shell-t újra kell indítani. Ez rövid időre bezárja és "
-"újra megnyitja a munkaasztali paneleket.\n"
-"\n"
-"Újraindítja most?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
-msgid "Later"
-msgstr "Később"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
-msgid "Restart"
-msgstr "Újraindítás"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Ikon hozzáadva — indítsa újra a Plasmát vagy jelentkezzen be újra, hogy megjelenjen."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
-msgid "Restarting Plasma Shell..."
-msgstr "A Plasma Shell újraindítása..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Nem sikerült újraindítani a Plasma Shell-t — kérlek, jelentkezz be újra."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
+msgstr "Gyorsbillentyű módosítva: {keys}"
+
+#: window.py
 msgid "No voices found — install rhvoice or espeak-ng"
-msgstr "Nincsenek hangok — telepítse a rhvoice-t vagy az espeak-ng-t"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 869
+msgstr "Nem található hang — telepítse a rhvoice-t vagy az espeak-ng-t"
+
+#: window.py
 msgid "No voices available"
-msgstr "Nincsenek elérhető hangok"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 872
+msgstr "Nincs elérhető hang"
+
+#: window.py
 msgid "No TTS voices installed"
-msgstr "Nincsenek telepítve TTS hangok."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 884
+msgstr "Nincs telepített TTS hang"
+
+#: window.py
 msgid "No voices available for this engine"
-msgstr "Nincsenek elérhető hangok ehhez a motorhoz."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 887
+msgstr "Nincs elérhető hang ehhez a motorhoz"
+
+#: window.py
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "Először telepítse a {engine} hangokat."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 914
+msgstr "Először telepítse a(z) {engine} hangokat"
+
+#: window.py
 #, python-brace-format
 msgid "{count} voices available"
-msgstr "{count} elérhető hangok"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1015
+msgstr "{count} hang elérhető"
+
+#: window.py
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
-msgstr "Nincsenek hangok a(z) {engine} számára — először telepítse azt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1025
+msgstr "Nem található hang a(z) {engine} motorhoz — először telepítse"
+
+#: window.py
 msgid "Install Piper Neural TTS?"
-msgstr "Telepítse a Piper Neural TTS-t?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1027
+msgstr "Telepíti a Piper Neural TTS-t?"
+
+#: window.py
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -416,111 +368,108 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"A Piper nincs telepítve. Magas színvonalú neurális hangokat biztosít a szöveg felolvasásához.\n"
+"A Piper nincs telepítve. Kiváló minőségű neurális hangokat biztosít szöveg "
+"felolvasásához.\n"
 "\n"
-"A következő csomagok lesznek telepítve:\n"
+"A következő csomagok kerülnek telepítésre:\n"
 "• piper-tts-bin (TTS motor)\n"
 "• piper-voices-pt-BR (portugál hangok)\n"
 "\n"
-"Ez rendszergazdai jogosultságokat igényel."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1035
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+"Ehhez rendszergazdai jogosultság szükséges."
+
+#: window.py
 msgid "Cancel"
 msgstr "Mégse"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1036
+
+#: window.py
 msgid "Install"
 msgstr "Telepítés"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1063
+
+#: window.py
 msgid "Installing Piper TTS — this may take a moment…"
-msgstr "A Piper TTS telepítése — ez egy pillanatig eltarthat…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1111
+msgstr "Piper TTS telepítése — ez eltarthat egy ideig…"
+
+#: window.py
 msgid "Piper installed successfully! Discovering voices…"
-msgstr "A Piper sikeresen telepítve! Hangok felfedezése…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
+msgstr "Piper sikeresen telepítve! Hangok felderítése…"
+
+#: window.py
 msgid "Failed to install Piper — check permissions"
-msgstr "A Piper telepítése nem sikerült — ellenőrizze a jogosultságokat"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
+msgstr "A Piper telepítése sikertelen — ellenőrizze a jogosultságokat"
+
+#: window.py
 msgid "Type some text to test"
-msgstr "Írj be néhány szöveget a teszteléshez."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
-msgid "Volume is at zero — increasing to minimum for test"
-msgstr "A hangerő nulla — a teszt kedvéért minimumra növelve"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1214
+msgstr "Írjon szöveget a teszteléshez"
+
+#: window.py
 msgid "Could not play test — check if a TTS engine is installed"
-msgstr "Nem sikerült lejátszani a tesztet — ellenőrizze, hogy telepítve van-e TTS motor."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1228
+msgstr "Nem sikerült lejátszani a tesztet — ellenőrizze, hogy telepítve van-e TTS motor"
+
+#: window.py
 msgid "Press Alt+V to stop"
-msgstr "Nyomja meg az Alt+V billentyűt a leállításhoz."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1229
+msgstr "Nyomja meg az Alt+V-t a leállításhoz"
+
+#: window.py
 msgid "Stop"
-msgstr "Állj meg"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1237
+msgstr "Leállítás"
+
+#: window.py
 msgid "Could not play speech — check TTS engine"
-msgstr "Nem sikerült lejátszani a beszédet — ellenőrizze a TTS motort."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1271
+msgstr "Nem sikerült lejátszani a beszédet — ellenőrizze a TTS motort"
+
+#: window.py
 #, python-brace-format
 msgid "Available: {engines}"
 msgstr "Elérhető: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1275
+
+#: window.py
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "Nincs TTS motor — telepítse a speech-dispatcher-t vagy az espeak-ng-t"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1286
+msgstr "Nem található TTS motor — telepítse a speech-dispatcher-t vagy az espeak-ng-t"
+
+#: window.py
 msgid "Settings restored to defaults"
-msgstr "A beállítások visszaállítva az alapértelmezett értékekre"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgstr "Beállítások visszaállítva az alapértékekre"
+
+#: window.py
 msgid "Restore Defaults"
-msgstr "Alapértelmezett visszaállítása"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "Alapértékek visszaállítása"
+
+#: window.py
 msgid "About"
 msgstr "Névjegy"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+
+#: window.py
 msgid "Quit"
 msgstr "Kilépés"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+
+#: window.py
 msgid "Main menu"
 msgstr "Főmenü"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: window.py
 msgid "Restore settings?"
-msgstr "Beállítások visszaállítása?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgstr "Visszaállítja a beállításokat?"
+
+#: window.py
 msgid "This will return all adjustments to their original defaults."
-msgstr "Ez visszaállítja az összes módosítást az eredeti alapértelmezett értékekre."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "Ez visszaállítja az összes beállítást az eredeti alapértékekre."
+
+#: window.py
 msgid "Restore"
 msgstr "Visszaállítás"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
+
+#: window.py
 msgid "Technologies used"
-msgstr "Használatban lévő technológiák"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
+msgstr "Használt technológiák"
+
+#: window.py
 msgid "License"
 msgstr "Licenc"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Ez a felület a GPL-3.0 licenc alatt áll. A TTS motorok saját licencük van."
+
+#: window.py
+msgid ""
+"This interface is licensed under GPL-3.0. TTS engines have their own "
+"licenses."
+msgstr ""
+"Ez a felület GPL-3.0 licenc alatt áll. A TTS motorok saját licenccel "
+"rendelkeznek."
