@@ -142,7 +142,7 @@ spd-say -C 2>/dev/null || true
 # ── Speak ─────────────────────────────────────────────────────────
 
 (
-    echo "$$" > "$PID_FILE"
+    echo "$BASHPID" > "$PID_FILE"
 
     case "$BACKEND" in
         "speech-dispatcher")
@@ -151,7 +151,7 @@ spd-say -C 2>/dev/null || true
             [[ -n "$VOICE_ID" ]] && CMD+=(-y "$VOICE_ID")
             [[ "$RATE" != "0" ]] && CMD+=(-r "$RATE")
             [[ "$PITCH" != "0" ]] && CMD+=(-p "$PITCH")
-            echo "$capture_text" | "${CMD[@]}"
+            echo "$capture_text" | "${CMD[@]}" || true
             ;;
         "espeak-ng")
             VOICE_ARG="${VOICE_ID#espeak-}"
@@ -167,16 +167,14 @@ spd-say -C 2>/dev/null || true
             ESP_VOL=$((VOLUME * 2))
             [[ "$ESP_VOL" -lt 20 ]] && ESP_VOL=20
             CMD+=(-a "$ESP_VOL")
-            echo "$capture_text" | "${CMD[@]}"
+            echo "$capture_text" | "${CMD[@]}" || true
             ;;
         "piper")
             # voice_id formats: "piper:/path/to/model.onnx" or "piper-modelname"
             MODEL_PATH=""
             if [[ "$VOICE_ID" == piper:* ]]; then
-                # Full path after "piper:" prefix
                 MODEL_PATH="${VOICE_ID#piper:}"
             else
-                # Legacy format: search by model name
                 MODEL_NAME="${VOICE_ID#piper-}"
                 for DIR in /usr/share/piper-voices /usr/local/share/piper-voices "$HOME/.local/share/piper-voices" /usr/share/piper/voices; do
                     if [[ -f "$DIR/$MODEL_NAME.onnx" ]]; then
@@ -195,9 +193,15 @@ spd-say -C 2>/dev/null || true
                 done
                 if [[ -n "$PIPER_BIN" ]]; then
                     VOL_FACTOR="$(python3 -c "print(max(0.2, min(2.0, ${VOLUME}/50.0)))" 2>/dev/null || echo "1.0")"
-                    echo "$capture_text" | "$PIPER_BIN" --model "$MODEL_PATH" --output-raw \
-                        | sox -t raw -r 22050 -e signed -b 16 -c 1 - -t wav - vol "$VOL_FACTOR" \
-                        | aplay -q -
+                    # Try pipeline with sox for volume, fallback without
+                    if command -v sox &>/dev/null; then
+                        echo "$capture_text" | "$PIPER_BIN" --model "$MODEL_PATH" --output-raw 2>/dev/null \
+                            | sox -t raw -r 22050 -e signed -b 16 -c 1 - -t wav - vol "$VOL_FACTOR" 2>/dev/null \
+                            | aplay -q - 2>/dev/null || true
+                    else
+                        echo "$capture_text" | "$PIPER_BIN" --model "$MODEL_PATH" --output-raw 2>/dev/null \
+                            | aplay -r 22050 -f S16_LE -t raw -q - 2>/dev/null || true
+                    fi
                 fi
             fi
             ;;
