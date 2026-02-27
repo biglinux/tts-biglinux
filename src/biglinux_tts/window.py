@@ -14,11 +14,10 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, Gdk, Gio, GLib, Gtk
+from gi.repository import Adw, Gio, GLib, Gtk
 
 from biglinux_tts.config import (
     APP_NAME,
-    ICON_APP,
     WINDOW_HEIGHT_MIN,
     WINDOW_WIDTH_MIN,
     save_settings,
@@ -106,19 +105,6 @@ class TTSWindow(Adw.ApplicationWindow):
         """Create header bar with icon and menu."""
         header = Adw.HeaderBar()
         header.set_show_end_title_buttons(True)
-
-        # App icon in header
-        if ICON_APP.exists():
-            try:
-                file = Gio.File.new_for_path(str(ICON_APP))
-                texture = Gdk.Texture.new_from_file(file)
-                icon_image = Gtk.Image.new_from_paintable(texture)
-                icon_image.set_pixel_size(24)
-                icon_image.set_margin_start(8)
-                icon_image.set_margin_end(4)
-                header.pack_start(icon_image)
-            except Exception:
-                logger.debug("Could not load header icon")
 
         # Title
         title = Adw.WindowTitle.new(_(APP_NAME), "")

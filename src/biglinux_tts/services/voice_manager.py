@@ -219,7 +219,17 @@ def _discover_spd_voices() -> list[VoiceInfo]:
     rhvoice_voices = _discover_rhvoice_installed()
     voices.extend(rhvoice_voices)
 
-    # 2. Try spd-say -L for default module (may only show "dummy")
+    # 2. Try spd-say -L for default module to find extra voices
+    #    Skip voices already found via RHVoice scan (case/accent insensitive)
+    import unicodedata
+
+    def _normalize_id(s: str) -> str:
+        s = unicodedata.normalize("NFD", s)
+        s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+        return s.lower()
+
+    known_ids = {_normalize_id(v.voice_id) for v in voices}
+
     try:
         proc = subprocess.run(
             ["spd-say", "-L"],
@@ -230,7 +240,6 @@ def _discover_spd_voices() -> list[VoiceInfo]:
         if proc.returncode == 0:
             for line in proc.stdout.strip().splitlines():
                 line = line.strip()
-                # Skip header and dummy
                 if not line or "NAME" in line or "dummy" in line:
                     continue
                 parts = re.split(r"\s{2,}", line)
@@ -238,8 +247,7 @@ def _discover_spd_voices() -> list[VoiceInfo]:
                     continue
                 voice_name = parts[0].strip()
                 lang_code = parts[1].strip()
-                # Skip if already found via RHVoice scan
-                if any(v.voice_id == voice_name for v in voices):
+                if _normalize_id(voice_name) in known_ids:
                     continue
                 voices.append(
                     VoiceInfo(

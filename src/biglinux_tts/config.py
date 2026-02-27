@@ -32,7 +32,7 @@ PID_FILE = Path("/tmp") / f"biglinux-tts-{Path.home().name}.pid"  # noqa: S108
 
 # Icon paths
 ICONS_DIR = Path("/usr/share/icons/hicolor/scalable/apps")
-ICON_APP = ICONS_DIR / "biglinux-tts.svg"
+ICON_APP = ICONS_DIR / "tts-biglinux.svg"
 
 # Locale
 LOCALE_DIR = Path("/usr/share/locale")
