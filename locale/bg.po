@@ -329,6 +329,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Прекратен е на {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Добавено в стартиране на приложението — може да се наложи повторно влизане, за да се появи в панела."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Не са намерени гласове — инсталирайте rhvoice или espeak-ng"

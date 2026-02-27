@@ -208,6 +208,10 @@ msgstr "Rozwiń skróty"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Rozwiń skróty tekstowe"
@@ -335,6 +339,12 @@ msgstr ""
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Skrót zmieniony na {keys}"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr ""
+"Dodano do uruchamiacza aplikacji — może być konieczne ponowne zalogowanie, aby pojawiło się w "
+"panelu."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

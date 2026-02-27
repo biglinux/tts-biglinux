@@ -328,6 +328,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Η συντόμευση άλλαξε σε {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Προστέθηκε στον εκκινητή εφαρμογών — μπορεί να χρειαστεί επανασύνδεση για να εμφανιστεί στον πίνακα"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Δεν βρέθηκαν φωνές — εγκαταστήστε το rhvoice ή το espeak-ng"

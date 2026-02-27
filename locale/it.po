@@ -330,6 +330,12 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "La scorciatoia è stata cambiata in {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr ""
+"Aggiunto al launcher dell'app — potrebbe essere necessario effettuare nuovamente il login per "
+"apparire nel pannello"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Nessuna voce trovata - installa rhvoice o espeak-ng"

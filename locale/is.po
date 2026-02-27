@@ -228,6 +228,18 @@ msgstr "Skammstafanir, snið, takmarkanir"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
 msgid "Read special characters"
 msgstr "Lesa sértæk tákn"
@@ -349,6 +361,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Skammstafur breyttist í {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Bætt við forritaskjá — gæti þurft að skrá sig inn aftur til að birtast á panelnum"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Engin hljóðs fannst ekki - settu upp rhvoice eða espeak-ng"
@@ -424,6 +440,10 @@ msgstr "Piper var sett upp með góðum árangri! Að uppgötva raddir…"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
 msgid "Failed to install Piper — check permissions"
 msgstr "Ekki tókst að setja upp Piper — athugaðu heimildir."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1168
 # 

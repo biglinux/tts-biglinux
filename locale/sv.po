@@ -326,6 +326,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Genvägen ändrad till {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Lagt till i appstartaren — kan behöva logga in igen för att visas i panelen"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Inga röster hittades — installera rhvoice eller espeak-ng"

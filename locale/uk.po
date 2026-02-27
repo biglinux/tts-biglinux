@@ -206,6 +206,10 @@ msgstr "Розширити скорочення"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
@@ -337,6 +341,10 @@ msgstr ""
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Скорочення змінено на {keys}"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Додано до запуску програми — можливо, потрібно повторно увійти, щоб з'явитися в панелі"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

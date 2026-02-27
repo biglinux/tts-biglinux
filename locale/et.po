@@ -327,6 +327,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Käskluse otsetee on muudetud {keys} peale."
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Lisatud rakenduse käivitajasse — võib-olla on vajalik uuesti sisse logida, et paneelis ilmuda."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Hääli ei leitud — installige rhvoice või espeak-ng"
@@ -394,6 +398,10 @@ msgstr "Installi"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1104
 # 

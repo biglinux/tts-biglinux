@@ -327,6 +327,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "ショートカットが{keys}に変更されました。"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "アプリランチャーに追加されました — パネルに表示されるには再ログインが必要な場合があります"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "音声が見つかりません — rhvoice または espeak-ng をインストールしてください"
