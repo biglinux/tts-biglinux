@@ -409,6 +409,10 @@ msgstr "Échec de l'installation de Piper — vérifiez les autorisations"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1175
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1189
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Le volume est à zéro — augmentation au minimum pour le test"
