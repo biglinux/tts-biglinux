@@ -1,7 +1,7 @@
 # Ukrainian translation for tts-biglinux.
 # Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
@@ -12,364 +12,263 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#
+"X-Generator: attranslate\n"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
 msgid "Select text and press Alt+V to read aloud"
 msgstr "Виділіть текст і натисніть Alt+V для озвучення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 msgid "This is a test, welcome to BigLinux!"
 msgstr "Це тест, ласкаво просимо до BigLinux!"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
 msgid "Type text to test…"
 msgstr "Введіть текст для тестування…"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1186
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1197
 msgid "Test voice"
 msgstr "Тестувати голос"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
 msgid "Test the selected voice"
 msgstr "Тестувати вибраний голос"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
 msgid "Voice settings"
 msgstr "Налаштування голосу"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
 msgid "Choose voice and adjust speech parameters"
 msgstr "Оберіть голос і налаштуйте параметри мовлення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
 msgid "Voice"
 msgstr "Голос"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
 msgid "Loading voices..."
 msgstr "Завантаження голосів..."
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
 msgid "Detecting installed voices..."
 msgstr "Виявлення встановлених голосів..."
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
 msgid "Select TTS voice"
 msgstr "Оберіть голос TTS"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
 msgid "Speed"
 msgstr "Швидкість"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
 msgid "Speech rate"
 msgstr "Швидкість мовлення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
 msgid "Slow"
 msgstr "Повільно"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
 msgid "Normal"
 msgstr "Нормально"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
 msgid "Fast"
 msgstr "Швидко"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
 msgid "Speech speed"
 msgstr "Швидкість мовлення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
 msgid "Pitch"
 msgstr "Висота тону"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
 msgid "Voice tone"
 msgstr "Тон голосу"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
 msgid "Low"
 msgstr "Низький"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
 msgid "High"
 msgstr "Високий"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
 msgid "Voice pitch"
 msgstr "Висота голосу"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
 msgid "Volume"
 msgstr "Гучність"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
 msgid "Speech volume"
 msgstr "Гучність мовлення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
 msgid "Mute"
 msgstr "Без звуку"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
 msgid "Max"
 msgstr "Макс"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
 msgid "TTS Engine"
 msgstr "Рушій TTS"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
 msgid "Choose which text-to-speech engine to use"
 msgstr "Оберіть, який рушій синтезу мовлення використовувати"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
-msgid "Engine"
-msgstr "Рушій"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
-msgid "speech-dispatcher"
-msgstr "speech-dispatcher"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
 msgid "TTS Backend"
 msgstr "Бекенд TTS"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
 msgid "Engine used for speech synthesis"
 msgstr "Рушій, що використовується для синтезу мовлення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
 msgid "Select TTS engine"
 msgstr "Оберіть рушій TTS"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
-msgid "Output module"
-msgstr "Модуль виводу"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
-msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Синтезатор мовлення, що використовується speech-dispatcher"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
-msgid "Select output module"
-msgstr "Оберіть модуль виводу"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
-msgid "Status"
-msgstr "Стан"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
-msgid "Checking..."
-msgstr "Перевірка..."
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
-msgid "Text processing"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 319
+msgid "Text Processing"
 msgstr "Обробка тексту"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
-msgid "How text is cleaned and prepared before reading"
-msgstr "Як текст очищається і підготовлюється перед читанням"
-
-#
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 320
+msgid "Configure how text is processed before reading"
+msgstr "Налаштуйте, як обробляється текст перед читанням."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
 msgid "Processing options"
 msgstr "Параметри обробки"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
 msgid "Abbreviations, formatting, limits"
 msgstr "Скорочення, форматування, обмеження"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
 msgid "Expand abbreviations"
 msgstr "Розгортати скорочення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 msgid "Replace common abbreviations with full words"
 msgstr "Замінювати поширені скорочення повними словами"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Розгортати текстові скорочення"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
 msgid "Read special characters"
 msgstr "Читати спеціальні символи"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
 msgid "Speak symbols like # @ % by name"
 msgstr "Вимовляти символи # @ % за назвою"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
 msgid "Read special characters aloud"
 msgstr "Читати спеціальні символи вголос"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
 msgid "Remove formatting"
 msgstr "Видаляти форматування"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
 msgid "Strip Markdown and HTML before reading"
 msgstr "Видаляти Markdown і HTML перед читанням"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
 msgid "Remove text formatting"
 msgstr "Видаляти форматування тексту"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
 msgid "Read URLs"
 msgstr "Читати URL-адреси"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
 msgid "Read web addresses aloud instead of skipping them"
 msgstr "Читати веб-адреси вголос замість пропускання"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
 msgid "Read URLs aloud"
 msgstr "Читати URL-адреси вголос"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
 msgid "Unlimited"
 msgstr "Необмежено"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
 msgid "Character limit"
 msgstr "Обмеження символів"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
 msgid "Maximum number of characters to read at once"
 msgstr "Максимальна кількість символів для читання за раз"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
 msgid "Maximum character limit"
 msgstr "Максимальне обмеження символів"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
 msgid "Advanced"
 msgstr "Додатково"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
 msgid "Advanced options"
 msgstr "Додаткові параметри"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
 msgid "Shortcut, behavior settings"
 msgstr "Комбінація клавіш, налаштування поведінки"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
 msgid "Keyboard shortcut"
 msgstr "Комбінація клавіш"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
-msgid ""
-"Select text anywhere and press the shortcut to read aloud. Press "
-"again to stop."
-msgstr ""
-"Виділіть текст будь-де і натисніть комбінацію клавіш для озвучення. Натисніть "
-"знову, щоб зупинити."
-
-#
+msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
+msgstr "Виділіть текст будь-де і натисніть комбінацію клавіш для озвучення. Натисніть знову, щоб зупинити."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
 msgid "Change"
 msgstr "Змінити"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
 msgid "Show speak button in app launcher"
 msgstr "Показати кнопку озвучення на панелі завдань"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
 msgid "Adds a launcher entry you can pin to the taskbar"
 msgstr "Додає значок, який можна закріпити на панелі завдань"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
 msgid "Set new shortcut"
 msgstr "Встановити нову комбінацію"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
 msgid "Press the new shortcut"
 msgstr "Натисніть нову комбінацію клавіш"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
@@ -381,8 +280,7 @@ msgstr ""
 "і натисніть літеру або клавішу.\n"
 "\n"
 "Натисніть Escape для скасування."
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
@@ -394,61 +292,86 @@ msgstr ""
 "і натисніть літеру або клавішу.\n"
 "\n"
 "<small>Натисніть Escape для скасування</small>"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Комбінацію змінено на {keys}"
-
-#
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
+msgid "Restart Plasma Shell?"
+msgstr "Перезапустити Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Іконка була додана до запуску програми.\n"
+"\n"
+"Щоб вона з'явилася в панелі, потрібно перезапустити оболонку Plasma. Це короткочасно закриє та "
+"знову відкриє панелі робочого столу.\n"
+"\n"
+"Перезапустити зараз?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
+msgid "Later"
+msgstr "Пізніше"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
+msgid "Restart"
+msgstr "Перезапустити"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Іконка додана — перезапустіть Plasma або повторно увійдіть, щоб вона з'явилася."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
+msgid "Restarting Plasma Shell..."
+msgstr "Перезапуск оболонки Plasma..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Не вдалося перезапустити Plasma Shell — будь ласка, увійдіть знову."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Голосів не знайдено — встановіть rhvoice або espeak-ng"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 808
 msgid "No voices available"
 msgstr "Немає доступних голосів"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 811
-msgid "No TTS voices installed"
-msgstr "Голоси TTS не встановлено"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 823
 msgid "No voices available for this engine"
 msgstr "Немає голосів для цього рушія"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 826
 #, python-brace-format
 msgid "Install {engine} voices first"
 msgstr "Спочатку встановіть голоси {engine}"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 853
 #, python-brace-format
 msgid "{count} voices available"
 msgstr "{count} голосів доступно"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "Голосів для {engine} не знайдено — спочатку встановіть"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 964
 msgid "Install Piper Neural TTS?"
 msgstr "Встановити Piper Neural TTS?"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 966
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for "
-"reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -456,135 +379,102 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"Piper не встановлено. Він забезпечує високоякісні нейронні голоси для "
-"читання тексту.\n"
+"Piper не встановлено. Він забезпечує високоякісні нейронні голоси для читання тексту.\n"
 "\n"
 "Будуть встановлені такі пакети:\n"
 "• piper-tts-bin (рушій TTS)\n"
 "• piper-voices-pt-BR (португальські голоси)\n"
 "\n"
 "Це потребує прав адміністратора."
-
-#
+# 
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 173
 msgid "Cancel"
 msgstr "Скасувати"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
 msgid "Install"
 msgstr "Встановити"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Встановлення Piper TTS — це може зайняти деякий час…"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
 msgid "Piper installed successfully! Discovering voices…"
 msgstr "Piper успішно встановлено! Виявлення голосів…"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
 msgid "Failed to install Piper — check permissions"
 msgstr "Не вдалося встановити Piper — перевірте дозволи"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
 msgid "Type some text to test"
 msgstr "Введіть текст для тестування"
-
-#
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1151
+msgid "Volume is at zero — increasing to minimum for test"
+msgstr "Гучність на нулі — збільшується до мінімуму для тестування"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Не вдалося відтворити тест — перевірте, чи встановлено рушій TTS"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1176
 msgid "Press Alt+V to stop"
 msgstr "Натисніть Alt+V, щоб зупинити"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
 msgid "Stop"
 msgstr "Зупинити"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
 msgid "Could not play speech — check TTS engine"
 msgstr "Не вдалося відтворити мовлення — перевірте рушій TTS"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1219
-#, python-brace-format
-msgid "Available: {engines}"
-msgstr "Доступні: {engines}"
-
-#
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
-msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "Рушій TTS не знайдено — встановіть speech-dispatcher або espeak-ng"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"
 msgstr "Налаштування відновлено до типових значень"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 138
 msgid "Restore Defaults"
 msgstr "Відновити типові"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 142
 msgid "About"
 msgstr "Про програму"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 143
 msgid "Quit"
 msgstr "Вийти"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 149
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 151
 msgid "Main menu"
 msgstr "Головне меню"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 170
 msgid "Restore settings?"
 msgstr "Відновити налаштування?"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 171
 msgid "This will return all adjustments to their original defaults."
 msgstr "Це поверне всі налаштування до початкових типових значень."
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 174
 msgid "Restore"
 msgstr "Відновити"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/application.py, line: 143
 msgid "Technologies used"
 msgstr "Використані технології"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/application.py, line: 154
 msgid "License"
 msgstr "Ліцензія"
-
-#
+# 
 # File: tts-biglinux/src/biglinux_tts/application.py, line: 157
-msgid ""
-"This interface is licensed under GPL-3.0. TTS engines have their own "
-"licenses."
-msgstr ""
-"Цей інтерфейс ліцензовано за GPL-3.0. Рушії TTS мають власні "
-"ліцензії."
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Цей інтерфейс ліцензовано за GPL-3.0. Рушії TTS мають власні ліцензії."
