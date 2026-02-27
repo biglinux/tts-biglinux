@@ -329,11 +329,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "El atajo se cambió a {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "¿Reiniciar Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
 msgstr ""
-"Añadido al lanzador de aplicaciones — puede que necesites volver a iniciar sesión para que aparezca "
-"en el panel."
+"El ícono se agregó al lanzador de la aplicación.\n"
+"\n"
+"Para que aparezca en el panel, es necesario reiniciar el Plasma Shell. Esto cerrará y volverá a "
+"abrir brevemente los paneles del escritorio.\n"
+"\n"
+"¿Reiniciar ahora?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Más tarde"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Reiniciar"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Icono añadido: reinicie Plasma o vuelva a iniciar sesión para que aparezca."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Reiniciando Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "No se pudo reiniciar Plasma Shell: por favor, vuelve a iniciar sesión."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

@@ -327,9 +327,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Käskluse otsetee on muudetud {keys} peale."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Lisatud rakenduse käivitajasse — võib-olla tuleb paneelis kuvamiseks uuesti sisse logida"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Taaskäivita Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Ikon lisati rakenduse käivitajasse.\n"
+"\n"
+"Kuna see kuvatakse paneelis, tuleb Plasma Shell taaskäivitada. See sulgeb ja avab lühidalt töölaua "
+"paneelid.\n"
+"\n"
+"Taaskäivita nüüd?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Hiljem"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Taaskäivita"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Ikon lisatud — selle kuvamiseks taaskäivitage Plasma või logige uuesti sisse"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Taaskäivitamine Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Plasma Shelli ei saanud taaskäivitada — palun logige uuesti sisse"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -398,6 +434,10 @@ msgstr "Installi"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1101
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1101
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
 # 

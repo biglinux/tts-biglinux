@@ -326,9 +326,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Klávesová zkratka byla změněna na {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Přidáno do spouštěče aplikací — může být nutné se znovu přihlásit, aby se objevilo v panelu"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Restartovat Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Ikona byla přidána do spouštěče aplikací.\n"
+"\n"
+"Aby se objevila na panelu, je nutné restartovat Plasma Shell. To na chvíli zavře a znovu otevře "
+"panely plochy.\n"
+"\n"
+"Restartovat nyní?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Později"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Restartovat"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Ikona byla přidána — restartujte Plasma nebo se znovu přihlaste, aby se zobrazila."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Restartování Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Nelze restartovat Plasma Shell — prosím, přihlaste se znovu."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

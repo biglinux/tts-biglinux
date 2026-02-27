@@ -216,6 +216,10 @@ msgstr "Udvid forkortelser"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Udvid tekstforkortelser"
@@ -342,9 +346,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Genvej ændret til {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Tilføjet til app-lanceringsprogrammet — muligvis behov for gen-login for at vises i panelet"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Genstart Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Ikonet blev tilføjet til app-lanceren.\n"
+"\n"
+"For at få det til at vises i panelet, skal Plasma Shell genstartes. Dette vil kort lukke og genåbne "
+"skrivebordspanelerne.\n"
+"\n"
+"Genstart nu?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Senere"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Genstart"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Ikon tilføjet — genstart Plasma eller log ind igen for at få den til at vises"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Genstarter Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Kunne ikke genstarte Plasma Shell - venligst log ind igen."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

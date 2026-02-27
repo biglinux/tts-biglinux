@@ -202,6 +202,10 @@ msgstr "קיצורים, עיצוב, מגבלות"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 msgid "Replace common abbreviations with full words"
 msgstr "החלף קיצורים נפוצים במילים מלאות"
@@ -356,9 +360,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "הקיצור שונה ל{keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "נוסף למפעיל האפליקציות - ייתכן שתצטרך להיכנס מחדש כדי להופיע בלוח."
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "האם להפעיל מחדש את Shell של Plasma?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"הסמל נוסף למפעיל האפליקציות.\n"
+"\n"
+"כדי להציג אותו בלוח, יש לאתחל את ה-Plasma Shell. זה יסגור ויפתח מחדש את לוחות השולחן העבודה באופן "
+"זמני.\n"
+"\n"
+"לאתחל עכשיו?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "מאוחר יותר"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "אתחל מחדש"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "אייקון נוסף - הפעל מחדש את פלאזמה או התחבר מחדש כדי שהוא יופיע"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "מחדש את Shell של Plasma..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "לא ניתן להפעיל מחדש את ה-Plasma Shell - אנא התחבר מחדש."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

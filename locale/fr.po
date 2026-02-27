@@ -329,11 +329,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Le raccourci a été changé en {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Redémarrer Plasma Shell ?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
 msgstr ""
-"Ajouté au lanceur d'applications — peut nécessiter une nouvelle connexion pour apparaître dans le "
-"panneau."
+"L'icône a été ajoutée au lanceur d'applications.\n"
+"\n"
+"Pour qu'elle apparaisse dans le panneau, le Shell Plasma doit être redémarré. Cela fermera et "
+"rouvrira brièvement les panneaux de bureau.\n"
+"\n"
+"Redémarrer maintenant ?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Plus tard"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Redémarrer"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Icône ajoutée — redémarrez Plasma ou reconnectez-vous pour qu'elle apparaisse."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Redémarrage de Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Impossible de redémarrer Plasma Shell — veuillez vous reconnecter."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

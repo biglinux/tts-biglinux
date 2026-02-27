@@ -212,6 +212,10 @@ msgstr "Extindeți abrevierile"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Extindeți abrevierile de text"
@@ -340,9 +344,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Comanda a fost schimbată în {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Adăugat la lansatorul de aplicații — poate fi necesar să te reconectezi pentru a apărea în panou"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Repornire Plasma Shell?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Iconi a fost adăugat la lansatorul de aplicații.\n"
+"\n"
+"Pentru a apărea în panou, Shell-ul Plasma trebuie să fie repornit. Acest lucru va închide și "
+"redeschide temporar panourile desktop-ului.\n"
+"\n"
+"Repornim acum?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Mai târziu"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Repornire"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Icon adăugat — repornește Plasma sau reconectează-te pentru a apărea"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Repornirea Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Nu s-a putut reporni Plasma Shell - vă rugăm să vă reconectați."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

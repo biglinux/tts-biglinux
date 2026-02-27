@@ -331,9 +331,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "A gyorsbillentyű megváltozott erre: {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Hozzáadva az alkalmazásindítóhoz — lehet, hogy újra be kell jelentkezni, hogy megjelenjen a panelen"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Újraindítja a Plasma Shell-t?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Az ikon hozzáadva az alkalmazásindítóhoz.\n"
+"\n"
+"Ahhoz, hogy megjelenjen a panelen, a Plasma Shell-t újra kell indítani. Ez rövid időre bezárja és "
+"újra megnyitja a munkaasztali paneleket.\n"
+"\n"
+"Újraindítja most?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Később"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Újraindítás"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Ikon hozzáadva — indítsa újra a Plasmát vagy jelentkezzen be újra, hogy megjelenjen."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "A Plasma Shell újraindítása..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Nem sikerült újraindítani a Plasma Shell-t — kérlek, jelentkezz be újra."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

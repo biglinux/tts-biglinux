@@ -327,9 +327,44 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "단축키가 {keys}로 변경되었습니다."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "앱 실행기에 추가됨 — 패널에 나타나려면 다시 로그인해야 할 수 있습니다."
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "플라즈마 셸을 재시작하시겠습니까?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"아이콘이 앱 실행기에 추가되었습니다.\n"
+"\n"
+"패널에 나타나게 하려면 Plasma Shell을 다시 시작해야 합니다. 이로 인해 데스크탑 패널이 잠시 닫혔다가 다시 열립니다.\n"
+"\n"
+"지금 다시 시작하시겠습니까?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "나중에"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "재시작"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "아이콘이 추가되었습니다 — 나타나려면 Plasma를 재시작하거나 다시 로그인하세요."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "플라즈마 셸을 재시작하는 중..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Plasma Shell을 재시작할 수 없습니다 — 다시 로그인해 주세요."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

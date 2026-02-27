@@ -212,6 +212,10 @@ msgstr "Rozwiń skróty"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Rozwiń skróty tekstowe"
@@ -340,11 +344,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Skrót zmieniony na {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Czy zrestartować powłokę Plasma?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
 msgstr ""
-"Dodano do uruchamiacza aplikacji — może być konieczne ponowne zalogowanie, aby pojawiło się w "
-"panelu."
+"Ikona została dodana do uruchamiacza aplikacji.\n"
+"\n"
+"Aby pojawiła się w panelu, należy zrestartować powłokę Plasma. Spowoduje to krótkie zamknięcie i "
+"ponowne otwarcie paneli pulpitu.\n"
+"\n"
+"Zrestartować teraz?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Później"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Uruchom ponownie"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Ikona dodana — zrestartuj Plasma lub zaloguj się ponownie, aby ją zobaczyć."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Restartowanie powłoki Plasma..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Nie można ponownie uruchomić powłoki Plasma — proszę ponownie się zalogować."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

@@ -240,6 +240,18 @@ msgstr "Skammstafanir, snið, takmarkanir"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
 msgid "Read special characters"
 msgstr "Lesa sértæk tákn"
@@ -361,9 +373,45 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Skammstafur breyttist í {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
-msgid "Added to app launcher — may need re-login to appear in panel"
-msgstr "Bætt við forritaskjá — gæti þurft að skrá sig inn aftur til að birtast á panelnum"
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 759
+msgid "Restart Plasma Shell?"
+msgstr "Endurræsa Plasma skel?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 761
+msgid ""
+"The icon was added to the app launcher.\n"
+"\n"
+"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
+"reopen the desktop panels.\n"
+"\n"
+"Restart now?"
+msgstr ""
+"Íkonin var bætt við forritaskjáinn.\n"
+"\n"
+"Til að láta það birtast á panelnum þarf að endurræsa Plasma Shell. Þetta mun loka og opna "
+"skrifborðspanelana í stuttan tíma.\n"
+"\n"
+"Viltu endurræsa núna?"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 768
+msgid "Later"
+msgstr "Síðar"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 769
+msgid "Restart"
+msgstr "Endurræsa"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 780
+msgid "Icon added — restart Plasma or re-login for it to appear"
+msgstr "Tákn bætt við — endurræstu Plasma eða skráðu þig inn aftur til að það birtist"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 787
+msgid "Restarting Plasma Shell..."
+msgstr "Endurheimta Plasma Shell..."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 790
+msgid "Could not restart Plasma Shell — please re-login"
+msgstr "Gat ekki að endurræsa Plasma Shell — vinsamlegast skráðu þig aftur inn."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -440,6 +488,10 @@ msgstr "Piper var sett upp með góðum árangri! Að uppgötva raddir…"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1115
 msgid "Failed to install Piper — check permissions"
 msgstr "Ekki tókst að setja upp Piper — athugaðu heimildir."
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1170
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1170
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
 # 
