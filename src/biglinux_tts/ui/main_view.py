@@ -973,11 +973,21 @@ class MainView(Adw.NavigationPage):
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
 
-        # Restart speech-dispatcher daemon when switching back to it
+        # When switching to speech-dispatcher, restart daemon and re-discover
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
-            self._tts._try_restart_speechd()
+            self._voice_combo.set_subtitle(_("Restarting speech-dispatcher…"))
 
-        # Refresh voices for new backend
+            def _restart_and_rediscover() -> VoiceCatalog:
+                self._tts._try_restart_speechd()
+                return discover_voices()
+
+            run_in_thread(
+                _restart_and_rediscover,
+                on_done=self._on_voices_discovered,
+            )
+            return
+
+        # Refresh voices for new backend from cached catalog
         if self._catalog:
             filtered = self._catalog.get_by_backend(backend)
             if not filtered and backend == TTSBackend.PIPER.value:
@@ -986,7 +996,7 @@ class MainView(Adw.NavigationPage):
             elif not filtered:
                 self._on_toast(
                     _("No voices found for {engine} — install it first").format(
-                        engine=names.get(backend, backend)
+                        engine=backend,
                     ),
                     4,
                 )
