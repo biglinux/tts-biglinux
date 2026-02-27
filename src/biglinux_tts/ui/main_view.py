@@ -686,7 +686,7 @@ class MainView(Adw.NavigationPage):
     # ── Launcher toggle ────────────────────────────────────────────
 
     def _on_launcher_toggle(self, active: bool) -> None:
-        """Toggle visibility of the speak action in the app launcher and taskbar."""
+        """Toggle visibility of the speak action in the app launcher."""
         from pathlib import Path
         import re
 
@@ -699,13 +699,11 @@ class MainView(Adw.NavigationPage):
         local_apps = Path.home() / ".local" / "share" / "applications"
         local_apps.mkdir(parents=True, exist_ok=True)
         desktop_dst = local_apps / "bigtts.desktop"
-        launcher_id = "applications:bigtts.desktop"
 
         # Ensure icon is available (handle old→new name transition)
         self._ensure_icon_available()
 
         if active:
-            # 1. Create a local .desktop without NoDisplay
             desktop_src = Path("/usr/share/applications/bigtts.desktop")
             try:
                 if desktop_src.exists():
@@ -732,21 +730,15 @@ class MainView(Adw.NavigationPage):
                 # Remove NoDisplay and any Desktop Actions junk
                 content = re.sub(r"^NoDisplay=.*\n?", "", content, flags=re.MULTILINE)
                 content = re.sub(r"\nActions=.*(?:\n\[Desktop Action [^\]]+\].*)*$", "", content, flags=re.DOTALL)
-                # Ensure Exec points to the correct command
                 content = re.sub(r"^Exec=.*$", "Exec=biglinux-tts-speak", content, flags=re.MULTILINE)
-                # Ensure Icon uses the correct name
                 content = re.sub(r"^Icon=.*$", "Icon=biglinux-tts", content, flags=re.MULTILINE)
                 desktop_dst.write_text(content)
             except OSError as e:
                 logger.warning("Could not create launcher entry: %s", e)
 
-            # 2. Pin to KDE Plasma taskbar (as last item, nearest to clock)
-            self._pin_to_plasma_taskbar(launcher_id, pin=True)
-
-            # 3. Update desktop database
             self._update_desktop_database()
+            self._on_toast(_("Added to app launcher — may need re-login to appear in panel"), 4)
         else:
-            # 1. Add NoDisplay back
             try:
                 if desktop_dst.exists():
                     content = desktop_dst.read_text()
@@ -759,8 +751,6 @@ class MainView(Adw.NavigationPage):
             except OSError as e:
                 logger.warning("Could not hide launcher entry: %s", e)
 
-            # 2. Unpin from KDE Plasma taskbar
-            self._pin_to_plasma_taskbar(launcher_id, pin=False)
             self._update_desktop_database()
 
     @staticmethod
@@ -814,41 +804,15 @@ class MainView(Adw.NavigationPage):
             )
         except (OSError, subprocess.TimeoutExpired):
             pass
-
-    def _pin_to_plasma_taskbar(self, launcher_id: str, *, pin: bool) -> None:
-        """Add or remove a launcher from all KDE Plasma icontasks panels."""
-        from pathlib import Path
-
-        config_path = Path.home() / ".config" / "plasma-org.kde.plasma.desktop-appletsrc"
-        if not config_path.exists():
-            logger.debug("Plasma config not found, skipping taskbar pin")
-            return
-
+        # Rebuild KDE service cache to make changes visible
         try:
-            content = config_path.read_text()
-            lines = content.splitlines()
-            modified = False
-
-            for i, line in enumerate(lines):
-                if not line.startswith("launchers="):
-                    continue
-                launchers = line[len("launchers="):]
-                items = [x.strip() for x in launchers.split(",") if x.strip()]
-
-                if pin and launcher_id not in items:
-                    items.append(launcher_id)
-                    lines[i] = "launchers=" + ",".join(items)
-                    modified = True
-                elif not pin and launcher_id in items:
-                    items.remove(launcher_id)
-                    lines[i] = "launchers=" + ",".join(items)
-                    modified = True
-
-            if modified:
-                config_path.write_text("\n".join(lines) + "\n")
-                logger.info("Plasma taskbar %s: %s", "pinned" if pin else "unpinned", launcher_id)
-        except OSError as e:
-            logger.warning("Could not update Plasma taskbar: %s", e)
+            subprocess.run(
+                ["kbuildsycoca6", "--noincremental"],
+                timeout=10, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
 
     # ── Voice Discovery Callback ─────────────────────────────────────
 

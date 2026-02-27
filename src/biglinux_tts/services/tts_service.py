@@ -288,14 +288,55 @@ class TTSService:
                 "speechd: module=%s, voice=%s, rate=%d, pitch=%d, vol=%d, text=%r",
                 output_module, voice_id, rate, pitch, spd_vol, text[:60],
             )
-            print(f"★ speechd SPEAK: module={output_module}, voice={voice_id}, text={text!r}")
             return True
 
         except Exception as e:
             logger.error("speechd failed: %s", e)
             self._close_spd_client()
+            # Try restarting speech-dispatcher and retry once
+            if self._try_restart_speechd():
+                try:
+                    client = speechd.SSIPClient("biglinux-tts")
+                    self._spd_client = client
+                    if output_module:
+                        client.set_output_module(output_module)
+                    if voice_id:
+                        client.set_synthesis_voice(voice_id)
+                    client.set_rate(max(-100, min(100, rate)))
+                    client.set_pitch(max(-100, min(100, pitch)))
+                    spd_vol = max(-100, min(100, (volume * 2) - 100))
+                    client.set_volume(spd_vol)
+
+                    def on_end2(callback_type: Any, index_mark: Any = None) -> None:
+                        try:
+                            from gi.repository import GLib
+                            GLib.idle_add(lambda: self._on_spd_finished() or False)
+                        except Exception:
+                            self._on_spd_finished()
+
+                    client.speak(text, callback=on_end2)
+                    logger.info("speechd retry succeeded after restart")
+                    return True
+                except Exception as e2:
+                    logger.error("speechd retry also failed: %s", e2)
+                    self._close_spd_client()
             # Fallback to spd-say
             return self._speak_spd_fallback(text, voice_id, output_module, rate, pitch, volume)
+
+    def _try_restart_speechd(self) -> bool:
+        """Try to restart the speech-dispatcher daemon."""
+        import time
+        try:
+            subprocess.run(
+                ["systemctl", "--user", "restart", "speech-dispatcher"],
+                timeout=5, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            time.sleep(1)
+            logger.info("Restarted speech-dispatcher service")
+            return True
+        except (OSError, subprocess.TimeoutExpired):
+            return False
 
     def _on_spd_finished(self) -> bool:
         """Called when speech-dispatcher finishes speaking (main thread)."""
