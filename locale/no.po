@@ -326,6 +326,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Snarveien ble endret til {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Lagt til i app-lansereren — kan hende du må logge inn på nytt for å vises i panelet"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Ingen stemmer funnet — installer rhvoice eller espeak-ng"

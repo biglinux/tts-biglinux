@@ -212,6 +212,10 @@ msgstr "Udvid forkortelser"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Udvid tekstforkortelser"
@@ -337,6 +341,10 @@ msgstr ""
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Genvej ændret til {keys}"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Tilføjet til app-lanceringsprogrammet — muligvis behov for gen-login for at vises i panelet"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"

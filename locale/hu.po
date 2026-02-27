@@ -331,6 +331,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "A gyorsbillentyű megváltozott erre: {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Hozzáadva az alkalmazásindítóhoz — lehet, hogy újra be kell jelentkezni, hogy megjelenjen a panelen"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Nincsenek hangok — telepítse a rhvoice-t vagy az espeak-ng-t"

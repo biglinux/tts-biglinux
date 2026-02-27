@@ -208,6 +208,10 @@ msgstr "Extindeți abrevierile"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
 msgid "Expand text abbreviations"
 msgstr "Extindeți abrevierile de text"
@@ -335,6 +339,10 @@ msgstr ""
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Comanda a fost schimbată în {keys}"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Adăugat la lansatorul de aplicații — poate fi necesar să te reconectezi pentru a apărea în panou"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"

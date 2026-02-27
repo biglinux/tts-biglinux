@@ -328,6 +328,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Kısayol {keys} olarak değiştirildi."
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Uygulama başlatıcısına eklendi — panelde görünmesi için yeniden giriş yapmanız gerekebilir."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Ses bulunamadı — rhvoice veya espeak-ng'yi yükleyin"

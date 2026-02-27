@@ -21,7 +21,7 @@ msgstr "BigLinux TTS"
 
 #
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1240
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1204
 msgid "Select text and press Alt+V to read aloud"
 msgstr "Select text and press Alt+V to read aloud"
 
@@ -37,8 +37,8 @@ msgstr "Type text to test…"
 
 #
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1242
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1206
 msgid "Test voice"
 msgstr "Test voice"
 
@@ -403,50 +403,55 @@ msgid "Shortcut changed to {keys}"
 msgstr "Shortcut changed to {keys}"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 860
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Added to app launcher — may need re-login to appear in panel"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 824
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "No voices found — install rhvoice or espeak-ng"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 862
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 826
 msgid "No voices available"
 msgstr "No voices available"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 865
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 829
 msgid "No TTS voices installed"
 msgstr "No TTS voices installed"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 877
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 841
 msgid "No voices available for this engine"
 msgstr "No voices available for this engine"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 880
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 844
 #, python-brace-format
 msgid "Install {engine} voices first"
 msgstr "Install {engine} voices first"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 907
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 871
 #, python-brace-format
 msgid "{count} voices available"
 msgstr "{count} voices available"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1008
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 972
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "No voices found for {engine} — install it first"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1018
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 982
 msgid "Install Piper Neural TTS?"
 msgstr "Install Piper Neural TTS?"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1020
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 984
 msgid ""
 "Piper is not installed. It provides high-quality neural voices for reading "
 "text.\n"
@@ -469,74 +474,74 @@ msgstr ""
 #
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1028
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 992
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 159
 msgid "Cancel"
 msgstr "Cancel"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1029
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 993
 msgid "Install"
 msgstr "Install"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1056
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1020
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Installing Piper TTS — this may take a moment…"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1104
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
 msgid "Piper installed successfully! Discovering voices…"
 msgstr "Piper installed successfully! Discovering voices…"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1108
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1072
 msgid "Failed to install Piper — check permissions"
 msgstr "Failed to install Piper — check permissions"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1132
 msgid "Type some text to test"
 msgstr "Type some text to test"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1182
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1146
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Volume is at zero — increasing to minimum for test"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1207
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1171
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Could not play test — check if a TTS engine is installed"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1221
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
 msgid "Press Alt+V to stop"
 msgstr "Press Alt+V to stop"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1222
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1186
 msgid "Stop"
 msgstr "Stop"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1230
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1194
 msgid "Could not play speech — check TTS engine"
 msgstr "Could not play speech — check TTS engine"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1264
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1228
 #, python-brace-format
 msgid "Available: {engines}"
 msgstr "Available: {engines}"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1268
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1232
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
 msgstr "No TTS engine found — install speech-dispatcher or espeak-ng"
 
 #
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1279
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1243
 msgid "Settings restored to defaults"
 msgstr "Settings restored to defaults"
 

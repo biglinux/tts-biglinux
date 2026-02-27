@@ -326,6 +326,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Sneltoets gewijzigd naar {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Toegevoegd aan app-lanceerder - mogelijk opnieuw inloggen nodig om in het paneel te verschijnen"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 867
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Geen stemmen gevonden - installeer rhvoice of espeak-ng"

@@ -329,6 +329,10 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Pikanäppäin muutettu muotoon {keys}"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 740
+msgid "Added to app launcher — may need re-login to appear in panel"
+msgstr "Lisätty sovelluskäynnistimeen — saattaa tarvita uudelleenkirjautumista näkyäkseen paneelissa"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Ääniä ei löytynyt — asenna rhvoice tai espeak-ng"
