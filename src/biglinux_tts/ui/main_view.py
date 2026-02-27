@@ -218,6 +218,9 @@ class MainView(Adw.NavigationPage):
         )
         group.add(self._voice_combo)
 
+        # SizeGroup for scale title alignment
+        title_sg = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
+
         # Speed
         self._speed_row, self._speed_scale = create_action_row_with_scale(
             title=_("Speed"),
@@ -230,6 +233,7 @@ class MainView(Adw.NavigationPage):
             on_changed=self._on_rate_changed,
             marks=[(RATE_MIN, _("Slow")), (0, _("Normal")), (RATE_MAX, _("Fast"))],
             accessible_name=_("Speech speed"),
+            title_size_group=title_sg,
         )
         group.add(self._speed_row)
 
@@ -245,6 +249,7 @@ class MainView(Adw.NavigationPage):
             on_changed=self._on_pitch_changed,
             marks=[(PITCH_MIN, _("Low")), (0, _("Normal")), (PITCH_MAX, _("High"))],
             accessible_name=_("Voice pitch"),
+            title_size_group=title_sg,
         )
         group.add(self._pitch_row)
 
@@ -260,6 +265,7 @@ class MainView(Adw.NavigationPage):
             on_changed=self._on_volume_changed,
             marks=[(VOLUME_MIN, _("Mute")), (50, "50%"), (VOLUME_MAX, _("Max"))],
             accessible_name=_("Speech volume"),
+            title_size_group=title_sg,
         )
         group.add(self._volume_row)
 
@@ -268,17 +274,10 @@ class MainView(Adw.NavigationPage):
     # ── Backend Section ──────────────────────────────────────────────
 
     def _build_backend_section(self) -> Adw.PreferencesGroup:
-        """Build TTS backend selection and status."""
+        """Build TTS backend selection."""
         group = create_preferences_group(
             title=_("TTS Engine"),
             description=_("Choose which text-to-speech engine to use"),
-        )
-
-        # Backend expander
-        self._backend_expander = create_expander_row(
-            title=_("Engine"),
-            subtitle=_("speech-dispatcher"),
-            icon_name="applications-multimedia-symbolic",
         )
 
         # Backend selection
@@ -308,38 +307,7 @@ class MainView(Adw.NavigationPage):
             on_selected=self._on_backend_selected,
             accessible_name=_("Select TTS engine"),
         )
-        self._backend_expander.add_row(self._backend_combo)
-
-        # Output module for speech-dispatcher
-        modules = ["rhvoice", "espeak-ng", "espeak", "pico", "festival"]
-        current_mod = self._settings.speech.output_module
-        mod_idx = 0
-        for i, m in enumerate(modules):
-            if m == current_mod:
-                mod_idx = i
-                break
-
-        self._module_combo = create_combo_row(
-            title=_("Output module"),
-            subtitle=_("Speech synthesizer used by speech-dispatcher"),
-            options=modules,
-            selected_index=mod_idx,
-            on_selected=self._on_module_selected,
-            accessible_name=_("Select output module"),
-        )
-        self._backend_expander.add_row(self._module_combo)
-
-        # Status row
-        self._backend_status = Adw.ActionRow()
-        self._backend_status.set_title(_("Status"))
-        self._backend_status.set_subtitle(_("Checking..."))
-        self._backend_status.set_icon_name("emblem-system-symbolic")
-        self._backend_expander.add_row(self._backend_status)
-
-        group.add(self._backend_expander)
-
-        # Check backend availability in background
-        GLib.idle_add(self._check_backend_status)
+        group.add(self._backend_combo)
 
         return group
 
@@ -348,8 +316,8 @@ class MainView(Adw.NavigationPage):
     def _build_text_processing_section(self) -> Adw.PreferencesGroup:
         """Build text processing options."""
         group = create_preferences_group(
-            title=_("Text processing"),
-            description=_("How text is cleaned and prepared before reading"),
+            title=_("Text Processing"),
+            description=_("Configure how text is processed before reading"),
         )
 
         expander = create_expander_row(
@@ -871,7 +839,6 @@ class MainView(Adw.NavigationPage):
                 Gtk.StringList.new([_("No voices available")])
             )
             self._voice_list = []
-            self._backend_status.set_subtitle(_("No TTS voices installed"))
             return
 
         # Filter voices by selected backend
@@ -951,7 +918,6 @@ class MainView(Adw.NavigationPage):
             voice = self._voice_list[selected_idx]
             self._settings.speech.voice_id = voice.voice_id
             self._settings.speech.backend = voice.backend
-            self._settings.speech.output_module = voice.output_module
             self._settings_service.save(self._settings)
 
         logger.info(
@@ -1007,17 +973,6 @@ class MainView(Adw.NavigationPage):
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
 
-        # Update subtitle
-        names = {
-            TTSBackend.SPEECH_DISPATCHER.value: "speech-dispatcher",
-            TTSBackend.ESPEAK_NG.value: "espeak-ng",
-            TTSBackend.PIPER.value: "Piper",
-        }
-        self._backend_expander.set_subtitle(names.get(backend, backend))
-
-        # Show/hide output module based on backend
-        self._module_combo.set_visible(backend == TTSBackend.SPEECH_DISPATCHER.value)
-
         # Restart speech-dispatcher daemon when switching back to it
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
             self._tts._try_restart_speechd()
@@ -1071,8 +1026,6 @@ class MainView(Adw.NavigationPage):
             self._settings.speech.backend = prev_backend
             self._settings_service.save(self._settings)
             self._backend_combo.set_selected(0)
-            self._backend_expander.set_subtitle("speech-dispatcher")
-            self._module_combo.set_visible(True)
             if self._catalog:
                 self._on_voices_discovered(self._catalog)
             self._updating_ui = False
@@ -1136,23 +1089,9 @@ class MainView(Adw.NavigationPage):
             self._settings.speech.backend = TTSBackend.SPEECH_DISPATCHER.value
             self._settings_service.save(self._settings)
             self._backend_combo.set_selected(0)
-            self._backend_expander.set_subtitle("speech-dispatcher")
-            self._module_combo.set_visible(True)
             if self._catalog:
                 self._on_voices_discovered(self._catalog)
             self._updating_ui = False
-
-    def _on_module_selected(self, index: int) -> None:
-        """Handle output module selection."""
-        if self._updating_ui:
-            return
-        modules = ["rhvoice", "espeak-ng", "espeak", "pico", "festival"]
-        if 0 <= index < len(modules):
-            self._settings.speech.output_module = modules[index]
-            self._settings_service.save(self._settings)
-            # Refresh voice list for the new module
-            if self._catalog:
-                self._on_voices_discovered(self._catalog)
 
     def _on_abbreviations_toggled(self, active: bool) -> None:
         self._settings.text.expand_abbreviations = active
@@ -1275,31 +1214,6 @@ class MainView(Adw.NavigationPage):
 
         return GLib.SOURCE_REMOVE
 
-    # ── Backend Status Check ─────────────────────────────────────────
-
-    def _check_backend_status(self) -> bool:
-        """Check if TTS backends are available."""
-        import shutil
-
-        available = []
-        if shutil.which("spd-say"):
-            available.append("speech-dispatcher")
-        if shutil.which("espeak-ng"):
-            available.append("espeak-ng")
-        if shutil.which("piper"):
-            available.append("Piper")
-
-        if available:
-            self._backend_status.set_subtitle(
-                _("Available: {engines}").format(engines=", ".join(available))
-            )
-        else:
-            self._backend_status.set_subtitle(
-                _("No TTS engine found — install speech-dispatcher or espeak-ng")
-            )
-
-        return GLib.SOURCE_REMOVE
-
     # ── Restore Defaults ─────────────────────────────────────────────
 
     def restore_defaults(self) -> None:
@@ -1338,15 +1252,6 @@ class MainView(Adw.NavigationPage):
         }
         backend_idx = backend_map.get(self._settings.speech.backend, 0)
         self._backend_combo.set_selected(backend_idx)
-
-        # Output module combo
-        modules = ["rhvoice", "espeak-ng", "espeak", "pico", "festival"]
-        mod_idx = 0
-        for i, m in enumerate(modules):
-            if m == self._settings.speech.output_module:
-                mod_idx = i
-                break
-        self._module_combo.set_selected(mod_idx)
 
         # Keyboard shortcut
         self._shortcut_label.set_accelerator(self._settings.shortcut.keybinding)

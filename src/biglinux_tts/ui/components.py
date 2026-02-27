@@ -69,12 +69,33 @@ def create_action_row_with_scale(
     on_changed: Callable[[float], None] | None = None,
     marks: list[tuple[float, str]] | None = None,
     accessible_name: str | None = None,
+    title_size_group: Gtk.SizeGroup | None = None,
 ) -> tuple[Adw.ActionRow, Gtk.Scale]:
     """Create an action row with a horizontal scale slider."""
     row = Adw.ActionRow()
-    row.set_title(title)
-    if subtitle:
-        row.set_subtitle(subtitle)
+
+    if title_size_group:
+        # Custom title area with SizeGroup for alignment
+        title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        title_box.set_valign(Gtk.Align.CENTER)
+        title_box.set_spacing(2)
+
+        title_label = Gtk.Label(label=title, xalign=0)
+        title_label.add_css_class("title")
+        title_box.append(title_label)
+
+        if subtitle:
+            sub_label = Gtk.Label(label=subtitle, xalign=0)
+            sub_label.add_css_class("dim-label")
+            sub_label.set_css_classes(["dim-label", "caption"])
+            title_box.append(sub_label)
+
+        row.add_prefix(title_box)
+        title_size_group.add_widget(title_box)
+    else:
+        row.set_title(title)
+        if subtitle:
+            row.set_subtitle(subtitle)
 
     adjustment = Gtk.Adjustment(
         value=value,
@@ -90,7 +111,7 @@ def create_action_row_with_scale(
     )
     scale.set_digits(digits)
     scale.set_hexpand(True)
-    scale.set_size_request(200, -1)
+    scale.set_size_request(280, -1)
     scale.set_valign(Gtk.Align.CENTER)
 
     # Accessibility

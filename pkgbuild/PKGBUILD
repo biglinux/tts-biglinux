@@ -59,6 +59,13 @@ package() {
         cp -r "${InternalDir}/usr/share" "${pkgdir}/usr/"
     fi
 
+    # Install .po translation files
+    if [ -d "${InternalDir}/locale" ]; then
+        install -d "${pkgdir}/usr/share/tts-biglinux/locale"
+        install -m644 "${InternalDir}/locale/"*.po \
+            "${pkgdir}/usr/share/tts-biglinux/locale/"
+    fi
+
     # KDE global shortcut link
     mkdir -p "${pkgdir}/usr/share/kglobalaccel/"
     ln -s "/usr/share/applications/bigtts.desktop" \
