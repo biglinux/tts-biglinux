@@ -439,6 +439,10 @@ msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1101
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1101
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1101
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1068
