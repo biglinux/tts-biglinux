@@ -14,13 +14,11 @@ PID_FILE="/tmp/biglinux-tts-$(whoami).pid"
 if [[ -f "$PID_FILE" ]]; then
     OLD_PID="$(cat "$PID_FILE" 2>/dev/null || true)"
     if [[ -n "$OLD_PID" ]] && kill -0 "$OLD_PID" 2>/dev/null; then
-        # Already speaking — stop
+        # Already speaking — stop the subshell and its children
         kill "$OLD_PID" 2>/dev/null || true
         spd-say -C 2>/dev/null || true
-        pkill -f "spd-say" 2>/dev/null || true
-        pkill -f "sd_rhvoice" 2>/dev/null || true
         pkill -f "espeak-ng" 2>/dev/null || true
-        pkill -f "piper" 2>/dev/null || true
+        pkill -f "piper-tts" 2>/dev/null || true
         rm -f "$PID_FILE"
         exit 0
     fi
@@ -40,25 +38,27 @@ PROCESS_CHARS="true"
 MAX_CHARS="10000"
 
 if [[ -f "$SETTINGS_FILE" ]] && command -v python3 &>/dev/null; then
-    eval "$(python3 -c "
-import json, sys
+    eval "$(python3 << 'PYEOF'
+import json, sys, os, shlex
+sf = os.path.expanduser("~/.config/biglinux-tts/settings.json")
 try:
-    with open('$SETTINGS_FILE') as f:
+    with open(sf) as f:
         s = json.load(f)
-    sp = s.get('speech', {})
-    tx = s.get('text', {})
-    print(f'RATE={sp.get(\"rate\", -25)}')
-    print(f'PITCH={sp.get(\"pitch\", -25)}')
-    print(f'VOLUME={sp.get(\"volume\", 75)}')
-    print(f'VOICE_ID=\"{sp.get(\"voice_id\", \"\")}\"')
-    print(f'BACKEND=\"{sp.get(\"backend\", \"speech-dispatcher\")}\"')
-    print(f'OUTPUT_MODULE=\"{sp.get(\"output_module\", \"rhvoice\")}\"')
-    print(f'EXPAND_ABBR={str(tx.get(\"expand_abbreviations\", True)).lower()}')
-    print(f'PROCESS_CHARS={str(tx.get(\"process_special_chars\", True)).lower()}')
-    print(f'MAX_CHARS={tx.get(\"max_chars\", 10000)}')
+    sp = s.get("speech", {})
+    tx = s.get("text", {})
+    print(f"RATE={sp.get('rate', -25)}")
+    print(f"PITCH={sp.get('pitch', -25)}")
+    print(f"VOLUME={sp.get('volume', 75)}")
+    print(f"VOICE_ID={shlex.quote(str(sp.get('voice_id', '')))}")
+    print(f"BACKEND={shlex.quote(str(sp.get('backend', 'speech-dispatcher')))}")
+    print(f"OUTPUT_MODULE={shlex.quote(str(sp.get('output_module', 'rhvoice')))}")
+    print(f"EXPAND_ABBR={str(tx.get('expand_abbreviations', True)).lower()}")
+    print(f"PROCESS_CHARS={str(tx.get('process_special_chars', True)).lower()}")
+    print(f"MAX_CHARS={tx.get('max_chars', 10000)}")
 except Exception:
     pass
-" 2>/dev/null)"
+PYEOF
+)" || true
 fi
 
 # ── Capture selected text ─────────────────────────────────────────
@@ -81,8 +81,8 @@ if [[ -z "${capture_text// /}" ]]; then
     exit 0
 fi
 
-# Truncate if needed
-if [[ "${#capture_text}" -gt "$MAX_CHARS" ]]; then
+# Truncate if needed (0 = unlimited)
+if [[ "$MAX_CHARS" -gt 0 ]] && [[ "${#capture_text}" -gt "$MAX_CHARS" ]]; then
     capture_text="${capture_text:0:$MAX_CHARS}"
 fi
 
@@ -164,22 +164,41 @@ spd-say -C 2>/dev/null || true
             ESP_PITCH=$((50 + PITCH / 2))
             [[ "$ESP_PITCH" -lt 0 ]] && ESP_PITCH=0
             [[ "$ESP_PITCH" -gt 99 ]] && ESP_PITCH=99
-            CMD+=(-p "$ESP_PITCH")
             ESP_VOL=$((VOLUME * 2))
+            [[ "$ESP_VOL" -lt 20 ]] && ESP_VOL=20
             CMD+=(-a "$ESP_VOL")
             echo "$capture_text" | "${CMD[@]}"
             ;;
         "piper")
-            MODEL_NAME="${VOICE_ID#piper-}"
+            # voice_id formats: "piper:/path/to/model.onnx" or "piper-modelname"
             MODEL_PATH=""
-            for DIR in /usr/share/piper-voices /usr/local/share/piper-voices "$HOME/.local/share/piper-voices" /usr/share/piper/voices; do
-                if [[ -f "$DIR/$MODEL_NAME.onnx" ]]; then
-                    MODEL_PATH="$DIR/$MODEL_NAME.onnx"
-                    break
+            if [[ "$VOICE_ID" == piper:* ]]; then
+                # Full path after "piper:" prefix
+                MODEL_PATH="${VOICE_ID#piper:}"
+            else
+                # Legacy format: search by model name
+                MODEL_NAME="${VOICE_ID#piper-}"
+                for DIR in /usr/share/piper-voices /usr/local/share/piper-voices "$HOME/.local/share/piper-voices" /usr/share/piper/voices; do
+                    if [[ -f "$DIR/$MODEL_NAME.onnx" ]]; then
+                        MODEL_PATH="$DIR/$MODEL_NAME.onnx"
+                        break
+                    fi
+                done
+            fi
+            if [[ -n "$MODEL_PATH" ]] && [[ -f "$MODEL_PATH" ]]; then
+                PIPER_BIN=""
+                for p in piper-tts piper; do
+                    if command -v "$p" &>/dev/null; then
+                        PIPER_BIN="$p"
+                        break
+                    fi
+                done
+                if [[ -n "$PIPER_BIN" ]]; then
+                    VOL_FACTOR="$(python3 -c "print(max(0.2, min(2.0, ${VOLUME}/50.0)))" 2>/dev/null || echo "1.0")"
+                    echo "$capture_text" | "$PIPER_BIN" --model "$MODEL_PATH" --output-raw \
+                        | sox -t raw -r 22050 -e signed -b 16 -c 1 - -t wav - vol "$VOL_FACTOR" \
+                        | aplay -q -
                 fi
-            done
-            if [[ -n "$MODEL_PATH" ]]; then
-                echo "$capture_text" | piper --model "$MODEL_PATH" --output-raw | aplay -r 22050 -f S16_LE -t raw -
             fi
             ;;
     esac
