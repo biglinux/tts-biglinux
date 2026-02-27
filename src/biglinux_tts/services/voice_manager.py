@@ -269,17 +269,15 @@ def _discover_spd_voices() -> list[VoiceInfo]:
 
 def _discover_rhvoice_installed() -> list[VoiceInfo]:
     """
-    Discover RHVoice voices by scanning installed packages and voice directories.
-    
-    RHVoice voices on Arch are installed as packages like:
-      rhvoice-voice-leticia-f123 (pt-BR female)
-      rhvoice-voice-evgeniy-eng (en male)
-    Voice data lives in /usr/share/RHVoice/voices/
+    Discover RHVoice voices by querying speech-dispatcher's SSIP voice list.
+
+    Uses the names reported by spd-say -o rhvoice -L as voice_id, since
+    speech-dispatcher's set_synthesis_voice requires the exact SSIP name
+    (which may include accented characters like Letícia-F123).
     """
     voices: list[VoiceInfo] = []
 
-    # Check if RHVoice is available in speech-dispatcher
-    has_rhvoice = False
+    # Query speech-dispatcher for rhvoice voices
     try:
         proc = subprocess.run(
             ["spd-say", "-o", "rhvoice", "-L"],
@@ -287,60 +285,100 @@ def _discover_rhvoice_installed() -> list[VoiceInfo]:
             text=True,
             timeout=5,
         )
-        has_rhvoice = proc.returncode == 0
+        if proc.returncode != 0:
+            return voices
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
-
-    if not has_rhvoice:
-        # Fallback: check if rhvoice binary exists
-        try:
-            proc = subprocess.run(
-                ["which", "RHVoice-test"],
-                capture_output=True,
-                timeout=3,
-            )
-            has_rhvoice = proc.returncode == 0
-        except (FileNotFoundError, subprocess.TimeoutExpired):
-            pass
-
-    if not has_rhvoice:
         return voices
 
-    # Scan for voice directories
+    # Known voice metadata: normalized_name → (language, gender, quality)
+    import unicodedata
+
+    def _normalize(s: str) -> str:
+        s = unicodedata.normalize("NFD", s)
+        s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+        return s.lower()
+
+    known_meta: dict[str, tuple[str, str]] = {
+        "leticia-f123": ("pt-BR", "female"),
+        "evgeniy-eng": ("en", "male"),
+        "natalia": ("ru", "female"),
+        "alan": ("en", "male"),
+        "anna": ("ru", "female"),
+        "elena": ("ru", "female"),
+        "aleksandr": ("ru", "male"),
+        "artemiy": ("ru", "male"),
+        "irina": ("ru", "female"),
+        "lyubov": ("ru", "female"),
+        "hana": ("cs", "female"),
+        "volodymyr": ("uk", "male"),
+        "anatol": ("uk", "male"),
+        "natia": ("ka", "female"),
+        "spomenka": ("hr", "female"),
+        "kiko": ("mk", "male"),
+        "natan": ("pl", "male"),
+        "magda": ("pl", "female"),
+        "suze": ("nl", "female"),
+        "azamat": ("tt", "male"),
+        "talgat": ("ky", "male"),
+        "zdenek": ("cs", "male"),
+    }
+
+    for line in proc.stdout.strip().splitlines():
+        line = line.strip()
+        if not line or "NAME" in line or "dummy" in line:
+            continue
+        parts = re.split(r"\s{2,}", line)
+        if len(parts) < 2:
+            continue
+
+        # SSIP name is the exact voice_id that set_synthesis_voice needs
+        ssip_name = parts[0].strip()
+        lang_code = parts[1].strip()
+
+        normalized = _normalize(ssip_name)
+        meta = known_meta.get(normalized)
+        if meta:
+            lang, gender = meta
+        else:
+            lang = lang_code if lang_code != "none" else "en"
+            gender = _guess_gender(ssip_name)
+
+        display_name = ssip_name.replace("-", " ").replace("_", " ")
+
+        voices.append(
+            VoiceInfo(
+                voice_id=ssip_name,
+                name=display_name,
+                language=lang,
+                language_name=_lang_name(lang[:2]),
+                backend=TTSBackend.SPEECH_DISPATCHER.value,
+                output_module="rhvoice",
+                gender=gender,
+                quality="high",
+                description="RHVoice — high quality local synthesis",
+            )
+        )
+
+    # If spd-say returned no voices, fall back to directory scan
+    if not voices:
+        voices = _discover_rhvoice_from_dirs()
+
+    return voices
+
+
+def _discover_rhvoice_from_dirs() -> list[VoiceInfo]:
+    """Fallback: discover RHVoice voices from directory scan."""
+    voices: list[VoiceInfo] = []
     voice_dirs = [
         Path("/usr/share/RHVoice/voices"),
         Path("/usr/local/share/RHVoice/voices"),
     ]
 
-    # Known RHVoice voice metadata (voice_dir_name → language, gender)
     known_voices: dict[str, tuple[str, str, str]] = {
-        "Leticia-F123": ("pt-BR", "female", "Letícia F123"),
         "leticia-f123": ("pt-BR", "female", "Letícia F123"),
-        "Evgeniy-Eng": ("en", "male", "Evgeniy"),
-        "evgeniy-eng": ("en", "male", "Evgeniy"),
-        "Natalia": ("ru", "female", "Natalia"),
-        "Alan": ("en", "male", "Alan"),
-        "Anna": ("ru", "female", "Anna"),
-        "Elena": ("ru", "female", "Elena"),
-        "Aleksandr": ("ru", "male", "Aleksandr"),
-        "Artemiy": ("ru", "male", "Artemiy"),
-        "Irina": ("ru", "female", "Irina"),
-        "Lyubov": ("ru", "female", "Lyubov"),
-        "Hana": ("cs", "female", "Hana"),
-        "Volodymyr": ("uk", "male", "Volodymyr"),
-        "Anatol": ("uk", "male", "Anatol"),
-        "Natia": ("ka", "female", "Natia"),
-        "Spomenka": ("hr", "female", "Spomenka"),
-        "Kiko": ("mk", "male", "Kiko"),
-        "Natan": ("pl", "male", "Natan"),
-        "Magda": ("pl", "female", "Magda"),
-        "Suze": ("nl", "female", "Suze"),
-        "Azamat": ("tt", "male", "Azamat"),
-        "Talgat": ("ky", "male", "Talgat"),
-        "Zdenek": ("cs", "male", "Zdeněk"),
+        "evgeniy-eng": ("en", "male", "Evgeniy Eng"),
     }
 
-    found_dirs: set[str] = set()
     for vdir in voice_dirs:
         if not vdir.exists():
             continue
@@ -348,16 +386,10 @@ def _discover_rhvoice_installed() -> list[VoiceInfo]:
             if not entry.is_dir():
                 continue
             dirname = entry.name
-            if dirname in found_dirs:
-                continue
-            found_dirs.add(dirname)
-
-            # Match against known voices
-            meta = known_voices.get(dirname)
+            meta = known_voices.get(dirname.lower())
             if meta:
                 lang, gender, display_name = meta
             else:
-                # Guess from directory name
                 lang = "en"
                 gender = _guess_gender(dirname)
                 display_name = dirname.replace("-", " ").replace("_", " ").title()
@@ -376,7 +408,6 @@ def _discover_rhvoice_installed() -> list[VoiceInfo]:
                 )
             )
 
-    # If no directories found, try pacman query as fallback
     if not voices:
         voices = _discover_rhvoice_from_pacman()
 

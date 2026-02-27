@@ -1,369 +1,362 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Hebrew translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Hebrew\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+
+#: 2
 msgid "Select text and press Alt+V to read aloud"
-msgstr "בחר טקסט ולחץ על Alt+V כדי לקרוא בקול רם"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "בחרו טקסט ולחצו Alt+V לקריאה בקול"
+
+#: 3
 msgid "This is a test, welcome to BigLinux!"
-msgstr "זהו מבחן, ברוך הבא ל-BigLinux!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+msgstr "!זוהי בדיקה, ברוכים הבאים ל-BigLinux"
+
+#: 4
 msgid "Type text to test…"
-msgstr "הקלד טקסט לבדיקה…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1186
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1197
+msgstr "…הקלידו טקסט לבדיקה"
+
+#: 5
 msgid "Test voice"
-msgstr "בדוק קול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "בדיקת קול"
+
+#: 6
 msgid "Test the selected voice"
-msgstr "בדוק את הקול שנבחר"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgstr "בדיקת הקול הנבחר"
+
+#: 7
 msgid "Voice settings"
 msgstr "הגדרות קול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+
+#: 8
 msgid "Choose voice and adjust speech parameters"
-msgstr "בחר קול והתאם את פרמטרי הדיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "בחרו קול וכוונו את פרמטרי הדיבור"
+
+#: 9
 msgid "Voice"
 msgstr "קול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: 10
 msgid "Loading voices..."
-msgstr "טוען קולות..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+msgstr "...טוען קולות"
+
+#: 11
 msgid "Detecting installed voices..."
-msgstr "מגלה קולות מותקנים..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "...מזהה קולות מותקנים"
+
+#: 12
 msgid "Select TTS voice"
-msgstr "בחר קול TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgstr "בחרו קול TTS"
+
+#: 13
 msgid "Speed"
 msgstr "מהירות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: 14
 msgid "Speech rate"
 msgstr "קצב דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 15
 msgid "Slow"
 msgstr "איטי"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 16
 msgid "Normal"
-msgstr "נורמלי"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+msgstr "רגיל"
+
+#: 17
 msgid "Fast"
 msgstr "מהיר"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+
+#: 18
 msgid "Speech speed"
 msgstr "מהירות דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+
+#: 19
 msgid "Pitch"
-msgstr "פיץ'"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "גובה צליל"
+
+#: 20
 msgid "Voice tone"
-msgstr "טון קול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgstr "גוון קול"
+
+#: 21
 msgid "Low"
 msgstr "נמוך"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 22
 msgid "High"
 msgstr "גבוה"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+
+#: 23
 msgid "Voice pitch"
-msgstr "גובה קול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+msgstr "גובה הקול"
+
+#: 24
 msgid "Volume"
-msgstr "נפח"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "עוצמה"
+
+#: 25
 msgid "Speech volume"
 msgstr "עוצמת דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+
+#: 26
 msgid "Mute"
-msgstr "שקט"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "השתק"
+
+#: 27
 msgid "Max"
 msgstr "מקס"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+
+#: 28
 msgid "TTS Engine"
 msgstr "מנוע TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+
+#: 29
 msgid "Choose which text-to-speech engine to use"
-msgstr "בחר באיזה מנוע טקסט לדיבור להשתמש"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "בחרו באיזה מנוע טקסט-לדיבור להשתמש"
+
+#: 30
 msgid "Engine"
 msgstr "מנוע"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+
+#: 31
 msgid "speech-dispatcher"
-msgstr "שירות דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: 32
 msgid "TTS Backend"
-msgstr "ממשק TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgstr "מערכת TTS"
+
+#: 33
 msgid "Engine used for speech synthesis"
 msgstr "מנוע המשמש לסינתזת דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+
+#: 34
 msgid "Select TTS engine"
-msgstr "בחר מנוע TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgstr "בחרו מנוע TTS"
+
+#: 35
 msgid "Output module"
 msgstr "מודול פלט"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+
+#: 36
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "סינתזת דיבור בשימוש על ידי מפיץ דיבור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "מסנתז דיבור בשימוש speech-dispatcher"
+
+#: 37
 msgid "Select output module"
-msgstr "בחר מודול פלט"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgstr "בחרו מודול פלט"
+
+#: 38
 msgid "Status"
-msgstr "סטטוס"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+msgstr "מצב"
+
+#: 39
 msgid "Checking..."
-msgstr "בודק..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+msgstr "...בודק"
+
+#: 40
 msgid "Text processing"
 msgstr "עיבוד טקסט"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+
+#: 41
 msgid "How text is cleaned and prepared before reading"
-msgstr "איך הטקסט מנוקה ומוכן לפני הקריאה"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgstr "כיצד הטקסט מנוקה ומוכן לפני הקריאה"
+
+#: 42
 msgid "Processing options"
 msgstr "אפשרויות עיבוד"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+
+#: 43
 msgid "Abbreviations, formatting, limits"
 msgstr "קיצורים, עיצוב, מגבלות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+
+#: 44
+msgid "Expand abbreviations"
+msgstr "הרחבת קיצורים"
+
+#: 45
+msgid "Replace common abbreviations with full words"
+msgstr "החלפת קיצורים נפוצים במילים מלאות"
+
+#: 46
 msgid "Expand text abbreviations"
-msgstr "הרחב קיצורים טקסטיים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "הרחבת קיצורי טקסט"
+
+#: 47
 msgid "Read special characters"
-msgstr "קרא תווים מיוחדים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgstr "קריאת תווים מיוחדים"
+
+#: 48
 msgid "Speak symbols like # @ % by name"
-msgstr "דבר סמלים כמו # @ % בשם"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "הגייה של סמלים כמו # @ % לפי שמם"
+
+#: 49
 msgid "Read special characters aloud"
-msgstr "קרא תווים מיוחדים בקול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+msgstr "קריאת תווים מיוחדים בקול"
+
+#: 50
+msgid "Remove formatting"
+msgstr "הסרת עיצוב"
+
+#: 51
 msgid "Strip Markdown and HTML before reading"
-msgstr "הסר Markdown ו-HTML לפני הקריאה"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+msgstr "הסרת Markdown ו-HTML לפני הקריאה"
+
+#: 52
 msgid "Remove text formatting"
-msgstr "הסר עיצוב טקסט"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+msgstr "הסרת עיצוב טקסט"
+
+#: 53
 msgid "Read URLs"
-msgstr "קרא כתובות URL"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+msgstr "קריאת כתובות URL"
+
+#: 54
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "קרא כתובות אינטרנט בקול במקום לדלג עליהן"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "קריאת כתובות אינטרנט בקול במקום לדלג עליהן"
+
+#: 55
 msgid "Read URLs aloud"
-msgstr "קרא כתובות URL בקול רם"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgstr "קריאת כתובות URL בקול"
+
+#: 56
 msgid "Unlimited"
-msgstr "בלתי מוגבל"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+msgstr "ללא הגבלה"
+
+#: 57
 msgid "Character limit"
 msgstr "מגבלת תווים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+
+#: 58
 msgid "Maximum number of characters to read at once"
-msgstr "מספר המרבי של תווים לקריאה בבת אחת"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgstr "מספר תווים מרבי לקריאה בבת אחת"
+
+#: 59
 msgid "Maximum character limit"
-msgstr "מגבלת תו מקסימלית"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+msgstr "מגבלת תווים מרבית"
+
+#: 60
 msgid "Advanced"
 msgstr "מתקדם"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+
+#: 61
 msgid "Advanced options"
 msgstr "אפשרויות מתקדמות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+
+#: 62
 msgid "Shortcut, behavior settings"
-msgstr "קיצור דרך, הגדרות התנהגות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+msgstr "קיצור, הגדרות התנהגות"
+
+#: 63
 msgid "Keyboard shortcut"
 msgstr "קיצור מקלדת"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
+
+#: 64
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr "בחר טקסט בכל מקום ולחץ על הקיצור כדי לקרוא בקול. לחץ שוב כדי להפסיק."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+msgstr "בחרו טקסט בכל מקום ולחצו על הקיצור לקריאה בקול. לחצו שוב לעצירה."
+
+#: 65
 msgid "Change"
-msgstr "שנה"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+msgstr "שינוי"
+
+#: 66
 msgid "Show speak button in app launcher"
-msgstr "הצג כפתור דיבור במנשק האפליקציות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "הצגת כפתור קריאה בשורת המשימות"
+
+#: 67
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "מוסיף רשומת הפעלה שניתן להדביק בשורת המשימות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "מוסיף סמל שניתן להצמיד לשורת המשימות"
+
+#: 68
 msgid "Set new shortcut"
-msgstr "הגדר קיצור דרך חדש"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgstr "הגדרת קיצור חדש"
+
+#: 69
 msgid "Press the new shortcut"
-msgstr "לחץ על הקיצור החדש"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "לחצו על הקיצור החדש"
+
+#: 70
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"לחץ על מקשי המודיפיקציה (אלט, Ctrl, Shift, Super) ולחץ על אות או מקש.\n"
+"החזיקו מקשי שינוי (Alt, Ctrl, Shift, Super)\n"
+"ולחצו על אות או מקש.\n"
 "\n"
-"לחץ על Escape כדי לבטל."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+"לחצו Escape לביטול."
+
+#: 71
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>לחץ על מקשי שינוי</b> (אלט, Ctrl, Shift, Super)\n"
-"ולחץ על אות או מקש.\n"
+"<b>החזיקו מקשי שינוי</b> (Alt, Ctrl, Shift, Super)\n"
+"ולחצו על אות או מקש.\n"
 "\n"
-"<small>לחץ על Escape לביטול</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+"<small>לחצו Escape לביטול</small>"
+
+#: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "הקיצור שונה ל{keys}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
+msgstr "הקיצור שונה ל-{keys}"
+
+#: 73
 msgid "No voices found — install rhvoice or espeak-ng"
-msgstr "לא נמצאו קולות - התקן rhvoice או espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 808
+msgstr "לא נמצאו קולות — התקינו rhvoice או espeak-ng"
+
+#: 74
 msgid "No voices available"
 msgstr "אין קולות זמינים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 811
+
+#: 75
 msgid "No TTS voices installed"
 msgstr "אין קולות TTS מותקנים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 823
+
+#: 76
 msgid "No voices available for this engine"
-msgstr "אין קולות זמינים עבור מנוע זה"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 826
+msgstr "אין קולות זמינים למנוע זה"
+
+#: 77
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "התקן קודם כל את קולות {engine}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 853
+msgstr "התקינו קודם קולות {engine}"
+
+#: 78
 #, python-brace-format
 msgid "{count} voices available"
 msgstr "{count} קולות זמינים"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
+
+#: 79
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
-msgstr "לא נמצאו קולות עבור {engine} - התקן אותו קודם"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 964
+msgstr "לא נמצאו קולות ל-{engine} — התקינו אותו קודם"
+
+#: 80
 msgid "Install Piper Neural TTS?"
-msgstr "האם להתקין את Piper Neural TTS?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 966
+msgstr "?להתקין Piper Neural TTS"
+
+#: 81
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -371,107 +364,103 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"פייפר לא מותקן. הוא מספק קולות נוירליים באיכות גבוהה לקריאת טקסט.\n"
+"Piper אינו מותקן. הוא מספק קולות נוירונים באיכות גבוהה לקריאת טקסט.\n"
 "\n"
 "החבילות הבאות יותקנו:\n"
 "• piper-tts-bin (מנוע TTS)\n"
-"• piper-voices-pt-BR (קולות פורטוגזיים)\n"
+"• piper-voices-pt-BR (קולות בפורטוגזית)\n"
 "\n"
-"זה דורש הרשאות מנהל."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+"פעולה זו דורשת הרשאות מנהל."
+
+#: 82
 msgid "Cancel"
 msgstr "ביטול"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
+
+#: 83
 msgid "Install"
-msgstr "התקן"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
+msgstr "התקנה"
+
+#: 84
 msgid "Installing Piper TTS — this may take a moment…"
-msgstr "מתקין את Piper TTS — זה עשוי לקחת רגע…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+msgstr "…מתקין Piper TTS — זה עשוי לקחת רגע"
+
+#: 85
 msgid "Piper installed successfully! Discovering voices…"
-msgstr "פייפר הותקן בהצלחה! מגלה קולות…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
+msgstr "…!Piper הותקן בהצלחה! מגלה קולות"
+
+#: 86
 msgid "Failed to install Piper — check permissions"
-msgstr "התקנה של פייפר נכשלה - בדוק הרשאות"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
+msgstr "התקנת Piper נכשלה — בדקו את ההרשאות"
+
+#: 87
 msgid "Type some text to test"
-msgstr "הקלד טקסט כלשהו כדי לבדוק"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
+msgstr "הקלידו טקסט לבדיקה"
+
+#: 88
 msgid "Could not play test — check if a TTS engine is installed"
-msgstr "לא ניתן לנגן את המבחן - בדוק אם מנוע TTS מותקן"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1176
+msgstr "לא ניתן להפעיל את הבדיקה — בדקו אם מנוע TTS מותקן"
+
+#: 89
 msgid "Press Alt+V to stop"
-msgstr "לחץ Alt+V כדי לעצור"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgstr "לחצו Alt+V לעצירה"
+
+#: 90
 msgid "Stop"
-msgstr "הפסק"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
+msgstr "עצירה"
+
+#: 91
 msgid "Could not play speech — check TTS engine"
-msgstr "לא ניתן לנגן דיבור - בדוק את מנוע ה-TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1219
+msgstr "לא ניתן להפעיל דיבור — בדקו את מנוע ה-TTS"
+
+#: 92
 #, python-brace-format
 msgid "Available: {engines}"
-msgstr "זמין: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
+msgstr "זמינים: {engines}"
+
+#: 93
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "לא נמצא מנוע TTS - התקן speech-dispatcher או espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
+msgstr "לא נמצא מנוע TTS — התקינו speech-dispatcher או espeak-ng"
+
+#: 94
 msgid "Settings restored to defaults"
-msgstr "הגדרות הוחזרו לברירות המחדל"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgstr "ההגדרות שוחזרו לברירות המחדל"
+
+#: 95
 msgid "Restore Defaults"
-msgstr "שחזר ברירות מחדל"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "שחזור ברירות מחדל"
+
+#: 96
 msgid "About"
 msgstr "אודות"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+
+#: 97
 msgid "Quit"
-msgstr "צא"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+msgstr "יציאה"
+
+#: 98
 msgid "Main menu"
 msgstr "תפריט ראשי"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: 99
 msgid "Restore settings?"
-msgstr "שחזר הגדרות?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgstr "?לשחזר הגדרות"
+
+#: 100
 msgid "This will return all adjustments to their original defaults."
-msgstr "זה יחזיר את כל ההתאמות לברירות המחדל המקוריות שלהן."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "פעולה זו תחזיר את כל ההתאמות לברירות המחדל המקוריות."
+
+#: 101
 msgid "Restore"
-msgstr "שחזר"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
+msgstr "שחזור"
+
+#: 102
 msgid "Technologies used"
 msgstr "טכנולוגיות בשימוש"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
+
+#: 103
 msgid "License"
 msgstr "רישיון"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
+
+#: 104
 msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "ממשק זה מורשה תחת GPL-3.0. למנועי TTS יש רישיונות משלהם."
+msgstr "ממשק זה מורשה תחת GPL-3.0. למנועי TTS רישיונות משלהם."

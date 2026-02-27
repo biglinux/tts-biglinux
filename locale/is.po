@@ -1,52 +1,467 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Icelandic translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Icelandic\n"
+"Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Texta-til-raddstillingar"
-msgid "Vozes - Abrir BigStore"
-msgstr "Raddir - Opna BigStore"
-msgid "Voice Configuration"
-msgstr "Raddstilling"
-msgid "Configurar voz"
-msgstr "Setja upp rödd"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Til að tala valinn texta skaltu nota flýtileiðina "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"eða táknið í Veitulotunni í kerfisvalmyndinni. Til að hætta að lesa skaltu nota flýtileiðina eða "
-"táknið."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Veldu valinn stillingar"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Stærri tölur gera röddina hraðari, sjálfgefið er: -25"
-msgid "Velocidade"
-msgstr "Hraði"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Stærri tölur skilja röddina eftir bráðari, mynstrið er: -25"
-msgid "Tom"
-msgstr "Tónn"
-msgid "O padrão é: 0."
-msgstr "Sjálfgefið er: 0."
-msgid "Volume"
-msgstr "Bindi"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Raddir eru fínstilltar fyrir tungumál sem eru kunnátta."
-msgid "Voz"
+
+#: 1
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+#: 2
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Veldu texta og ýttu á Alt+V til að lesa upphátt"
+
+#: 3
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Þetta er prufa, velkomin í BigLinux!"
+
+#: 4
+msgid "Type text to test…"
+msgstr "Sláðu inn texta til að prófa…"
+
+#: 5
+msgid "Test voice"
+msgstr "Prófa rödd"
+
+#: 6
+msgid "Test the selected voice"
+msgstr "Prófa valda rödd"
+
+#: 7
+msgid "Voice settings"
+msgstr "Raddstillingar"
+
+#: 8
+msgid "Choose voice and adjust speech parameters"
+msgstr "Veldu rödd og stilltu talmælisbreytur"
+
+#: 9
+msgid "Voice"
 msgstr "Rödd"
+
+#: 10
+msgid "Loading voices..."
+msgstr "Hleð röddum..."
+
+#: 11
+msgid "Detecting installed voices..."
+msgstr "Greini uppsettar raddir..."
+
+#: 12
+msgid "Select TTS voice"
+msgstr "Veldu TTS rödd"
+
+#: 13
+msgid "Speed"
+msgstr "Hraði"
+
+#: 14
+msgid "Speech rate"
+msgstr "Talhraði"
+
+#: 15
+msgid "Slow"
+msgstr "Hægt"
+
+#: 16
+msgid "Normal"
+msgstr "Venjulegt"
+
+#: 17
+msgid "Fast"
+msgstr "Hratt"
+
+#: 18
+msgid "Speech speed"
+msgstr "Talhraði"
+
+#: 19
+msgid "Pitch"
+msgstr "Tónhæð"
+
+#: 20
+msgid "Voice tone"
+msgstr "Raddbragð"
+
+#: 21
+msgid "Low"
+msgstr "Lágt"
+
+#: 22
+msgid "High"
+msgstr "Hátt"
+
+#: 23
+msgid "Voice pitch"
+msgstr "Tónhæð raddar"
+
+#: 24
+msgid "Volume"
+msgstr "Hljóðstyrkur"
+
+#: 25
+msgid "Speech volume"
+msgstr "Hljóðstyrkur tals"
+
+#: 26
+msgid "Mute"
+msgstr "Hljóðlaust"
+
+#: 27
+msgid "Max"
+msgstr "Hámark"
+
+#: 28
+msgid "TTS Engine"
+msgstr "TTS vél"
+
+#: 29
+msgid "Choose which text-to-speech engine to use"
+msgstr "Veldu hvaða texta-í-tal vél á að nota"
+
+#: 30
+msgid "Engine"
+msgstr "Vél"
+
+#: 31
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+#: 32
+msgid "TTS Backend"
+msgstr "TTS bakendi"
+
+#: 33
+msgid "Engine used for speech synthesis"
+msgstr "Vél notuð til talsmíðunar"
+
+#: 34
+msgid "Select TTS engine"
+msgstr "Veldu TTS vél"
+
+#: 35
+msgid "Output module"
+msgstr "Úttakseining"
+
+#: 36
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Talgervill notaður af speech-dispatcher"
+
+#: 37
+msgid "Select output module"
+msgstr "Veldu úttakseiningu"
+
+#: 38
+msgid "Status"
+msgstr "Staða"
+
+#: 39
+msgid "Checking..."
+msgstr "Athuga..."
+
+#: 40
+msgid "Text processing"
+msgstr "Textavinnsla"
+
+#: 41
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hvernig texti er hreinsaður og undirbúinn áður en lesið er"
+
+#: 42
+msgid "Processing options"
+msgstr "Vinnsluvalkostir"
+
+#: 43
+msgid "Abbreviations, formatting, limits"
+msgstr "Skammstafanir, snið, takmörk"
+
+#: 44
+msgid "Expand abbreviations"
+msgstr "Víkka skammstafanir"
+
+#: 45
+msgid "Replace common abbreviations with full words"
+msgstr "Skipta algengum skammstöfunum út fyrir heil orð"
+
+#: 46
+msgid "Expand text abbreviations"
+msgstr "Víkka textaskammstafanir"
+
+#: 47
+msgid "Read special characters"
+msgstr "Lesa sérstafi"
+
+#: 48
+msgid "Speak symbols like # @ % by name"
+msgstr "Segja tákn eins og # @ % eftir nafni"
+
+#: 49
+msgid "Read special characters aloud"
+msgstr "Lesa sérstafi upphátt"
+
+#: 50
+msgid "Remove formatting"
+msgstr "Fjarlægja snið"
+
+#: 51
+msgid "Strip Markdown and HTML before reading"
+msgstr "Fjarlægja Markdown og HTML áður en lesið er"
+
+#: 52
+msgid "Remove text formatting"
+msgstr "Fjarlægja textasnið"
+
+#: 53
+msgid "Read URLs"
+msgstr "Lesa vefslóðir"
+
+#: 54
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Lesa vefföng upphátt í stað þess að sleppa þeim"
+
+#: 55
+msgid "Read URLs aloud"
+msgstr "Lesa vefslóðir upphátt"
+
+#: 56
+msgid "Unlimited"
+msgstr "Ótakmarkað"
+
+#: 57
+msgid "Character limit"
+msgstr "Stafatakmörk"
+
+#: 58
+msgid "Maximum number of characters to read at once"
+msgstr "Hámarksfjöldi stafa til að lesa í einu"
+
+#: 59
+msgid "Maximum character limit"
+msgstr "Hámarks stafatakmörk"
+
+#: 60
+msgid "Advanced"
+msgstr "Ítarlegt"
+
+#: 61
+msgid "Advanced options"
+msgstr "Ítarlegir valkostir"
+
+#: 62
+msgid "Shortcut, behavior settings"
+msgstr "Flýtileið, hegðunarstillingar"
+
+#: 63
+msgid "Keyboard shortcut"
+msgstr "Flýtilykill"
+
+#: 64
+msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
+msgstr "Veldu texta hvar sem er og ýttu á flýtilykil til að lesa upphátt. Ýttu aftur til að stöðva."
+
+#: 65
+msgid "Change"
+msgstr "Breyta"
+
+#: 66
+msgid "Show speak button in app launcher"
+msgstr "Sýna talhnappp á verkefnastiku"
+
+#: 67
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Bætir við tákni sem þú getur fest á verkefnastiku"
+
+#: 68
+msgid "Set new shortcut"
+msgstr "Setja nýjan flýtilykil"
+
+#: 69
+msgid "Press the new shortcut"
+msgstr "Ýttu á nýja flýtilykilinn"
+
+#: 70
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Haltu niðri breytilyklum (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á bókstaf eða lykil.\n"
+"\n"
+"Ýttu á Escape til að hætta við."
+
+#: 71
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Haltu niðri breytilyklum</b> (Alt, Ctrl, Shift, Super)\n"
+"og ýttu á bókstaf eða lykil.\n"
+"\n"
+"<small>Ýttu á Escape til að hætta við</small>"
+
+#: 72
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Flýtilykli breytt í {keys}"
+
+#: 73
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Engar raddir fundust — settu upp rhvoice eða espeak-ng"
+
+#: 74
+msgid "No voices available"
+msgstr "Engar raddir tiltækar"
+
+#: 75
+msgid "No TTS voices installed"
+msgstr "Engar TTS raddir uppsettar"
+
+#: 76
+msgid "No voices available for this engine"
+msgstr "Engar raddir tiltækar fyrir þessa vél"
+
+#: 77
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Settu fyrst upp raddir fyrir {engine}"
+
+#: 78
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} raddir tiltækar"
+
+#: 79
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Engar raddir fundust fyrir {engine} — settu það fyrst upp"
+
+#: 80
+msgid "Install Piper Neural TTS?"
+msgstr "Setja upp Piper Neural TTS?"
+
+#: 81
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper er ekki uppsett. Það býður upp á hágæða taugakerfsraddir til að lesa "
+"texta.\n"
+"\n"
+"Eftirfarandi pakkar verða settir upp:\n"
+"• piper-tts-bin (TTS vél)\n"
+"• piper-voices-pt-BR (portúgalskar raddir)\n"
+"\n"
+"Þetta krefst stjórnandaheimilda."
+
+#: 82
+msgid "Cancel"
+msgstr "Hætta við"
+
+#: 83
+msgid "Install"
+msgstr "Setja upp"
+
+#: 84
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Set upp Piper TTS — þetta gæti tekið smá stund…"
+
+#: 85
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper sett upp! Greini raddir…"
+
+#: 86
+msgid "Failed to install Piper — check permissions"
+msgstr "Ekki tókst að setja upp Piper — athugaðu heimildir"
+
+#: 87
+msgid "Type some text to test"
+msgstr "Sláðu inn texta til að prófa"
+
+#: 88
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Gat ekki spilað próf — athugaðu hvort TTS vél sé uppsett"
+
+#: 89
+msgid "Press Alt+V to stop"
+msgstr "Ýttu á Alt+V til að stöðva"
+
+#: 90
+msgid "Stop"
+msgstr "Stöðva"
+
+#: 91
+msgid "Could not play speech — check TTS engine"
+msgstr "Gat ekki spilað tal — athugaðu TTS vél"
+
+#: 92
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Tiltækt: {engines}"
+
+#: 93
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Engin TTS vél fannst — settu upp speech-dispatcher eða espeak-ng"
+
+#: 94
+msgid "Settings restored to defaults"
+msgstr "Stillingum endurstillt á sjálfgildi"
+
+#: 95
+msgid "Restore Defaults"
+msgstr "Endurstilla sjálfgildi"
+
+#: 96
+msgid "About"
+msgstr "Um"
+
+#: 97
+msgid "Quit"
+msgstr "Hætta"
+
+#: 98
+msgid "Main menu"
+msgstr "Aðalvalmynd"
+
+#: 99
+msgid "Restore settings?"
+msgstr "Endurstilla stillingar?"
+
+#: 100
+msgid "This will return all adjustments to their original defaults."
+msgstr "Þetta mun færa allar stillingar til baka í upprunaleg sjálfgildi."
+
+#: 101
+msgid "Restore"
+msgstr "Endurstilla"
+
+#: 102
+msgid "Technologies used"
+msgstr "Notuð tækni"
+
+#: 103
+msgid "License"
+msgstr "Leyfi"
+
+#: 104
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Þetta viðmót er gefið út undir GPL-3.0 leyfi. TTS vélar hafa sín eigin leyfi."

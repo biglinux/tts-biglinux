@@ -1,50 +1,578 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Polish translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Polish\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Ustawienia zamiany tekstu na głos"
-msgid "Vozes - Abrir BigStore"
-msgstr "Głosy - Open BigStore"
-msgid "Voice Configuration"
-msgstr "Konfiguracja głosu"
-msgid "Configurar voz"
-msgstr "Konfigurowanie głosu"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Aby wypowiedzieć zaznaczony tekst, użyj skrótu "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr "lub ikonę w sesji Narzędzia w menu systemowym. Aby zatrzymać czytanie, użyj skrótu lub ikony."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Wybierz preferowane ustawienia"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Większe liczby przyspieszają głos, domyślnie: -25"
-msgid "Velocidade"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Zaznacz tekst i naciśnij Alt+V, aby przeczytać na głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgid "This is a test, welcome to BigLinux!"
+msgstr "To jest test, witamy w BigLinux!"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+msgid "Type text to test…"
+msgstr "Wpisz tekst do przetestowania…"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1186
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1197
+msgid "Test voice"
+msgstr "Testuj głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgid "Test the selected voice"
+msgstr "Przetestuj wybrany głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+msgid "Voice settings"
+msgstr "Ustawienia głosu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+msgid "Choose voice and adjust speech parameters"
+msgstr "Wybierz głos i dostosuj parametry mowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgid "Voice"
+msgstr "Głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+msgid "Loading voices..."
+msgstr "Ładowanie głosów..."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+msgid "Detecting installed voices..."
+msgstr "Wykrywanie zainstalowanych głosów..."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgid "Select TTS voice"
+msgstr "Wybierz głos TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgid "Speed"
 msgstr "Szybkość"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Większe liczby pozostawiają głos bardziej ostry, wzór wynosi: -25"
-msgid "Tom"
-msgstr "Ton"
-msgid "O padrão é: 0."
-msgstr "Wartość domyślna to: 0."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+msgid "Speech rate"
+msgstr "Szybkość mowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+msgid "Slow"
+msgstr "Wolno"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgid "Normal"
+msgstr "Normalnie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+msgid "Fast"
+msgstr "Szybko"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+msgid "Speech speed"
+msgstr "Szybkość mowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+msgid "Pitch"
+msgstr "Wysokość tonu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgid "Voice tone"
+msgstr "Ton głosu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgid "Low"
+msgstr "Niski"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+msgid "High"
+msgstr "Wysoki"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+msgid "Voice pitch"
+msgstr "Wysokość głosu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
 msgid "Volume"
 msgstr "Głośność"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Głosy są zoptymalizowane pod kątem języków know-how."
-msgid "Voz"
-msgstr "Głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgid "Speech volume"
+msgstr "Głośność mowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgid "Mute"
+msgstr "Wyciszenie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgid "Max"
+msgstr "Maks"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+msgid "TTS Engine"
+msgstr "Silnik TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+msgid "Choose which text-to-speech engine to use"
+msgstr "Wybierz, którego silnika tekst-na-mowę użyć"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgid "Engine"
+msgstr "Silnik"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgid "TTS Backend"
+msgstr "Backend TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgid "Engine used for speech synthesis"
+msgstr "Silnik używany do syntezy mowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+msgid "Select TTS engine"
+msgstr "Wybierz silnik TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgid "Output module"
+msgstr "Moduł wyjściowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "Syntezator mowy używany przez speech-dispatcher"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgid "Select output module"
+msgstr "Wybierz moduł wyjściowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgid "Status"
+msgstr "Status"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+msgid "Checking..."
+msgstr "Sprawdzanie..."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+msgid "Text processing"
+msgstr "Przetwarzanie tekstu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+msgid "How text is cleaned and prepared before reading"
+msgstr "Jak tekst jest czyszczony i przygotowywany przed odczytaniem"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgid "Processing options"
+msgstr "Opcje przetwarzania"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+msgid "Abbreviations, formatting, limits"
+msgstr "Skróty, formatowanie, limity"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+msgid "Expand abbreviations"
+msgstr "Rozwiń skróty"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgid "Replace common abbreviations with full words"
+msgstr "Zamień popularne skróty na pełne słowa"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+msgid "Expand text abbreviations"
+msgstr "Rozwiń skróty tekstowe"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgid "Read special characters"
+msgstr "Czytaj znaki specjalne"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgid "Speak symbols like # @ % by name"
+msgstr "Wymawiaj symbole takie jak # @ % po nazwie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgid "Read special characters aloud"
+msgstr "Czytaj znaki specjalne na głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgid "Remove formatting"
+msgstr "Usuń formatowanie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+msgid "Strip Markdown and HTML before reading"
+msgstr "Usuń Markdown i HTML przed czytaniem"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+msgid "Remove text formatting"
+msgstr "Usuń formatowanie tekstu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+msgid "Read URLs"
+msgstr "Czytaj adresy URL"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Czytaj adresy internetowe na głos zamiast je pomijać"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgid "Read URLs aloud"
+msgstr "Czytaj adresy URL na głos"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgid "Unlimited"
+msgstr "Bez limitu"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+msgid "Character limit"
+msgstr "Limit znaków"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+msgid "Maximum number of characters to read at once"
+msgstr "Maksymalna liczba znaków do odczytania naraz"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgid "Maximum character limit"
+msgstr "Maksymalny limit znaków"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+msgid "Advanced options"
+msgstr "Opcje zaawansowane"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+msgid "Shortcut, behavior settings"
+msgstr "Skrót, ustawienia zachowania"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+msgid "Keyboard shortcut"
+msgstr "Skrót klawiszowy"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
+msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
+msgstr "Zaznacz tekst gdziekolwiek i naciśnij skrót, aby przeczytać na głos. Naciśnij ponownie, aby zatrzymać."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+msgid "Change"
+msgstr "Zmień"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+msgid "Show speak button in app launcher"
+msgstr "Pokaż przycisk czytania na pasku zadań"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Dodaje ikonę, którą można przypiąć do paska zadań"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgid "Set new shortcut"
+msgstr "Ustaw nowy skrót"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgid "Press the new shortcut"
+msgstr "Naciśnij nowy skrót"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Przytrzymaj klawisze modyfikujące (Alt, Ctrl, Shift, Super)\n"
+"i naciśnij literę lub klawisz.\n"
+"\n"
+"Naciśnij Escape, aby anulować."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Przytrzymaj klawisze modyfikujące</b> (Alt, Ctrl, Shift, Super)\n"
+"i naciśnij literę lub klawisz.\n"
+"\n"
+"<small>Naciśnij Escape, aby anulować</small>"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Skrót zmieniony na {keys}"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nie znaleziono głosów — zainstaluj rhvoice lub espeak-ng"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 808
+msgid "No voices available"
+msgstr "Brak dostępnych głosów"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 811
+msgid "No TTS voices installed"
+msgstr "Brak zainstalowanych głosów TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 823
+msgid "No voices available for this engine"
+msgstr "Brak dostępnych głosów dla tego silnika"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 826
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Najpierw zainstaluj głosy {engine}"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 853
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} głosów dostępnych"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nie znaleziono głosów dla {engine} — najpierw zainstaluj"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 964
+msgid "Install Piper Neural TTS?"
+msgstr "Zainstalować Piper Neural TTS?"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 966
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper nie jest zainstalowany. Oferuje wysokiej jakości głosy neuronowe do czytania tekstu.\n"
+"\n"
+"Zostaną zainstalowane następujące pakiety:\n"
+"• piper-tts-bin (silnik TTS)\n"
+"• piper-voices-pt-BR (głosy portugalskie)\n"
+"\n"
+"Wymaga to uprawnień administratora."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+msgid "Cancel"
+msgstr "Anuluj"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
+msgid "Install"
+msgstr "Zainstaluj"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Instalowanie Piper TTS — to może chwilę potrwać…"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper zainstalowany pomyślnie! Wykrywanie głosów…"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
+msgid "Failed to install Piper — check permissions"
+msgstr "Nie udało się zainstalować Pipera — sprawdź uprawnienia"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
+msgid "Type some text to test"
+msgstr "Wpisz tekst do przetestowania"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Nie można odtworzyć testu — sprawdź, czy silnik TTS jest zainstalowany"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1176
+msgid "Press Alt+V to stop"
+msgstr "Naciśnij Alt+V, aby zatrzymać"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgid "Stop"
+msgstr "Zatrzymaj"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
+msgid "Could not play speech — check TTS engine"
+msgstr "Nie można odtworzyć mowy — sprawdź silnik TTS"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1219
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Dostępne: {engines}"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nie znaleziono silnika TTS — zainstaluj speech-dispatcher lub espeak-ng"
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
+msgid "Settings restored to defaults"
+msgstr "Ustawienia przywrócone do wartości domyślnych"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+msgid "Restore Defaults"
+msgstr "Przywróć domyślne"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgid "About"
+msgstr "O programie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+msgid "Quit"
+msgstr "Zakończ"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+msgid "Main menu"
+msgstr "Menu główne"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+msgid "Restore settings?"
+msgstr "Przywrócić ustawienia?"
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgid "This will return all adjustments to their original defaults."
+msgstr "Spowoduje to przywrócenie wszystkich ustawień do wartości domyślnych."
+
+#
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgid "Restore"
+msgstr "Przywróć"
+
+#
+# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
+msgid "Technologies used"
+msgstr "Użyte technologie"
+
+#
+# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
+msgid "License"
+msgstr "Licencja"
+
+#
+# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
+msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
+msgstr "Ten interfejs jest licencjonowany na GPL-3.0. Silniki TTS mają własne licencje."

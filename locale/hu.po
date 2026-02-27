@@ -1,52 +1,475 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Hungarian translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Szöveg-hang beállítások"
-msgid "Vozes - Abrir BigStore"
-msgstr "Hangok - Nyissa meg a BigStore-t"
-msgid "Voice Configuration"
-msgstr "Hang konfiguráció"
-msgid "Configurar voz"
-msgstr "Hang beállítása"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "A kijelölt szöveg kimondásához használja a parancsikont "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"vagy a rendszermenü Segédprogramok munkamenetének ikonja. Az olvasás leállításához használja a "
-"parancsikont vagy ikont."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Válassza ki a kívánt beállításokat"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "A nagyobb számok gyorsabbá teszik a hangot, az alapértelmezett: -25"
-msgid "Velocidade"
-msgstr "Sebesség"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "A nagyobb számok élesebbé teszik a hangot, a minta: -25"
-msgid "Tom"
-msgstr "Tónus"
-msgid "O padrão é: 0."
-msgstr "Az alapértelmezett érték: 0."
-msgid "Volume"
-msgstr "Térfogat"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "A hangok a know-how nyelvekre vannak optimalizálva."
-msgid "Voz"
+
+#: window.py
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+#: window.py
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Jelöljön ki szöveget, és nyomja meg az Alt+V billentyűt a felolvasáshoz"
+
+#: window.py
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Ez egy teszt, üdvözöljük a BigLinuxban!"
+
+#: window.py
+msgid "Type text to test…"
+msgstr "Írjon szöveget a teszteléshez…"
+
+#: window.py
+msgid "Test voice"
+msgstr "Hang tesztelése"
+
+#: window.py
+msgid "Test the selected voice"
+msgstr "A kiválasztott hang tesztelése"
+
+#: window.py
+msgid "Voice settings"
+msgstr "Hangbeállítások"
+
+#: window.py
+msgid "Choose voice and adjust speech parameters"
+msgstr "Válasszon hangot, és állítsa be a beszédparamétereket"
+
+#: window.py
+msgid "Voice"
 msgstr "Hang"
+
+#: window.py
+msgid "Loading voices..."
+msgstr "Hangok betöltése..."
+
+#: window.py
+msgid "Detecting installed voices..."
+msgstr "Telepített hangok felderítése..."
+
+#: window.py
+msgid "Select TTS voice"
+msgstr "TTS hang kiválasztása"
+
+#: window.py
+msgid "Speed"
+msgstr "Sebesség"
+
+#: window.py
+msgid "Speech rate"
+msgstr "Beszédsebesség"
+
+#: window.py
+msgid "Slow"
+msgstr "Lassú"
+
+#: window.py
+msgid "Normal"
+msgstr "Normál"
+
+#: window.py
+msgid "Fast"
+msgstr "Gyors"
+
+#: window.py
+msgid "Speech speed"
+msgstr "Beszédsebesség"
+
+#: window.py
+msgid "Pitch"
+msgstr "Hangmagasság"
+
+#: window.py
+msgid "Voice tone"
+msgstr "Hangszín"
+
+#: window.py
+msgid "Low"
+msgstr "Mély"
+
+#: window.py
+msgid "High"
+msgstr "Magas"
+
+#: window.py
+msgid "Voice pitch"
+msgstr "Hangmagasság"
+
+#: window.py
+msgid "Volume"
+msgstr "Hangerő"
+
+#: window.py
+msgid "Speech volume"
+msgstr "Beszéd hangereje"
+
+#: window.py
+msgid "Mute"
+msgstr "Némítás"
+
+#: window.py
+msgid "Max"
+msgstr "Max"
+
+#: window.py
+msgid "TTS Engine"
+msgstr "TTS motor"
+
+#: window.py
+msgid "Choose which text-to-speech engine to use"
+msgstr "Válassza ki a használni kívánt szövegfelolvasó motort"
+
+#: window.py
+msgid "Engine"
+msgstr "Motor"
+
+#: window.py
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+#: window.py
+msgid "TTS Backend"
+msgstr "TTS háttérrendszer"
+
+#: window.py
+msgid "Engine used for speech synthesis"
+msgstr "Beszédszintézishez használt motor"
+
+#: window.py
+msgid "Select TTS engine"
+msgstr "TTS motor kiválasztása"
+
+#: window.py
+msgid "Output module"
+msgstr "Kimeneti modul"
+
+#: window.py
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "A speech-dispatcher által használt beszédszintetizátor"
+
+#: window.py
+msgid "Select output module"
+msgstr "Kimeneti modul kiválasztása"
+
+#: window.py
+msgid "Status"
+msgstr "Állapot"
+
+#: window.py
+msgid "Checking..."
+msgstr "Ellenőrzés..."
+
+#: window.py
+msgid "Text processing"
+msgstr "Szövegfeldolgozás"
+
+#: window.py
+msgid "How text is cleaned and prepared before reading"
+msgstr "Hogyan történik a szöveg tisztítása és előkészítése az olvasás előtt"
+
+#: window.py
+msgid "Processing options"
+msgstr "Feldolgozási lehetőségek"
+
+#: window.py
+msgid "Abbreviations, formatting, limits"
+msgstr "Rövidítések, formázás, korlátok"
+
+#: window.py
+msgid "Expand abbreviations"
+msgstr "Rövidítések kibontása"
+
+#: window.py
+msgid "Replace common abbreviations with full words"
+msgstr "Gyakori rövidítések cseréje teljes szavakra"
+
+#: window.py
+msgid "Expand text abbreviations"
+msgstr "Szöveges rövidítések kibontása"
+
+#: window.py
+msgid "Read special characters"
+msgstr "Speciális karakterek felolvasása"
+
+#: window.py
+msgid "Speak symbols like # @ % by name"
+msgstr "Szimbólumok felolvasása név szerint, mint # @ %"
+
+#: window.py
+msgid "Read special characters aloud"
+msgstr "Speciális karakterek felolvasása hangosan"
+
+#: window.py
+msgid "Remove formatting"
+msgstr "Formázás eltávolítása"
+
+#: window.py
+msgid "Strip Markdown and HTML before reading"
+msgstr "Markdown és HTML eltávolítása olvasás előtt"
+
+#: window.py
+msgid "Remove text formatting"
+msgstr "Szövegformázás eltávolítása"
+
+#: window.py
+msgid "Read URLs"
+msgstr "URL-ek felolvasása"
+
+#: window.py
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Webcímek felolvasása kihagyás helyett"
+
+#: window.py
+msgid "Read URLs aloud"
+msgstr "URL-ek felolvasása hangosan"
+
+#: window.py
+msgid "Unlimited"
+msgstr "Korlátlan"
+
+#: window.py
+msgid "Character limit"
+msgstr "Karakterkorlát"
+
+#: window.py
+msgid "Maximum number of characters to read at once"
+msgstr "Egyszerre felolvasható karakterek maximális száma"
+
+#: window.py
+msgid "Maximum character limit"
+msgstr "Maximális karakterkorlát"
+
+#: window.py
+msgid "Advanced"
+msgstr "Speciális"
+
+#: window.py
+msgid "Advanced options"
+msgstr "Speciális beállítások"
+
+#: window.py
+msgid "Shortcut, behavior settings"
+msgstr "Gyorsbillentyű, viselkedési beállítások"
+
+#: window.py
+msgid "Keyboard shortcut"
+msgstr "Gyorsbillentyű"
+
+#: window.py
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press again to "
+"stop."
+msgstr ""
+"Jelöljön ki szöveget bárhol, és nyomja meg a gyorsbillentyűt a "
+"felolvasáshoz. Nyomja meg újra a leállításhoz."
+
+#: window.py
+msgid "Change"
+msgstr "Módosítás"
+
+#: window.py
+msgid "Show speak button in app launcher"
+msgstr "Felolvasás gomb megjelenítése a tálcán"
+
+#: window.py
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Hozzáad egy ikont, amelyet a tálcára rögzíthet"
+
+#: window.py
+msgid "Set new shortcut"
+msgstr "Új gyorsbillentyű beállítása"
+
+#: window.py
+msgid "Press the new shortcut"
+msgstr "Nyomja meg az új gyorsbillentyűt"
+
+#: window.py
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Tartsa lenyomva a módosító billentyűket (Alt, Ctrl, Shift, Super),\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
+"\n"
+"Nyomja meg az Escape-et a megszakításhoz."
+
+#: window.py
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Tartsa lenyomva a módosító billentyűket</b> (Alt, Ctrl, Shift, Super),\n"
+"és nyomjon meg egy betűt vagy billentyűt.\n"
+"\n"
+"<small>Nyomja meg az Escape-et a megszakításhoz</small>"
+
+#: window.py
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Gyorsbillentyű módosítva: {keys}"
+
+#: window.py
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Nem található hang — telepítse a rhvoice-t vagy az espeak-ng-t"
+
+#: window.py
+msgid "No voices available"
+msgstr "Nincs elérhető hang"
+
+#: window.py
+msgid "No TTS voices installed"
+msgstr "Nincs telepített TTS hang"
+
+#: window.py
+msgid "No voices available for this engine"
+msgstr "Nincs elérhető hang ehhez a motorhoz"
+
+#: window.py
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Először telepítse a(z) {engine} hangokat"
+
+#: window.py
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} hang elérhető"
+
+#: window.py
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "Nem található hang a(z) {engine} motorhoz — először telepítse"
+
+#: window.py
+msgid "Install Piper Neural TTS?"
+msgstr "Telepíti a Piper Neural TTS-t?"
+
+#: window.py
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"A Piper nincs telepítve. Kiváló minőségű neurális hangokat biztosít szöveg "
+"felolvasásához.\n"
+"\n"
+"A következő csomagok kerülnek telepítésre:\n"
+"• piper-tts-bin (TTS motor)\n"
+"• piper-voices-pt-BR (portugál hangok)\n"
+"\n"
+"Ehhez rendszergazdai jogosultság szükséges."
+
+#: window.py
+msgid "Cancel"
+msgstr "Mégse"
+
+#: window.py
+msgid "Install"
+msgstr "Telepítés"
+
+#: window.py
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Piper TTS telepítése — ez eltarthat egy ideig…"
+
+#: window.py
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper sikeresen telepítve! Hangok felderítése…"
+
+#: window.py
+msgid "Failed to install Piper — check permissions"
+msgstr "A Piper telepítése sikertelen — ellenőrizze a jogosultságokat"
+
+#: window.py
+msgid "Type some text to test"
+msgstr "Írjon szöveget a teszteléshez"
+
+#: window.py
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Nem sikerült lejátszani a tesztet — ellenőrizze, hogy telepítve van-e TTS motor"
+
+#: window.py
+msgid "Press Alt+V to stop"
+msgstr "Nyomja meg az Alt+V-t a leállításhoz"
+
+#: window.py
+msgid "Stop"
+msgstr "Leállítás"
+
+#: window.py
+msgid "Could not play speech — check TTS engine"
+msgstr "Nem sikerült lejátszani a beszédet — ellenőrizze a TTS motort"
+
+#: window.py
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Elérhető: {engines}"
+
+#: window.py
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "Nem található TTS motor — telepítse a speech-dispatcher-t vagy az espeak-ng-t"
+
+#: window.py
+msgid "Settings restored to defaults"
+msgstr "Beállítások visszaállítva az alapértékekre"
+
+#: window.py
+msgid "Restore Defaults"
+msgstr "Alapértékek visszaállítása"
+
+#: window.py
+msgid "About"
+msgstr "Névjegy"
+
+#: window.py
+msgid "Quit"
+msgstr "Kilépés"
+
+#: window.py
+msgid "Main menu"
+msgstr "Főmenü"
+
+#: window.py
+msgid "Restore settings?"
+msgstr "Visszaállítja a beállításokat?"
+
+#: window.py
+msgid "This will return all adjustments to their original defaults."
+msgstr "Ez visszaállítja az összes beállítást az eredeti alapértékekre."
+
+#: window.py
+msgid "Restore"
+msgstr "Visszaállítás"
+
+#: window.py
+msgid "Technologies used"
+msgstr "Használt technológiák"
+
+#: window.py
+msgid "License"
+msgstr "Licenc"
+
+#: window.py
+msgid ""
+"This interface is licensed under GPL-3.0. TTS engines have their own "
+"licenses."
+msgstr ""
+"Ez a felület GPL-3.0 licenc alatt áll. A TTS motorok saját licenccel "
+"rendelkeznek."

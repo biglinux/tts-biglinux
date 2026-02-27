@@ -1,370 +1,362 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Estonian translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Estonian\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
+
+#: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+
+#: 2
 msgid "Select text and press Alt+V to read aloud"
-msgstr "Valige tekst ja vajutage Alt+V, et valjusti lugeda."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
+msgstr "Valige tekst ja vajutage Alt+V ettelugemiseks"
+
+#: 3
 msgid "This is a test, welcome to BigLinux!"
 msgstr "See on test, tere tulemast BigLinuxi!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
+
+#: 4
 msgid "Type text to test…"
-msgstr "Sisestage tekst, et testida…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1186
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1197
+msgstr "Sisestage tekst testimiseks…"
+
+#: 5
 msgid "Test voice"
-msgstr "Testi hääl"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
+msgstr "Testi häält"
+
+#: 6
 msgid "Test the selected voice"
 msgstr "Testi valitud häält"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
+
+#: 7
 msgid "Voice settings"
-msgstr "Häälseseaded"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
+msgstr "Häälseaded"
+
+#: 8
 msgid "Choose voice and adjust speech parameters"
-msgstr "Vali hääl ja kohanda kõne parameetreid"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
+msgstr "Valige hääl ja kohandage kõne parameetreid"
+
+#: 9
 msgid "Voice"
 msgstr "Hääl"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
+
+#: 10
 msgid "Loading voices..."
-msgstr "Laadimine hääli..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
+msgstr "Häälte laadimine..."
+
+#: 11
 msgid "Detecting installed voices..."
-msgstr "Paigaldatud hääli tuvastatakse..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
+msgstr "Paigaldatud häälte tuvastamine..."
+
+#: 12
 msgid "Select TTS voice"
-msgstr "Vali TTS hääl"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 223
+msgstr "Valige TTS-hääl"
+
+#: 13
 msgid "Speed"
 msgstr "Kiirus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 224
+
+#: 14
 msgid "Speech rate"
 msgstr "Kõne kiirus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 15
 msgid "Slow"
 msgstr "Aeglane"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 16
 msgid "Normal"
 msgstr "Tavaline"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 231
+
+#: 17
 msgid "Fast"
 msgstr "Kiire"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 232
+
+#: 18
 msgid "Speech speed"
 msgstr "Kõne kiirus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 238
+
+#: 19
 msgid "Pitch"
-msgstr "Pakkumine"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 239
+msgstr "Helikõrgus"
+
+#: 20
 msgid "Voice tone"
 msgstr "Hääletoon"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 21
 msgid "Low"
 msgstr "Madal"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 246
+
+#: 22
 msgid "High"
 msgstr "Kõrge"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 247
+
+#: 23
 msgid "Voice pitch"
 msgstr "Hääle kõrgus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 253
+
+#: 24
 msgid "Volume"
-msgstr "Ruumala"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 254
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 262
+msgstr "Helitugevus"
+
+#: 25
 msgid "Speech volume"
 msgstr "Kõne helitugevus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+
+#: 26
 msgid "Mute"
-msgstr "Vaikne"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 261
+msgstr "Vaigista"
+
+#: 27
 msgid "Max"
-msgstr "Max"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
+msgstr "Maks"
+
+#: 28
 msgid "TTS Engine"
-msgstr "TTS mootor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
+msgstr "TTS-mootor"
+
+#: 29
 msgid "Choose which text-to-speech engine to use"
-msgstr "Vali, millist tekstist kõneks mootori kasutada."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 279
+msgstr "Valige, millist tekst-kõneks mootorit kasutada"
+
+#: 30
 msgid "Engine"
 msgstr "Mootor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 280
+
+#: 31
 msgid "speech-dispatcher"
-msgstr "kõnesaatja"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgstr "speech-dispatcher"
+
+#: 32
 msgid "TTS Backend"
-msgstr "TTS taustaprogramm"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgstr "TTS-taustasüsteem"
+
+#: 33
 msgid "Engine used for speech synthesis"
-msgstr "Kõnesünteesi mootor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+msgstr "Kõnesünteesiks kasutatav mootor"
+
+#: 34
 msgid "Select TTS engine"
-msgstr "Vali TTS mootor"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 323
+msgstr "Valige TTS-mootor"
+
+#: 35
 msgid "Output module"
 msgstr "Väljundmoodul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
+
+#: 36
 msgid "Speech synthesizer used by speech-dispatcher"
-msgstr "Kõnesüntesaator, mida kasutab kõneedastaja"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 328
+msgstr "Kõnesüntesaator, mida kasutab speech-dispatcher"
+
+#: 37
 msgid "Select output module"
-msgstr "Vali väljundmoodul"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 334
+msgstr "Valige väljundmoodul"
+
+#: 38
 msgid "Status"
 msgstr "Olek"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
+
+#: 39
 msgid "Checking..."
 msgstr "Kontrollimine..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
+
+#: 40
 msgid "Text processing"
 msgstr "Tekstitöötlus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
+
+#: 41
 msgid "How text is cleaned and prepared before reading"
-msgstr "Kuidas teksti puhastatakse ja valmistatakse ette lugemiseks"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 356
+msgstr "Kuidas teksti puhastada ja ette valmistada enne lugemist"
+
+#: 42
 msgid "Processing options"
-msgstr "Töötlemise valikud"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 357
+msgstr "Töötlusvalikud"
+
+#: 43
 msgid "Abbreviations, formatting, limits"
-msgstr "Lühendid, vormindamine, piirangud"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 363
+msgstr "Lühendid, vorming, piirangud"
+
+#: 44
 msgid "Expand abbreviations"
-msgstr "Laiendage lühendeid"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
+msgstr "Laienda lühendeid"
+
+#: 45
 msgid "Replace common abbreviations with full words"
-msgstr "Asenda tavalised lühendid täis sõnadega."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 364
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 367
+msgstr "Asenda tavalised lühendid täissõnadega"
+
+#: 46
 msgid "Expand text abbreviations"
-msgstr "Lai lai teksti lühendeid."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 373
+msgstr "Laienda teksti lühendeid"
+
+#: 47
 msgid "Read special characters"
-msgstr "Loe erimärgid"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 374
+msgstr "Loe erimärke"
+
+#: 48
 msgid "Speak symbols like # @ % by name"
-msgstr "Räägi sümboleid nagu # @ % nimepidi."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 377
+msgstr "Ütle sümbolid nagu # @ % nimepidi"
+
+#: 49
 msgid "Read special characters aloud"
-msgstr "Loe erilise märke hääldus."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 383
+msgstr "Loe erimärke ette"
+
+#: 50
 msgid "Remove formatting"
-msgstr "Eemalda vormindus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 384
+msgstr "Eemalda vorming"
+
+#: 51
 msgid "Strip Markdown and HTML before reading"
 msgstr "Eemalda Markdown ja HTML enne lugemist"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 387
+
+#: 52
 msgid "Remove text formatting"
-msgstr "Eemalda teksti vormindamine"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
+msgstr "Eemalda teksti vorming"
+
+#: 53
 msgid "Read URLs"
 msgstr "Loe URL-e"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 394
+
+#: 54
 msgid "Read web addresses aloud instead of skipping them"
-msgstr "Loe veebiaadresse valjusti, mitte ära jäta neid vahele."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 397
+msgstr "Loe veebiaadressid ette, mitte ära jäta neid vahele"
+
+#: 55
 msgid "Read URLs aloud"
-msgstr "Loe URL-e valjusti."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 403
+msgstr "Loe URL-e ette"
+
+#: 56
 msgid "Unlimited"
 msgstr "Piiramatu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
+
+#: 57
 msgid "Character limit"
-msgstr "Märgi piirang"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 421
+msgstr "Tähemärkide piirang"
+
+#: 58
 msgid "Maximum number of characters to read at once"
-msgstr "Maksimaalne märkide arv, mida korraga lugeda."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 425
+msgstr "Maksimaalne tähemärkide arv korraga lugemiseks"
+
+#: 59
 msgid "Maximum character limit"
 msgstr "Maksimaalne tähemärkide piirang"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 437
+
+#: 60
 msgid "Advanced"
 msgstr "Täpsem"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 441
+
+#: 61
 msgid "Advanced options"
 msgstr "Täpsemad valikud"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
+
+#: 62
 msgid "Shortcut, behavior settings"
 msgstr "Otsetee, käitumise seaded"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 448
+
+#: 63
 msgid "Keyboard shortcut"
 msgstr "Klaviatuuri otsetee"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 450
+
+#: 64
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr "Valige tekst ükskõik kus ja vajutage otseteed, et häälega lugeda. Vajutage uuesti, et peatada."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 460
+msgstr "Valige tekst kõikjal ja vajutage otseteed ettelugemiseks. Vajutage uuesti peatamiseks."
+
+#: 65
 msgid "Change"
 msgstr "Muuda"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
+
+#: 66
 msgid "Show speak button in app launcher"
-msgstr "Kuva kõne nupp rakenduste käivitajas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+msgstr "Näita lugemise nuppu tegumiribal"
+
+#: 67
 msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Lisab käivitaja sissekande, mille saad ülesandele kinnitada."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
+msgstr "Lisab ikooni, mille saate tegumiribal kinnitada"
+
+#: 68
 msgid "Set new shortcut"
-msgstr "Sead uus otsetee"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgstr "Määra uus otsetee"
+
+#: 69
 msgid "Press the new shortcut"
-msgstr "Käivita uus otsetee"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
+msgstr "Vajutage uut otseteed"
+
+#: 70
 msgid ""
 "Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "Press Escape to cancel."
 msgstr ""
-"Hoia modifikaatornuppe (Alt, Ctrl, Shift, Super) ja vajuta tähte või nuppu. Vajuta Escape, et "
-"tühistada."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
+"Hoidke all muuteklahve (Alt, Ctrl, Shift, Super)\n"
+"ja vajutage tähte või klahvi.\n"
+"\n"
+"Vajutage Escape tühistamiseks."
+
+#: 71
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
 "\n"
 "<small>Press Escape to cancel</small>"
 msgstr ""
-"<b>Hoia modifikaatornuppe</b> (Alt, Ctrl, Shift, Super)\n"
-"ja vajutage tähte või nuppu.\n"
+"<b>Hoidke all muuteklahve</b> (Alt, Ctrl, Shift, Super)\n"
+"ja vajutage tähte või klahvi.\n"
 "\n"
-"<small>Vajutage Escape, et tühistada</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
+"<small>Vajutage Escape tühistamiseks</small>"
+
+#: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
-msgstr "Käskluse otsetee on muudetud {keys} peale."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
+msgstr "Otsetee muudetud: {keys}"
+
+#: 73
 msgid "No voices found — install rhvoice or espeak-ng"
-msgstr "Hääli ei leitud — installige rhvoice või espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 808
+msgstr "Hääli ei leitud — paigaldage rhvoice või espeak-ng"
+
+#: 74
 msgid "No voices available"
-msgstr "Hääli pole saadaval"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 811
+msgstr "Häält pole saadaval"
+
+#: 75
 msgid "No TTS voices installed"
-msgstr "TTS hääli ei ole installitud"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 823
+msgstr "TTS-häält pole paigaldatud"
+
+#: 76
 msgid "No voices available for this engine"
-msgstr "Selle mootorile ei ole hääli saadaval."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 826
+msgstr "Selle mootori jaoks pole hääli saadaval"
+
+#: 77
 #, python-brace-format
 msgid "Install {engine} voices first"
-msgstr "Installige {engine} hääli esmalt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 853
+msgstr "Paigaldage esmalt {engine} hääled"
+
+#: 78
 #, python-brace-format
 msgid "{count} voices available"
-msgstr "{count} hääli saadaval"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
+msgstr "{count} häält saadaval"
+
+#: 79
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
-msgstr "{engine} jaoks hääli ei leitud - installige see esmalt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 964
+msgstr "{engine} hääli ei leitud — paigaldage see esmalt"
+
+#: 80
 msgid "Install Piper Neural TTS?"
-msgstr "Paigaldage Piper Neural TTS?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 966
+msgstr "Paigaldada Piper Neural TTS?"
+
+#: 81
 msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
 "\n"
 "The following packages will be installed:\n"
 "• piper-tts-bin (TTS engine)\n"
@@ -372,107 +364,104 @@ msgid ""
 "\n"
 "This requires administrator permissions."
 msgstr ""
-"Piper ei ole installitud. See pakub kvaliteetseid närvilisi hääli teksti lugemiseks.\n"
+"Piper ei ole paigaldatud. See pakub kvaliteetseid neurovõrgu hääli teksti "
+"ettelugemiseks.\n"
 "\n"
-"Järgmised paketid installitakse:\n"
-"• piper-tts-bin (TTS mootor)\n"
+"Paigaldatakse järgmised paketid:\n"
+"• piper-tts-bin (TTS-mootor)\n"
 "• piper-voices-pt-BR (portugali hääled)\n"
 "\n"
 "See nõuab administraatori õigusi."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+
+#: 82
 msgid "Cancel"
 msgstr "Tühista"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
+
+#: 83
 msgid "Install"
-msgstr "Installi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
+msgstr "Paigalda"
+
+#: 84
 msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Paigaldamine Piper TTS — see võib võtta hetke…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
+msgstr "Piper TTS-i paigaldamine — see võib võtta hetke…"
+
+#: 85
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper paigaldatud edukalt! Häälte avastamine…"
+
+#: 86
 msgid "Failed to install Piper — check permissions"
-msgstr "Piper'i installimine ebaõnnestus — kontrollige õigusi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1114
+msgstr "Piperi paigaldamine ebaõnnestus — kontrollige õigusi"
+
+#: 87
 msgid "Type some text to test"
-msgstr "Sisestage testimiseks mõni tekst."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1162
+msgstr "Sisestage tekst testimiseks"
+
+#: 88
 msgid "Could not play test — check if a TTS engine is installed"
-msgstr "Ei saanud testi mängida — kontrollige, kas TTS-mootor on installitud"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1176
+msgstr "Testi ei saanud esitada — kontrollige, kas TTS-mootor on paigaldatud"
+
+#: 89
 msgid "Press Alt+V to stop"
-msgstr "Pühi Alt+V, et peatada"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgstr "Vajutage Alt+V peatamiseks"
+
+#: 90
 msgid "Stop"
-msgstr "Lõpeta"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
+msgstr "Peata"
+
+#: 91
 msgid "Could not play speech — check TTS engine"
-msgstr "Ei saanud kõnet esitada - kontrollige TTS mootorit"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1219
+msgstr "Kõnet ei saanud esitada — kontrollige TTS-mootorit"
+
+#: 92
 #, python-brace-format
 msgid "Available: {engines}"
 msgstr "Saadaval: {engines}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
+
+#: 93
 msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
-msgstr "TTS mootorit ei leitud — installige speech-dispatcher või espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
+msgstr "TTS-mootorit ei leitud — paigaldage speech-dispatcher või espeak-ng"
+
+#: 94
 msgid "Settings restored to defaults"
 msgstr "Seaded taastatud vaikeseadetele"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 138
+
+#: 95
 msgid "Restore Defaults"
-msgstr "Taasta vaikeväärtused"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 142
+msgstr "Taasta vaikeseaded"
+
+#: 96
 msgid "About"
 msgstr "Teave"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 143
+
+#: 97
 msgid "Quit"
-msgstr "Välja"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 149
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 151
+msgstr "Välju"
+
+#: 98
 msgid "Main menu"
 msgstr "Peamenüü"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 170
+
+#: 99
 msgid "Restore settings?"
-msgstr "Taasta seaded?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 171
+msgstr "Taastada seaded?"
+
+#: 100
 msgid "This will return all adjustments to their original defaults."
-msgstr "See tagastab kõik kohandused nende algsetesse vaikeväärtustesse."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 174
+msgstr "See taastab kõik kohandused algsete vaikeseadeteni."
+
+#: 101
 msgid "Restore"
 msgstr "Taasta"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
+
+#: 102
 msgid "Technologies used"
 msgstr "Kasutatud tehnoloogiad"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
+
+#: 103
 msgid "License"
-msgstr "Litsentss"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
+msgstr "Litsents"
+
+#: 104
 msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "See liides on litsentseeritud GPL-3.0 all. TTS-mootoritel on oma litsentsid."
+msgstr "See liides on litsentsitud GPL-3.0 alusel. TTS-mootoritel on oma litsentsid."

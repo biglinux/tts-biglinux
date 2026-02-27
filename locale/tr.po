@@ -1,52 +1,475 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Turkish translation for tts-biglinux.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the tts-biglinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: tts-biglinux\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: attranslate\n"
-msgid "Configurações de texto para voz"
-msgstr "Metinden sese ayarları"
-msgid "Vozes - Abrir BigStore"
-msgstr "Voices - BigStore'u Açın"
-msgid "Voice Configuration"
-msgstr "Ses Yapılandırması"
-msgid "Configurar voz"
-msgstr "Sesi ayarlama"
-msgid "Para falar um texto selecionado use o atalho "
-msgstr "Seçili metni seslendirmek için kısayolu kullanın "
-msgid "[Alt] + [V]"
-msgstr "[Alt] + [V]"
-msgid ""
-"ou o ícone na sessão Utilitários no menu do sistema. Para interromper a leitura use novamene o "
-"atalho ou ícone."
-msgstr ""
-"veya sistem menüsündeki Yardımcı Programlar oturumundaki simge. Okumayı durdurmak için kısayolu "
-"veya simgeyi kullanın."
-msgid "Selecione as configurações de sua preferência"
-msgstr "Tercih ettiğiniz ayarları seçin"
-msgid "Números maiores deixam a voz mais rápida, o padrão é: -25"
-msgstr "Daha büyük sayılar sesi daha hızlı hale getirir, varsayılan: -25"
-msgid "Velocidade"
-msgstr "Hız"
-msgid "Números maiores deixam a voz mais aguda, o padrão é: -25"
-msgstr "Daha büyük sayılar sesi daha keskin bırakır, kalıp: -25"
-msgid "Tom"
-msgstr "Sesi"
-msgid "O padrão é: 0."
-msgstr "Varsayılan: 0."
-msgid "Volume"
-msgstr "Hacim"
-msgid "As vozes são otimizadas para idiomas expecíficos."
-msgstr "Sesler, know-how dilleri için optimize edilmiştir."
-msgid "Voz"
+
+#: 1
+msgid "BigLinux TTS"
+msgstr "BigLinux TTS"
+
+#: 2
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Metin seçin ve sesli okumak için Alt+V tuşuna basın"
+
+#: 3
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Bu bir testtir, BigLinux'a hoş geldiniz!"
+
+#: 4
+msgid "Type text to test…"
+msgstr "Test etmek için metin yazın…"
+
+#: 5
+msgid "Test voice"
+msgstr "Sesi test et"
+
+#: 6
+msgid "Test the selected voice"
+msgstr "Seçili sesi test et"
+
+#: 7
+msgid "Voice settings"
+msgstr "Ses ayarları"
+
+#: 8
+msgid "Choose voice and adjust speech parameters"
+msgstr "Ses seçin ve konuşma parametrelerini ayarlayın"
+
+#: 9
+msgid "Voice"
 msgstr "Ses"
+
+#: 10
+msgid "Loading voices..."
+msgstr "Sesler yükleniyor..."
+
+#: 11
+msgid "Detecting installed voices..."
+msgstr "Yüklü sesler algılanıyor..."
+
+#: 12
+msgid "Select TTS voice"
+msgstr "TTS sesini seçin"
+
+#: 13
+msgid "Speed"
+msgstr "Hız"
+
+#: 14
+msgid "Speech rate"
+msgstr "Konuşma hızı"
+
+#: 15
+msgid "Slow"
+msgstr "Yavaş"
+
+#: 16
+msgid "Normal"
+msgstr "Normal"
+
+#: 17
+msgid "Fast"
+msgstr "Hızlı"
+
+#: 18
+msgid "Speech speed"
+msgstr "Konuşma hızı"
+
+#: 19
+msgid "Pitch"
+msgstr "Perde"
+
+#: 20
+msgid "Voice tone"
+msgstr "Ses tonu"
+
+#: 21
+msgid "Low"
+msgstr "Düşük"
+
+#: 22
+msgid "High"
+msgstr "Yüksek"
+
+#: 23
+msgid "Voice pitch"
+msgstr "Ses perdesi"
+
+#: 24
+msgid "Volume"
+msgstr "Ses düzeyi"
+
+#: 25
+msgid "Speech volume"
+msgstr "Konuşma ses düzeyi"
+
+#: 26
+msgid "Mute"
+msgstr "Sessiz"
+
+#: 27
+msgid "Max"
+msgstr "Maks"
+
+#: 28
+msgid "TTS Engine"
+msgstr "TTS Motoru"
+
+#: 29
+msgid "Choose which text-to-speech engine to use"
+msgstr "Hangi metin-konuşma motorunun kullanılacağını seçin"
+
+#: 30
+msgid "Engine"
+msgstr "Motor"
+
+#: 31
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+#: 32
+msgid "TTS Backend"
+msgstr "TTS Arka Ucu"
+
+#: 33
+msgid "Engine used for speech synthesis"
+msgstr "Konuşma sentezi için kullanılan motor"
+
+#: 34
+msgid "Select TTS engine"
+msgstr "TTS motorunu seçin"
+
+#: 35
+msgid "Output module"
+msgstr "Çıkış modülü"
+
+#: 36
+msgid "Speech synthesizer used by speech-dispatcher"
+msgstr "speech-dispatcher tarafından kullanılan konuşma sentezleyicisi"
+
+#: 37
+msgid "Select output module"
+msgstr "Çıkış modülünü seçin"
+
+#: 38
+msgid "Status"
+msgstr "Durum"
+
+#: 39
+msgid "Checking..."
+msgstr "Kontrol ediliyor..."
+
+#: 40
+msgid "Text processing"
+msgstr "Metin işleme"
+
+#: 41
+msgid "How text is cleaned and prepared before reading"
+msgstr "Metnin okuma öncesinde nasıl temizlenip hazırlandığı"
+
+#: 42
+msgid "Processing options"
+msgstr "İşleme seçenekleri"
+
+#: 43
+msgid "Abbreviations, formatting, limits"
+msgstr "Kısaltmalar, biçimlendirme, sınırlar"
+
+#: 44
+msgid "Expand abbreviations"
+msgstr "Kısaltmaları genişlet"
+
+#: 45
+msgid "Replace common abbreviations with full words"
+msgstr "Yaygın kısaltmaları tam sözcüklerle değiştir"
+
+#: 46
+msgid "Expand text abbreviations"
+msgstr "Metin kısaltmalarını genişlet"
+
+#: 47
+msgid "Read special characters"
+msgstr "Özel karakterleri oku"
+
+#: 48
+msgid "Speak symbols like # @ % by name"
+msgstr "# @ % gibi sembolleri adlarıyla oku"
+
+#: 49
+msgid "Read special characters aloud"
+msgstr "Özel karakterleri sesli oku"
+
+#: 50
+msgid "Remove formatting"
+msgstr "Biçimlendirmeyi kaldır"
+
+#: 51
+msgid "Strip Markdown and HTML before reading"
+msgstr "Okumadan önce Markdown ve HTML'yi kaldır"
+
+#: 52
+msgid "Remove text formatting"
+msgstr "Metin biçimlendirmesini kaldır"
+
+#: 53
+msgid "Read URLs"
+msgstr "URL'leri oku"
+
+#: 54
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Web adreslerini atlamak yerine sesli oku"
+
+#: 55
+msgid "Read URLs aloud"
+msgstr "URL'leri sesli oku"
+
+#: 56
+msgid "Unlimited"
+msgstr "Sınırsız"
+
+#: 57
+msgid "Character limit"
+msgstr "Karakter sınırı"
+
+#: 58
+msgid "Maximum number of characters to read at once"
+msgstr "Bir seferde okunacak maksimum karakter sayısı"
+
+#: 59
+msgid "Maximum character limit"
+msgstr "Maksimum karakter sınırı"
+
+#: 60
+msgid "Advanced"
+msgstr "Gelişmiş"
+
+#: 61
+msgid "Advanced options"
+msgstr "Gelişmiş seçenekler"
+
+#: 62
+msgid "Shortcut, behavior settings"
+msgstr "Kısayol, davranış ayarları"
+
+#: 63
+msgid "Keyboard shortcut"
+msgstr "Klavye kısayolu"
+
+#: 64
+msgid ""
+"Select text anywhere and press the shortcut to read aloud. Press again to "
+"stop."
+msgstr ""
+"Herhangi bir yerde metin seçin ve sesli okumak için kısayola basın. "
+"Durdurmak için tekrar basın."
+
+#: 65
+msgid "Change"
+msgstr "Değiştir"
+
+#: 66
+msgid "Show speak button in app launcher"
+msgstr "Görev çubuğunda okuma düğmesini göster"
+
+#: 67
+msgid "Adds a launcher entry you can pin to the taskbar"
+msgstr "Görev çubuğuna sabitleyebileceğiniz bir simge ekler"
+
+#: 68
+msgid "Set new shortcut"
+msgstr "Yeni kısayol ayarla"
+
+#: 69
+msgid "Press the new shortcut"
+msgstr "Yeni kısayola basın"
+
+#: 70
+msgid ""
+"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"Press Escape to cancel."
+msgstr ""
+"Değiştirici tuşları (Alt, Ctrl, Shift, Super) basılı tutun\n"
+"ve bir harf veya tuşa basın.\n"
+"\n"
+"İptal etmek için Escape tuşuna basın."
+
+#: 71
+msgid ""
+"<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+"and press a letter or key.\n"
+"\n"
+"<small>Press Escape to cancel</small>"
+msgstr ""
+"<b>Değiştirici tuşları basılı tutun</b> (Alt, Ctrl, Shift, Super)\n"
+"ve bir harf veya tuşa basın.\n"
+"\n"
+"<small>İptal etmek için Escape tuşuna basın</small>"
+
+#: 72
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Kısayol {keys} olarak değiştirildi"
+
+#: 73
+msgid "No voices found — install rhvoice or espeak-ng"
+msgstr "Ses bulunamadı — rhvoice veya espeak-ng yükleyin"
+
+#: 74
+msgid "No voices available"
+msgstr "Kullanılabilir ses yok"
+
+#: 75
+msgid "No TTS voices installed"
+msgstr "TTS sesi yüklü değil"
+
+#: 76
+msgid "No voices available for this engine"
+msgstr "Bu motor için kullanılabilir ses yok"
+
+#: 77
+#, python-brace-format
+msgid "Install {engine} voices first"
+msgstr "Önce {engine} seslerini yükleyin"
+
+#: 78
+#, python-brace-format
+msgid "{count} voices available"
+msgstr "{count} ses kullanılabilir"
+
+#: 79
+#, python-brace-format
+msgid "No voices found for {engine} — install it first"
+msgstr "{engine} için ses bulunamadı — önce yükleyin"
+
+#: 80
+msgid "Install Piper Neural TTS?"
+msgstr "Piper Neural TTS yüklensin mi?"
+
+#: 81
+msgid ""
+"Piper is not installed. It provides high-quality neural voices for reading "
+"text.\n"
+"\n"
+"The following packages will be installed:\n"
+"• piper-tts-bin (TTS engine)\n"
+"• piper-voices-pt-BR (Portuguese voices)\n"
+"\n"
+"This requires administrator permissions."
+msgstr ""
+"Piper yüklü değil. Metin okuma için yüksek kaliteli sinirsel sesler "
+"sunar.\n"
+"\n"
+"Aşağıdaki paketler yüklenecektir:\n"
+"• piper-tts-bin (TTS motoru)\n"
+"• piper-voices-pt-BR (Portekizce sesler)\n"
+"\n"
+"Bu işlem yönetici izni gerektirir."
+
+#: 82
+msgid "Cancel"
+msgstr "İptal"
+
+#: 83
+msgid "Install"
+msgstr "Yükle"
+
+#: 84
+msgid "Installing Piper TTS — this may take a moment…"
+msgstr "Piper TTS yükleniyor — bu biraz zaman alabilir…"
+
+#: 85
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper başarıyla yüklendi! Sesler algılanıyor…"
+
+#: 86
+msgid "Failed to install Piper — check permissions"
+msgstr "Piper yüklenemedi — izinleri kontrol edin"
+
+#: 87
+msgid "Type some text to test"
+msgstr "Test etmek için metin yazın"
+
+#: 88
+msgid "Could not play test — check if a TTS engine is installed"
+msgstr "Test oynatılamadı — TTS motorunun yüklü olup olmadığını kontrol edin"
+
+#: 89
+msgid "Press Alt+V to stop"
+msgstr "Durdurmak için Alt+V tuşuna basın"
+
+#: 90
+msgid "Stop"
+msgstr "Durdur"
+
+#: 91
+msgid "Could not play speech — check TTS engine"
+msgstr "Konuşma oynatılamadı — TTS motorunu kontrol edin"
+
+#: 92
+#, python-brace-format
+msgid "Available: {engines}"
+msgstr "Kullanılabilir: {engines}"
+
+#: 93
+msgid "No TTS engine found — install speech-dispatcher or espeak-ng"
+msgstr "TTS motoru bulunamadı — speech-dispatcher veya espeak-ng yükleyin"
+
+#: 94
+msgid "Settings restored to defaults"
+msgstr "Ayarlar varsayılanlara geri yüklendi"
+
+#: 95
+msgid "Restore Defaults"
+msgstr "Varsayılanları geri yükle"
+
+#: 96
+msgid "About"
+msgstr "Hakkında"
+
+#: 97
+msgid "Quit"
+msgstr "Çıkış"
+
+#: 98
+msgid "Main menu"
+msgstr "Ana menü"
+
+#: 99
+msgid "Restore settings?"
+msgstr "Ayarlar geri yüklensin mi?"
+
+#: 100
+msgid "This will return all adjustments to their original defaults."
+msgstr "Bu, tüm ayarları orijinal varsayılan değerlerine döndürecektir."
+
+#: 101
+msgid "Restore"
+msgstr "Geri yükle"
+
+#: 102
+msgid "Technologies used"
+msgstr "Kullanılan teknolojiler"
+
+#: 103
+msgid "License"
+msgstr "Lisans"
+
+#: 104
+msgid ""
+"This interface is licensed under GPL-3.0. TTS engines have their own "
+"licenses."
+msgstr ""
+"Bu arayüz GPL-3.0 altında lisanslanmıştır. TTS motorlarının kendi "
+"lisansları vardır."
