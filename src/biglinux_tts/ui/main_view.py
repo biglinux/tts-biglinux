@@ -847,13 +847,6 @@ class MainView(Adw.NavigationPage):
             if modified:
                 config_path.write_text("\n".join(lines) + "\n")
                 logger.info("Plasma taskbar %s: %s", "pinned" if pin else "unpinned", launcher_id)
-
-                # Reload Plasma panel to reflect changes
-                subprocess.run(
-                    ["qdbus6", "org.kde.plasmashell", "/PlasmaShell",
-                     "org.kde.PlasmaShell.refreshCurrentShell"],
-                    timeout=10, check=False,
-                )
         except OSError as e:
             logger.warning("Could not update Plasma taskbar: %s", e)
 
