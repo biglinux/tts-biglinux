@@ -2,7 +2,7 @@
 Type=Application
 Exec=biglinux-tts
 Icon=tts-biglinux
-Categories=Settings;Utility;Accessibility;
+Categories=Utility;
 StartupNotify=true
 Terminal=false
 Name=BigLinux Text to Speech

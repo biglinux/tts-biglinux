@@ -537,6 +537,10 @@ msgid "About"
 msgstr "Sobre"
 
 #
+msgid "Welcome"
+msgstr "Boas-vindas"
+
+#
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 143
 msgid "Quit"
 msgstr "Sair"
@@ -576,3 +580,109 @@ msgstr "Licença"
 # File: tts-biglinux/src/biglinux_tts/application.py, line: 157
 msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
 msgstr "Esta interface é licenciada sob GPL-3.0. Os motores TTS possuem suas próprias licenças."
+
+#
+# File: tts-biglinux/src/biglinux_tts/ui/welcome_dialog.py
+msgid "Welcome to BigLinux TTS"
+msgstr "Bem-vindo ao BigLinux TTS"
+
+#
+msgid "Your text-to-speech assistant"
+msgstr "Seu assistente de leitura em voz alta"
+
+#
+msgid "Let's Start"
+msgstr "Vamos Começar"
+
+#
+msgid "Multiple TTS Engines"
+msgstr "Múltiplos Motores TTS"
+
+#
+msgid "RHVoice, espeak-ng and Piper Neural TTS\nwith automatic voice discovery"
+msgstr "RHVoice, espeak-ng e Piper Neural TTS\ncom descoberta automática de vozes"
+
+#
+msgid "Multilingual Support"
+msgstr "Suporte Multilíngue"
+
+#
+msgid "Voices in dozens of languages\nincluding Portuguese (Brazil)"
+msgstr "Vozes em dezenas de idiomas\nincluindo Português (Brasil)"
+
+#
+msgid "Global Shortcut"
+msgstr "Atalho Global"
+
+#
+msgid "Press Alt+V to read selected text\nfrom any application"
+msgstr "Pressione Alt+V para ler o texto selecionado\nde qualquer aplicação"
+
+#
+msgid "Clipboard Reading"
+msgstr "Leitura da Área de Transferência"
+
+#
+msgid "Paste or type text directly\nand listen instantly"
+msgstr "Cole ou digite texto diretamente\ne ouça instantaneamente"
+
+#
+msgid "Fine-Tune Speech"
+msgstr "Ajuste Fino da Fala"
+
+#
+msgid "Adjust speed, pitch and volume\nto your preference"
+msgstr "Ajuste velocidade, tom e volume\nao seu gosto"
+
+#
+msgid "Neural Voices"
+msgstr "Vozes Neurais"
+
+#
+msgid "Install Piper voices for natural,\nhigh-quality speech synthesis"
+msgstr "Instale vozes Piper para síntese\nde fala natural e de alta qualidade"
+
+#
+msgid "Easy Installation"
+msgstr "Instalação Fácil"
+
+#
+msgid "Install new voices and engines\ndirectly from the interface"
+msgstr "Instale novas vozes e motores\ndiretamente pela interface"
+
+#
+msgid "Lightweight & Fast"
+msgstr "Leve e Rápido"
+
+#
+msgid "Native GTK4/Adwaita interface\nwith minimal resource usage"
+msgstr "Interface nativa GTK4/Adwaita\ncom uso mínimo de recursos"
+
+#
+msgid "Show this dialog on startup"
+msgstr "Mostrar este diálogo ao iniciar"
+
+#
+# File: tts-biglinux/src/biglinux_tts/application.py — Tray
+msgid "Text-to-speech assistant"
+msgstr "Assistente de leitura em voz alta"
+
+#
+msgid "Show Window"
+msgstr "Mostrar Janela"
+
+#
+msgid "Stop Speaking"
+msgstr "Parar de Falar"
+
+#
+msgid "Settings"
+msgstr "Configurações"
+
+#
+msgid "Launcher icon updated"
+msgstr "Ícone do lançador atualizado"
+
+#
+msgid "Launcher icon updated — changes may take a moment"
+msgstr "Ícone do lançador atualizado — pode demorar um instante"

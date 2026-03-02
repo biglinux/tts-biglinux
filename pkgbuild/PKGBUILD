@@ -19,6 +19,7 @@ depends=(
     'alsa-utils'
 )
 optdepends=(
+    'pyside6: system tray icon support'
     'rhvoice: high-quality multilingual TTS engine'
     'rhvoice-voice-leticia-f123: Brazilian Portuguese female voice'
     'rhvoice-voice-evgeniy-eng: English male voice'
@@ -38,25 +39,14 @@ package() {
         InternalDir="${srcdir}/${pkgname}"
     fi
 
-    # Detect Python version for site-packages
-    local _pyver
-    _pyver=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-
-    # Install Python module
-    install -d "${pkgdir}/usr/lib/python${_pyver}/site-packages/"
-    if [ -d "${InternalDir}/src/biglinux_tts" ]; then
-        cp -r "${InternalDir}/src/biglinux_tts" "${pkgdir}/usr/lib/python${_pyver}/site-packages/"
+    # Install usr/ tree (bin, share/biglinux, share/applications, share/icons, share/locale, share/khotkeys)
+    if [ -d "${InternalDir}/usr" ]; then
+        cp -r "${InternalDir}/usr" "${pkgdir}/usr"
     fi
 
-    # Install executables
-    install -d "${pkgdir}/usr/bin"
-    if [ -d "${InternalDir}/usr/bin" ]; then
-        install -m755 "${InternalDir}/usr/bin/"* "${pkgdir}/usr/bin/"
-    fi
-
-    # Install share files (desktop entries, icons, locale)
-    if [ -d "${InternalDir}/usr/share" ]; then
-        cp -r "${InternalDir}/usr/share" "${pkgdir}/usr/"
+    # Fix permissions for executables
+    if [ -d "${pkgdir}/usr/bin" ]; then
+        chmod 755 "${pkgdir}/usr/bin/"*
     fi
 
     # Install .po translation files
@@ -64,18 +54,6 @@ package() {
         install -d "${pkgdir}/usr/share/tts-biglinux/locale"
         install -m644 "${InternalDir}/locale/"*.po \
             "${pkgdir}/usr/share/tts-biglinux/locale/"
-    fi
-
-    # KDE global shortcut link
-    mkdir -p "${pkgdir}/usr/share/kglobalaccel/"
-    ln -s "/usr/share/applications/bigtts.desktop" \
-        "${pkgdir}/usr/share/kglobalaccel/bigtts.desktop"
-
-    # KHotkeys config for Plasma 5 compatibility
-    if [ -d "${InternalDir}/usr/share/khotkeys" ]; then
-        mkdir -p "${pkgdir}/usr/share/khotkeys/"
-        install -m644 "${InternalDir}/usr/share/khotkeys/"* \
-            "${pkgdir}/usr/share/khotkeys/"
     fi
 
     # Icon compatibility symlink (old name → new name)
