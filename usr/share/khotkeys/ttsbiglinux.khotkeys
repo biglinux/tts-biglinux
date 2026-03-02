@@ -11,14 +11,14 @@ DataCount=1
 Comment=Global keyboard shortcut to launch biglinux-tts
 Enabled=true
 Name=Launch tts-biglinux
-Type=MENUENTRY_SHORTCUT_ACTION_DATA
+Type=SIMPLE_ACTION_DATA
 
 [Data_1Actions]
 ActionsCount=1
 
 [Data_1Actions0]
-CommandURL=bigtts.desktop
-Type=MENUENTRY
+CommandURL=biglinux-tts-speak
+Type=COMMAND_URL
 
 [Data_1Conditions]
 Comment=
