@@ -14,6 +14,103 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "ברוך הבא ל-BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "בוא נתחיל"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "האסיסטנט שלך להמרת טקסט לדיבור"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 144
+msgid "Multiple TTS Engines"
+msgstr "מנועי TTS מרובים"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 146
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice, espeak-ng ו-Piper Neural TTS עם גילוי קול אוטומטי"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 151
+msgid "Multilingual Support"
+msgstr "תמיכה רב-לשונית"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "קולות בעשרות שפות כולל פורטוגזית (ברזיל)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 158
+msgid "Global Shortcut"
+msgstr "קיצור דרך גלובלי"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "לחץ על Alt+V כדי לקרוא טקסט שנבחר מכל יישום"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 165
+msgid "Clipboard Reading"
+msgstr "קריאת לוח שנה"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "הדבק או הקלד טקסט ישירות והקשב מיד"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 182
+msgid "Fine-Tune Speech"
+msgstr "שיפור דיבור"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 184
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "התאם מהירות, גובה ועוצמה להעדפתך"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 189
+msgid "Neural Voices"
+msgstr "קולות נוירליים"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "התקן קולות פייפר לסינתזת דיבור טבעית ואיכותית גבוהה"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 196
+msgid "Easy Installation"
+msgstr "התקנה קלה"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr "התקן קולות ומנועים חדשים ישירות מהממשק"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 203
+msgid "Lightweight & Fast"
+msgstr "קליל ומהיר"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "ממשק GTK4/Adwaita מקורי עם שימוש מינימלי במשאבים"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 218
+msgid "Show this dialog on startup"
+msgstr "הצג דיאלוג זה בהפעלה"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 #: 1
 msgid "BigLinux TTS"
@@ -361,45 +458,13 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "הקיצור שונה ל-{keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "האם להפעיל מחדש את Shell של Plasma?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 748
+msgid "Launcher icon updated"
+msgstr "אייקון המפעיל עודכן"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"הסמל נוסף למפעיל האפליקציות.\n"
-"\n"
-"כדי להציג אותו בלוח, יש לאתחל את ה-Plasma Shell. זה יסגור ויפתח מחדש את לוחות השולחן העבודה באופן "
-"זמני.\n"
-"\n"
-"לאתחל עכשיו?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "מאוחר יותר"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "אתחל מחדש"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "אייקון נוסף - הפעל מחדש את פלאזמה או התחבר מחדש כדי שהוא יופיע"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "מחדש את Shell של Plasma..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "לא ניתן להפעיל מחדש את Shell של Plasma - אנא התחבר שוב"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
+msgid "Launcher icon updated — changes may take a moment"
+msgstr "אייקון המפעיל עודכן - השינויים עשויים לקחת רגע"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 837
 #: 73
@@ -529,6 +594,10 @@ msgstr "ההגדרות שוחזרו לברירות המחדל"
 msgid "Restore Defaults"
 msgstr "שחזור ברירות מחדל"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "ברוך הבא"
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 128
 #: 96
 msgid "About"
@@ -560,17 +629,10 @@ msgstr "פעולה זו תחזיר את כל ההתאמות לברירות המ�
 msgid "Restore"
 msgstr "שחזור"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
-#: 102
-msgid "Technologies used"
-msgstr "טכנולוגיות בשימוש"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "עוזר טקסט לדיבור"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
-#: 103
-msgid "License"
-msgstr "רישיון"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
-#: 104
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "ממשק זה מורשה תחת GPL-3.0. למנועי TTS רישיונות משלהם."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "הגדרות"

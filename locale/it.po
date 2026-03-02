@@ -14,6 +14,105 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "Benvenuto in BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "Iniziamo"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "Il tuo assistente di sintesi vocale"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 144
+msgid "Multiple TTS Engines"
+msgstr "Motori TTS multipli"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 146
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice, espeak-ng e Piper Neural TTS con scoperta automatica della voce"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 151
+msgid "Multilingual Support"
+msgstr "Supporto multilingue"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "Voci in dozzine di lingue, inclusa la portoghese (Brasile)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 158
+msgid "Global Shortcut"
+msgstr "Scorciatoia Globale"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "Premi Alt+V per leggere il testo selezionato da qualsiasi applicazione."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 165
+msgid "Clipboard Reading"
+msgstr "Lettura degli appunti"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "Incolla o digita il testo direttamente e ascolta istantaneamente"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 182
+msgid "Fine-Tune Speech"
+msgstr "Affina il parlato"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 184
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "Regola la velocità, il tono e il volume secondo le tue preferenze."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 189
+msgid "Neural Voices"
+msgstr "Voci Neurali"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "Installa le voci Piper per una sintesi vocale naturale e di alta qualità."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 196
+msgid "Easy Installation"
+msgstr "Installazione Facile"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr ""
+"Installa nuove voci e motori\n"
+"direttamente dall'interfaccia"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 203
+msgid "Lightweight & Fast"
+msgstr "Leggero e Veloce"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "Interfaccia nativa GTK4/Adwaita con utilizzo minimo delle risorse"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 218
+msgid "Show this dialog on startup"
+msgstr "Mostra questa finestra di dialogo all'avvio"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -300,45 +399,13 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "Scorciatoia modificata in {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "Riavviare Plasma Shell?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 748
+msgid "Launcher icon updated"
+msgstr "Icona del launcher aggiornata"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"L'icona è stata aggiunta al lanciatore dell'app.\n"
-"\n"
-"Per farla apparire nel pannello, è necessario riavviare il Plasma Shell. Questo chiuderà e riaprirà "
-"brevemente i pannelli del desktop.\n"
-"\n"
-"Riavviare ora?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "Più tardi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "Riavvia"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Icona aggiunta — riavvia Plasma o effettua nuovamente il login affinché appaia"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "Riavviando Plasma Shell..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Impossibile riavviare Plasma Shell — si prega di effettuare nuovamente il login."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
+msgid "Launcher icon updated — changes may take a moment"
+msgstr "Icona del launcher aggiornata - le modifiche potrebbero richiedere un momento"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -448,6 +515,10 @@ msgstr "Impostazioni ripristinate ai valori predefiniti"
 msgid "Restore Defaults"
 msgstr "Ripristina predefiniti"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "Benvenuto"
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 142
 msgid "About"
 msgstr "Informazioni"
@@ -473,14 +544,10 @@ msgstr "Tutti gli aggiustamenti torneranno ai valori predefiniti originali."
 msgid "Restore"
 msgstr "Ripristina"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
-msgid "Technologies used"
-msgstr "Tecnologie utilizzate"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "Assistente di sintesi vocale"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
-msgid "License"
-msgstr "Licenza"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Questa interfaccia è licenziata sotto GPL-3.0. I motori TTS hanno le proprie licenze."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "Impostazioni"

@@ -14,6 +14,103 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "欢迎使用 BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "让我们开始"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "您的文本转语音助手"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 144
+msgid "Multiple TTS Engines"
+msgstr "多个TTS引擎"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 146
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice、espeak-ng 和 Piper 神经 TTS，带自动语音发现"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 151
+msgid "Multilingual Support"
+msgstr "多语言支持"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "包括葡萄牙语（巴西）在内的数十种语言的语音"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 158
+msgid "Global Shortcut"
+msgstr "全局快捷键"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "按 Alt+V 读取来自任何应用程序的选定文本"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 165
+msgid "Clipboard Reading"
+msgstr "剪贴板读取"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "直接粘贴或输入文本并立即收听"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 182
+msgid "Fine-Tune Speech"
+msgstr "微调语音"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 184
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "根据您的喜好调整速度、音调和音量"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 189
+msgid "Neural Voices"
+msgstr "神经语音"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "安装Piper语音以实现自然、高质量的语音合成"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 196
+msgid "Easy Installation"
+msgstr "简单安装"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr "直接从界面安装新语音和引擎"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 203
+msgid "Lightweight & Fast"
+msgstr "轻量级与快速"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "原生 GTK4/Adwaita 界面，资源使用最小化"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 218
+msgid "Show this dialog on startup"
+msgstr "在启动时显示此对话框"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -298,44 +395,13 @@ msgstr ""
 msgid "Shortcut changed to {keys}"
 msgstr "快捷键已更改为 {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "重新启动 Plasma Shell？"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 748
+msgid "Launcher icon updated"
+msgstr "启动器图标已更新"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"图标已添加到应用程序启动器。\n"
-"\n"
-"要使其出现在面板中，需要重新启动 Plasma Shell。这将暂时关闭并重新打开桌面面板。\n"
-"\n"
-"现在重启吗？"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "稍后"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "重启"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "图标已添加 — 重新启动 Plasma 或重新登录以使其显示"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "正在重启 Plasma Shell..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "无法重新启动 Plasma Shell — 请重新登录"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
+msgid "Launcher icon updated — changes may take a moment"
+msgstr "启动器图标已更新 — 更改可能需要片刻时间"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -443,6 +509,10 @@ msgstr "设置已恢复为默认值"
 msgid "Restore Defaults"
 msgstr "恢复默认值"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "欢迎"
+# 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 142
 msgid "About"
 msgstr "关于"
@@ -468,14 +538,10 @@ msgstr "这将把所有调整恢复为原始默认值。"
 msgid "Restore"
 msgstr "恢复"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
-msgid "Technologies used"
-msgstr "使用的技术"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "文本转语音助手"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
-msgid "License"
-msgstr "许可证"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "此界面采用 GPL-3.0 许可证。TTS 引擎有各自的许可证。"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "设置"
