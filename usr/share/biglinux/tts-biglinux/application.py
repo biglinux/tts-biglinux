@@ -297,92 +297,231 @@ class TTSApplication(Adw.Application):
         else:
             kde_shortcut = kde_shortcut.upper()
 
-        # Check if already registered correctly in the services group
-        already_correct = False
-        if rc_path.exists():
-            try:
-                content = rc_path.read_text(encoding="utf-8")
-                import re
-                # Match within [services][biglinux-tts-speak.desktop] group
-                match = re.search(
-                    r"\[services\]\[biglinux-tts-speak\.desktop\]\s*\n_launch=([^\t\n]+)",
-                    content,
-                )
-                if match and match.group(1) == kde_shortcut:
-                    already_correct = True
-            except OSError:
-                pass
+        # ── Smart Path Detection ──────────────────────────────────────
+        # Use script from Git repo if running from there, otherwise system path
+        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+        git_script = repo_root / "usr" / "bin" / "biglinux-tts-speak"
+        if git_script.exists():
+            exec_path = str(git_script)
+            logger.info("Using development script from Git: %s", exec_path)
+        else:
+            exec_path = "/usr/bin/biglinux-tts-speak"
+
+        # ── Zombie Nuke ──────────────────────────────────────────────
+        # These old files in ~/.local/share/applications/ often have Alt+V
+        # hardcoded in X-KDE-Shortcuts and override everything.
+        local_apps = Path.home() / ".local" / "share" / "applications"
+        zombies = ["tts-speak.desktop", "bigtts.desktop"]
+        for z in zombies:
+            z_path = local_apps / z
+            if z_path.exists():
+                try:
+                    z_path.unlink()
+                    logger.info("Deleted zombie desktop file: %s", z_path)
+                    # Also unregister from memory
+                    comp_name = z
+                    for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--dest=org.kde.kglobalaccel"]]:
+                        if "dbus-send" in dbus_cmd:
+                            subprocess.run(dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp_name}", "string:_launch"], timeout=1, stderr=subprocess.DEVNULL)
+                        else:
+                            subprocess.run(dbus_cmd + ["org.kde.kglobalaccel", "/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp_name, "_launch"], timeout=1, stderr=subprocess.DEVNULL)
+                except: pass
 
         # ── Radical Cleanup ──────────────────────────────────────────
-        # Fix: Unregister via DBus to remove active zombies, not just config entries
         self._radical_dbus_cleanup()
 
-        for group in ["khotkeys", "biglinux-tts-speak.desktop", "bigtts.desktop", "tts-speak.desktop"]:
-            try:
-                subprocess.run(
-                    ["kwriteconfig6", "--file", "kglobalshortcutsrc", "--group", group, "--key", "_launch", "--delete"],
-                    timeout=2, check=False
-                )
-            except: pass
+        # Groups to clean and register in
+        groups = [
+            ("services", "biglinux-tts-speak.desktop"),  # Plasma 6
+            ("", "biglinux-tts-speak.desktop"),          # Plasma 5
+            ("services", "br.com.biglinux.tts.desktop"), # Potential UI conflict
+            ("", "bigtts.desktop"),                      # Legacy
+        ]
 
-        # Ensure the desktop file exists unconditionally, so KDE has a target
-        # for the [services] global shortcut.
+        # Ensure the desktop file exists unconditionally in local apps
         local_apps = Path.home() / ".local" / "share" / "applications"
         desktop_dst = local_apps / "biglinux-tts-speak.desktop"
-        content = (
-            "[Desktop Entry]\n"
-            "Type=Application\n"
-            "Exec=biglinux-tts-speak\n"
-            "Icon=tts-biglinux\n"
-            "Categories=Utility;Accessibility;\n"
-            "StartupNotify=false\n"
-            "NoDisplay=true\n"
-            f"X-KDE-Shortcuts={kde_shortcut}\n"
-            "Name=Speech or stop selected text\n"
-            "Name[pt_BR]=Narrador de texto\n"
-        )
+        
+        content = f"""[Desktop Entry]
+Type=Application
+Exec={exec_path}
+Icon=tts-biglinux
+Categories=Utility;Accessibility;
+StartupNotify=false
+NoDisplay=true
+X-KDE-Shortcuts={kde_shortcut}
+Name=BigLinux TTS Speak
+GenericName=Speech or stop selected text
+GenericName[pt_BR]=Narrador de texto
+
+Actions=SoftwareRender;AmdRender;IntegratedRender;
+
+[Desktop Action SoftwareRender]
+Name=Software Render
+Exec=SoftwareRender {exec_path}
+
+[Desktop Action AmdRender]
+Name=Amd Render
+Exec=AmdRender {exec_path}
+
+[Desktop Action IntegratedRender]
+Name=Integrated Render
+Exec=IntegratedRender {exec_path}
+"""
         try:
             desktop_dst.parent.mkdir(parents=True, exist_ok=True)
-            desktop_dst.write_text(content)
+            desktop_dst.write_text(content, encoding="utf-8")
+            # Update database
+            subprocess.run(["update-desktop-database", str(local_apps)], timeout=2, check=False)
         except OSError as e:
             logger.warning("Could not write desktop file: %s", e)
 
-        # Update the desktop database to ensure KDE picks it up
-        try:
-            subprocess.run(["update-desktop-database", str(local_apps)], timeout=5, check=False)
-            subprocess.run(["kbuildsycoca6", "--noincremental"], timeout=10, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except (OSError, subprocess.TimeoutExpired):
-            pass
+        # Registry commands
+        registry_cmds = ["kwriteconfig6", "kwriteconfig5", "kwriteconfig"]
+        
+        # NUKE 'Alt+V' specifically from anywhere it might be hiding
+        import shutil
+        nuke_targets = ["khotkeys", "biglinux-tts-speak.desktop", "bigtts.desktop", "tts-speak.desktop", "tts_speak_desktop", "plasmashell"]
+        for n_group in nuke_targets:
+            for kcmd in registry_cmds:
+                if shutil.which(kcmd):
+                    subprocess.run([kcmd, "--file", "kglobalshortcutsrc", "--group", n_group, "--key", "_launch", "--delete"], timeout=1, stderr=subprocess.DEVNULL)
+                    subprocess.run([kcmd, "--file", "kglobalshortcutsrc", "--group", n_group, "--key", "Launch tts-biglinux", "--delete"], timeout=1, stderr=subprocess.DEVNULL)
 
-        # Now register via kwriteconfig6 in the services group (The correct way for Plasma 6)
+        if kde_shortcut.lower() == "none":
+            logger.info("Shortcut is 'none', skipping registration.")
+            # Still reload to ensure old ones are gone
+            self._reload_kglobalaccel()
+            return
+
+        for group_prefix, group_name in groups:
+            for kcmd in registry_cmds:
+                if not shutil.which(kcmd):
+                    continue
+                try:
+                    cmd = [kcmd, "--file", "kglobalshortcutsrc"]
+                    if group_prefix:
+                        cmd.extend(["--group", group_prefix])
+                    cmd.extend(["--group", group_name, "--key", "_launch"])
+                    # If it's a cleanup target, delete it first
+                    if "bigtts" in group_name or "br.com.biglinux.tts" in group_name:
+                        subprocess.run(cmd + ["--delete"], timeout=2, check=False)
+                        continue
+                    
+                    # Register new shortcut with COMMAS (most stable separator for kwriteconfig)
+                    val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
+                    subprocess.run(cmd + [val], timeout=2, check=False)
+                except: pass
+
+        # Rebuild sycoca (KDE service cache)
+        for scmd in ["kbuildsycoca6", "kbuildsycoca5"]:
+            try:
+                subprocess.run([scmd, "--noincremental"], timeout=5, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except: pass
+
+        # Notify systems
+        self._reload_kglobalaccel()
+        
+        # ── Real-Time DBus Injection ────────────────────────────────
+        # Force the change in memory so it works WITHOUT log out
+        self._inject_shortcut_dbus(kde_shortcut)
+
+    @staticmethod
+    def _inject_shortcut_dbus_static(kde_shortcut: str) -> None:
+        """Inject the shortcut directly into KGlobalAccel memory via DBus."""
+        import subprocess
+        
+        # Calculate KDE numeric codes
+        # Map: Alt=0x08000000, Ctrl=0x04000000, Shift=0x02000000, Meta/Win=0x10000000
+        # Example: Alt+9 -> 0x08000000 + 0x39 = 134217785
+        def get_kde_code(s):
+            code = 0
+            if "Alt+" in s: code += 0x08000000
+            if "Ctrl+" in s: code += 0x04000000
+            if "Shift+" in s: code += 0x02000000
+            if "Meta+" in s: code += 0x10000000
+            
+            key = s.split("+")[-1].upper()
+            if len(key) == 1:
+                code += ord(key)
+            elif key == "F1": code += 0x1000  # Simplified mapping
+            # This is a basic mapping, but works for common shortcuts like Alt+9, Alt+V, etc.
+            return code
+
+        numeric_code = get_kde_code(kde_shortcut)
+        if numeric_code > 0:
+            # Tell KGlobalAccel to set the shortcut for our .desktop file entry
+            # Group: biglinux-tts-speak.desktop, Action: _launch
+            # Flags: 0x2 = Authorized/Set
+            for comp in ["biglinux-tts-speak.desktop", "biglinux_tts_speak_desktop"]:
+                subprocess.run([
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel", "/kglobalaccel",
+                    "org.kde.KGlobalAccel.setShortcut",
+                    f"array:string:{comp},_launch",
+                    f"array:int32:{numeric_code}",
+                    "uint32:2"
+                ], timeout=1, stderr=subprocess.DEVNULL)
+
+    def _inject_shortcut_dbus(self, kde_shortcut: str) -> None:
+        """Instance wrapper for the static injection."""
+        self._inject_shortcut_dbus_static(kde_shortcut)
+
+    @staticmethod
+    def _reload_kglobalaccel() -> None:
+        """Force KGlobalAccel to reload shortcut configuration."""
+        import subprocess
+        import time
+        # Method 1: block/unblock cycle forces re-read
         try:
             subprocess.run(
                 [
-                    "kwriteconfig6",
-                    "--file", "kglobalshortcutsrc",
-                    "--group", "services",
-                    "--group", "biglinux-tts-speak.desktop",
-                    "--key", "_launch",
-                    f"{kde_shortcut}\t{kde_shortcut}\tSpeech or stop selected text",
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
+                    "boolean:true",
                 ],
-                timeout=5,
-                check=False,
+                timeout=2, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
-            logger.info("Shortcut registered in kglobalshortcutsrc [services]")
-        except (OSError, subprocess.TimeoutExpired) as e:
-            logger.warning("Could not register shortcut: %s", e)
+            time.sleep(0.1)
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
+                    "boolean:false",
+                ],
+                timeout=2, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except: pass
 
-        # Notify KGlobalAccel to reload
+        # Method 2: Plasma 6/5 reparseConfiguration
+        for cmd in ["qdbus6", "qdbus"]:
+            try:
+                subprocess.run(
+                    [
+                        cmd, "org.kde.kglobalaccel", "/kglobalaccel",
+                        "org.kde.KGlobalAccel.reparseConfiguration"
+                    ],
+                    timeout=2, check=False,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except: pass
+
+        # Method 3: also notify KGlobalSettings (Legacy)
         try:
             subprocess.run(
                 ["dbus-send", "--type=signal", "--session",
                  "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
                  "int32:3", "int32:0"],
-                timeout=5,
-                check=False,
+                timeout=2, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
+        except: pass
 
     @staticmethod
     def _radical_dbus_cleanup() -> None:
@@ -399,7 +538,7 @@ class TTSApplication(Adw.Application):
                 try:
                     if "dbus-send" in dbus_cmd:
                         subprocess.run(
-                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
+                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp}", f"string:{action}"],
                             timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                         )
                     else:

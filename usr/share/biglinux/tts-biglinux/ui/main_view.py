@@ -550,7 +550,7 @@ class MainView(Adw.NavigationPage):
         self._settings_service.save_now()
 
         # Update UI
-        self._shortcut_label.set_accelerator(accel)
+        self._shortcut_label.set_accelerator("" if accel == "none" else accel)
         self._update_hero_labels(self._tts.state)
 
         # Unblock global shortcuts before updating KDE bindings
@@ -596,49 +596,62 @@ class MainView(Adw.NavigationPage):
 
         logger.info("Updating KDE shortcut to: %s", kde_shortcut)
 
-        # 1. Ensure local .desktop exists with the current shortcut
-        # KDE requires a valid .desktop file to attach a [services] shortcut to.
+        # 1. Update local .desktop
         local_apps = Path.home() / ".local" / "share" / "applications"
         desktop_dst = local_apps / "biglinux-tts-speak.desktop"
-
         self._ensure_desktop_file(desktop_dst)
-        logger.info("Ensured desktop file: %s", desktop_dst)
 
+        # 2. Radical Cleanup — Unregister zombies via DBus first
         self._radical_dbus_cleanup()
 
-        # 2. Radical Cleanup — delete any 'zombie' Alt+V entries from legacy groups
-        # This prevents the system from having two shortcuts for the same thing
-        for group in ["khotkeys", "biglinux-tts-speak.desktop", "bigtts.desktop", "tts-speak.desktop"]:
-            try:
-                subprocess.run(
-                    ["kwriteconfig6", "--file", "kglobalshortcutsrc", "--group", group, "--key", "_launch", "--delete"],
-                    timeout=2, check=False
-                )
-            except: pass
+        # Groups to clean and register in (Plasma 5 and 6)
+        groups = [
+            ("services", "biglinux-tts-speak.desktop"),  # Plasma 6
+            ("", "biglinux-tts-speak.desktop"),          # Plasma 5
+            ("services", "br.com.biglinux.tts.desktop"), # Potential UI conflict
+            ("", "bigtts.desktop"),                      # Legacy
+        ]
 
-        # 3. Write the shortcut in the services group (Plasma 6 mechanism
-        #    for .desktop file shortcuts)
-        try:
-            subprocess.run(
-                [
-                    "kwriteconfig6",
-                    "--file", "kglobalshortcutsrc",
-                    "--group", "services",
-                    "--group", "biglinux-tts-speak.desktop",
-                    "--key", "_launch",
-                    f"{kde_shortcut}\t{kde_shortcut}\tSpeech or stop selected text",
-                ],
-                timeout=5,
-                check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired) as e:
-            logger.warning("Could not update kglobalshortcutsrc: %s", e)
+        # Registry commands to try
+        registry_cmds = ["kwriteconfig6", "kwriteconfig5", "kwriteconfig"]
+        import shutil
 
-        # 4. Rebuild system caches so KDE sees the updated .desktop file
+        for group_prefix, group_name in groups:
+            for kcmd in registry_cmds:
+                if not shutil.which(kcmd):
+                    continue
+                try:
+                    cmd = [kcmd, "--file", "kglobalshortcutsrc"]
+                    if group_prefix:
+                        cmd.extend(["--group", group_prefix])
+                    cmd.extend(["--group", group_name, "--key", "_launch"])
+                    
+                    # If it's a cleanup target, delete it first
+                    if "bigtts" in group_name or "br.com.biglinux.tts" in group_name:
+                        subprocess.run(cmd + ["--delete"], timeout=2, check=False)
+                        continue
+                        
+                    # Register new shortcut with COMMAS (most stable)
+                    if kde_shortcut.lower() != "none":
+                        val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
+                        subprocess.run(cmd + [val], timeout=2, check=False)
+                    else:
+                        subprocess.run(cmd + ["--delete"], timeout=2, check=False)
+                except: pass
+
+        # 3. Rebuild system caches so KDE sees the updated .desktop file
         self._update_desktop_database()
 
-        # 5. Force kglobalaccel to re-read configuration
+        # 4. Force kglobalaccel to re-read configuration
         self._reload_kglobalaccel()
+
+        # 5. Real-Time DBus Injection (Force memory update)
+        if hasattr(self, "_app") and self._app:
+            self._app._inject_shortcut_dbus(kde_shortcut)
+        else:
+            # Fallback if app reference is not direct
+            from application import TTSApplication
+            TTSApplication._inject_shortcut_dbus_static(kde_shortcut)
 
     @staticmethod
     def _block_global_shortcuts(block: bool) -> None:
@@ -734,7 +747,7 @@ class MainView(Adw.NavigationPage):
                 try:
                     if "dbus-send" in dbus_cmd:
                         subprocess.run(
-                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
+                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp}", f"string:{action}"],
                             timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                         )
                     else:
@@ -814,14 +827,15 @@ class MainView(Adw.NavigationPage):
         content = (
             "[Desktop Entry]\n"
             "Type=Application\n"
-            "Exec=biglinux-tts-speak\n"
+            "Exec=/usr/bin/biglinux-tts-speak\n"
             "Icon=tts-biglinux\n"
             "Categories=Utility;Accessibility;\n"
             "StartupNotify=false\n"
             "NoDisplay=true\n"
             f"X-KDE-Shortcuts={kde_key}\n"
-            "Name=Speech or stop selected text\n"
-            "Name[pt_BR]=Narrador de texto\n"
+            "Name=BigLinux TTS Speak\n"
+            "GenericName=Speech or stop selected text\n"
+            "GenericName[pt_BR]=Narrador de texto\n"
         )
         desktop_dst.parent.mkdir(parents=True, exist_ok=True)
         desktop_dst.write_text(content)
@@ -1411,13 +1425,14 @@ class MainView(Adw.NavigationPage):
         self._backend_combo.set_selected(backend_idx)
 
         # Keyboard shortcut
-        self._shortcut_label.set_accelerator(self._settings.shortcut.keybinding)
+        accel = self._settings.shortcut.keybinding
+        self._shortcut_label.set_accelerator("" if accel == "none" else accel)
 
         # Launcher toggle
         self._launcher_switch_widget.set_active(self._settings.shortcut.show_in_launcher)
 
         # Update KDE shortcut to default
-        self._update_khotkeys(self._settings.shortcut.keybinding)
+        self._update_khotkeys(accel)
 
         # Update hero labels
         self._update_hero_labels(self._tts.state)
