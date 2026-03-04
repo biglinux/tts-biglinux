@@ -92,7 +92,13 @@ fi
 
 # ── Text processing via Python module ─────────────────────────────
 
-TTS_MODULE_DIR="/usr/share/biglinux/tts-biglinux"
+# Dynamic module detection for development
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$SCRIPT_DIR" == *"Documentos/Git/tts-biglinux"* ]]; then
+    TTS_MODULE_DIR="$(cd "$SCRIPT_DIR/../share/biglinux/tts-biglinux" && pwd)"
+else
+    TTS_MODULE_DIR="/usr/share/biglinux/tts-biglinux"
+fi
 if [[ -d "$TTS_MODULE_DIR" ]] && command -v python3 &>/dev/null; then
     processed="$(printf '%s' "$capture_text" | python3 -c "
 import sys, os
