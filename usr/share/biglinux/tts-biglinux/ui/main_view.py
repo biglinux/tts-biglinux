@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import subprocess
+from pathlib import Path
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
@@ -576,7 +577,6 @@ class MainView(Adw.NavigationPage):
         keep the .desktop file's X-KDE-Shortcuts in sync and remove any stale
         component-level entries left from older versions.
         """
-        from pathlib import Path
         import re
 
         # Convert GTK accelerator to KDE format
@@ -741,6 +741,10 @@ class MainView(Adw.NavigationPage):
             ("khotkeys", "_launch"),
             ("bigtts.desktop", "_launch"),
             ("tts-speak.desktop", "_launch"),
+            ("biglinux-tts-speak.desktop", "_launch"),
+            ("biglinux-tts-speak.desktop", "IntegratedRender"),
+            ("biglinux-tts-speak.desktop", "SoftwareRender"),
+            ("biglinux-tts-speak.desktop", "AmdRender"),
         ]
         for comp, action in zombies:
             for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--type=method_call", "--dest=org.kde.kglobalaccel"]]:
@@ -824,21 +828,45 @@ class MainView(Adw.NavigationPage):
         if "+" in kde_key:
             parts = kde_key.rsplit("+", 1)
             kde_key = parts[0] + "+" + parts[1].upper()
-        content = (
-            "[Desktop Entry]\n"
-            "Type=Application\n"
-            "Exec=/usr/bin/biglinux-tts-speak\n"
-            "Icon=tts-biglinux\n"
-            "Categories=Utility;Accessibility;\n"
-            "StartupNotify=false\n"
-            "NoDisplay=true\n"
-            f"X-KDE-Shortcuts={kde_key}\n"
-            "Name=BigLinux TTS Speak\n"
-            "GenericName=Speech or stop selected text\n"
-            "GenericName[pt_BR]=Narrador de texto\n"
-        )
+        else:
+            kde_key = kde_key.upper()
+
+        # Dynamic path detection (same as application.py)
+        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+        git_script = repo_root / "usr" / "bin" / "biglinux-tts-speak"
+        if git_script.exists():
+            exec_path = str(git_script)
+        else:
+            exec_path = "/usr/bin/biglinux-tts-speak"
+
+        content = f"""[Desktop Entry]
+Type=Application
+Exec={exec_path}
+Icon=tts-biglinux
+Categories=Utility;Accessibility;
+StartupNotify=false
+NoDisplay=true
+X-KDE-Shortcuts={kde_key}
+Name=BigLinux TTS Speak
+GenericName=Speech or stop selected text
+GenericName[pt_BR]=Narrador de texto
+
+Actions=SoftwareRender;AmdRender;IntegratedRender;
+
+[Desktop Action SoftwareRender]
+Name=Software Render
+Exec=SoftwareRender {exec_path}
+
+[Desktop Action AmdRender]
+Name=Amd Render
+Exec=AmdRender {exec_path}
+
+[Desktop Action IntegratedRender]
+Name=Integrated Render
+Exec=IntegratedRender {exec_path}
+"""
         desktop_dst.parent.mkdir(parents=True, exist_ok=True)
-        desktop_dst.write_text(content)
+        desktop_dst.write_text(content, encoding="utf-8")
 
     def _refresh_plasma_launcher(self) -> None:
         """Refresh Plasma launcher config without full restart."""

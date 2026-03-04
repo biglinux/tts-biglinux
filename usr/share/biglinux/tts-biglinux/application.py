@@ -450,17 +450,23 @@ Exec=IntegratedRender {exec_path}
 
         numeric_code = get_kde_code(kde_shortcut)
         if numeric_code > 0:
-            # Tell KGlobalAccel to set the shortcut for our .desktop file entry
-            # Group: biglinux-tts-speak.desktop, Action: _launch
-            # Flags: 0x2 = Authorized/Set
             for comp in ["biglinux-tts-speak.desktop", "biglinux_tts_speak_desktop"]:
+                # FIRST: Unregister to clear memory (Force Reset)
+                subprocess.run([
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel", "/kglobalaccel",
+                    "org.kde.KGlobalAccel.unregister",
+                    f"string:{comp}", "string:_launch"
+                ], timeout=1, stderr=subprocess.DEVNULL)
+                
+                # SECOND: Set new shortcut
                 subprocess.run([
                     "dbus-send", "--session", "--type=method_call",
                     "--dest=org.kde.kglobalaccel", "/kglobalaccel",
                     "org.kde.KGlobalAccel.setShortcut",
                     f"array:string:{comp},_launch",
                     f"array:int32:{numeric_code}",
-                    "uint32:2"
+                    "uint32:1" # 0x1 = Persistent
                 ], timeout=1, stderr=subprocess.DEVNULL)
 
     def _inject_shortcut_dbus(self, kde_shortcut: str) -> None:
@@ -532,6 +538,10 @@ Exec=IntegratedRender {exec_path}
             ("khotkeys", "_launch"),
             ("bigtts.desktop", "_launch"),
             ("tts-speak.desktop", "_launch"),
+            ("biglinux-tts-speak.desktop", "_launch"),
+            ("biglinux-tts-speak.desktop", "IntegratedRender"),
+            ("biglinux-tts-speak.desktop", "SoftwareRender"),
+            ("biglinux-tts-speak.desktop", "AmdRender"),
         ]
         for comp, action in zombies:
             for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--type=method_call", "--dest=org.kde.kglobalaccel"]]:
