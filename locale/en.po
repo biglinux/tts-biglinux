@@ -164,8 +164,8 @@ msgstr "Type text to test…"
 
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 189
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1358
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1367
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1372
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1381
 msgid "Test voice"
 msgstr "Test voice"
 
@@ -480,62 +480,62 @@ msgid "Shortcut changed to {keys}"
 msgstr "Shortcut changed to {keys}"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 866
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 880
 msgid "Launcher icon updated"
 msgstr "Launcher icon updated"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 883
 msgid ""
 "Launcher icon updated — you may need to log out and back in for it to appear"
 msgstr ""
 "Launcher icon updated — you may need to log out and back in for it to appear"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 922
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 936
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "No voices found — install rhvoice or espeak-ng"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 924
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 938
 msgid "No voices available"
 msgstr "No voices available"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 943
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 957
 msgid "No voices available for this engine"
 msgstr "No voices available for this engine"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 946
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 960
 #, python-brace-format
 msgid "Install {engine} voices first"
 msgstr "Install {engine} voices first"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 976
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 990
 #, python-brace-format
 msgid "{count} voices available"
 msgstr "{count} voices available"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1070
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1084
 msgid "Restarting speech-dispatcher…"
 msgstr "Restarting speech-dispatcher…"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1090
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1104
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "No voices found for {engine} — install it first"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1100
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1114
 msgid "Install Piper Neural TTS?"
 msgstr "Install Piper Neural TTS?"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1102
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1116
 msgid ""
 "Piper is not installed. It provides high-quality neural voices for reading "
 "text.\n"
@@ -558,68 +558,68 @@ msgstr ""
 #
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1110
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1124
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 178
 msgid "Cancel"
 msgstr "Cancel"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1111
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1125
 msgid "Install"
 msgstr "Install"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1136
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1150
 msgid "Installing Piper TTS — this may take a moment…"
 msgstr "Installing Piper TTS — this may take a moment…"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1219
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1233
 msgid "Piper installed successfully! Discovering voices…"
 msgstr "Piper installed successfully! Discovering voices…"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1223
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1237
 msgid "Failed to install Piper — check permissions"
 msgstr "Failed to install Piper — check permissions"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1273
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
 msgid "Type some text to test"
 msgstr "Type some text to test"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1301
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Volume is at zero — increasing to minimum for test"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1312
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1326
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Could not play test — check if a TTS engine is installed"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1334
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1348
 msgid "Press Alt+V to stop"
 msgstr "Press Alt+V to stop"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1337
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1351
 msgid "Could not play speech — check TTS engine"
 msgstr "Could not play speech — check TTS engine"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1339
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1353
 msgid "Select text and press Alt+V to read aloud"
 msgstr "Select text and press Alt+V to read aloud"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1349
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1363
 msgid "Stop"
 msgstr "Stop"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1380
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1394
 msgid "Settings restored to defaults"
 msgstr "Settings restored to defaults"
 
