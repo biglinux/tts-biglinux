@@ -113,6 +113,9 @@ class TTSService:
         # Stop any current speech first
         if self.is_speaking:
             self.stop()
+            # Brief pause to let the output module fully release
+            import time
+            time.sleep(0.15)
 
         # Resolve voice parameters
         if voice:

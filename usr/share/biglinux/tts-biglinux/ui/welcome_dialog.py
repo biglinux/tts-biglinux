@@ -139,6 +139,15 @@ class WelcomeWindow(Adw.Window):
         col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         col.set_hexpand(True)
 
+        accel = self._settings_service.get().shortcut.keybinding
+        kde_shortcut = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
+        if "+" in kde_shortcut:
+            parts = kde_shortcut.rsplit("+", 1)
+            kde_shortcut = parts[0] + "+" + parts[1].upper()
+        else:
+            kde_shortcut = kde_shortcut.upper()
+        sc = kde_shortcut
+
         features = [
             (
                 "🗣️ " + _("Multiple TTS Engines"),
@@ -159,7 +168,7 @@ class WelcomeWindow(Adw.Window):
                 _(
                     "Press Alt+V to read selected text\n"
                     "from any application"
-                ),
+                ).replace("Alt+V", sc),
             ),
             (
                 "📋 " + _("Clipboard Reading"),
