@@ -1,7 +1,7 @@
 #!/bin/bash
 # BigLinux TTS — Speak selected text (CLI)
 # Toggle: if speaking, stop; if idle, speak selected text.
-# Triggered by Alt+V keyboard shortcut.
+# Triggered by configured keyboard shortcut.
 
 set -euo pipefail
 
