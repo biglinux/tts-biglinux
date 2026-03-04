@@ -41,7 +41,7 @@
 
 O **BigLinux TTS** (Text-to-Speech) é um aplicativo nativo para desktop Linux que transforma texto em fala. Desenvolvido com GTK4 e libadwaita, é a ferramenta de leitura em voz alta do [BigLinux](https://www.biglinux.com.br/) — uma distribuição Linux brasileira baseada em Manjaro/Arch Linux.
 
-O aplicativo resolve um problema prático: permitir que qualquer usuário ouça em voz alta textos selecionados na tela, sem configuração complicada. Basta selecionar um texto em qualquer janela, pressionar **Alt+V**, e o texto é lido automaticamente. Pressionando novamente, a leitura para (toggle).
+O aplicativo resolve um problema prático: permitir que qualquer usuário ouça em voz alta textos selecionados na tela, sem configuração complicada. Basta selecionar um texto em qualquer janela, pressionar o **Atalho configurado** (padrão Alt+V), e o texto é lido automaticamente. Pressionando novamente, a leitura para (toggle).
 
 ### Para que serve
 
@@ -66,7 +66,7 @@ O aplicativo resolve um problema prático: permitir que qualquer usuário ouça 
 
 ### Leitura de Texto
 
-- **Atalho global Alt+V** — Selecione qualquer texto em qualquer aplicativo e pressione Alt+V para ouvir. Pressione novamente para parar (comportamento toggle)
+- **Atalho global configurável** (padrão Alt+V) — Selecione qualquer texto em qualquer aplicativo e pressione o atalho para ouvir. Pressione novamente para parar (comportamento toggle)
 - **Botão na bandeja do sistema** — Clique esquerdo no ícone do tray para ler o texto selecionado; clique direito para acessar configurações ou sair
 - **Teste de voz integrado** — Campo de texto na interface para digitar e ouvir com a voz e configurações atuais
 - **Fixação no launcher** — Opção para fixar o botão de falar na barra de tarefas do KDE Plasma
@@ -92,7 +92,7 @@ O aplicativo resolve um problema prático: permitir que qualquer usuário ouça 
 
 | Atalho | Ação |
 |---|---|
-| **Alt+V** (padrão) | Ler/parar texto selecionado (toggle) |
+| **Atalho (padrão Alt+V)** | Ler/parar texto selecionado (toggle) |
 | **Ctrl+Q** | Fechar o aplicativo |
 | Configurável | O atalho pode ser alterado na interface com captura visual de teclas |
 

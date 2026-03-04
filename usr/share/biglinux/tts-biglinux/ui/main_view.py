@@ -164,13 +164,12 @@ class MainView(Adw.NavigationPage):
         hero.append(self._hero_title)
 
         # Status subtitle (instructions)
-        self._hero_subtitle = Gtk.Label(
-            label=_("Select text and press Alt+V to read aloud")
-        )
+        self._hero_subtitle = Gtk.Label()
         self._hero_subtitle.add_css_class("hero-subtitle")
         self._hero_subtitle.set_halign(Gtk.Align.CENTER)
         self._hero_subtitle.set_wrap(True)
         self._hero_subtitle.set_justify(Gtk.Justification.CENTER)
+        self._update_hero_labels(TTSState.IDLE)
         hero.append(self._hero_subtitle)
 
         # Test text entry
@@ -454,6 +453,9 @@ class MainView(Adw.NavigationPage):
         """Open a small key-capture window for shortcut recording."""
         parent = self.get_root()
 
+        # Block global shortcuts so the current binding does not fire
+        self._block_global_shortcuts(True)
+
         # Create a capture window
         win = Adw.Window()
         win.set_title(_("Set new shortcut"))
@@ -462,17 +464,6 @@ class MainView(Adw.NavigationPage):
         if parent:
             win.set_transient_for(parent)
         win.set_resizable(False)
-
-        # Simple layout with a status page
-        status = Adw.StatusPage()
-        status.set_icon_name("input-keyboard-symbolic")
-        status.set_title(_("Press the new shortcut"))
-        status.set_description(
-            _("Hold modifier keys (Alt, Ctrl, Shift, Super)\nand press a letter or key.\n\nPress Escape to cancel.")
-        )
-        # Reduce icon size
-        status.set_icon_name("")
-        status.set_title(_("Press the new shortcut"))
 
         # Custom smaller icon
         icon = Gtk.Image.new_from_icon_name("input-keyboard-symbolic")
@@ -502,6 +493,9 @@ class MainView(Adw.NavigationPage):
         content_box.append(desc_label)
 
         win.set_content(content_box)
+
+        # Restore global shortcuts when the capture window is closed
+        win.connect("close-request", lambda w: self._block_global_shortcuts(False) or False)
 
         # Key controller on the capture window
         key_ctrl = Gtk.EventControllerKey()
@@ -553,10 +547,14 @@ class MainView(Adw.NavigationPage):
 
         # Save the new shortcut
         self._settings.shortcut.keybinding = accel
-        self._settings_service.save(self._settings)
+        self._settings_service.save_now()
 
         # Update UI
         self._shortcut_label.set_accelerator(accel)
+        self._update_hero_labels(self._tts.state)
+
+        # Unblock global shortcuts before updating KDE bindings
+        self._block_global_shortcuts(False)
 
         # Update KDE shortcut files
         self._update_khotkeys(accel)
@@ -573,9 +571,10 @@ class MainView(Adw.NavigationPage):
     def _update_khotkeys(self, accel: str) -> None:
         """Update the KDE shortcut with the new keybinding.
 
-        On Plasma 6, shortcuts are set via X-KDE-Shortcuts in .desktop files
-        and kglobalshortcutsrc. We update both the user-local desktop file
-        override and the kglobalshortcutsrc.
+        On Plasma 6, shortcuts for .desktop file actions are stored in the
+        [services][app.desktop] nested group in kglobalshortcutsrc.  We also
+        keep the .desktop file's X-KDE-Shortcuts in sync and remove any stale
+        component-level entries left from older versions.
         """
         from pathlib import Path
         import re
@@ -597,33 +596,37 @@ class MainView(Adw.NavigationPage):
 
         logger.info("Updating KDE shortcut to: %s", kde_shortcut)
 
-        # 1. Update local .desktop if it exists (from launcher toggle)
+        # 1. Ensure local .desktop exists with the current shortcut
+        # KDE requires a valid .desktop file to attach a [services] shortcut to.
         local_apps = Path.home() / ".local" / "share" / "applications"
         desktop_dst = local_apps / "biglinux-tts-speak.desktop"
 
-        if desktop_dst.exists():
-            try:
-                content = desktop_dst.read_text()
-                content = re.sub(
-                    r"^X-KDE-Shortcuts=.*$",
-                    f"X-KDE-Shortcuts={kde_shortcut}",
-                    content,
-                    flags=re.MULTILINE,
-                )
-                desktop_dst.write_text(content)
-                logger.info("Updated desktop file: %s", desktop_dst)
-            except OSError as e:
-                logger.warning("Could not update desktop file: %s", e)
+        self._ensure_desktop_file(desktop_dst)
+        logger.info("Ensured desktop file: %s", desktop_dst)
 
-        # 2. Update kglobalshortcutsrc via kwriteconfig6
+        self._radical_dbus_cleanup()
+
+        # 2. Radical Cleanup — delete any 'zombie' Alt+V entries from legacy groups
+        # This prevents the system from having two shortcuts for the same thing
+        for group in ["khotkeys", "biglinux-tts-speak.desktop", "bigtts.desktop", "tts-speak.desktop"]:
+            try:
+                subprocess.run(
+                    ["kwriteconfig6", "--file", "kglobalshortcutsrc", "--group", group, "--key", "_launch", "--delete"],
+                    timeout=2, check=False
+                )
+            except: pass
+
+        # 3. Write the shortcut in the services group (Plasma 6 mechanism
+        #    for .desktop file shortcuts)
         try:
             subprocess.run(
                 [
                     "kwriteconfig6",
                     "--file", "kglobalshortcutsrc",
+                    "--group", "services",
                     "--group", "biglinux-tts-speak.desktop",
                     "--key", "_launch",
-                    f"{kde_shortcut}\t,Alt+V\t,Speech or stop selected text",
+                    f"{kde_shortcut}\t{kde_shortcut}\tSpeech or stop selected text",
                 ],
                 timeout=5,
                 check=False,
@@ -631,17 +634,115 @@ class MainView(Adw.NavigationPage):
         except (OSError, subprocess.TimeoutExpired) as e:
             logger.warning("Could not update kglobalshortcutsrc: %s", e)
 
-        # 3. Notify KGlobalAccel to reload
+        # 4. Rebuild system caches so KDE sees the updated .desktop file
+        self._update_desktop_database()
+
+        # 5. Force kglobalaccel to re-read configuration
+        self._reload_kglobalaccel()
+
+    @staticmethod
+    def _block_global_shortcuts(block: bool) -> None:
+        """Block or unblock all global shortcuts via KGlobalAccel D-Bus."""
+        try:
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
+                    f"boolean:{'true' if block else 'false'}",
+                ],
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            logger.debug("Global shortcuts %s", "blocked" if block else "unblocked")
+        except (OSError, subprocess.TimeoutExpired):
+            logger.warning("Could not %s global shortcuts", "block" if block else "unblock")
+
+    @staticmethod
+    def _reload_kglobalaccel() -> None:
+        """Force KGlobalAccel to reload shortcut configuration."""
+        import time
+        # Method 1: block/unblock cycle forces re-read
+        try:
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
+                    "boolean:true",
+                ],
+                timeout=3, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            time.sleep(0.1)
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
+                    "boolean:false",
+                ],
+                timeout=3, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+
+        # Method 2: Plasma 6/5 reparseConfiguration
+        for cmd in ["qdbus6", "qdbus"]:
+            try:
+                subprocess.run(
+                    [
+                        cmd, "org.kde.kglobalaccel", "/kglobalaccel",
+                        "org.kde.KGlobalAccel.reparseConfiguration"
+                    ],
+                    timeout=3, check=False,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+
+        # Method 3: also notify KGlobalSettings (Legacy)
         try:
             subprocess.run(
                 ["dbus-send", "--type=signal", "--session",
                  "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
                  "int32:3", "int32:0"],
-                timeout=5,
-                check=False,
+                timeout=3, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
         except (OSError, subprocess.TimeoutExpired):
             pass
+
+    @staticmethod
+    def _radical_dbus_cleanup() -> None:
+        """Explicitly unregister legacy components from KGlobalAccel via DBus."""
+        import subprocess
+        zombies = [
+            ("khotkeys", "Launch tts-biglinux"),
+            ("khotkeys", "_launch"),
+            ("bigtts.desktop", "_launch"),
+            ("tts-speak.desktop", "_launch"),
+        ]
+        for comp, action in zombies:
+            for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--type=method_call", "--dest=org.kde.kglobalaccel"]]:
+                try:
+                    if "dbus-send" in dbus_cmd:
+                        subprocess.run(
+                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
+                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+                        )
+                    else:
+                        subprocess.run(
+                            dbus_cmd + ["org.kde.kglobalaccel", "/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
+                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+                        )
+                except: pass
 
     # ── Launcher toggle ────────────────────────────────────────────
 
@@ -704,13 +805,7 @@ class MainView(Adw.NavigationPage):
             logger.warning("Could not update Plasma launchers: %s", e)
 
     def _ensure_desktop_file(self, desktop_dst: "Path") -> None:
-        """Ensure biglinux-tts-speak.desktop exists locally with NoDisplay=true."""
-
-        if desktop_dst.exists():
-            content = desktop_dst.read_text()
-            if "NoDisplay=true" in content:
-                return
-
+        """Ensure biglinux-tts-speak.desktop exists locally with current shortcut."""
         accel = self._settings.shortcut.keybinding
         kde_key = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
         if "+" in kde_key:
@@ -734,20 +829,45 @@ class MainView(Adw.NavigationPage):
     def _refresh_plasma_launcher(self) -> None:
         """Refresh Plasma launcher config without full restart."""
         self._update_desktop_database()
-        # Notify Plasma to reload launcher config via D-Bus
+
+        # Method 1: Notify Plasma via D-Bus evaluateScript
+        reloaded = False
         try:
-            subprocess.run(
+            result = subprocess.run(
                 [
                     "qdbus6", "org.kde.plasmashell", "/PlasmaShell",
                     "org.kde.PlasmaShell.evaluateScript",
                     "panels().forEach(p => p.reloadConfig())",
                 ],
                 timeout=5, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                capture_output=True, text=True,
             )
-            self._on_toast(_("Launcher icon updated"), 2)
+            if result.returncode == 0:
+                reloaded = True
         except (OSError, subprocess.TimeoutExpired):
-            self._on_toast(_("Launcher icon updated — changes may take a moment"), 3)
+            pass
+
+        # Method 2: Fallback via dbus-send signal
+        if not reloaded:
+            try:
+                subprocess.run(
+                    [
+                        "dbus-send", "--session", "--type=signal",
+                        "/org/kde/PlasmaShell",
+                        "org.kde.PlasmaShell.configChanged",
+                    ],
+                    timeout=3, check=False,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+
+        if reloaded:
+            self._on_toast(_("Launcher icon updated"), 2)
+        else:
+            self._on_toast(
+                _("Launcher icon updated — you may need to log out and back in for it to appear"), 5
+            )
 
     @staticmethod
     def _ensure_icon_available() -> None:
@@ -782,14 +902,15 @@ class MainView(Adw.NavigationPage):
         except (OSError, subprocess.TimeoutExpired):
             pass
         # Rebuild KDE service cache to make changes visible
-        try:
-            subprocess.run(
-                ["kbuildsycoca6", "--noincremental"],
-                timeout=10, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
+        for cmd in ["kbuildsycoca6", "kbuildsycoca5"]:
+            try:
+                subprocess.run(
+                    [cmd, "--noincremental"],
+                    timeout=10, check=False,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
 
     # ── Voice Discovery Callback ─────────────────────────────────────
 
@@ -1129,14 +1250,13 @@ class MainView(Adw.NavigationPage):
         self._settings.text.max_chars = int(value)
         self._settings_service.save(self._settings)
 
-    def _on_max_chars_selected(self, combo: Adw.ComboRow, _pspec: object) -> None:
+    def _on_max_chars_selected(self, idx: int) -> None:
         """Handle character limit combo selection."""
         if self._updating_ui:
             return
-        idx = combo.get_selected()
         if 0 <= idx < len(self._char_limit_values):
             self._settings.text.max_chars = self._char_limit_values[idx]
-            self._settings_service.save(self._settings)
+            self._settings_service.save()
 
     # ── Test Voice ───────────────────────────────────────────────────
 
@@ -1197,13 +1317,35 @@ class MainView(Adw.NavigationPage):
         """Update hero section when TTS state changes."""
         GLib.idle_add(self._update_hero_state, state)
 
+    def _get_shortcut_display(self) -> str:
+        accel = self._settings.shortcut.keybinding
+        kde_shortcut = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
+        if "+" in kde_shortcut:
+            parts = kde_shortcut.rsplit("+", 1)
+            kde_shortcut = parts[0] + "+" + parts[1].upper()
+        else:
+            kde_shortcut = kde_shortcut.upper()
+        return kde_shortcut
+
+    def _update_hero_labels(self, state: TTSState) -> None:
+        """Update hero subtitle texts dynamically."""
+        sc = self._get_shortcut_display()
+        if state == TTSState.SPEAKING:
+            lbl = _("Press Alt+V to stop")
+            self._hero_subtitle.set_label(lbl.replace("Alt+V", sc))
+        elif state == TTSState.ERROR:
+            self._hero_subtitle.set_label(_("Could not play speech — check TTS engine"))
+        else:
+            lbl = _("Select text and press Alt+V to read aloud")
+            self._hero_subtitle.set_label(lbl.replace("Alt+V", sc))
+
     def _update_hero_state(self, state: TTSState) -> bool:
         """Update hero UI for current TTS state (main thread)."""
         if state == TTSState.SPEAKING:
             self._hero_icon.set_from_icon_name("audio-volume-high-symbolic")
             self._hero_icon.add_css_class("speaking-indicator")
             self._hero_title.set_markup(f"<b>{_('Speaking...')}</b>")
-            self._hero_subtitle.set_label(_("Press Alt+V to stop"))
+            self._update_hero_labels(state)
             self._test_button.set_label(_("Stop"))
             self._test_button.remove_css_class("suggested-action")
             self._test_button.add_css_class("destructive-action")
@@ -1212,7 +1354,7 @@ class MainView(Adw.NavigationPage):
             self._hero_icon.set_from_icon_name("dialog-warning-symbolic")
             self._hero_icon.remove_css_class("speaking-indicator")
             self._hero_title.set_markup(f"<b>{_('Error')}</b>")
-            self._hero_subtitle.set_label(_("Could not play speech — check TTS engine"))
+            self._update_hero_labels(state)
             self._test_button.set_label(_("Test voice"))
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
@@ -1221,9 +1363,7 @@ class MainView(Adw.NavigationPage):
             self._hero_icon.set_from_icon_name("audio-speakers-symbolic")
             self._hero_icon.remove_css_class("speaking-indicator")
             self._hero_title.set_markup(f"<b>{_('Ready to speak')}</b>")
-            self._hero_subtitle.set_label(
-                _("Select text and press Alt+V to read aloud")
-            )
+            self._update_hero_labels(state)
             self._test_button.set_label(_("Test voice"))
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
@@ -1236,6 +1376,7 @@ class MainView(Adw.NavigationPage):
         """Reset all settings to defaults and update UI."""
         self._settings = self._settings_service.reset_to_defaults()
         self._update_ui_from_settings()
+        self._settings_service.save_now()
         self._on_toast(_("Settings restored to defaults"), 3)
 
     def _update_ui_from_settings(self) -> None:
@@ -1277,5 +1418,8 @@ class MainView(Adw.NavigationPage):
 
         # Update KDE shortcut to default
         self._update_khotkeys(self._settings.shortcut.keybinding)
+
+        # Update hero labels
+        self._update_hero_labels(self._tts.state)
 
         self._updating_ui = False

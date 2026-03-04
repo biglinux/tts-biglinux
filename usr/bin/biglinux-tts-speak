@@ -35,7 +35,9 @@ BACKEND="speech-dispatcher"
 OUTPUT_MODULE="rhvoice"
 EXPAND_ABBR="true"
 PROCESS_CHARS="true"
-MAX_CHARS="10000"
+PROCESS_URLS="false"
+STRIP_FMT="true"
+MAX_CHARS="0"
 
 if [[ -f "$SETTINGS_FILE" ]] && command -v python3 &>/dev/null; then
     eval "$(python3 << 'PYEOF'
@@ -54,7 +56,9 @@ try:
     print(f"OUTPUT_MODULE={shlex.quote(str(sp.get('output_module', 'rhvoice')))}")
     print(f"EXPAND_ABBR={str(tx.get('expand_abbreviations', True)).lower()}")
     print(f"PROCESS_CHARS={str(tx.get('process_special_chars', True)).lower()}")
-    print(f"MAX_CHARS={tx.get('max_chars', 10000)}")
+    print(f"PROCESS_URLS={str(tx.get('process_urls', False)).lower()}")
+    print(f"STRIP_FMT={str(tx.get('strip_formatting', True)).lower()}")
+    print(f"MAX_CHARS={tx.get('max_chars', 0)}")
 except Exception:
     pass
 PYEOF
@@ -86,58 +90,42 @@ if [[ "$MAX_CHARS" -gt 0 ]] && [[ "${#capture_text}" -gt "$MAX_CHARS" ]]; then
     capture_text="${capture_text:0:$MAX_CHARS}"
 fi
 
-# ── Text processing (basic abbreviations for PT) ─────────────────
+# ── Text processing via Python module ─────────────────────────────
 
-if [[ "$EXPAND_ABBR" == "true" ]] && [[ "${LANG:-}" == pt* ]]; then
-    capture_text="$(echo "$capture_text" | sed \
-        's|\btb\b|também|gI;
-         s|\btbm\b|também|gI;
-         s|\bvc\b|você|gI;
-         s|\bvcs\b|vocês|gI;
-         s|\btd\b|tudo|gI;
-         s|\bpq\b|porque|gI;
-         s|\bhj\b|hoje|gI;
-         s|\bmt\b|muito|gI;
-         s|\bmto\b|muito|gI;
-         s|\bqd\b|quando|gI;
-         s|\bqdo\b|quando|gI;
-         s|\boq\b|o que|gI;
-         s|\bdps\b|depois|gI;
-         s|\bvlw\b|valeu|gI;
-         s|\bblz\b|beleza|gI;
-         s|\bmsg\b|mensagem|gI;
-         s|\bobg\b|obrigado|gI;
-         s|\bcmg\b|comigo|gI;
-         s|\bctg\b|contigo|gI;
-         s|\bmsm\b|mesmo|gI;
-         s|\bngm\b|ninguém|gI;
-         s|\bpfv\b|por favor|gI;
-         s|\bpf\b|por favor|gI;
-         s|\bagr\b|agora|gI;
-         s|\bdnv\b|de novo|gI;
-         s|\bctz\b|certeza|gI;
-         s|\bvdd\b|verdade|gI')"
+TTS_MODULE_DIR="/usr/share/biglinux/tts-biglinux"
+if [[ -d "$TTS_MODULE_DIR" ]] && command -v python3 &>/dev/null; then
+    processed="$(printf '%s' "$capture_text" | python3 -c "
+import sys, os
+sys.path.insert(0, '$TTS_MODULE_DIR')
+try:
+    from services.text_processor import process_text
+    text = sys.stdin.read()
+    result = process_text(
+        text,
+        expand_abbreviations=$([[ "$EXPAND_ABBR" == "true" ]] && echo True || echo False),
+        process_special_chars=$([[ "$PROCESS_CHARS" == "true" ]] && echo True || echo False),
+        process_urls=$([[ "$PROCESS_URLS" == "true" ]] && echo True || echo False),
+        strip_formatting=$([[ "$STRIP_FMT" == "true" ]] && echo True || echo False),
+    )
+    print(result, end='')
+except Exception:
+    print(text, end='')
+" 2>/dev/null)" || true
+    if [[ -n "$processed" ]]; then
+        capture_text="$processed"
+    fi
 fi
 
-if [[ "$PROCESS_CHARS" == "true" ]]; then
-    if [[ "${LANG:-}" == pt* ]]; then
-        capture_text="$(echo "$capture_text" | sed \
-            's|#| cerquilha |g;
-             s|@| arroba |g;
-             s|%| por cento|g;
-             s| - | traço |g')"
-    else
-        capture_text="$(echo "$capture_text" | sed \
-            's|#| hash |g;
-             s|@| at |g;
-             s|%| percent|g;
-             s| - | dash |g')"
-    fi
+# Ensure text is not empty after processing
+if [[ -z "${capture_text// /}" ]]; then
+    exit 0
 fi
 
 # ── Cancel any existing speech ────────────────────────────────────
 
 spd-say -C 2>/dev/null || true
+# Brief pause to let speech-dispatcher finish cancelling
+sleep 0.15
 
 # ── Speak ─────────────────────────────────────────────────────────
 
