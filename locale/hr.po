@@ -14,16 +14,109 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "Dobrodošli u BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "Započnimo"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "Vaš asistent za pretvaranje teksta u govor"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid "Multiple TTS Engines"
+msgstr "Više TTS motora"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 155
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice, espeak-ng i Piper Neural TTS s automatskim otkrivanjem glasa"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid "Multilingual Support"
+msgstr "Višjezicna podrška"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 162
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "Glasovi na desecima jezika, uključujući portugalski (Brazil)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid "Global Shortcut"
+msgstr "Globalna prečica"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 169
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "Pritisnite Alt+V za čitanje odabranog teksta iz bilo koje aplikacije"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
+msgid "Clipboard Reading"
+msgstr "Čitanje međuspremnika"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 176
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "Zalijepite ili upišite tekst izravno i odmah slušajte"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid "Fine-Tune Speech"
+msgstr "Fino podešavanje govora"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 193
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "Podesite brzinu, visinu i glasnoću prema svojim željama."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid "Neural Voices"
+msgstr "Neuralni glasovi"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "Instalirajte Piper glasove za prirodnu, visokokvalitetnu sintezu govora."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid "Easy Installation"
+msgstr "Jednostavna instalacija"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 207
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr ""
+"Instalirajte nove glasove i motore\n"
+"izravno iz sučelja"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 212
+msgid "Lightweight & Fast"
+msgstr "Lagano i brzo"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 214
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "Nativno GTK4/Adwaita sučelje s minimalnom potrošnjom resursa"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 227
+msgid "Show this dialog on startup"
+msgstr "Prikaži ovaj dijalog pri pokretanju"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 #: src/biglinux_tts/ui/main_view.py
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1209
-#: src/biglinux_tts/ui/main_view.py
-msgid "Select text and press Alt+V to read aloud"
-msgstr "Odaberite tekst i pritisnite Alt+V za čitanje naglas"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 #: src/biglinux_tts/ui/main_view.py
@@ -322,26 +415,6 @@ msgstr "Dodaje ikonu koju možete prikvačiti na traku zadataka"
 msgid "Set new shortcut"
 msgstr "Postavi novi prečac"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 469
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 493
-#: src/biglinux_tts/ui/main_view.py
-msgid "Press the new shortcut"
-msgstr "Pritisnite novi prečac"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 471
-#: src/biglinux_tts/ui/main_view.py
-msgid ""
-"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
-"and press a letter or key.\n"
-"\n"
-"Press Escape to cancel."
-msgstr ""
-"Držite modifikacijske tipke (Alt, Ctrl, Shift, Super)\n"
-"i pritisnite slovo ili tipku.\n"
-"\n"
-"Pritisnite Escape za odustajanje."
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 485
 #: src/biglinux_tts/ui/main_view.py
 msgid ""
@@ -355,51 +428,26 @@ msgstr ""
 "\n"
 "<small>Pritisnite Escape za odustajanje</small>"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 469
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 493
+#: src/biglinux_tts/ui/main_view.py
+msgid "Press the new shortcut"
+msgstr "Pritisnite novi prečac"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 568
 #: src/biglinux_tts/ui/main_view.py
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Prečac promijenjen u {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "Ponovno pokrenuti Plasma Shell?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 866
+msgid "Launcher icon updated"
+msgstr "Ikona pokretača ažurirana"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Ikona je dodana u pokretač aplikacija.\n"
-"\n"
-"Da bi se pojavila u panelu, potrebno je ponovno pokrenuti Plasma Shell. Ovo će kratko zatvoriti i "
-"ponovo otvoriti panele radne površine.\n"
-"\n"
-"Ponovno pokrenuti sada?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "Kasnije"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "Ponovno pokreni"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Ikona dodana — ponovno pokrenite Plasmu ili se ponovno prijavite da bi se pojavila"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "Ponovno pokretanje Plasma Shell-a..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Nije moguće ponovo pokrenuti Plasma Shell — molimo vas da se ponovo prijavite."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+msgid "Launcher icon updated — you may need to log out and back in for it to appear"
+msgstr "Ikona pokretača ažurirana - možda ćete se morati odjaviti i ponovno prijaviti da bi se pojavila."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 837
 #: src/biglinux_tts/services/voice_manager.py
@@ -509,15 +557,21 @@ msgstr "Nije moguće reproducirati test — provjerite je li TTS motor instalira
 msgid "Press Alt+V to stop"
 msgstr "Pritisnite Alt+V za zaustavljanje"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1191
-#: src/biglinux_tts/services/tts_service.py
-msgid "Stop"
-msgstr "Zaustavi"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1199
 #: src/biglinux_tts/services/tts_service.py
 msgid "Could not play speech — check TTS engine"
 msgstr "Nije moguće reproducirati govor — provjerite TTS motor"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1209
+#: src/biglinux_tts/ui/main_view.py
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Odaberite tekst i pritisnite Alt+V za čitanje naglas"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1191
+#: src/biglinux_tts/services/tts_service.py
+msgid "Stop"
+msgstr "Zaustavi"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
 #: src/biglinux_tts/services/settings_service.py
@@ -528,6 +582,10 @@ msgstr "Postavke vraćene na zadane vrijednosti"
 #: src/biglinux_tts/ui/main_view.py
 msgid "Restore Defaults"
 msgstr "Vrati zadane postavke"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "Dobrodošli"
 # 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 128
 #: src/biglinux_tts/ui/main_view.py
@@ -560,17 +618,10 @@ msgstr "Ovo će vratiti sve prilagodbe na izvorne zadane vrijednosti."
 msgid "Restore"
 msgstr "Vrati"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
-#: src/biglinux_tts/ui/main_view.py
-msgid "Technologies used"
-msgstr "Korištene tehnologije"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "Asistent za pretvaranje teksta u govor"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
-#: src/biglinux_tts/ui/main_view.py
-msgid "License"
-msgstr "Licenca"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
-#: src/biglinux_tts/ui/main_view.py
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Ovo sučelje je licencirano pod GPL-3.0. TTS motori imaju vlastite licence."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "Postavke"

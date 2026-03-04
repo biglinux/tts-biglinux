@@ -117,11 +117,6 @@ msgstr "Mostra questa finestra di dialogo all'avvio"
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
-msgid "Select text and press Alt+V to read aloud"
-msgstr "Seleziona il testo e premi Alt+V per leggere ad alta voce"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 msgid "This is a test, welcome to BigLinux!"
 msgstr "Questo è un test, benvenuto in BigLinux!"
@@ -364,24 +359,6 @@ msgstr "Aggiunge un'icona che puoi fissare nella barra delle applicazioni"
 msgid "Set new shortcut"
 msgstr "Imposta nuova scorciatoia"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
-msgid "Press the new shortcut"
-msgstr "Premi la nuova scorciatoia"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
-msgid ""
-"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
-"and press a letter or key.\n"
-"\n"
-"Press Escape to cancel."
-msgstr ""
-"Tieni premuti i tasti modificatori (Alt, Ctrl, Shift, Super)\n"
-"e premi una lettera o tasto.\n"
-"\n"
-"Premi Escape per annullare."
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
@@ -394,6 +371,12 @@ msgstr ""
 "\n"
 "<small>Premi Escape per annullare</small>"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgid "Press the new shortcut"
+msgstr "Premi la nuova scorciatoia"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
@@ -403,9 +386,11 @@ msgstr "Scorciatoia modificata in {keys}"
 msgid "Launcher icon updated"
 msgstr "Icona del launcher aggiornata"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
-msgid "Launcher icon updated — changes may take a moment"
-msgstr "Icona del launcher aggiornata - le modifiche potrebbero richiedere un momento"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+msgid "Launcher icon updated — you may need to log out and back in for it to appear"
+msgstr ""
+"Icona del launcher aggiornata - potrebbe essere necessario disconnettersi e riconnettersi affinché "
+"appaia."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -499,13 +484,18 @@ msgstr "Impossibile riprodurre il test — verifica se un motore TTS è installa
 msgid "Press Alt+V to stop"
 msgstr "Premi Alt+V per fermare"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
-msgid "Stop"
-msgstr "Ferma"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
 msgid "Could not play speech — check TTS engine"
 msgstr "Impossibile riprodurre la voce — controlla il motore TTS"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Seleziona il testo e premi Alt+V per leggere ad alta voce"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgid "Stop"
+msgstr "Ferma"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"

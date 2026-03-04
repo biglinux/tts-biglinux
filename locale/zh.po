@@ -115,11 +115,6 @@ msgstr "在启动时显示此对话框"
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
-msgid "Select text and press Alt+V to read aloud"
-msgstr "选择文本并按 Alt+V 朗读"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 msgid "This is a test, welcome to BigLinux!"
 msgstr "这是一个测试，欢迎使用 BigLinux！"
@@ -360,24 +355,6 @@ msgstr "添加一个可以固定到任务栏的图标"
 msgid "Set new shortcut"
 msgstr "设置新快捷键"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
-msgid "Press the new shortcut"
-msgstr "按下新的快捷键"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
-msgid ""
-"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
-"and press a letter or key.\n"
-"\n"
-"Press Escape to cancel."
-msgstr ""
-"按住修饰键（Alt、Ctrl、Shift、Super）\n"
-"然后按一个字母或按键。\n"
-"\n"
-"按 Escape 取消。"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
@@ -390,6 +367,12 @@ msgstr ""
 "\n"
 "<small>按 Escape 取消</small>"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgid "Press the new shortcut"
+msgstr "按下新的快捷键"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
@@ -399,9 +382,9 @@ msgstr "快捷键已更改为 {keys}"
 msgid "Launcher icon updated"
 msgstr "启动器图标已更新"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
-msgid "Launcher icon updated — changes may take a moment"
-msgstr "启动器图标已更新 — 更改可能需要片刻时间"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+msgid "Launcher icon updated — you may need to log out and back in for it to appear"
+msgstr "启动器图标已更新 — 你可能需要注销并重新登录才能显示。"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -493,13 +476,18 @@ msgstr "无法播放测试 — 请检查是否已安装 TTS 引擎"
 msgid "Press Alt+V to stop"
 msgstr "按 Alt+V 停止"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
-msgid "Stop"
-msgstr "停止"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
 msgid "Could not play speech — check TTS engine"
 msgstr "无法播放语音 — 请检查 TTS 引擎"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+msgid "Select text and press Alt+V to read aloud"
+msgstr "选择文本并按 Alt+V 朗读"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgid "Stop"
+msgstr "停止"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"

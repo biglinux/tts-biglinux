@@ -14,16 +14,107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "Velkommen til BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "La oss begynne"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "Din tekst-til-tale-assistent"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid "Multiple TTS Engines"
+msgstr "Flere TTS-motorer"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 155
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice, espeak-ng og Piper Neural TTS med automatisk stemmeoppdagelse"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid "Multilingual Support"
+msgstr "Flerspråklig støtte"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 162
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "Stemmer i dusinvis av språk, inkludert portugisisk (Brasil)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid "Global Shortcut"
+msgstr "Global hurtigtast"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 169
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "Trykk Alt+V for å lese valgt tekst fra hvilken som helst applikasjon."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
+msgid "Clipboard Reading"
+msgstr "Utklipp Lesing"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 176
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "Lim inn eller skriv tekst direkte og lytt umiddelbart"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid "Fine-Tune Speech"
+msgstr "Finjuster tale"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 193
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "Juster hastighet, tonehøyde og volum etter dine preferanser"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid "Neural Voices"
+msgstr "Neurale stemmer"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "Installer Piper-stemmer for naturlig, høy-kvalitets tale syntese"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid "Easy Installation"
+msgstr "Enkel installasjon"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 207
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr "Installer nye stemmer og motorer direkte fra grensesnittet"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 212
+msgid "Lightweight & Fast"
+msgstr "Lett og rask"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 214
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "Nativ GTK4/Adwaita-grensesnitt med minimal ressursbruk"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 227
+msgid "Show this dialog on startup"
+msgstr "Vis denne dialogen ved oppstart"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 #: 1
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1209
-#: 2
-msgid "Select text and press Alt+V to read aloud"
-msgstr "Merk tekst og trykk Alt+V for å lese høyt"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 #: 3
@@ -322,26 +413,6 @@ msgstr "Legger til et ikon du kan feste på oppgavelinjen"
 msgid "Set new shortcut"
 msgstr "Sett ny snarvei"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 469
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 493
-#: 69
-msgid "Press the new shortcut"
-msgstr "Trykk den nye snarveien"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 471
-#: 70
-msgid ""
-"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
-"and press a letter or key.\n"
-"\n"
-"Press Escape to cancel."
-msgstr ""
-"Hold nede modifikasjonstaster (Alt, Ctrl, Shift, Super)\n"
-"og trykk en bokstav eller tast.\n"
-"\n"
-"Trykk Escape for å avbryte."
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 485
 #: 71
 msgid ""
@@ -355,51 +426,26 @@ msgstr ""
 "\n"
 "<small>Trykk Escape for å avbryte</small>"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 469
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 493
+#: 69
+msgid "Press the new shortcut"
+msgstr "Trykk den nye snarveien"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 568
 #: 72
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Snarvei endret til {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "Start på nytt Plasma Shell?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 866
+msgid "Launcher icon updated"
+msgstr "Ikon for lansering oppdatert"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
-msgstr ""
-"Ikonet ble lagt til appstarteren.\n"
-"\n"
-"For å få det til å vises i panelet, må Plasma Shell startes på nytt. Dette vil kort lukke og åpne "
-"skrivebordspanelene på nytt.\n"
-"\n"
-"Vil du starte på nytt nå?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "Senere"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "Start på nytt"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Ikon lagt til — start Plasma på nytt eller logg inn igjen for at den skal vises"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "Starter Plasma Shell på nytt..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Kunne ikke starte Plasma Shell på nytt — vennligst logg inn igjen"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+msgid "Launcher icon updated — you may need to log out and back in for it to appear"
+msgstr "Ikon for lansering oppdatert - du må kanskje logge ut og inn igjen for at den skal vises."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 837
 #: 73
@@ -509,15 +555,21 @@ msgstr "Kunne ikke spille av test — sjekk om en TTS-motor er installert"
 msgid "Press Alt+V to stop"
 msgstr "Trykk Alt+V for å stoppe"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1191
-#: 90
-msgid "Stop"
-msgstr "Stopp"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1199
 #: 91
 msgid "Could not play speech — check TTS engine"
 msgstr "Kunne ikke spille av tale — sjekk TTS-motoren"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1209
+#: 2
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Merk tekst og trykk Alt+V for å lese høyt"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1191
+#: 90
+msgid "Stop"
+msgstr "Stopp"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
 #: 94
@@ -528,6 +580,10 @@ msgstr "Innstillinger tilbakestilt til standardverdier"
 #: 95
 msgid "Restore Defaults"
 msgstr "Gjenopprett standardverdier"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "Velkommen"
 # 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 128
 #: 96
@@ -560,17 +616,10 @@ msgstr "Dette vil tilbakestille alle justeringer til de opprinnelige standardver
 msgid "Restore"
 msgstr "Gjenopprett"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 144
-#: 102
-msgid "Technologies used"
-msgstr "Brukte teknologier"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "Tale-til-tekst-assistent"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 155
-#: 103
-msgid "License"
-msgstr "Lisens"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 158
-#: 104
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Dette grensesnittet er lisensiert under GPL-3.0. TTS-motorer har sine egne lisenser."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "Innstillinger"

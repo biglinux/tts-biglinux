@@ -14,14 +14,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "Bine ați venit la BigLinux TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "Să începem"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
+msgid "Your text-to-speech assistant"
+msgstr "Asistentul tău de text la vorbire"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
+msgid "Multiple TTS Engines"
+msgstr "Multiple motoare TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 155
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr "RHVoice, espeak-ng și Piper Neural TTS cu descoperire automată a vocii"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
+msgid "Multilingual Support"
+msgstr "Suport multilingv"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 162
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "Voci în zeci de limbi, inclusiv portugheză (Brazilia)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid "Global Shortcut"
+msgstr "Scurtătură globală"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 169
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr "Apăsați Alt+V pentru a citi textul selectat din orice aplicație."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
+msgid "Clipboard Reading"
+msgstr "Citire clipboard"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 176
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "Lipește sau scrie textul direct și ascultă instantaneu."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid "Fine-Tune Speech"
+msgstr "Ajustare fină a vocii"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 193
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "Ajustați viteza, tonul și volumul conform preferințelor dumneavoastră."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
+msgid "Neural Voices"
+msgstr "Voci neuronale"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr "Instalați vocile Piper pentru sinteză vocală naturală și de înaltă calitate."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
+msgid "Easy Installation"
+msgstr "Instalare ușoară"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 207
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr "Instalați voci și motoare noi direct din interfață"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 212
+msgid "Lightweight & Fast"
+msgstr "Ușor și Rapid"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 214
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr "Interfață nativă GTK4/Adwaita cu utilizare minimă a resurselor"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 227
+msgid "Show this dialog on startup"
+msgstr "Afișați acest dialog la pornire"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
-msgid "Select text and press Alt+V to read aloud"
-msgstr "Selectați textul și apăsați Alt+V pentru a citi cu voce tare"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
 msgid "This is a test, welcome to BigLinux!"
@@ -265,24 +357,6 @@ msgstr "Adaugă o pictogramă pe care o puteți fixa în bara de activități"
 msgid "Set new shortcut"
 msgstr "Setează scurtătură nouă"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
-msgid "Press the new shortcut"
-msgstr "Apăsați noua scurtătură"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 503
-msgid ""
-"Hold modifier keys (Alt, Ctrl, Shift, Super)\n"
-"and press a letter or key.\n"
-"\n"
-"Press Escape to cancel."
-msgstr ""
-"Țineți apăsate tastele modificatoare (Alt, Ctrl, Shift, Super)\n"
-"și apăsați o literă sau tastă.\n"
-"\n"
-"Apăsați Escape pentru a anula."
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 517
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
@@ -295,50 +369,26 @@ msgstr ""
 "\n"
 "<small>Apăsați Escape pentru a anula</small>"
 # 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 501
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 507
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 525
+msgid "Press the new shortcut"
+msgstr "Apăsați noua scurtătură"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 600
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "Scurtătura schimbată în {keys}"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 755
-msgid "Restart Plasma Shell?"
-msgstr "Repornire Plasma Shell?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 866
+msgid "Launcher icon updated"
+msgstr "Iconul launcher-ului a fost actualizat."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 757
-msgid ""
-"The icon was added to the app launcher.\n"
-"\n"
-"To make it appear in the panel, the Plasma Shell needs to be restarted. This will briefly close and "
-"reopen the desktop panels.\n"
-"\n"
-"Restart now?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
+msgid "Launcher icon updated — you may need to log out and back in for it to appear"
 msgstr ""
-"Iconul a fost adăugat în lansatorul de aplicații.\n"
-"\n"
-"Pentru a-l face să apară în panou, Shell-ul Plasma trebuie să fie repornit. Acest lucru va închide "
-"și redeschide temporar panourile desktop-ului.\n"
-"\n"
-"Repornim acum?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 764
-msgid "Later"
-msgstr "Mai târziu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 765
-msgid "Restart"
-msgstr "Repornire"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 776
-msgid "Icon added — restart Plasma or re-login for it to appear"
-msgstr "Icon adăugat — repornește Plasma sau reconectează-te pentru a apărea"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 783
-msgid "Restarting Plasma Shell..."
-msgstr "Repornirea Plasma Shell..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 786
-msgid "Could not restart Plasma Shell — please re-login"
-msgstr "Nu s-a putut reporni Plasma Shell - vă rugăm să vă reconectați."
+"Iconi de lansare actualizate - este posibil să fie necesar să te deconectezi și să te reconectezi "
+"pentru a apărea."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 806
 msgid "No voices found — install rhvoice or espeak-ng"
@@ -432,13 +482,18 @@ msgstr "Nu s-a putut reda testul — verificați dacă un motor TTS este instala
 msgid "Press Alt+V to stop"
 msgstr "Apăsați Alt+V pentru a opri"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
-msgid "Stop"
-msgstr "Oprire"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1185
 msgid "Could not play speech — check TTS engine"
 msgstr "Nu s-a putut reda vorbirea — verificați motorul TTS"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1195
+msgid "Select text and press Alt+V to read aloud"
+msgstr "Selectați textul și apăsați Alt+V pentru a citi cu voce tare"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgid "Stop"
+msgstr "Oprire"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"
@@ -447,6 +502,10 @@ msgstr "Setările au fost restabilite la valorile implicite"
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 138
 msgid "Restore Defaults"
 msgstr "Restabilește valorile implicite"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+msgid "Welcome"
+msgstr "Bine ai venit"
 # 
 # File: tts-biglinux/src/biglinux_tts/window.py, line: 142
 msgid "About"
@@ -473,14 +532,10 @@ msgstr "Aceasta va readuce toate ajustările la valorile implicite originale."
 msgid "Restore"
 msgstr "Restabilește"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 143
-msgid "Technologies used"
-msgstr "Tehnologii utilizate"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
+msgid "Text-to-speech assistant"
+msgstr "Asistent text-la-vorbire"
 # 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 154
-msgid "License"
-msgstr "Licență"
-# 
-# File: tts-biglinux/src/biglinux_tts/application.py, line: 157
-msgid "This interface is licensed under GPL-3.0. TTS engines have their own licenses."
-msgstr "Această interfață este licențiată sub GPL-3.0. Motoarele TTS au propriile licențe."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
+msgid "Settings"
+msgstr "Setări"
