@@ -514,6 +514,8 @@ class MainView(Adw.NavigationPage):
         win: Adw.Window,
     ) -> bool:
         """Handle key press in the capture window."""
+        import threading
+
         from gi.repository import Gdk
 
         # Ignore modifier-only presses
@@ -557,9 +559,7 @@ class MainView(Adw.NavigationPage):
         # Unblock global shortcuts before updating KDE bindings
         self._block_global_shortcuts(False)
 
-        # Update KDE shortcut files
-        self._update_khotkeys(accel)
-
+        # Close the capture window immediately
         win.close()
 
         display_name = Gtk.accelerator_get_label(keyval, mods)
@@ -567,7 +567,35 @@ class MainView(Adw.NavigationPage):
             _("Shortcut changed to {keys}").format(keys=display_name), 3
         )
         logger.info("Shortcut changed to: %s (%s)", accel, display_name)
+
+        # Update KDE shortcut files in a background thread so the UI
+        # doesn't freeze during subprocess calls and the brief sleep
+        threading.Thread(
+            target=self._update_khotkeys,
+            args=(accel,),
+            daemon=True,
+        ).start()
+
         return True
+
+    @staticmethod
+    def _gtk_accel_to_kde(accel: str) -> str:
+        """Convert GTK accelerator string to KDE format.
+
+        GTK: <Alt>v  →  KDE: Alt+V
+        GTK: <Control><Shift>s  →  KDE: Ctrl+Shift+S
+        """
+        kde = accel
+        kde = kde.replace("<Control>", "Ctrl+")
+        kde = kde.replace("<Shift>", "Shift+")
+        kde = kde.replace("<Alt>", "Alt+")
+        kde = kde.replace("<Super>", "Meta+")
+        if "+" in kde:
+            parts = kde.rsplit("+", 1)
+            kde = parts[0] + "+" + parts[1].upper()
+        else:
+            kde = kde.upper()
+        return kde
 
     def _update_khotkeys(self, accel: str) -> None:
         """Update the KDE shortcut with the new keybinding.
@@ -576,27 +604,16 @@ class MainView(Adw.NavigationPage):
         [services][app.desktop] nested group in kglobalshortcutsrc.  We also
         keep the .desktop file's X-KDE-Shortcuts in sync and remove any stale
         component-level entries left from older versions.
-        """
-        import re
 
-        # Convert GTK accelerator to KDE format
-        # GTK: <Alt>v  →  KDE: Alt+V
-        # GTK: <Control><Shift>s  →  KDE: Ctrl+Shift+S
-        kde_shortcut = accel
-        kde_shortcut = kde_shortcut.replace("<Control>", "Ctrl+")
-        kde_shortcut = kde_shortcut.replace("<Shift>", "Shift+")
-        kde_shortcut = kde_shortcut.replace("<Alt>", "Alt+")
-        kde_shortcut = kde_shortcut.replace("<Super>", "Meta+")
-        # Capitalize the final key
-        if "+" in kde_shortcut:
-            parts = kde_shortcut.rsplit("+", 1)
-            kde_shortcut = parts[0] + "+" + parts[1].upper()
-        else:
-            kde_shortcut = kde_shortcut.upper()
+        For the change to take effect immediately (without session restart),
+        we explicitly unregister the old binding from KGlobalAccel memory and
+        then inject the new one via the setShortcutKeys DBus API.
+        """
+        kde_shortcut = self._gtk_accel_to_kde(accel)
 
         logger.info("Updating KDE shortcut to: %s", kde_shortcut)
 
-        # 1. Update local .desktop
+        # 1. Update local .desktop file with the new X-KDE-Shortcuts
         local_apps = Path.home() / ".local" / "share" / "applications"
         desktop_dst = local_apps / "biglinux-tts-speak.desktop"
         self._ensure_desktop_file(desktop_dst)
@@ -625,33 +642,75 @@ class MainView(Adw.NavigationPage):
                     if group_prefix:
                         cmd.extend(["--group", group_prefix])
                     cmd.extend(["--group", group_name, "--key", "_launch"])
-                    
+
                     # If it's a cleanup target, delete it first
                     if "bigtts" in group_name or "br.com.biglinux.tts" in group_name:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)
                         continue
-                        
+
                     # Register new shortcut with COMMAS (most stable)
                     if kde_shortcut.lower() != "none":
                         val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
                         subprocess.run(cmd + [val], timeout=2, check=False)
                     else:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)
-                except: pass
+                except Exception:
+                    pass
 
         # 3. Rebuild system caches so KDE sees the updated .desktop file
         self._update_desktop_database()
 
-        # 4. Force kglobalaccel to re-read configuration
+        # 4. Force kglobalaccel to re-read the on-disk configuration
         self._reload_kglobalaccel()
 
-        # 5. Real-Time DBus Injection (Force memory update)
-        if hasattr(self, "_app") and self._app:
-            self._app._inject_shortcut_dbus(kde_shortcut)
-        else:
-            # Fallback if app reference is not direct
-            from application import TTSApplication
-            TTSApplication._inject_shortcut_dbus_static(kde_shortcut)
+        # 5. Real-Time DBus Injection — force the in-memory shortcut update
+        #    First unregister the component so KGlobalAccel drops the old
+        #    cached key combo, then inject the new one via setShortcutKeys.
+        import time
+        self._unregister_shortcut_from_memory()
+        time.sleep(0.15)  # brief pause to let kglobalaccel process the unregister
+
+        from application import TTSApplication
+        TTSApplication._inject_shortcut_dbus_static(kde_shortcut)
+
+    @staticmethod
+    def _unregister_shortcut_from_memory() -> None:
+        """Unregister our component from KGlobalAccel in-memory cache.
+
+        This forces KGlobalAccel to forget the old key binding so the next
+        setShortcutKeys call can set the new one without conflicts.
+        """
+        comp = "biglinux-tts-speak.desktop"
+        # Use gdbus call which handles complex types properly
+        try:
+            subprocess.run(
+                [
+                    "gdbus", "call", "--session",
+                    "--dest", "org.kde.kglobalaccel",
+                    "--object-path", "/kglobalaccel",
+                    "--method", "org.kde.KGlobalAccel.unregister",
+                    f"'{comp}'", "'_launch'",
+                ],
+                timeout=2, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+        # Also try via dbus-send as fallback
+        try:
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.unregister",
+                    f"string:{comp}", "string:_launch",
+                ],
+                timeout=2, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
 
     @staticmethod
     def _block_global_shortcuts(block: bool) -> None:
@@ -1273,20 +1332,28 @@ Exec=IntegratedRender {exec_path}
             self._updating_ui = False
 
     def _on_abbreviations_toggled(self, active: bool) -> None:
+        if self._updating_ui:
+            return
         self._settings.text.expand_abbreviations = active
-        self._settings_service.save(self._settings)
+        self._settings_service.save()
 
     def _on_special_chars_toggled(self, active: bool) -> None:
+        if self._updating_ui:
+            return
         self._settings.text.process_special_chars = active
-        self._settings_service.save(self._settings)
+        self._settings_service.save()
 
     def _on_strip_formatting_toggled(self, active: bool) -> None:
+        if self._updating_ui:
+            return
         self._settings.text.strip_formatting = active
-        self._settings_service.save(self._settings)
+        self._settings_service.save()
 
     def _on_urls_toggled(self, active: bool) -> None:
+        if self._updating_ui:
+            return
         self._settings.text.process_urls = active
-        self._settings_service.save(self._settings)
+        self._settings_service.save()
 
     def _on_max_chars_changed(self, value: float) -> None:
         self._settings.text.max_chars = int(value)

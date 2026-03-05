@@ -146,6 +146,7 @@ class WindowConfig:
     width: int = WINDOW_WIDTH_DEFAULT
     height: int = WINDOW_HEIGHT_DEFAULT
     maximized: bool = False
+    tray_warning_shown: bool = False
 
 
 @dataclass
@@ -234,6 +235,7 @@ def _deserialize_settings(data: dict) -> AppSettings:
             width=int(w.get("width", WINDOW_WIDTH_DEFAULT)),
             height=int(w.get("height", WINDOW_HEIGHT_DEFAULT)),
             maximized=bool(w.get("maximized", False)),
+            tray_warning_shown=bool(w.get("tray_warning_shown", False)),
         )
 
     settings.show_welcome = bool(data.get("show_welcome", True))
