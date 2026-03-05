@@ -537,3 +537,17 @@ msgstr "Assistente de texto para fala"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Configurações"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Minimizado para a Área de Notificação"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"O BigLinux TTS Speak ainda está em execução em segundo plano. Você pode acessá-lo a qualquer "
+"momento pelo ícone na bandeja do sistema."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172

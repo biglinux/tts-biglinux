@@ -625,3 +625,17 @@ msgstr "Tekstist kõneks abiline"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Seaded"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Minimeeritud süsteemisalve"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"BigLinux TTS Speak töötab endiselt taustal.  \n"
+"Sa saad sellele igal ajal juurde pääseda süsteemisalve ikooni kaudu."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172

@@ -627,3 +627,17 @@ msgstr "Szövegfelolvasó asszisztens"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Beállítások"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Minimalizálva a Rendszer Tálcára"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr "A BigLinux TTS Speak még mindig a háttérben fut. Bármikor hozzáférhet a rendszer tálca ikonjából."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+msgid "OK"
+msgstr "Rendben"

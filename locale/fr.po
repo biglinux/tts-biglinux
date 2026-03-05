@@ -627,3 +627,17 @@ msgstr "Assistant de synthèse vocale"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Paramètres"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Minimisé dans la barre d'état système"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"BigLinux TTS Speak fonctionne toujours en arrière-plan. Vous pouvez y accéder à tout moment depuis "
+"l'icône de la zone de notification."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172

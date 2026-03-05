@@ -537,3 +537,19 @@ msgstr "텍스트 음성 변환 도우미"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "설정"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "시스템 트레이로 최소화됨"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"BigLinux TTS Speak는 여전히 백그라운드에서 실행 중입니다.  \n"
+"시스템 트레이 아이콘에서 언제든지 접근할 수 있습니다."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+msgid "OK"
+msgstr "알겠습니다."

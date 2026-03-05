@@ -627,3 +627,17 @@ msgstr "Tekst-naar-spraak-assistent"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Instellingen"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Geminimaliseerd naar Systeemvak"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"BigLinux TTS Speak draait nog steeds op de achtergrond. Je kunt er op elk moment toegang toe "
+"krijgen via het systeemvakpictogram."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
