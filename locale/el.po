@@ -537,3 +537,17 @@ msgstr "Βοηθός κειμένου σε ομιλία"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Ρυθμίσεις"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
+msgid "Minimized to System Tray"
+msgstr "Ελαχιστοποιημένο στη Γραμμή Εργασιών"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
+msgid ""
+"BigLinux TTS Speak is still running in the background.\n"
+"You can access it anytime from the system tray icon."
+msgstr ""
+"Το BigLinux TTS Speak εκτελείται ακόμα στο παρασκήνιο. Μπορείτε να το αποκτήσετε πρόσβαση "
+"οποιαδήποτε στιγμή από το εικονίδιο της γραμμής συστήματος."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
