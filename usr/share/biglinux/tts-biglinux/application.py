@@ -156,7 +156,25 @@ class TTSApplication(Adw.Application):
     def _on_window_close_request(self, window: Gtk.Window) -> bool:
         """Hide window to tray instead of quitting."""
         if self._tray is not None:
-            window.set_visible(False)
+            if not self.settings.window.tray_warning_shown:
+                from gi.repository import Adw
+                
+                def _on_dialog_response(dialog: Adw.MessageDialog, response: str) -> None:
+                    window.set_visible(False)
+                    self.settings.window.tray_warning_shown = True
+                    self.settings_service.save()
+                
+                dialog = Adw.MessageDialog(
+                    heading=_("Minimized to System Tray"),
+                    body=_("BigLinux TTS Speak is still running in the background.\nYou can access it anytime from the system tray icon."),
+                    transient_for=window,
+                )
+                dialog.add_response("ok", _("OK"))
+                dialog.set_default_response("ok")
+                dialog.connect("response", _on_dialog_response)
+                dialog.present()
+            else:
+                window.set_visible(False)
             return True  # Prevent default close/destroy
         return False  # No tray — allow normal close
 
@@ -427,47 +445,119 @@ Exec=IntegratedRender {exec_path}
         self._inject_shortcut_dbus(kde_shortcut)
 
     @staticmethod
-    def _inject_shortcut_dbus_static(kde_shortcut: str) -> None:
-        """Inject the shortcut directly into KGlobalAccel memory via DBus."""
-        import subprocess
-        
-        # Calculate KDE numeric codes
-        # Map: Alt=0x08000000, Ctrl=0x04000000, Shift=0x02000000, Meta/Win=0x10000000
-        # Example: Alt+9 -> 0x08000000 + 0x39 = 134217785
-        def get_kde_code(s):
-            code = 0
-            if "Alt+" in s: code += 0x08000000
-            if "Ctrl+" in s: code += 0x04000000
-            if "Shift+" in s: code += 0x02000000
-            if "Meta+" in s: code += 0x10000000
-            
-            key = s.split("+")[-1].upper()
-            if len(key) == 1:
-                code += ord(key)
-            elif key == "F1": code += 0x1000  # Simplified mapping
-            # This is a basic mapping, but works for common shortcuts like Alt+9, Alt+V, etc.
-            return code
+    def _kde_shortcut_to_qt_keycode(kde_shortcut: str) -> int:
+        """Convert a KDE shortcut string (e.g. 'Alt+V') to Qt key code integer.
 
-        numeric_code = get_kde_code(kde_shortcut)
-        if numeric_code > 0:
-            for comp in ["biglinux-tts-speak.desktop", "biglinux_tts_speak_desktop"]:
-                # FIRST: Unregister to clear memory (Force Reset)
-                subprocess.run([
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel", "/kglobalaccel",
-                    "org.kde.KGlobalAccel.unregister",
-                    f"string:{comp}", "string:_launch"
-                ], timeout=1, stderr=subprocess.DEVNULL)
-                
-                # SECOND: Set new shortcut
-                subprocess.run([
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel", "/kglobalaccel",
-                    "org.kde.KGlobalAccel.setShortcut",
-                    f"array:string:{comp},_launch",
-                    f"array:int32:{numeric_code}",
-                    "uint32:1" # 0x1 = Persistent
-                ], timeout=1, stderr=subprocess.DEVNULL)
+        Qt combines modifier flags and key value into a single int:
+          Alt   = 0x08000000
+          Ctrl  = 0x04000000
+          Shift = 0x02000000
+          Meta  = 0x10000000
+        Letter keys use their uppercase ASCII value (e.g. V = 0x56).
+        Function keys use Qt::Key_F1 = 0x01000030, F2 = 0x01000031, etc.
+        """
+        code = 0
+        if "Alt+" in kde_shortcut:
+            code |= 0x08000000
+        if "Ctrl+" in kde_shortcut:
+            code |= 0x04000000
+        if "Shift+" in kde_shortcut:
+            code |= 0x02000000
+        if "Meta+" in kde_shortcut:
+            code |= 0x10000000
+
+        key = kde_shortcut.split("+")[-1].upper()
+
+        # Single character key — use ASCII value (matches Qt::Key_A..Z, 0..9)
+        if len(key) == 1 and key.isascii():
+            code |= ord(key)
+        # Function keys F1–F35
+        elif key.startswith("F") and key[1:].isdigit():
+            fn = int(key[1:])
+            if 1 <= fn <= 35:
+                code |= 0x01000030 + (fn - 1)
+        # Common named keys
+        else:
+            named = {
+                "SPACE": 0x20, "TAB": 0x01000001, "RETURN": 0x01000004,
+                "ENTER": 0x01000005, "BACKSPACE": 0x01000003,
+                "ESCAPE": 0x01000000, "DELETE": 0x01000007,
+                "INSERT": 0x01000006, "HOME": 0x01000010,
+                "END": 0x01000011, "PAGEUP": 0x01000016,
+                "PAGEDOWN": 0x01000017,
+                "LEFT": 0x01000012, "UP": 0x01000013,
+                "RIGHT": 0x01000014, "DOWN": 0x01000015,
+                "PRINT": 0x01000009, "PAUSE": 0x01000008,
+                "CAPSLOCK": 0x01000024, "NUMLOCK": 0x01000025,
+                "SCROLLLOCK": 0x01000026,
+            }
+            code |= named.get(key, 0)
+        return code
+
+    @staticmethod
+    def _inject_shortcut_dbus_static(kde_shortcut: str) -> None:
+        """Inject the shortcut directly into KGlobalAccel memory via DBus.
+
+        Uses gdbus call with the correct Plasma 6 API:
+          setShortcutKeys(as action_id, a(iiii) keys)
+        where action_id = [component, action, friendlyName, friendlyDesc]
+        and each key tuple = (qt_keycode, 0, 0, 0).
+        """
+        import subprocess
+
+        qt_code = TTSApplication._kde_shortcut_to_qt_keycode(kde_shortcut)
+        if qt_code == 0:
+            logger.warning("Could not compute Qt key code for '%s'", kde_shortcut)
+            return
+
+        comp = "biglinux-tts-speak.desktop"
+        action_id = (
+            f"['{comp}', '_launch', "
+            f"'BigLinux TTS Speak', 'Speech or stop selected text']"
+        )
+        keys = f"[({qt_code}, 0, 0, 0)]"
+
+        # Method 1: gdbus call — supports complex GVariant types properly
+        try:
+            result = subprocess.run(
+                [
+                    "gdbus", "call", "--session",
+                    "--dest", "org.kde.kglobalaccel",
+                    "--object-path", "/kglobalaccel",
+                    "--method", "org.kde.KGlobalAccel.setShortcutKeys",
+                    action_id,
+                    keys,
+                ],
+                timeout=3, check=False,
+                capture_output=True, text=True,
+            )
+            if result.returncode == 0:
+                logger.info(
+                    "Shortcut injected via gdbus setShortcutKeys: %s (Qt code %d)",
+                    kde_shortcut, qt_code,
+                )
+                return
+            logger.debug("gdbus setShortcutKeys returned %d: %s",
+                         result.returncode, result.stderr.strip())
+        except (OSError, subprocess.TimeoutExpired) as e:
+            logger.debug("gdbus setShortcutKeys failed: %s", e)
+
+        # Method 2: Fallback using qdbus6 / qdbus
+        for qcmd in ["qdbus6", "qdbus"]:
+            try:
+                subprocess.run(
+                    [
+                        qcmd, "org.kde.kglobalaccel", "/kglobalaccel",
+                        "org.kde.KGlobalAccel.setShortcutKeys",
+                        comp, "_launch",
+                        "BigLinux TTS Speak", "Speech or stop selected text",
+                        str(qt_code), "0", "0", "0",
+                    ],
+                    timeout=3, check=False,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
 
     def _inject_shortcut_dbus(self, kde_shortcut: str) -> None:
         """Instance wrapper for the static injection."""
