@@ -1413,8 +1413,10 @@ Exec=IntegratedRender {exec_path}
             backend=settings.backend,
             output_module=settings.output_module,
             voice_id=settings.voice_id,
-            expand_abbreviations=False,
-            process_special_chars=False,
+            expand_abbreviations=self._settings.text.expand_abbreviations,
+            process_special_chars=self._settings.text.process_special_chars,
+            process_urls=self._settings.text.process_urls,
+            strip_formatting=self._settings.text.strip_formatting,
         )
 
         if not success:
