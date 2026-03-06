@@ -55,7 +55,10 @@ def _get_text_wayland(max_chars: int) -> ClipboardResult:
         return ClipboardResult("", False, "wl-clipboard not installed")
 
     # Try primary selection first, then regular clipboard
-    for args in [["wl-paste", "--primary", "--no-newline"], ["wl-paste", "--no-newline"]]:
+    for args in [
+        ["wl-paste", "--primary", "--no-newline"],
+        ["wl-paste", "--no-newline"],
+    ]:
         result = _run_capture(args, max_chars)
         if result.success and result.text:
             return result

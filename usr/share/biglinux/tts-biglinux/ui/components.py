@@ -46,9 +46,7 @@ def create_action_row_with_switch(
 
     # Accessibility
     acc_name = accessible_name or title
-    switch.update_property(
-        [Gtk.AccessibleProperty.LABEL], [acc_name]
-    )
+    switch.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
     if on_toggled:
         switch.connect("notify::active", lambda s, _: on_toggled(s.get_active()))
@@ -116,9 +114,7 @@ def create_action_row_with_scale(
 
     # Accessibility
     acc_name = accessible_name or title
-    scale.update_property(
-        [Gtk.AccessibleProperty.LABEL], [acc_name]
-    )
+    scale.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
     if marks:
         for mark_value, mark_label in marks:
@@ -192,9 +188,7 @@ def create_combo_row(
 
     # Accessibility
     if accessible_name:
-        row.update_property(
-            [Gtk.AccessibleProperty.LABEL], [accessible_name]
-        )
+        row.update_property([Gtk.AccessibleProperty.LABEL], [accessible_name])
 
     if on_selected:
         row.connect("notify::selected", lambda r, _: on_selected(r.get_selected()))
@@ -231,9 +225,7 @@ def create_spin_row(
 
     # Accessibility
     if accessible_name:
-        row.update_property(
-            [Gtk.AccessibleProperty.LABEL], [accessible_name]
-        )
+        row.update_property([Gtk.AccessibleProperty.LABEL], [accessible_name])
 
     if on_changed:
         row.connect("notify::value", lambda r, _: on_changed(r.get_value()))
@@ -272,9 +264,7 @@ def create_button_row(
     button.set_valign(Gtk.Align.CENTER)
 
     acc_name = accessible_name or label
-    button.update_property(
-        [Gtk.AccessibleProperty.LABEL], [acc_name]
-    )
+    button.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
     if style_class:
         button.add_css_class(style_class)
@@ -299,9 +289,7 @@ def create_icon_button(
 
     # Accessibility — icon buttons MUST have accessible name
     acc_name = accessible_name or tooltip or icon_name
-    button.update_property(
-        [Gtk.AccessibleProperty.LABEL], [acc_name]
-    )
+    button.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
     if style_class:
         button.add_css_class(style_class)

@@ -15,8 +15,8 @@ from collections.abc import Callable
 from typing import Any
 
 from config import TTSBackend, TTSState
-from services.text_processor import get_system_language, process_text
-from services.voice_manager import VoiceCatalog, VoiceInfo
+from services.text_processor import process_text
+from services.voice_manager import VoiceInfo
 
 logger = logging.getLogger(__name__)
 
@@ -115,6 +115,7 @@ class TTSService:
             self.stop()
             # Brief pause to let the output module fully release
             import time
+
             time.sleep(0.15)
 
         # Resolve voice parameters
@@ -140,7 +141,9 @@ class TTSService:
 
         # Speak via appropriate backend
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
-            success = self._speak_spd(processed, voice_id, output_module, rate, pitch, volume)
+            success = self._speak_spd(
+                processed, voice_id, output_module, rate, pitch, volume
+            )
         elif backend == TTSBackend.ESPEAK_NG.value:
             success = self._speak_espeak(processed, voice_id, rate, pitch, volume)
         elif backend == TTSBackend.PIPER.value:
@@ -259,7 +262,9 @@ class TTSService:
             import speechd
         except ImportError:
             logger.warning("speechd module not available, falling back to spd-say")
-            return self._speak_spd_fallback(text, voice_id, output_module, rate, pitch, volume)
+            return self._speak_spd_fallback(
+                text, voice_id, output_module, rate, pitch, volume
+            )
 
         try:
             # Close previous connection if any
@@ -284,6 +289,7 @@ class TTSService:
             def on_end(callback_type: Any, index_mark: Any = None) -> None:
                 try:
                     from gi.repository import GLib
+
                     GLib.idle_add(lambda: self._on_spd_finished() or False)
                 except Exception:
                     self._on_spd_finished()
@@ -292,7 +298,12 @@ class TTSService:
 
             logger.debug(
                 "speechd: module=%s, voice=%s, rate=%d, pitch=%d, vol=%d, text=%r",
-                output_module, voice_id, rate, pitch, spd_vol, text[:60],
+                output_module,
+                voice_id,
+                rate,
+                pitch,
+                spd_vol,
+                text[:60],
             )
             return True
 
@@ -316,6 +327,7 @@ class TTSService:
                     def on_end2(callback_type: Any, index_mark: Any = None) -> None:
                         try:
                             from gi.repository import GLib
+
                             GLib.idle_add(lambda: self._on_spd_finished() or False)
                         except Exception:
                             self._on_spd_finished()
@@ -327,17 +339,22 @@ class TTSService:
                     logger.error("speechd retry also failed: %s", e2)
                     self._close_spd_client()
             # Fallback to spd-say
-            return self._speak_spd_fallback(text, voice_id, output_module, rate, pitch, volume)
+            return self._speak_spd_fallback(
+                text, voice_id, output_module, rate, pitch, volume
+            )
 
     def _try_restart_speechd(self) -> bool:
         """Try to restart the speech-dispatcher daemon."""
         import time
+
         # Try systemctl first
         try:
             subprocess.run(
                 ["systemctl", "--user", "restart", "speech-dispatcher"],
-                timeout=5, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=5,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
             time.sleep(1)
             logger.info("Restarted speech-dispatcher via systemctl")
@@ -348,8 +365,10 @@ class TTSService:
         try:
             subprocess.run(
                 ["pkill", "-f", "speech-dispatcher"],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
             time.sleep(2)
             logger.info("Killed speech-dispatcher for auto-restart")
@@ -418,7 +437,11 @@ class TTSService:
         cmd = ["espeak-ng"]
 
         # Extract actual voice name from our ID format
-        actual_voice = voice_id.removeprefix("espeak-") if voice_id.startswith("espeak-") else voice_id
+        actual_voice = (
+            voice_id.removeprefix("espeak-")
+            if voice_id.startswith("espeak-")
+            else voice_id
+        )
         if actual_voice:
             cmd.extend(["-v", actual_voice])
 
@@ -441,7 +464,9 @@ class TTSService:
         result = self._start_process_no_stdin(cmd)
         return result
 
-    def _speak_piper(self, text: str, voice_id: str, rate: int, pitch: int, volume: int) -> bool:
+    def _speak_piper(
+        self, text: str, voice_id: str, rate: int, pitch: int, volume: int
+    ) -> bool:
         """Speak via Piper neural TTS.
 
         voice_id format: "piper:/absolute/path/to/model.onnx"
@@ -467,7 +492,11 @@ class TTSService:
             return False
 
         # Extract model path from voice_id
-        model_path = voice_id.removeprefix("piper:") if voice_id.startswith("piper:") else voice_id
+        model_path = (
+            voice_id.removeprefix("piper:")
+            if voice_id.startswith("piper:")
+            else voice_id
+        )
 
         if not os.path.isfile(model_path):
             logger.error("Piper model not found: %s", model_path)
@@ -495,17 +524,28 @@ class TTSService:
 
         logger.debug(
             "Piper: bin=%s, model=%s, length_scale=%.2f, noise_scale=%.3f, tmp=%s",
-            piper_bin, model_path, length_scale, noise_scale, tmp_path,
+            piper_bin,
+            model_path,
+            length_scale,
+            noise_scale,
+            tmp_path,
         )
 
         # Build piper command — output to WAV file (pre-generate all audio)
         cmd_piper = [
-            piper_bin, "--model", model_path,
-            "--output_file", tmp_path,
-            "--length_scale", f"{length_scale:.2f}",
-            "--noise_scale", f"{noise_scale:.3f}",
-            "--noise_w", f"{noise_w:.2f}",
-            "--sentence_silence", f"{sentence_silence:.2f}",
+            piper_bin,
+            "--model",
+            model_path,
+            "--output_file",
+            tmp_path,
+            "--length_scale",
+            f"{length_scale:.2f}",
+            "--noise_scale",
+            f"{noise_scale:.3f}",
+            "--noise_w",
+            f"{noise_w:.2f}",
+            "--sentence_silence",
+            f"{sentence_silence:.2f}",
         ]
 
         def _generate_and_play() -> None:
@@ -529,8 +569,16 @@ class TTSService:
                     if gen_proc.returncode == -9:
                         logger.debug("Piper stopped by user")
                     else:
-                        stderr = gen_proc.stderr.read().decode("utf-8", errors="replace") if gen_proc.stderr else ""
-                        logger.error("Piper generation failed (code %d): %s", gen_proc.returncode, stderr[-200:])
+                        stderr = (
+                            gen_proc.stderr.read().decode("utf-8", errors="replace")
+                            if gen_proc.stderr
+                            else ""
+                        )
+                        logger.error(
+                            "Piper generation failed (code %d): %s",
+                            gen_proc.returncode,
+                            stderr[-200:],
+                        )
                     try:
                         os.unlink(tmp_path)
                     except OSError:
@@ -549,14 +597,22 @@ class TTSService:
 
                 # Phase 2: play the pre-generated audio
                 if vol_factor != 1.0:
-                    sox_available = subprocess.run(
-                        ["which", "sox"], capture_output=True, timeout=2,
-                    ).returncode == 0
+                    sox_available = (
+                        subprocess.run(
+                            ["which", "sox"],
+                            capture_output=True,
+                            timeout=2,
+                        ).returncode
+                        == 0
+                    )
 
                     if sox_available:
                         play_cmd = [
-                            "play", "-q", tmp_path,
-                            "vol", f"{vol_factor:.2f}",
+                            "play",
+                            "-q",
+                            tmp_path,
+                            "vol",
+                            f"{vol_factor:.2f}",
                         ]
                     else:
                         play_cmd = ["aplay", "-q", tmp_path]
@@ -648,6 +704,7 @@ class TTSService:
         self._stop_watch()
         try:
             from gi.repository import GLib
+
             self._watch_id = GLib.timeout_add(_WATCH_INTERVAL_MS, self._check_process)
         except ImportError:
             pass
@@ -657,6 +714,7 @@ class TTSService:
         if self._watch_id:
             try:
                 from gi.repository import GLib
+
                 GLib.source_remove(self._watch_id)
             except (ImportError, ValueError):
                 pass
@@ -674,7 +732,10 @@ class TTSService:
                 try:
                     stderr_data = self._process.stderr.read()
                     if stderr_data:
-                        logger.debug("TTS stderr: %s", stderr_data.decode(errors="replace").strip())
+                        logger.debug(
+                            "TTS stderr: %s",
+                            stderr_data.decode(errors="replace").strip(),
+                        )
                 except Exception:
                     pass
             if rc != 0:

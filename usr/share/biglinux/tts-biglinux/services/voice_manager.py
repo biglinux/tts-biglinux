@@ -628,13 +628,35 @@ def _guess_gender(name: str) -> str:
     """Best-effort gender guess from voice name."""
     name_lower = name.lower()
     female_names = {
-        "letícia", "leticia", "natalia", "anna", "elena", "irina",
-        "lyubov", "marianna", "hana", "suze", "magda", "clb", "slt",
-        "spomenka", "natia",
+        "letícia",
+        "leticia",
+        "natalia",
+        "anna",
+        "elena",
+        "irina",
+        "lyubov",
+        "marianna",
+        "hana",
+        "suze",
+        "magda",
+        "clb",
+        "slt",
+        "spomenka",
+        "natia",
     }
     male_names = {
-        "antonio", "evgeniy", "alan", "bdl", "aleksandr", "artemiy",
-        "anatol", "volodymyr", "zdenek", "natan", "kiko", "azamat",
+        "antonio",
+        "evgeniy",
+        "alan",
+        "bdl",
+        "aleksandr",
+        "artemiy",
+        "anatol",
+        "volodymyr",
+        "zdenek",
+        "natan",
+        "kiko",
+        "azamat",
         "talgat",
     }
 

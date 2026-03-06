@@ -29,7 +29,7 @@ from gi.repository import GLib
 
 logger = logging.getLogger(__name__)
 
-_HELPER_SCRIPT = textwrap.dedent('''\
+_HELPER_SCRIPT = textwrap.dedent("""\
 import json
 import signal
 import sys
@@ -121,7 +121,7 @@ signal.signal(signal.SIGTERM, lambda *_: app.quit())
 signal.signal(signal.SIGINT, lambda *_: app.quit())
 
 sys.exit(app.exec())
-''')
+""")
 
 
 class MenuItem:
@@ -170,8 +170,12 @@ class TrayIcon:
     def register(self) -> None:
         """Start the Qt6 tray helper subprocess."""
         cmd = [
-            sys.executable, "-c", _HELPER_SCRIPT,
-            self._icon_name, self._title, self._tooltip,
+            sys.executable,
+            "-c",
+            _HELPER_SCRIPT,
+            self._icon_name,
+            self._title,
+            self._tooltip,
         ]
         if self._icon_path:
             cmd.append(self._icon_path)
@@ -184,7 +188,6 @@ class TrayIcon:
         )
         # Watch stdout for events using GLib IO
         if self._proc.stdout:
-            import io
             fd = self._proc.stdout.fileno()
             os.set_blocking(fd, False)
             channel = GLib.IOChannel.unix_new(fd)

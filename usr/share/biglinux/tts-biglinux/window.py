@@ -139,6 +139,9 @@ class TTSWindow(Adw.ApplicationWindow):
         """Create application menu button."""
         menu = Gio.Menu.new()
 
+        # Tray Icon toggle
+        menu.append(_("Tray icon"), "win.toggle-tray")
+
         # Restore defaults
         menu.append(_("Restore Defaults"), "win.restore-defaults")
 
@@ -153,9 +156,7 @@ class TTSWindow(Adw.ApplicationWindow):
         menu_button.set_icon_name("open-menu-symbolic")
         menu_button.set_menu_model(menu)
         menu_button.set_tooltip_text(_("Main menu"))
-        menu_button.update_property(
-            [Gtk.AccessibleProperty.LABEL], [_("Main menu")]
-        )
+        menu_button.update_property([Gtk.AccessibleProperty.LABEL], [_("Main menu")])
 
         return menu_button
 
@@ -164,6 +165,10 @@ class TTSWindow(Adw.ApplicationWindow):
         action = Gio.SimpleAction.new("restore-defaults", None)
         action.connect("activate", self._on_restore_defaults)
         self.add_action(action)
+
+        tray_action = Gio.SimpleAction.new("toggle-tray", None)
+        tray_action.connect("activate", self._on_toggle_tray)
+        self.add_action(tray_action)
 
         welcome_action = Gio.SimpleAction.new("show-welcome", None)
         welcome_action.connect("activate", lambda *_: self._show_welcome())
@@ -192,6 +197,14 @@ class TTSWindow(Adw.ApplicationWindow):
         """Handle restore confirmation response."""
         if response == "restore" and hasattr(self, "_main_view"):
             self._main_view.restore_defaults()
+
+    def _on_toggle_tray(
+        self, action: Gio.SimpleAction, param: GLib.Variant | None
+    ) -> None:
+        """Toggle tray icon state from menu."""
+        if hasattr(self, "_main_view"):
+            current = self.settings.shortcut.show_in_launcher
+            self._main_view.set_launcher_enabled(not current)
 
     def _setup_window_tracking(self) -> None:
         """Track window size and maximize state changes."""

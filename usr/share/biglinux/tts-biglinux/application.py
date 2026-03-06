@@ -94,6 +94,11 @@ class TTSApplication(Adw.Application):
     def _on_startup(self, app: Adw.Application) -> None:
         """Application startup — load CSS and create actions."""
         logger.debug("Application startup")
+
+        # Explicitly set color scheme to prevent warnings from KDE injected settings
+        style_manager = Adw.StyleManager.get_default()
+        style_manager.set_color_scheme(Adw.ColorScheme.PREFER_DARK)
+
         load_css()
         self._create_actions()
         GLib.set_application_name(_(APP_NAME))
@@ -132,7 +137,9 @@ class TTSApplication(Adw.Application):
         # Resolve icon fallback path for when theme lookup fails
         icon_fallback = ""
         for prefix in ["/usr/share", str(Path.home() / ".local/share")]:
-            candidate = f"{prefix}/icons/hicolor/scalable/status/tts-biglinux-symbolic.svg"
+            candidate = (
+                f"{prefix}/icons/hicolor/scalable/status/tts-biglinux-symbolic.svg"
+            )
             if Path(candidate).exists():
                 icon_fallback = candidate
                 break
@@ -144,11 +151,13 @@ class TTSApplication(Adw.Application):
             icon_path=icon_fallback,
         )
         self._tray.on_activate = self._on_tray_speak
-        self._tray.set_menu([
-            MenuItem(1, _("Settings"), self._on_tray_settings),
-            MenuItem(2, "", separator=True),
-            MenuItem(3, _("Quit"), self._on_tray_quit),
-        ])
+        self._tray.set_menu(
+            [
+                MenuItem(1, _("Settings"), self._on_tray_settings),
+                MenuItem(2, "", separator=True),
+                MenuItem(3, _("Quit"), self._on_tray_quit),
+            ]
+        )
         self._tray.register()
         # Keep app alive when all windows are closed
         self.hold()
@@ -158,15 +167,19 @@ class TTSApplication(Adw.Application):
         if self._tray is not None:
             if not self.settings.window.tray_warning_shown:
                 from gi.repository import Adw
-                
-                def _on_dialog_response(dialog: Adw.MessageDialog, response: str) -> None:
+
+                def _on_dialog_response(
+                    dialog: Adw.MessageDialog, response: str
+                ) -> None:
                     window.set_visible(False)
                     self.settings.window.tray_warning_shown = True
                     self.settings_service.save()
-                
+
                 dialog = Adw.MessageDialog(
                     heading=_("Minimized to System Tray"),
-                    body=_("BigLinux TTS Speak is still running in the background.\nYou can access it anytime from the system tray icon."),
+                    body=_(
+                        "BigLinux TTS Speak is still running in the background.\nYou can access it anytime from the system tray icon."
+                    ),
                     transient_for=window,
                 )
                 dialog.add_response("ok", _("OK"))
@@ -203,12 +216,18 @@ class TTSApplication(Adw.Application):
                 process_urls=self.settings.text.process_urls,
                 strip_formatting=self.settings.text.strip_formatting,
             )
-            logger.debug("Tray speak: processed text length=%d", len(processed) if processed else 0)
+            logger.debug(
+                "Tray speak: processed text length=%d",
+                len(processed) if processed else 0,
+            )
             if not processed:
                 return
 
             speech = self.settings.speech
-            logger.debug("Tray speak: backend=%s, voice=%s", speech.backend, speech.voice_id)
+            logger.debug(
+                "Tray speak: backend=%s, voice=%s", speech.backend, speech.voice_id
+            )
+
             def _do_speak() -> bool:
                 tts.speak(
                     processed,
@@ -264,9 +283,7 @@ class TTSApplication(Adw.Application):
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Control>q"])
 
-    def _on_about(
-        self, action: Gio.SimpleAction, param: GLib.Variant | None
-    ) -> None:
+    def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         """Show about dialog."""
         about = Adw.AboutWindow(
             transient_for=self._window,
@@ -280,9 +297,7 @@ class TTSApplication(Adw.Application):
         )
         about.present()
 
-    def _on_quit(
-        self, action: Gio.SimpleAction, param: GLib.Variant | None
-    ) -> None:
+    def _on_quit(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         """Quit the application."""
         logger.info("Quit action triggered")
         if self._tray is not None:
@@ -338,12 +353,38 @@ class TTSApplication(Adw.Application):
                     logger.info("Deleted zombie desktop file: %s", z_path)
                     # Also unregister from memory
                     comp_name = z
-                    for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--dest=org.kde.kglobalaccel"]]:
+                    for dbus_cmd in [
+                        ["qdbus6"],
+                        ["qdbus"],
+                        ["dbus-send", "--session", "--dest=org.kde.kglobalaccel"],
+                    ]:
                         if "dbus-send" in dbus_cmd:
-                            subprocess.run(dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp_name}", "string:_launch"], timeout=1, stderr=subprocess.DEVNULL)
+                            subprocess.run(
+                                dbus_cmd
+                                + [
+                                    "/kglobalaccel",
+                                    "org.kde.KGlobalAccel.unregister",
+                                    f"string:{comp_name}",
+                                    "string:_launch",
+                                ],
+                                timeout=1,
+                                stderr=subprocess.DEVNULL,
+                            )
                         else:
-                            subprocess.run(dbus_cmd + ["org.kde.kglobalaccel", "/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp_name, "_launch"], timeout=1, stderr=subprocess.DEVNULL)
-                except: pass
+                            subprocess.run(
+                                dbus_cmd
+                                + [
+                                    "org.kde.kglobalaccel",
+                                    "/kglobalaccel",
+                                    "org.kde.KGlobalAccel.unregister",
+                                    comp_name,
+                                    "_launch",
+                                ],
+                                timeout=1,
+                                stderr=subprocess.DEVNULL,
+                            )
+                except:
+                    pass
 
         # ── Radical Cleanup ──────────────────────────────────────────
         self._radical_dbus_cleanup()
@@ -351,15 +392,15 @@ class TTSApplication(Adw.Application):
         # Groups to clean and register in
         groups = [
             ("services", "biglinux-tts-speak.desktop"),  # Plasma 6
-            ("", "biglinux-tts-speak.desktop"),          # Plasma 5
-            ("services", "br.com.biglinux.tts.desktop"), # Potential UI conflict
-            ("", "bigtts.desktop"),                      # Legacy
+            ("", "biglinux-tts-speak.desktop"),  # Plasma 5
+            ("services", "br.com.biglinux.tts.desktop"),  # Potential UI conflict
+            ("", "bigtts.desktop"),  # Legacy
         ]
 
         # Ensure the desktop file exists unconditionally in local apps
         local_apps = Path.home() / ".local" / "share" / "applications"
         desktop_dst = local_apps / "biglinux-tts-speak.desktop"
-        
+
         content = f"""[Desktop Entry]
 Type=Application
 Exec={exec_path}
@@ -390,21 +431,57 @@ Exec=IntegratedRender {exec_path}
             desktop_dst.parent.mkdir(parents=True, exist_ok=True)
             desktop_dst.write_text(content, encoding="utf-8")
             # Update database
-            subprocess.run(["update-desktop-database", str(local_apps)], timeout=2, check=False)
+            subprocess.run(
+                ["update-desktop-database", str(local_apps)], timeout=2, check=False
+            )
         except OSError as e:
             logger.warning("Could not write desktop file: %s", e)
 
         # Registry commands
         registry_cmds = ["kwriteconfig6", "kwriteconfig5", "kwriteconfig"]
-        
+
         # NUKE 'Alt+V' specifically from anywhere it might be hiding
         import shutil
-        nuke_targets = ["khotkeys", "biglinux-tts-speak.desktop", "bigtts.desktop", "tts-speak.desktop", "tts_speak_desktop", "plasmashell"]
+
+        nuke_targets = [
+            "khotkeys",
+            "biglinux-tts-speak.desktop",
+            "bigtts.desktop",
+            "tts-speak.desktop",
+            "tts_speak_desktop",
+            "plasmashell",
+        ]
         for n_group in nuke_targets:
             for kcmd in registry_cmds:
                 if shutil.which(kcmd):
-                    subprocess.run([kcmd, "--file", "kglobalshortcutsrc", "--group", n_group, "--key", "_launch", "--delete"], timeout=1, stderr=subprocess.DEVNULL)
-                    subprocess.run([kcmd, "--file", "kglobalshortcutsrc", "--group", n_group, "--key", "Launch tts-biglinux", "--delete"], timeout=1, stderr=subprocess.DEVNULL)
+                    subprocess.run(
+                        [
+                            kcmd,
+                            "--file",
+                            "kglobalshortcutsrc",
+                            "--group",
+                            n_group,
+                            "--key",
+                            "_launch",
+                            "--delete",
+                        ],
+                        timeout=1,
+                        stderr=subprocess.DEVNULL,
+                    )
+                    subprocess.run(
+                        [
+                            kcmd,
+                            "--file",
+                            "kglobalshortcutsrc",
+                            "--group",
+                            n_group,
+                            "--key",
+                            "Launch tts-biglinux",
+                            "--delete",
+                        ],
+                        timeout=1,
+                        stderr=subprocess.DEVNULL,
+                    )
 
         if kde_shortcut.lower() == "none":
             logger.info("Shortcut is 'none', skipping registration.")
@@ -425,21 +502,29 @@ Exec=IntegratedRender {exec_path}
                     if "bigtts" in group_name or "br.com.biglinux.tts" in group_name:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)
                         continue
-                    
+
                     # Register new shortcut with COMMAS (most stable separator for kwriteconfig)
                     val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
                     subprocess.run(cmd + [val], timeout=2, check=False)
-                except: pass
+                except:
+                    pass
 
         # Rebuild sycoca (KDE service cache)
         for scmd in ["kbuildsycoca6", "kbuildsycoca5"]:
             try:
-                subprocess.run([scmd, "--noincremental"], timeout=5, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            except: pass
+                subprocess.run(
+                    [scmd, "--noincremental"],
+                    timeout=5,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+            except:
+                pass
 
         # Notify systems
         self._reload_kglobalaccel()
-        
+
         # ── Real-Time DBus Injection ────────────────────────────────
         # Force the change in memory so it works WITHOUT log out
         self._inject_shortcut_dbus(kde_shortcut)
@@ -479,16 +564,26 @@ Exec=IntegratedRender {exec_path}
         # Common named keys
         else:
             named = {
-                "SPACE": 0x20, "TAB": 0x01000001, "RETURN": 0x01000004,
-                "ENTER": 0x01000005, "BACKSPACE": 0x01000003,
-                "ESCAPE": 0x01000000, "DELETE": 0x01000007,
-                "INSERT": 0x01000006, "HOME": 0x01000010,
-                "END": 0x01000011, "PAGEUP": 0x01000016,
+                "SPACE": 0x20,
+                "TAB": 0x01000001,
+                "RETURN": 0x01000004,
+                "ENTER": 0x01000005,
+                "BACKSPACE": 0x01000003,
+                "ESCAPE": 0x01000000,
+                "DELETE": 0x01000007,
+                "INSERT": 0x01000006,
+                "HOME": 0x01000010,
+                "END": 0x01000011,
+                "PAGEUP": 0x01000016,
                 "PAGEDOWN": 0x01000017,
-                "LEFT": 0x01000012, "UP": 0x01000013,
-                "RIGHT": 0x01000014, "DOWN": 0x01000015,
-                "PRINT": 0x01000009, "PAUSE": 0x01000008,
-                "CAPSLOCK": 0x01000024, "NUMLOCK": 0x01000025,
+                "LEFT": 0x01000012,
+                "UP": 0x01000013,
+                "RIGHT": 0x01000014,
+                "DOWN": 0x01000015,
+                "PRINT": 0x01000009,
+                "PAUSE": 0x01000008,
+                "CAPSLOCK": 0x01000024,
+                "NUMLOCK": 0x01000025,
                 "SCROLLLOCK": 0x01000026,
             }
             code |= named.get(key, 0)
@@ -521,24 +616,35 @@ Exec=IntegratedRender {exec_path}
         try:
             result = subprocess.run(
                 [
-                    "gdbus", "call", "--session",
-                    "--dest", "org.kde.kglobalaccel",
-                    "--object-path", "/kglobalaccel",
-                    "--method", "org.kde.KGlobalAccel.setShortcutKeys",
+                    "gdbus",
+                    "call",
+                    "--session",
+                    "--dest",
+                    "org.kde.kglobalaccel",
+                    "--object-path",
+                    "/kglobalaccel",
+                    "--method",
+                    "org.kde.KGlobalAccel.setShortcutKeys",
                     action_id,
                     keys,
                 ],
-                timeout=3, check=False,
-                capture_output=True, text=True,
+                timeout=3,
+                check=False,
+                capture_output=True,
+                text=True,
             )
             if result.returncode == 0:
                 logger.info(
                     "Shortcut injected via gdbus setShortcutKeys: %s (Qt code %d)",
-                    kde_shortcut, qt_code,
+                    kde_shortcut,
+                    qt_code,
                 )
                 return
-            logger.debug("gdbus setShortcutKeys returned %d: %s",
-                         result.returncode, result.stderr.strip())
+            logger.debug(
+                "gdbus setShortcutKeys returned %d: %s",
+                result.returncode,
+                result.stderr.strip(),
+            )
         except (OSError, subprocess.TimeoutExpired) as e:
             logger.debug("gdbus setShortcutKeys failed: %s", e)
 
@@ -547,14 +653,23 @@ Exec=IntegratedRender {exec_path}
             try:
                 subprocess.run(
                     [
-                        qcmd, "org.kde.kglobalaccel", "/kglobalaccel",
+                        qcmd,
+                        "org.kde.kglobalaccel",
+                        "/kglobalaccel",
                         "org.kde.KGlobalAccel.setShortcutKeys",
-                        comp, "_launch",
-                        "BigLinux TTS Speak", "Speech or stop selected text",
-                        str(qt_code), "0", "0", "0",
+                        comp,
+                        "_launch",
+                        "BigLinux TTS Speak",
+                        "Speech or stop selected text",
+                        str(qt_code),
+                        "0",
+                        "0",
+                        "0",
                     ],
-                    timeout=3, check=False,
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    timeout=3,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
                 )
             except (OSError, subprocess.TimeoutExpired):
                 pass
@@ -568,61 +683,86 @@ Exec=IntegratedRender {exec_path}
         """Force KGlobalAccel to reload shortcut configuration."""
         import subprocess
         import time
+
         # Method 1: block/unblock cycle forces re-read
         try:
             subprocess.run(
                 [
-                    "dbus-send", "--session", "--type=method_call",
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
                     "--dest=org.kde.kglobalaccel",
                     "/kglobalaccel",
                     "org.kde.KGlobalAccel.blockGlobalShortcuts",
                     "boolean:true",
                 ],
-                timeout=2, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=2,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
             time.sleep(0.1)
             subprocess.run(
                 [
-                    "dbus-send", "--session", "--type=method_call",
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
                     "--dest=org.kde.kglobalaccel",
                     "/kglobalaccel",
                     "org.kde.KGlobalAccel.blockGlobalShortcuts",
                     "boolean:false",
                 ],
-                timeout=2, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=2,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
-        except: pass
+        except:
+            pass
 
         # Method 2: Plasma 6/5 reparseConfiguration
         for cmd in ["qdbus6", "qdbus"]:
             try:
                 subprocess.run(
                     [
-                        cmd, "org.kde.kglobalaccel", "/kglobalaccel",
-                        "org.kde.KGlobalAccel.reparseConfiguration"
+                        cmd,
+                        "org.kde.kglobalaccel",
+                        "/kglobalaccel",
+                        "org.kde.KGlobalAccel.reparseConfiguration",
                     ],
-                    timeout=2, check=False,
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    timeout=2,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
                 )
-            except: pass
+            except:
+                pass
 
         # Method 3: also notify KGlobalSettings (Legacy)
         try:
             subprocess.run(
-                ["dbus-send", "--type=signal", "--session",
-                 "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
-                 "int32:3", "int32:0"],
-                timeout=2, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                [
+                    "dbus-send",
+                    "--type=signal",
+                    "--session",
+                    "/KGlobalSettings",
+                    "org.kde.KGlobalSettings.notifyChange",
+                    "int32:3",
+                    "int32:0",
+                ],
+                timeout=2,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
-        except: pass
+        except:
+            pass
 
     @staticmethod
     def _radical_dbus_cleanup() -> None:
         """Explicitly unregister legacy components from KGlobalAccel via DBus."""
         import subprocess
+
         zombies = [
             ("khotkeys", "Launch tts-biglinux"),
             ("khotkeys", "_launch"),
@@ -634,19 +774,46 @@ Exec=IntegratedRender {exec_path}
             ("biglinux-tts-speak.desktop", "AmdRender"),
         ]
         for comp, action in zombies:
-            for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--type=method_call", "--dest=org.kde.kglobalaccel"]]:
+            for dbus_cmd in [
+                ["qdbus6"],
+                ["qdbus"],
+                [
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                ],
+            ]:
                 try:
                     if "dbus-send" in dbus_cmd:
                         subprocess.run(
-                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp}", f"string:{action}"],
-                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+                            dbus_cmd
+                            + [
+                                "/kglobalaccel",
+                                "org.kde.KGlobalAccel.unregister",
+                                f"string:{comp}",
+                                f"string:{action}",
+                            ],
+                            timeout=1,
+                            stderr=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL,
                         )
                     else:
                         subprocess.run(
-                            dbus_cmd + ["org.kde.kglobalaccel", "/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
-                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+                            dbus_cmd
+                            + [
+                                "org.kde.kglobalaccel",
+                                "/kglobalaccel",
+                                "org.kde.KGlobalAccel.unregister",
+                                comp,
+                                action,
+                            ],
+                            timeout=1,
+                            stderr=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL,
                         )
-                except: pass
+                except:
+                    pass
 
     @staticmethod
     def _disable_legacy_khotkeys() -> None:
@@ -663,10 +830,14 @@ Exec=IntegratedRender {exec_path}
         try:
             result = subprocess.run(
                 [
-                    "qdbus6", "org.kde.kded6", "/kded",
+                    "qdbus6",
+                    "org.kde.kded6",
+                    "/kded",
                     "org.kde.kded6.loadedModules",
                 ],
-                capture_output=True, text=True, timeout=3,
+                capture_output=True,
+                text=True,
+                timeout=3,
             )
             if "khotkeys" not in result.stdout:
                 return  # module not loaded, nothing to do
@@ -679,13 +850,17 @@ Exec=IntegratedRender {exec_path}
         try:
             subprocess.run(
                 [
-                    "dbus-send", "--session", "--type=method_call",
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
                     "--dest=org.kde.kded6",
                     "/modules/khotkeys",
                     "org.kde.khotkeys.reread_configuration",
                 ],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
         except (OSError, subprocess.TimeoutExpired):
             pass

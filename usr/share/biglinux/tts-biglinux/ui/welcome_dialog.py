@@ -126,9 +126,7 @@ class WelcomeWindow(Adw.Window):
 
         subtitle = Gtk.Label()
         subtitle.set_markup(
-            "<span size='large'>"
-            + _("Your text-to-speech assistant")
-            + "</span>"
+            "<span size='large'>" + _("Your text-to-speech assistant") + "</span>"
         )
         subtitle.add_css_class("dim-label")
         box.append(subtitle)
@@ -140,7 +138,12 @@ class WelcomeWindow(Adw.Window):
         col.set_hexpand(True)
 
         accel = self._settings_service.get().shortcut.keybinding
-        kde_shortcut = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
+        kde_shortcut = (
+            accel.replace("<Control>", "Ctrl+")
+            .replace("<Shift>", "Shift+")
+            .replace("<Alt>", "Alt+")
+            .replace("<Super>", "Meta+")
+        )
         if "+" in kde_shortcut:
             parts = kde_shortcut.rsplit("+", 1)
             kde_shortcut = parts[0] + "+" + parts[1].upper()
@@ -158,24 +161,17 @@ class WelcomeWindow(Adw.Window):
             ),
             (
                 "🌍 " + _("Multilingual Support"),
-                _(
-                    "Voices in dozens of languages\n"
-                    "including Portuguese (Brazil)"
-                ),
+                _("Voices in dozens of languages\nincluding Portuguese (Brazil)"),
             ),
             (
                 "⌨️ " + _("Global Shortcut"),
-                _(
-                    "Press Alt+V to read selected text\n"
-                    "from any application"
-                ).replace("Alt+V", sc),
+                _("Press Alt+V to read selected text\nfrom any application").replace(
+                    "Alt+V", sc
+                ),
             ),
             (
                 "📋 " + _("Clipboard Reading"),
-                _(
-                    "Paste or type text directly\n"
-                    "and listen instantly"
-                ),
+                _("Paste or type text directly\nand listen instantly"),
             ),
         ]
         for title, desc in features:
@@ -189,31 +185,19 @@ class WelcomeWindow(Adw.Window):
         features = [
             (
                 "🎛️ " + _("Fine-Tune Speech"),
-                _(
-                    "Adjust speed, pitch and volume\n"
-                    "to your preference"
-                ),
+                _("Adjust speed, pitch and volume\nto your preference"),
             ),
             (
                 "🤖 " + _("Neural Voices"),
-                _(
-                    "Install Piper voices for natural,\n"
-                    "high-quality speech synthesis"
-                ),
+                _("Install Piper voices for natural,\nhigh-quality speech synthesis"),
             ),
             (
                 "📦 " + _("Easy Installation"),
-                _(
-                    "Install new voices and engines\n"
-                    "directly from the interface"
-                ),
+                _("Install new voices and engines\ndirectly from the interface"),
             ),
             (
                 "⚡ " + _("Lightweight & Fast"),
-                _(
-                    "Native GTK4/Adwaita interface\n"
-                    "with minimal resource usage"
-                ),
+                _("Native GTK4/Adwaita interface\nwith minimal resource usage"),
             ),
         ]
         for title, desc in features:
@@ -230,9 +214,7 @@ class WelcomeWindow(Adw.Window):
 
         self._show_switch = Gtk.Switch()
         self._show_switch.set_valign(Gtk.Align.CENTER)
-        self._show_switch.set_active(
-            self._settings_service.get().show_welcome
-        )
+        self._show_switch.set_active(self._settings_service.get().show_welcome)
 
         box.append(label)
         box.append(self._show_switch)

@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import logging
 import subprocess
-from pathlib import Path
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
@@ -22,27 +21,24 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk
 
 from config import (
-    PITCH_DEFAULT,
     PITCH_MAX,
     PITCH_MIN,
     PITCH_STEP,
-    RATE_DEFAULT,
     RATE_MAX,
     RATE_MIN,
     RATE_STEP,
     TTSBackend,
     TTSState,
-    VOLUME_DEFAULT,
     VOLUME_MAX,
     VOLUME_MIN,
     VOLUME_STEP,
 )
+from services.desktop_integration_service import DesktopIntegrationService
 from services.text_processor import get_system_language
 from services.voice_manager import (
     VoiceCatalog,
     VoiceInfo,
     discover_voices,
-    get_default_voice_for_language,
 )
 from ui.components import (
     create_action_row_with_scale,
@@ -51,7 +47,6 @@ from ui.components import (
     create_combo_row,
     create_expander_row,
     create_preferences_group,
-    create_spin_row,
 )
 from utils.async_utils import run_in_thread
 from utils.i18n import _
@@ -415,7 +410,9 @@ class MainView(Adw.NavigationPage):
         shortcut_row = Adw.ActionRow()
         shortcut_row.set_title(_("Keyboard shortcut"))
         shortcut_row.set_subtitle(
-            _("Select text anywhere and press the shortcut to read aloud. Press again to stop.")
+            _(
+                "Select text anywhere and press the shortcut to read aloud. Press again to stop."
+            )
         )
         shortcut_row.set_icon_name("preferences-desktop-keyboard-shortcuts-symbolic")
 
@@ -439,10 +436,11 @@ class MainView(Adw.NavigationPage):
 
         # ── Show speak action in app launcher ──
         launcher_row, self._launcher_switch_widget = create_action_row_with_switch(
-            title=_("Show speak button in app launcher"),
-            subtitle=_("Adds a launcher entry you can pin to the taskbar"),
+            title=_("Tray icon"),
+            subtitle=_("Fixes quick access and allows running in the background"),
             active=self._settings.shortcut.show_in_launcher,
             on_toggled=self._on_launcher_toggle,
+            accessible_name=_("Show system tray icon"),
         )
         launcher_row.set_icon_name("view-pin-symbolic")
         expander.add_row(launcher_row)
@@ -455,7 +453,7 @@ class MainView(Adw.NavigationPage):
         parent = self.get_root()
 
         # Block global shortcuts so the current binding does not fire
-        self._block_global_shortcuts(True)
+        DesktopIntegrationService.block_global_shortcuts(True)
 
         # Create a capture window
         win = Adw.Window()
@@ -474,9 +472,11 @@ class MainView(Adw.NavigationPage):
 
         desc_label = Gtk.Label()
         desc_label.set_markup(
-            _("<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
-              "and press a letter or key.\n\n"
-              "<small>Press Escape to cancel</small>")
+            _(
+                "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
+                "and press a letter or key.\n\n"
+                "<small>Press Escape to cancel</small>"
+            )
         )
         desc_label.set_justify(Gtk.Justification.CENTER)
         desc_label.set_margin_top(16)
@@ -496,7 +496,10 @@ class MainView(Adw.NavigationPage):
         win.set_content(content_box)
 
         # Restore global shortcuts when the capture window is closed
-        win.connect("close-request", lambda w: self._block_global_shortcuts(False) or False)
+        win.connect(
+            "close-request",
+            lambda w: DesktopIntegrationService.block_global_shortcuts(False) or False,
+        )
 
         # Key controller on the capture window
         key_ctrl = Gtk.EventControllerKey()
@@ -520,18 +523,28 @@ class MainView(Adw.NavigationPage):
 
         # Ignore modifier-only presses
         modifier_keys = {
-            Gdk.KEY_Shift_L, Gdk.KEY_Shift_R,
-            Gdk.KEY_Control_L, Gdk.KEY_Control_R,
-            Gdk.KEY_Alt_L, Gdk.KEY_Alt_R,
-            Gdk.KEY_Super_L, Gdk.KEY_Super_R,
-            Gdk.KEY_Meta_L, Gdk.KEY_Meta_R,
+            Gdk.KEY_Shift_L,
+            Gdk.KEY_Shift_R,
+            Gdk.KEY_Control_L,
+            Gdk.KEY_Control_R,
+            Gdk.KEY_Alt_L,
+            Gdk.KEY_Alt_R,
+            Gdk.KEY_Super_L,
+            Gdk.KEY_Super_R,
+            Gdk.KEY_Meta_L,
+            Gdk.KEY_Meta_R,
         }
         if keyval in modifier_keys:
             return False
 
         # Escape = cancel
         if keyval == Gdk.KEY_Escape and not (
-            state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK | Gdk.ModifierType.SUPER_MASK)
+            state
+            & (
+                Gdk.ModifierType.CONTROL_MASK
+                | Gdk.ModifierType.ALT_MASK
+                | Gdk.ModifierType.SUPER_MASK
+            )
         ):
             win.close()
             return True
@@ -557,276 +570,29 @@ class MainView(Adw.NavigationPage):
         self._update_hero_labels(self._tts.state)
 
         # Unblock global shortcuts before updating KDE bindings
-        self._block_global_shortcuts(False)
+        DesktopIntegrationService.block_global_shortcuts(False)
 
         # Close the capture window immediately
         win.close()
 
         display_name = Gtk.accelerator_get_label(keyval, mods)
-        self._on_toast(
-            _("Shortcut changed to {keys}").format(keys=display_name), 3
-        )
+        self._on_toast(_("Shortcut changed to {keys}").format(keys=display_name), 3)
         logger.info("Shortcut changed to: %s (%s)", accel, display_name)
 
         # Update KDE shortcut files in a background thread so the UI
         # doesn't freeze during subprocess calls and the brief sleep
         threading.Thread(
-            target=self._update_khotkeys,
+            target=DesktopIntegrationService.update_khotkeys,
             args=(accel,),
             daemon=True,
         ).start()
 
         return True
 
-    @staticmethod
-    def _gtk_accel_to_kde(accel: str) -> str:
-        """Convert GTK accelerator string to KDE format.
-
-        GTK: <Alt>v  →  KDE: Alt+V
-        GTK: <Control><Shift>s  →  KDE: Ctrl+Shift+S
-        """
-        kde = accel
-        kde = kde.replace("<Control>", "Ctrl+")
-        kde = kde.replace("<Shift>", "Shift+")
-        kde = kde.replace("<Alt>", "Alt+")
-        kde = kde.replace("<Super>", "Meta+")
-        if "+" in kde:
-            parts = kde.rsplit("+", 1)
-            kde = parts[0] + "+" + parts[1].upper()
-        else:
-            kde = kde.upper()
-        return kde
-
-    def _update_khotkeys(self, accel: str) -> None:
-        """Update the KDE shortcut with the new keybinding.
-
-        On Plasma 6, shortcuts for .desktop file actions are stored in the
-        [services][app.desktop] nested group in kglobalshortcutsrc.  We also
-        keep the .desktop file's X-KDE-Shortcuts in sync and remove any stale
-        component-level entries left from older versions.
-
-        For the change to take effect immediately (without session restart),
-        we explicitly unregister the old binding from KGlobalAccel memory and
-        then inject the new one via the setShortcutKeys DBus API.
-        """
-        kde_shortcut = self._gtk_accel_to_kde(accel)
-
-        logger.info("Updating KDE shortcut to: %s", kde_shortcut)
-
-        # 1. Update local .desktop file with the new X-KDE-Shortcuts
-        local_apps = Path.home() / ".local" / "share" / "applications"
-        desktop_dst = local_apps / "biglinux-tts-speak.desktop"
-        self._ensure_desktop_file(desktop_dst)
-
-        # 2. Radical Cleanup — Unregister zombies via DBus first
-        self._radical_dbus_cleanup()
-
-        # Groups to clean and register in (Plasma 5 and 6)
-        groups = [
-            ("services", "biglinux-tts-speak.desktop"),  # Plasma 6
-            ("", "biglinux-tts-speak.desktop"),          # Plasma 5
-            ("services", "br.com.biglinux.tts.desktop"), # Potential UI conflict
-            ("", "bigtts.desktop"),                      # Legacy
-        ]
-
-        # Registry commands to try
-        registry_cmds = ["kwriteconfig6", "kwriteconfig5", "kwriteconfig"]
-        import shutil
-
-        for group_prefix, group_name in groups:
-            for kcmd in registry_cmds:
-                if not shutil.which(kcmd):
-                    continue
-                try:
-                    cmd = [kcmd, "--file", "kglobalshortcutsrc"]
-                    if group_prefix:
-                        cmd.extend(["--group", group_prefix])
-                    cmd.extend(["--group", group_name, "--key", "_launch"])
-
-                    # If it's a cleanup target, delete it first
-                    if "bigtts" in group_name or "br.com.biglinux.tts" in group_name:
-                        subprocess.run(cmd + ["--delete"], timeout=2, check=False)
-                        continue
-
-                    # Register new shortcut with COMMAS (most stable)
-                    if kde_shortcut.lower() != "none":
-                        val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
-                        subprocess.run(cmd + [val], timeout=2, check=False)
-                    else:
-                        subprocess.run(cmd + ["--delete"], timeout=2, check=False)
-                except Exception:
-                    pass
-
-        # 3. Rebuild system caches so KDE sees the updated .desktop file
-        self._update_desktop_database()
-
-        # 4. Force kglobalaccel to re-read the on-disk configuration
-        self._reload_kglobalaccel()
-
-        # 5. Real-Time DBus Injection — force the in-memory shortcut update
-        #    First unregister the component so KGlobalAccel drops the old
-        #    cached key combo, then inject the new one via setShortcutKeys.
-        import time
-        self._unregister_shortcut_from_memory()
-        time.sleep(0.15)  # brief pause to let kglobalaccel process the unregister
-
-        from application import TTSApplication
-        TTSApplication._inject_shortcut_dbus_static(kde_shortcut)
-
-    @staticmethod
-    def _unregister_shortcut_from_memory() -> None:
-        """Unregister our component from KGlobalAccel in-memory cache.
-
-        This forces KGlobalAccel to forget the old key binding so the next
-        setShortcutKeys call can set the new one without conflicts.
-        """
-        comp = "biglinux-tts-speak.desktop"
-        # Use gdbus call which handles complex types properly
-        try:
-            subprocess.run(
-                [
-                    "gdbus", "call", "--session",
-                    "--dest", "org.kde.kglobalaccel",
-                    "--object-path", "/kglobalaccel",
-                    "--method", "org.kde.KGlobalAccel.unregister",
-                    f"'{comp}'", "'_launch'",
-                ],
-                timeout=2, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-        # Also try via dbus-send as fallback
-        try:
-            subprocess.run(
-                [
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.unregister",
-                    f"string:{comp}", "string:_launch",
-                ],
-                timeout=2, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-
-    @staticmethod
-    def _block_global_shortcuts(block: bool) -> None:
-        """Block or unblock all global shortcuts via KGlobalAccel D-Bus."""
-        try:
-            subprocess.run(
-                [
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
-                    f"boolean:{'true' if block else 'false'}",
-                ],
-                timeout=3,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            logger.debug("Global shortcuts %s", "blocked" if block else "unblocked")
-        except (OSError, subprocess.TimeoutExpired):
-            logger.warning("Could not %s global shortcuts", "block" if block else "unblock")
-
-    @staticmethod
-    def _reload_kglobalaccel() -> None:
-        """Force KGlobalAccel to reload shortcut configuration."""
-        import time
-        # Method 1: block/unblock cycle forces re-read
-        try:
-            subprocess.run(
-                [
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
-                    "boolean:true",
-                ],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-            time.sleep(0.1)
-            subprocess.run(
-                [
-                    "dbus-send", "--session", "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
-                    "boolean:false",
-                ],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-
-        # Method 2: Plasma 6/5 reparseConfiguration
-        for cmd in ["qdbus6", "qdbus"]:
-            try:
-                subprocess.run(
-                    [
-                        cmd, "org.kde.kglobalaccel", "/kglobalaccel",
-                        "org.kde.KGlobalAccel.reparseConfiguration"
-                    ],
-                    timeout=3, check=False,
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
-
-        # Method 3: also notify KGlobalSettings (Legacy)
-        try:
-            subprocess.run(
-                ["dbus-send", "--type=signal", "--session",
-                 "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
-                 "int32:3", "int32:0"],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-
-    @staticmethod
-    def _radical_dbus_cleanup() -> None:
-        """Explicitly unregister legacy components from KGlobalAccel via DBus."""
-        import subprocess
-        zombies = [
-            ("khotkeys", "Launch tts-biglinux"),
-            ("khotkeys", "_launch"),
-            ("bigtts.desktop", "_launch"),
-            ("tts-speak.desktop", "_launch"),
-            ("biglinux-tts-speak.desktop", "_launch"),
-            ("biglinux-tts-speak.desktop", "IntegratedRender"),
-            ("biglinux-tts-speak.desktop", "SoftwareRender"),
-            ("biglinux-tts-speak.desktop", "AmdRender"),
-        ]
-        for comp, action in zombies:
-            for dbus_cmd in [["qdbus6"], ["qdbus"], ["dbus-send", "--session", "--type=method_call", "--dest=org.kde.kglobalaccel"]]:
-                try:
-                    if "dbus-send" in dbus_cmd:
-                        subprocess.run(
-                            dbus_cmd + ["/kglobalaccel", "org.kde.KGlobalAccel.unregister", f"string:{comp}", f"string:{action}"],
-                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-                        )
-                    else:
-                        subprocess.run(
-                            dbus_cmd + ["org.kde.kglobalaccel", "/kglobalaccel", "org.kde.KGlobalAccel.unregister", comp, action],
-                            timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-                        )
-                except: pass
-
     # ── Launcher toggle ────────────────────────────────────────────
 
     def _on_launcher_toggle(self, active: bool) -> None:
         """Pin/unpin speak button in KDE Plasma taskbar (icontasks)."""
-        from pathlib import Path
-        import re
-
         if self._updating_ui:
             return
 
@@ -840,178 +606,18 @@ class MainView(Adw.NavigationPage):
         else:
             app.disable_tray()
 
-        # Ensure desktop file exists with NoDisplay=true (hidden from menu)
-        local_apps = Path.home() / ".local" / "share" / "applications"
-        local_apps.mkdir(parents=True, exist_ok=True)
-        desktop_dst = local_apps / "biglinux-tts-speak.desktop"
-
-        self._ensure_icon_available()
-        self._ensure_desktop_file(desktop_dst)
-
-        # Pin/unpin in KDE Plasma icontasks
-        launcher_entry = "applications:biglinux-tts-speak.desktop"
-        plasma_cfg = Path.home() / ".config" / "plasma-org.kde.plasma.desktop-appletsrc"
-
-        if not plasma_cfg.exists():
-            logger.warning("Plasma config not found: %s", plasma_cfg)
-            return
-
-        try:
-            lines = plasma_cfg.read_text().splitlines()
-            changed = False
-            for i, line in enumerate(lines):
-                if not line.startswith("launchers="):
-                    continue
-                launchers = line.split("=", 1)[1]
-                entries = [e.strip() for e in launchers.split(",") if e.strip()]
-
-                if active and launcher_entry not in entries:
-                    entries.append(launcher_entry)
-                    lines[i] = "launchers=" + ",".join(entries)
-                    changed = True
-                elif not active and launcher_entry in entries:
-                    entries.remove(launcher_entry)
-                    lines[i] = "launchers=" + ",".join(entries)
-                    changed = True
-
-            if changed:
-                plasma_cfg.write_text("\n".join(lines) + "\n")
-                self._refresh_plasma_launcher()
-        except OSError as e:
-            logger.warning("Could not update Plasma launchers: %s", e)
-
-    def _ensure_desktop_file(self, desktop_dst: "Path") -> None:
-        """Ensure biglinux-tts-speak.desktop exists locally with current shortcut."""
-        accel = self._settings.shortcut.keybinding
-        kde_key = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
-        if "+" in kde_key:
-            parts = kde_key.rsplit("+", 1)
-            kde_key = parts[0] + "+" + parts[1].upper()
-        else:
-            kde_key = kde_key.upper()
-
-        # Dynamic path detection (same as application.py)
-        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-        git_script = repo_root / "usr" / "bin" / "biglinux-tts-speak"
-        if git_script.exists():
-            exec_path = str(git_script)
-        else:
-            exec_path = "/usr/bin/biglinux-tts-speak"
-
-        content = f"""[Desktop Entry]
-Type=Application
-Exec={exec_path}
-Icon=tts-biglinux
-Categories=Utility;Accessibility;
-StartupNotify=false
-NoDisplay=true
-X-KDE-Shortcuts={kde_key}
-Name=BigLinux TTS Speak
-GenericName=Speech or stop selected text
-GenericName[pt_BR]=Narrador de texto
-
-Actions=SoftwareRender;AmdRender;IntegratedRender;
-
-[Desktop Action SoftwareRender]
-Name=Software Render
-Exec=SoftwareRender {exec_path}
-
-[Desktop Action AmdRender]
-Name=Amd Render
-Exec=AmdRender {exec_path}
-
-[Desktop Action IntegratedRender]
-Name=Integrated Render
-Exec=IntegratedRender {exec_path}
-"""
-        desktop_dst.parent.mkdir(parents=True, exist_ok=True)
-        desktop_dst.write_text(content, encoding="utf-8")
-
-    def _refresh_plasma_launcher(self) -> None:
-        """Refresh Plasma launcher config without full restart."""
-        self._update_desktop_database()
-
-        # Method 1: Notify Plasma via D-Bus evaluateScript
-        reloaded = False
-        try:
-            result = subprocess.run(
-                [
-                    "qdbus6", "org.kde.plasmashell", "/PlasmaShell",
-                    "org.kde.PlasmaShell.evaluateScript",
-                    "panels().forEach(p => p.reloadConfig())",
-                ],
-                timeout=5, check=False,
-                capture_output=True, text=True,
-            )
-            if result.returncode == 0:
-                reloaded = True
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-
-        # Method 2: Fallback via dbus-send signal
-        if not reloaded:
-            try:
-                subprocess.run(
-                    [
-                        "dbus-send", "--session", "--type=signal",
-                        "/org/kde/PlasmaShell",
-                        "org.kde.PlasmaShell.configChanged",
-                    ],
-                    timeout=3, check=False,
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
-
-        if reloaded:
+        kde_key = DesktopIntegrationService.gtk_accel_to_kde(
+            self._settings.shortcut.keybinding
+        )
+        if DesktopIntegrationService.toggle_launcher_pin(active, kde_key):
             self._on_toast(_("Launcher icon updated"), 2)
-        else:
+        elif active:
             self._on_toast(
-                _("Launcher icon updated — you may need to log out and back in for it to appear"), 5
+                _(
+                    "Launcher icon updated — you may need to log out and back in for it to appear"
+                ),
+                5,
             )
-
-    @staticmethod
-    def _ensure_icon_available() -> None:
-        """Ensure the tts-biglinux icon is resolvable in user's icon theme."""
-        from pathlib import Path
-
-        system_icon = Path("/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg")
-        local_icon_dir = Path.home() / ".local" / "share" / "icons" / "hicolor" / "scalable" / "apps"
-        local_icon = local_icon_dir / "tts-biglinux.svg"
-
-        if local_icon.exists() or not system_icon.exists():
-            return
-
-        local_icon_dir.mkdir(parents=True, exist_ok=True)
-        try:
-            local_icon.symlink_to(system_icon)
-            logger.info("Created icon symlink: %s -> %s", local_icon, system_icon)
-        except OSError as e:
-            logger.warning("Could not create icon symlink: %s", e)
-
-    @staticmethod
-    def _update_desktop_database() -> None:
-        """Update the desktop file database so KDE picks up changes."""
-        from pathlib import Path
-
-        local_apps = Path.home() / ".local" / "share" / "applications"
-        try:
-            subprocess.run(
-                ["update-desktop-database", str(local_apps)],
-                timeout=5, check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-        # Rebuild KDE service cache to make changes visible
-        for cmd in ["kbuildsycoca6", "kbuildsycoca5"]:
-            try:
-                subprocess.run(
-                    [cmd, "--noincremental"],
-                    timeout=10, check=False,
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
 
     # ── Voice Discovery Callback ─────────────────────────────────────
 
@@ -1020,10 +626,10 @@ Exec=IntegratedRender {exec_path}
         self._catalog = catalog
 
         if not catalog.voices:
-            self._voice_combo.set_subtitle(_("No voices found — install rhvoice or espeak-ng"))
-            self._voice_combo.set_model(
-                Gtk.StringList.new([_("No voices available")])
+            self._voice_combo.set_subtitle(
+                _("No voices found — install rhvoice or espeak-ng")
             )
+            self._voice_combo.set_model(Gtk.StringList.new([_("No voices available")]))
             self._voice_list = []
             return
 
@@ -1065,9 +671,7 @@ Exec=IntegratedRender {exec_path}
             elif v.quality == "high":
                 quality_tag = " [HQ]"
 
-            display_names.append(
-                f"{v.name} — {v.language_name}{quality_tag}"
-            )
+            display_names.append(f"{v.name} — {v.language_name}{quality_tag}")
 
         # Update combo
         self._updating_ui = True
@@ -1267,7 +871,9 @@ Exec=IntegratedRender {exec_path}
         try:
             check = subprocess.run(
                 ["pacman", "-Si"] + pkgs,
-                capture_output=True, text=True, timeout=15,
+                capture_output=True,
+                text=True,
+                timeout=15,
             )
             if check.returncode != 0:
                 # Find which packages are missing
@@ -1275,7 +881,9 @@ Exec=IntegratedRender {exec_path}
                 for pkg in pkgs:
                     r = subprocess.run(
                         ["pacman", "-Si", pkg],
-                        capture_output=True, text=True, timeout=5,
+                        capture_output=True,
+                        text=True,
+                        timeout=5,
                     )
                     if r.returncode != 0:
                         missing.append(pkg)
@@ -1296,10 +904,15 @@ Exec=IntegratedRender {exec_path}
                 text=True,
                 timeout=300,
             )
-            logger.info("Piper install stdout: %s", result.stdout[-200:] if result.stdout else "")
+            logger.info(
+                "Piper install stdout: %s",
+                result.stdout[-200:] if result.stdout else "",
+            )
             if result.returncode != 0:
                 stderr = result.stderr[-300:] if result.stderr else ""
-                logger.error("Piper install failed (code %d): %s", result.returncode, stderr)
+                logger.error(
+                    "Piper install failed (code %d): %s", result.returncode, stderr
+                )
                 if "authorization" in stderr.lower() or result.returncode == 126:
                     logger.error(
                         "pkexec authorization denied. Ensure polkit agent is running "
@@ -1308,7 +921,9 @@ Exec=IntegratedRender {exec_path}
                 return False
             return True
         except FileNotFoundError:
-            logger.error("pkexec not found — install polkit to enable GUI privilege elevation")
+            logger.error(
+                "pkexec not found — install polkit to enable GUI privilege elevation"
+            )
             return False
         except (subprocess.TimeoutExpired, OSError) as e:
             logger.error("Failed to install Piper: %s", e)
@@ -1420,7 +1035,9 @@ Exec=IntegratedRender {exec_path}
         )
 
         if not success:
-            self._on_toast(_("Could not play test — check if a TTS engine is installed"), 4)
+            self._on_toast(
+                _("Could not play test — check if a TTS engine is installed"), 4
+            )
 
     # ── TTS State Callback ───────────────────────────────────────────
 
@@ -1430,13 +1047,7 @@ Exec=IntegratedRender {exec_path}
 
     def _get_shortcut_display(self) -> str:
         accel = self._settings.shortcut.keybinding
-        kde_shortcut = accel.replace("<Control>", "Ctrl+").replace("<Shift>", "Shift+").replace("<Alt>", "Alt+").replace("<Super>", "Meta+")
-        if "+" in kde_shortcut:
-            parts = kde_shortcut.rsplit("+", 1)
-            kde_shortcut = parts[0] + "+" + parts[1].upper()
-        else:
-            kde_shortcut = kde_shortcut.upper()
-        return kde_shortcut
+        return DesktopIntegrationService.gtk_accel_to_kde(accel)
 
     def _update_hero_labels(self, state: TTSState) -> None:
         """Update hero subtitle texts dynamically."""
@@ -1458,6 +1069,9 @@ Exec=IntegratedRender {exec_path}
             self._hero_title.set_markup(f"<b>{_('Speaking...')}</b>")
             self._update_hero_labels(state)
             self._test_button.set_label(_("Stop"))
+            self._test_button.update_property(
+                [Gtk.AccessibleProperty.LABEL], [_("Stop")]
+            )
             self._test_button.remove_css_class("suggested-action")
             self._test_button.add_css_class("destructive-action")
 
@@ -1467,6 +1081,9 @@ Exec=IntegratedRender {exec_path}
             self._hero_title.set_markup(f"<b>{_('Error')}</b>")
             self._update_hero_labels(state)
             self._test_button.set_label(_("Test voice"))
+            self._test_button.update_property(
+                [Gtk.AccessibleProperty.LABEL], [_("Test voice")]
+            )
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
 
@@ -1476,6 +1093,9 @@ Exec=IntegratedRender {exec_path}
             self._hero_title.set_markup(f"<b>{_('Ready to speak')}</b>")
             self._update_hero_labels(state)
             self._test_button.set_label(_("Test voice"))
+            self._test_button.update_property(
+                [Gtk.AccessibleProperty.LABEL], [_("Test voice")]
+            )
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
 
@@ -1532,12 +1152,20 @@ Exec=IntegratedRender {exec_path}
         self._shortcut_label.set_accelerator("" if accel == "none" else accel)
 
         # Launcher toggle
-        self._launcher_switch_widget.set_active(self._settings.shortcut.show_in_launcher)
+        self._launcher_switch_widget.set_active(
+            self._settings.shortcut.show_in_launcher
+        )
 
         # Update KDE shortcut to default
-        self._update_khotkeys(accel)
+        DesktopIntegrationService.update_khotkeys(accel)
 
         # Update hero labels
         self._update_hero_labels(self._tts.state)
 
         self._updating_ui = False
+
+    def set_launcher_enabled(self, enabled: bool) -> None:
+        """Expose launcher toggle state change to other components."""
+        if self._launcher_switch_widget:
+            self._launcher_switch_widget.set_active(enabled)
+            # This will trigger the _on_launcher_toggle callback automatically
