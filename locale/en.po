@@ -164,8 +164,8 @@ msgstr "Type text to test…"
 
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 190
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1467
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1476
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1469
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1478
 msgid "Test voice"
 msgstr "Test voice"
 
@@ -594,32 +594,32 @@ msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Volume is at zero — increasing to minimum for test"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1421
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1423
 msgid "Could not play test — check if a TTS engine is installed"
 msgstr "Could not play test — check if a TTS engine is installed"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1443
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1445
 msgid "Press Alt+V to stop"
 msgstr "Press Alt+V to stop"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1446
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1448
 msgid "Could not play speech — check TTS engine"
 msgstr "Could not play speech — check TTS engine"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1448
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1450
 msgid "Select text and press Alt+V to read aloud"
 msgstr "Select text and press Alt+V to read aloud"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1458
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1460
 msgid "Stop"
 msgstr "Stop"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1489
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1491
 msgid "Settings restored to defaults"
 msgstr "Settings restored to defaults"
 

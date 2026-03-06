@@ -551,3 +551,5 @@ msgstr ""
 "zasobniku systemowym."
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+msgid "OK"
+msgstr "OK"
