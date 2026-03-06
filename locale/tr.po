@@ -402,15 +402,20 @@ msgstr "Herhangi bir yerde metin seçin ve sesli okumak için kısayola basın. 
 msgid "Change"
 msgstr "Değiştir"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: 66
-msgid "Show speak button in app launcher"
-msgstr "Görev çubuğunda okuma düğmesini göster"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: 67
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Görev çubuğuna sabitleyebileceğiniz bir simge ekler"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Sistem tepsisi simgesi"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Hızlı erişimi düzeltir ve arka planda çalıştırılmasına izin verir."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Sistem tepsisi simgesini göster"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: 68
@@ -640,4 +645,4 @@ msgstr ""
 "BigLinux TTS Speak hala arka planda çalışıyor. İstediğiniz zaman sistem tepsisi simgesinden "
 "erişebilirsiniz."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

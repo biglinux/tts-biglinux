@@ -400,15 +400,20 @@ msgstr "Veldu texta hvar sem er og ýttu á flýtilykil til að lesa upphátt. �
 msgid "Change"
 msgstr "Breyta"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: 66
-msgid "Show speak button in app launcher"
-msgstr "Sýna talhnappp á verkefnastiku"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: 67
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Bætir við tákni sem þú getur fest á verkefnastiku"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Vinnustiklu tákn"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Laga fljótlegan aðgang og leyfir að keyra í bakgrunni."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Sýna kerfistákn í kerfistré."
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: 68
@@ -638,4 +643,4 @@ msgstr ""
 "BigLinux TTS Speak er ennþá að keyra í bakgrunni. Þú getur aðgang að því hvenær sem er frá "
 "kerfistray tákninu."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

@@ -398,15 +398,20 @@ msgstr "Text beliebig markieren und die Tastenkombination zum Vorlesen drücken.
 msgid "Change"
 msgstr "Ändern"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: 66
-msgid "Show speak button in app launcher"
-msgstr "Vorlese-Schaltfläche in der Taskleiste anzeigen"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: 67
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Fügt ein Symbol hinzu, das an die Taskleiste angeheftet werden kann"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Symbolleiste-Icon"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Behebt den schnellen Zugriff und ermöglicht das Ausführen im Hintergrund."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "System-Tray-Symbol anzeigen"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: 68
@@ -638,4 +643,4 @@ msgstr ""
 "BigLinux TTS Speak läuft weiterhin im Hintergrund. Sie können jederzeit über das Symbol im "
 "Systembereich darauf zugreifen."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

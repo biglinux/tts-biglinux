@@ -345,13 +345,20 @@ msgstr ""
 msgid "Change"
 msgstr "Промяна"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-msgid "Show speak button in app launcher"
-msgstr "Показване на бутон за четене на лентата със задачи"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Добавя икона, която можете да закачите на лентата със задачи"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Икона в системния трей"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Поправя бързия достъп и позволява работа на заден план."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Покажи иконата в системния трей"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 msgid "Set new shortcut"
@@ -552,4 +559,4 @@ msgstr ""
 "BigLinux TTS Speak все още работи във фонов режим. Можете да получите достъп до него по всяко време "
 "от иконата в системната лента."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

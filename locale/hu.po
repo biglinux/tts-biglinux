@@ -400,15 +400,20 @@ msgstr ""
 msgid "Change"
 msgstr "Módosítás"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: window.py
-msgid "Show speak button in app launcher"
-msgstr "Felolvasás gomb megjelenítése a tálcán"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: window.py
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Hozzáad egy ikont, amelyet a tálcára rögzíthet"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Tálca ikon"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Javítja a gyors hozzáférést és lehetővé teszi a háttérben való futást."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Rendszer tálca ikon megjelenítése"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: window.py

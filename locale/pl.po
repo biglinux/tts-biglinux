@@ -345,13 +345,20 @@ msgstr ""
 msgid "Change"
 msgstr "Zmień"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
-msgid "Show speak button in app launcher"
-msgstr "Pokaż przycisk czytania na pasku zadań"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Dodaje ikonę, którą można przypiąć do paska zadań"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Ikona zasobnika"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Naprawia szybki dostęp i umożliwia działanie w tle."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Pokaż ikonę w zasobniku systemowym"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
 msgid "Set new shortcut"

@@ -400,15 +400,20 @@ msgstr "Valige tekst kõikjal ja vajutage otseteed ettelugemiseks. Vajutage uues
 msgid "Change"
 msgstr "Muuda"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: 66
-msgid "Show speak button in app launcher"
-msgstr "Näita lugemise nuppu tegumiribal"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: 67
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Lisab ikooni, mille saate tegumiribal kinnitada"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Teavituse ikoon"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Parandab kiirele juurdepääsule ja võimaldab taustal töötamist."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Kuva süsteemisalve ikoonist"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: 68
@@ -638,4 +643,4 @@ msgstr ""
 "BigLinux TTS Speak töötab endiselt taustal.  \n"
 "Sa saad sellele igal ajal juurde pääseda süsteemisalve ikooni kaudu."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185
