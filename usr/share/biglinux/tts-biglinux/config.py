@@ -71,9 +71,9 @@ VOLUME_MAX = 100
 VOLUME_DEFAULT = 75
 VOLUME_STEP = 5
 
-MAX_CHARS_MIN = 0           # 0 = unlimited
+MAX_CHARS_MIN = 0  # 0 = unlimited
 MAX_CHARS_MAX = 1000000
-MAX_CHARS_DEFAULT = 0       # Unlimited by default
+MAX_CHARS_DEFAULT = 0  # Unlimited by default
 MAX_CHARS_STEP = 1000
 
 
@@ -280,5 +280,7 @@ def _migrate_legacy_settings() -> AppSettings:
     settings.speech.backend = TTSBackend.SPEECH_DISPATCHER.value
     settings.speech.output_module = "rhvoice"
 
-    logger.info("Migrated legacy settings: rate=%s pitch=%s voice=%s", rate, pitch, voice)
+    logger.info(
+        "Migrated legacy settings: rate=%s pitch=%s voice=%s", rate, pitch, voice
+    )
     return settings
