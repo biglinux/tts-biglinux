@@ -347,13 +347,20 @@ msgstr "どこでもテキストを選択してショートカットを押すと
 msgid "Change"
 msgstr "変更"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
-msgid "Show speak button in app launcher"
-msgstr "タスクバーに読み上げボタンを表示"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "タスクバーに固定できるアイコンを追加"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "トレイアイコン"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "クイックアクセスを修正し、バックグラウンドでの実行を可能にします。"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "システムトレイアイコンを表示"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
 msgid "Set new shortcut"
@@ -550,4 +557,4 @@ msgstr ""
 "BigLinux TTSスピークはまだバックグラウンドで実行中です。  \n"
 "システムトレイアイコンからいつでもアクセスできます。"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

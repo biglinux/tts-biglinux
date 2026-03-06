@@ -345,13 +345,20 @@ msgstr ""
 msgid "Change"
 msgstr "Alterar"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 474
-msgid "Show speak button in app launcher"
-msgstr "Mostrar botão de fala na barra de tarefas"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Adiciona um ícone que pode fixar na barra de tarefas"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Ícone da bandeja"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Corrige o acesso rápido e permite a execução em segundo plano."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Mostrar ícone na bandeja do sistema"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
 msgid "Set new shortcut"
@@ -550,4 +557,4 @@ msgstr ""
 "O BigLinux TTS Speak ainda está em execução em segundo plano. Você pode acessá-lo a qualquer "
 "momento pelo ícone na bandeja do sistema."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185

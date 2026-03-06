@@ -400,15 +400,20 @@ msgstr "Odaberite tekst bilo gdje i pritisnite prečac za čitanje naglas. Priti
 msgid "Change"
 msgstr "Promijeni"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: src/biglinux_tts/ui/main_view.py
-msgid "Show speak button in app launcher"
-msgstr "Prikaži gumb za govor na traci zadataka"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: src/biglinux_tts/ui/main_view.py
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Dodaje ikonu koju možete prikvačiti na traku zadataka"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Ikona u sistemskoj traci"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Ispravlja brzi pristup i omogućuje rad u pozadini"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Prikaži ikonu u sistemskoj traci"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: src/biglinux_tts/ui/main_view.py

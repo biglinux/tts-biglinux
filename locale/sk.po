@@ -398,15 +398,20 @@ msgstr "Vyberte text kdekoľvek a stlačte skratku na prečítanie nahlas. Stla�
 msgid "Change"
 msgstr "Zmeniť"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 442
-#: 66
-msgid "Show speak button in app launcher"
-msgstr "Zobraziť tlačidlo čítania na paneli úloh"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 443
-#: 67
-msgid "Adds a launcher entry you can pin to the taskbar"
-msgstr "Pridá ikonu, ktorú môžete pripnúť na panel úloh"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+msgid "Tray icon"
+msgstr "Ikona v systémovej lište"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+msgid "Fixes quick access and allows running in the background"
+msgstr "Opravy rýchly prístup a umožňuje spúšťanie na pozadí."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+msgid "Show system tray icon"
+msgstr "Zobraziť ikonu systémovej lišty"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
 #: 68
@@ -638,4 +643,4 @@ msgstr ""
 "BigLinux TTS Speak stále beží na pozadí. Môžete k nemu pristupovať kedykoľvek z ikony v systémovej "
 "lište."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 172
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185
