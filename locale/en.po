@@ -559,7 +559,7 @@ msgstr ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1211
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 178
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 183
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -619,51 +619,51 @@ msgid "Stop"
 msgstr "Stop"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1491
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1497
 msgid "Settings restored to defaults"
 msgstr "Settings restored to defaults"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 138
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
 msgid "Restore Defaults"
 msgstr "Restore Defaults"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 147
 msgid "Welcome"
 msgstr "Welcome"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 148
 msgid "About"
 msgstr "About"
 
 #
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 144
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 149
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 150
 msgid "Quit"
 msgstr "Quit"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 150
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 152
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 155
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 157
 msgid "Main menu"
 msgstr "Main menu"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 175
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 180
 msgid "Restore settings?"
 msgstr "Restore settings?"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 176
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 181
 msgid "This will return all adjustments to their original defaults."
 msgstr "This will return all adjustments to their original defaults."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 179
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 184
 msgid "Restore"
 msgstr "Restore"
 
