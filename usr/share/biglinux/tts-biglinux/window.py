@@ -43,7 +43,6 @@ class TTSWindow(Adw.ApplicationWindow):
         super().__init__(application=application)
 
         self._app = application
-        self._settings = application.settings
 
         # Window state tracking
         self._size_change_timer: int = 0
@@ -59,15 +58,21 @@ class TTSWindow(Adw.ApplicationWindow):
 
         logger.debug("Window initialized")
 
+    @property
+    def settings(self):
+        """Current application settings."""
+        return self._app.settings
+
     def _setup_window(self) -> None:
         """Configure window properties."""
+        settings = self.settings
         self.set_default_size(
-            self._settings.window.width,
-            self._settings.window.height,
+            settings.window.width,
+            settings.window.height,
         )
         self.set_size_request(WINDOW_WIDTH_MIN, WINDOW_HEIGHT_MIN)
 
-        if self._settings.window.maximized:
+        if settings.window.maximized:
             self.maximize()
 
         self.set_title(_(APP_NAME))
@@ -202,8 +207,9 @@ class TTSWindow(Adw.ApplicationWindow):
 
     def _on_maximized_changed(self, widget: Gtk.Widget, param: object) -> None:
         """Save maximized state."""
-        self._settings.window.maximized = self.is_maximized()
-        save_settings(self._settings)
+        settings = self.settings
+        settings.window.maximized = self.is_maximized()
+        save_settings(settings)
 
     def _save_window_state(self) -> bool:
         """Save current window size."""
@@ -212,7 +218,8 @@ class TTSWindow(Adw.ApplicationWindow):
             width = self.get_default_size()[0]
             height = self.get_default_size()[1]
             if width > 0 and height > 0:
-                self._settings.window.width = width
-                self._settings.window.height = height
-                save_settings(self._settings)
+                settings = self.settings
+                settings.window.width = width
+                settings.window.height = height
+                save_settings(settings)
         return GLib.SOURCE_REMOVE

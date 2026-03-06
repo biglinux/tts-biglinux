@@ -1487,7 +1487,13 @@ Exec=IntegratedRender {exec_path}
         """Reset all settings to defaults and update UI."""
         self._settings = self._settings_service.reset_to_defaults()
         self._update_ui_from_settings()
-        self._settings_service.save_now()
+
+        # Explicitly sync tray state since _update_ui_from_settings blocks callbacks
+        # via the _updating_ui guard. On restore, tray is always disabled (default).
+        app = self.get_root().get_application()
+        if hasattr(app, "disable_tray"):
+            app.disable_tray()
+
         self._on_toast(_("Settings restored to defaults"), 3)
 
     def _update_ui_from_settings(self) -> None:
