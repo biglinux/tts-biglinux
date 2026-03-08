@@ -642,3 +642,5 @@ msgstr ""
 "liště."
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185
+msgid "OK"
+msgstr "OK"

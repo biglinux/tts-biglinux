@@ -642,3 +642,5 @@ msgstr ""
 "Du kan tilgå det når som helst fra systembakkeikonet."
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 185
+msgid "OK"
+msgstr "OK"
