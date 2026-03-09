@@ -670,6 +670,16 @@ msgstr "Erro desconhecido"
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
+# 
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
+# 
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
 # 
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
