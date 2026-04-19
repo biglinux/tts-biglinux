@@ -3,7 +3,7 @@
 pkgname=tts-biglinux
 pkgver=$(date +%y.%m.%d)
 pkgrel=$(date +%H%M)
-arch=('any')
+arch=('x86_64')
 license=('GPL')
 url="https://github.com/biglinux/tts-biglinux"
 pkgdesc="Text to speech with graphical configuration and very easy to use"
@@ -17,6 +17,11 @@ depends=(
     'xsel'
     'wl-clipboard-rs'
     'alsa-utils'
+    'onnxruntime'
+)
+makedepends=(
+    'rust'
+    'cargo'
 )
 optdepends=(
     'pyside6: system tray icon support'
@@ -26,10 +31,28 @@ optdepends=(
     'rhvoice-brazilian-portuguese-complementary-dict-biglinux: dictionary complement'
     'piper-tts-bin: neural TTS engine (high quality, offline)'
     'piper-voices-pt-BR: Brazilian Portuguese neural voices for Piper'
-    'sox: volume control for Piper audio output'
+    'sox: volume control for Piper/Kokoro audio output'
+    'python-kokoro: Kokoro neural TTS engine (high quality, multilingual)'
+    'python-pytorch: PyTorch runtime for Kokoro TTS'
+    'python-soundfile: audio file I/O for Kokoro TTS'
 )
 source=("git+https://github.com/biglinux/tts-biglinux.git")
 md5sums=(SKIP)
+
+build() {
+    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
+        _basedir="${srcdir}/${pkgname}/${pkgname}"
+    else
+        _basedir="${srcdir}/${pkgname}"
+    fi
+
+    # Build native Rust TTS engine
+    if [ -d "${_basedir}/tts-engine" ]; then
+        cd "${_basedir}/tts-engine"
+        ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 \
+            cargo build --release
+    fi
+}
 
 package() {
     # Verify default folder
@@ -42,6 +65,13 @@ package() {
     # Install usr/ tree (bin, share/biglinux, share/applications, share/icons, share/locale, share/khotkeys)
     if [ -d "${InternalDir}/usr" ]; then
         cp -r "${InternalDir}/usr" "${pkgdir}/usr"
+    fi
+
+    # Install native Rust TTS engine
+    local _so="${InternalDir}/tts-engine/target/release/libtts_engine.so"
+    if [ -f "$_so" ]; then
+        install -Dm755 "$_so" \
+            "${pkgdir}/usr/share/biglinux/tts-biglinux/tts_engine.so"
     fi
 
     # Fix permissions for executables

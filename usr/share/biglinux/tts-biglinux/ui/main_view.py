@@ -12,7 +12,8 @@ from __future__ import annotations
 import logging
 import subprocess
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from contextlib import contextmanager
+from typing import TYPE_CHECKING, Iterator
 
 import gi
 
@@ -90,8 +91,26 @@ class MainView(Adw.NavigationPage):
         # Build UI
         self._build_ui()
 
+        # Apply saved playback mode
+        from ui.audio_player import AudioPlayerWidget
+        AudioPlayerWidget.set_playback_mode(self._settings.history.playback_mode)
+
         # Discover voices in background
         run_in_thread(discover_voices, on_done=self._on_voices_discovered)
+
+    @contextmanager
+    def _guard_ui(self) -> Iterator[None]:
+        """Block callback handlers during programmatic widget updates.
+
+        Exception-safe and nesting-safe: restores previous flag value
+        even if an exception occurs during the guarded block.
+        """
+        prev = self._updating_ui
+        self._updating_ui = True
+        try:
+            yield
+        finally:
+            self._updating_ui = prev
 
     # ── UI Construction ──────────────────────────────────────────────
 
@@ -122,13 +141,13 @@ class MainView(Adw.NavigationPage):
         quick = self._build_quick_settings()
         content.append(quick)
 
-        # 3. Backend expander
-        backend_group = self._build_backend_section()
-        content.append(backend_group)
-
-        # 4. Text processing expander
+        # 3. Text processing expander
         text_group = self._build_text_processing_section()
         content.append(text_group)
+
+        # 4. Backend expander
+        backend_group = self._build_backend_section()
+        content.append(backend_group)
 
         # 5. Advanced expander
         advanced_group = self._build_advanced_section()
@@ -157,12 +176,14 @@ class MainView(Adw.NavigationPage):
         self._hero_title = Gtk.Label()
         self._hero_title.set_markup(f"<b>{_('Ready to speak')}</b>")
         self._hero_title.add_css_class("hero-title")
+        self._hero_title.add_css_class("title-2")
         self._hero_title.set_halign(Gtk.Align.CENTER)
         hero.append(self._hero_title)
 
         # Status subtitle (instructions)
         self._hero_subtitle = Gtk.Label()
         self._hero_subtitle.add_css_class("hero-subtitle")
+        self._hero_subtitle.add_css_class("dim-label")
         self._hero_subtitle.set_halign(Gtk.Align.CENTER)
         self._hero_subtitle.set_wrap(True)
         self._hero_subtitle.set_justify(Gtk.Justification.CENTER)
@@ -203,6 +224,36 @@ class MainView(Adw.NavigationPage):
             title=_("Voice settings"),
             description=_("Choose voice and adjust speech parameters"),
         )
+
+        # TTS Backend selection (above voice combo)
+        backends = [
+            _("RHVoice (Native)"),
+            _("espeak-ng"),
+            _("Piper (Neural TTS)"),
+            _("Kokoro (Neural TTS)"),
+        ]
+        self._backend_map = {
+            0: TTSBackend.RHVOICE.value,
+            1: TTSBackend.ESPEAK_NG.value,
+            2: TTSBackend.PIPER.value,
+            3: TTSBackend.KOKORO.value,
+        }
+        current_backend = self._settings.speech.backend
+        current_idx = 0
+        for idx, val in self._backend_map.items():
+            if val == current_backend:
+                current_idx = idx
+                break
+
+        self._backend_combo = create_combo_row(
+            title=_("TTS Backend"),
+            subtitle=_("Engine used for speech synthesis"),
+            options=backends,
+            selected_index=current_idx,
+            on_selected=self._on_backend_selected,
+            accessible_name=_("Select TTS engine"),
+        )
+        group.add(self._backend_combo)
 
         # Voice selection combo
         self._voice_combo = create_combo_row(
@@ -280,45 +331,63 @@ class MainView(Adw.NavigationPage):
         )
         group.add(self._volume_row)
 
+        # ── Kokoro-specific controls (visible only when Kokoro is active) ──
+        is_kokoro = self._settings.speech.backend == TTSBackend.KOKORO.value
+
+        # Expression style combo
+        emotion_presets = [
+            _("Neutral"),
+            _("Happy"),
+            _("Calm"),
+            _("Urgent"),
+            _("Narrative"),
+        ]
+        self._kokoro_emotion_values = [
+            "neutral", "happy", "calm", "urgent", "narrative",
+        ]
+        current_emotion = self._settings.speech.kokoro.emotion_preset
+        emotion_idx = 0
+        for i, v in enumerate(self._kokoro_emotion_values):
+            if v == current_emotion:
+                emotion_idx = i
+                break
+
+        self._kokoro_emotion_combo = create_combo_row(
+            title=_("Expression style"),
+            subtitle=_("Changes speed and intonation to match the mood"),
+            options=emotion_presets,
+            selected_index=emotion_idx,
+            on_selected=self._on_kokoro_emotion_selected,
+            accessible_name=_("Select expression style"),
+        )
+        self._kokoro_emotion_combo.set_visible(is_kokoro)
+        group.add(self._kokoro_emotion_combo)
+
+        # Voice blend combo — select a second voice to mix with the primary
+        self._kokoro_blend_voices = [""]  # "" = no blend (populated later)
+        self._kokoro_blend_labels = [_("None (single voice)")]
+
+        self._kokoro_blend_combo = create_combo_row(
+            title=_("Voice blend"),
+            subtitle=_("Mix a second voice with the primary voice"),
+            options=self._kokoro_blend_labels,
+            selected_index=0,
+            on_selected=self._on_kokoro_blend_selected,
+            accessible_name=_("Select blend voice"),
+        )
+        self._kokoro_blend_combo.set_visible(is_kokoro)
+        group.add(self._kokoro_blend_combo)
+
         return group
 
     # ── Backend Section ──────────────────────────────────────────────
 
     def _build_backend_section(self) -> Adw.PreferencesGroup:
-        """Build TTS backend selection."""
+        """Build voice management section."""
         group = create_preferences_group(
-            title=_("TTS Engine"),
-            description=_("Choose which text-to-speech engine to use"),
+            title=_("Voice Management"),
+            description=_("Install or manage voice packages"),
         )
-
-        # Backend selection
-        backends = [
-            "RHVoice (Native)",
-            "espeak-ng",
-            "Piper (Neural TTS)",
-        ]
-        backend_map = {
-            0: TTSBackend.RHVOICE.value,
-            1: TTSBackend.ESPEAK_NG.value,
-            2: TTSBackend.PIPER.value,
-        }
-        # Find current index
-        current_backend = self._settings.speech.backend
-        current_idx = 0
-        for idx, val in backend_map.items():
-            if val == current_backend:
-                current_idx = idx
-                break
-
-        self._backend_combo = create_combo_row(
-            title=_("TTS Backend"),
-            subtitle=_("Engine used for speech synthesis"),
-            options=backends,
-            selected_index=current_idx,
-            on_selected=self._on_backend_selected,
-            accessible_name=_("Select TTS engine"),
-        )
-        group.add(self._backend_combo)
 
         # Voice Manager row
         voice_mgr_row = Adw.ActionRow()
@@ -394,11 +463,11 @@ class MainView(Adw.NavigationPage):
         # Max characters — combo with presets
         char_options = [
             _("Unlimited"),
-            "1 000",
-            "5 000",
-            "10 000",
-            "50 000",
-            "100 000",
+            _("1 000"),
+            _("5 000"),
+            _("10 000"),
+            _("50 000"),
+            _("100 000"),
         ]
         self._char_limit_values = [0, 1000, 5000, 10000, 50000, 100000]
 
@@ -475,8 +544,31 @@ class MainView(Adw.NavigationPage):
         launcher_row.set_icon_name("view-pin-symbolic")
         expander.add_row(launcher_row)
 
+        # ── History save ──
+        history_row, self._history_switch_widget = create_action_row_with_switch(
+            title=_("Save history"),
+            subtitle=_("Save spoken text and audio to ~/Music/tts-biglinux"),
+            active=self._settings.history.enabled,
+            on_toggled=self._on_history_toggle,
+            accessible_name=_("Save speech history"),
+        )
+        history_row.set_icon_name("document-save-symbolic")
+        expander.add_row(history_row)
 
-
+        # ── Playback mode for history player ──
+        playback_row = Adw.ComboRow()
+        playback_row.set_title(_("Audio playback mode"))
+        playback_row.set_subtitle(_("Behavior when playing multiple audios or speech"))
+        playback_row.set_icon_name("media-playback-start-symbolic")
+        playback_modes = Gtk.StringList.new(
+            [_("Interrupt previous"), _("Queue"), _("Simultaneous")]
+        )
+        playback_row.set_model(playback_modes)
+        mode_map = {"interrupt": 0, "queue": 1, "simultaneous": 2}
+        current = self._settings.history.playback_mode
+        playback_row.set_selected(mode_map.get(current, 0))
+        playback_row.connect("notify::selected", self._on_playback_mode_changed)
+        expander.add_row(playback_row)
 
         group.add(expander)
         return group
@@ -641,9 +733,88 @@ class MainView(Adw.NavigationPage):
             app.disable_tray()
             self._on_toast(_("Tray icon disabled"), 2)
 
+    def _on_history_toggle(self, active: bool) -> None:
+        """Enable/disable speech history saving."""
+        if self._updating_ui:
+            return
+        self._settings.history.enabled = active
+        self._settings_service.save()
+
+        if active:
+            # Ensure directory exists
+            from services.history_service import ensure_history_dir
+            ensure_history_dir()
+            self._on_toast(_("History saving enabled"), 2)
+        else:
+            self._on_toast(_("History saving disabled"), 2)
+
+        # Notify window to show/hide history tab
+        window = self.get_root()
+        if hasattr(window, "update_history_tab_visibility"):
+            window.update_history_tab_visibility(active)
+
+    def _on_playback_mode_changed(self, combo: Adw.ComboRow, _pspec: object) -> None:
+        """Handle audio playback mode selection."""
+        if self._updating_ui:
+            return
+        modes = ["interrupt", "queue", "simultaneous"]
+        idx = combo.get_selected()
+        if 0 <= idx < len(modes):
+            self._settings.history.playback_mode = modes[idx]
+            self._settings_service.save()
+            # Update AudioPlayerWidget class setting
+            from ui.audio_player import AudioPlayerWidget
+            AudioPlayerWidget.set_playback_mode(modes[idx])
+
+    def _on_kokoro_emotion_selected(self, index: int) -> None:
+        """Handle Kokoro emotion preset selection."""
+        if self._updating_ui:
+            return
+        preset = self._kokoro_emotion_values[index]
+        self._settings.speech.kokoro.emotion_preset = preset
+        self._settings_service.save()
+
+    def _on_kokoro_blend_selected(self, index: int) -> None:
+        """Handle Kokoro voice blend combo selection."""
+        if self._updating_ui:
+            return
+        voice_id = self._kokoro_blend_voices[index] if index < len(self._kokoro_blend_voices) else ""
+        self._settings.speech.kokoro.voice_blend = voice_id
+        self._settings_service.save()
+
+    def _populate_kokoro_blend_combo(self, current_blend: str = "") -> None:
+        """Populate voice blend combo with available Kokoro voices."""
+        voices = [""]
+        labels = [_("None (single voice)")]
+
+        # Get available Kokoro voices from catalog
+        if self._catalog:
+            for v in self._catalog.get_by_backend(TTSBackend.KOKORO.value):
+                voices.append(v.voice_id)
+                labels.append(v.name or v.voice_id)
+
+        self._kokoro_blend_voices = voices
+        self._kokoro_blend_labels = labels
+
+        # Rebuild combo model — guard to prevent callback from clearing selection
+        with self._guard_ui():
+            model = Gtk.StringList()
+            for label in labels:
+                model.append(label)
+            self._kokoro_blend_combo.set_model(model)
+
+            # Restore selection
+            if not current_blend:
+                current_blend = self._settings.speech.kokoro.voice_blend
+            sel_idx = 0
+            for i, vid in enumerate(voices):
+                if vid == current_blend:
+                    sel_idx = i
+                    break
+            self._kokoro_blend_combo.set_selected(sel_idx)
+
     def _on_refresh_voices(self) -> None:
         """Manually trigger voice discovery."""
-        print("DEBUG: Manual refresh triggered...")
         self._voice_combo.set_subtitle(_("Refreshing voices..."))
         run_in_thread(discover_voices, on_done=self._on_voices_discovered)
         self._on_toast(_("Refreshing voice list…"), 2)
@@ -656,6 +827,7 @@ class MainView(Adw.NavigationPage):
             "rhvoice": "RHVoice",
             "piper": "Piper",
             "espeak-ng": "espeak-ng",
+            "kokoro": "Kokoro",
             "speech-dispatcher": self._settings.speech.output_module.lower()
         }
         engine_filter = engine_map.get(backend.lower())
@@ -686,11 +858,6 @@ class MainView(Adw.NavigationPage):
     def _on_voices_discovered(self, catalog: VoiceCatalog) -> None:
         """Handle voice discovery completion (called on main thread)."""
         self._catalog = catalog
-        print(f"DEBUG: Voices discovered: {len(catalog.voices)} total voices")
-        for v in catalog.voices:
-            if "spomenka" in v.name.lower() or "mateo" in v.name.lower():
-                 print(f"DEBUG: Found important voice: {v.name} ({v.language}) backend={v.backend}")
-
         logger.info("Voices discovered: %d voices in catalog", len(catalog.voices))
 
         if not catalog.voices:
@@ -705,6 +872,43 @@ class MainView(Adw.NavigationPage):
         current_backend = self._settings.speech.backend
         filtered = catalog.get_by_backend(current_backend)
 
+        # If selected backend has no voices, auto-switch to one that does
+        if not filtered and catalog.backends_available:
+            # Prefer backends in this order
+            preferred = [
+                TTSBackend.RHVOICE.value,
+                TTSBackend.PIPER.value,
+                TTSBackend.KOKORO.value,
+                TTSBackend.ESPEAK_NG.value,
+            ]
+            for pref in preferred:
+                if pref in catalog.backends_available:
+                    current_backend = pref
+                    break
+            else:
+                current_backend = catalog.backends_available[0]
+
+            filtered = catalog.get_by_backend(current_backend)
+            self._settings.speech.backend = current_backend
+            self._settings_service.save(self._settings)
+
+            # Update backend combo to reflect the auto-switch
+            backend_idx_map = {
+                TTSBackend.RHVOICE.value: 0,
+                TTSBackend.ESPEAK_NG.value: 1,
+                TTSBackend.PIPER.value: 2,
+                TTSBackend.KOKORO.value: 3,
+            }
+            with self._guard_ui():
+                self._backend_combo.set_selected(
+                    backend_idx_map.get(current_backend, 0)
+                )
+
+            logger.info(
+                "Auto-switched backend from %s to %s (no voices for original)",
+                self._settings.speech.backend, current_backend,
+            )
+
         # For speech-dispatcher, show ALL output modules (rhvoice + espeak-ng)
         # so the user always sees every installed voice regardless of the
         # previously saved output_module.  The correct module is set when the
@@ -713,15 +917,14 @@ class MainView(Adw.NavigationPage):
         if not filtered:
             # No voices for selected backend
             self._voice_list = []
-            self._updating_ui = True
-            self._voice_combo.set_model(
-                Gtk.StringList.new([_("No voices available for this engine")])
-            )
-            self._voice_combo.set_subtitle(
-                _("Install {engine} voices first").format(engine=current_backend)
-            )
-            self._test_button.set_sensitive(False)
-            self._updating_ui = False
+            with self._guard_ui():
+                self._voice_combo.set_model(
+                    Gtk.StringList.new([_("No voices available for this engine")])
+                )
+                self._voice_combo.set_subtitle(
+                    _("Install {engine} voices first").format(engine=current_backend)
+                )
+                self._test_button.set_sensitive(False)
             return
 
         self._voice_list = filtered
@@ -743,44 +946,41 @@ class MainView(Adw.NavigationPage):
             display_names.append(f"{v.name} — {v.language_name}{quality_tag}")
 
         # Update combo
-        self._updating_ui = True
-        model = Gtk.StringList.new(display_names)
-        self._voice_combo.set_model(model)
-        status_msg = _("{count} voices available").format(count=len(display_names))
-        self._voice_combo.set_subtitle(status_msg)
-        print(f"DEBUG: UI Model updated with {len(display_names)} voices")
-        
-        # Explicitly show a toast for the refresh result
-        self._on_toast(status_msg, 2)
+        with self._guard_ui():
+            model = Gtk.StringList.new(display_names)
+            self._voice_combo.set_model(model)
+            status_msg = _("{count} voices available").format(count=len(display_names))
+            self._voice_combo.set_subtitle(status_msg)
+            # Show a toast for the refresh result
+            self._on_toast(status_msg, 2)
 
-        # Select current voice (accent-insensitive match)
-        current_voice_id = self._settings.speech.voice_id
-        selected_idx = 0
+            # Select current voice (accent-insensitive match)
+            current_voice_id = self._settings.speech.voice_id
+            selected_idx = 0
 
-        if current_voice_id:
-            import unicodedata
+            if current_voice_id:
+                import unicodedata
 
-            def _norm(s: str) -> str:
-                s = unicodedata.normalize("NFD", s)
-                return "".join(c for c in s if unicodedata.category(c) != "Mn").lower()
+                def _norm(s: str) -> str:
+                    s = unicodedata.normalize("NFD", s)
+                    return "".join(c for c in s if unicodedata.category(c) != "Mn").lower()
 
-            norm_current = _norm(current_voice_id)
-            for i, v in enumerate(self._voice_list):
-                if _norm(v.voice_id) == norm_current:
-                    selected_idx = i
-                    break
+                norm_current = _norm(current_voice_id)
+                for i, v in enumerate(self._voice_list):
+                    if _norm(v.voice_id) == norm_current:
+                        selected_idx = i
+                        break
 
-        # If current voice not in filtered list, auto-select best
-        if selected_idx == 0 and current_voice_id:
-            # Voice not found in current backend — pick best for language
-            sys_lang = get_system_language()
-            for i, v in enumerate(self._voice_list):
-                if v.language.startswith(sys_lang):
-                    selected_idx = i
-                    break
+            # If current voice not in filtered list, auto-select best
+            if selected_idx == 0 and current_voice_id:
+                # Voice not found in current backend — pick best for language
+                sys_lang = get_system_language()
+                for i, v in enumerate(self._voice_list):
+                    if v.language.startswith(sys_lang):
+                        selected_idx = i
+                        break
 
-        self._voice_combo.set_selected(selected_idx)
-        self._updating_ui = False
+            self._voice_combo.set_selected(selected_idx)
 
         # Update settings with selected voice
         if self._voice_list:
@@ -794,6 +994,10 @@ class MainView(Adw.NavigationPage):
             len(self._voice_list),
             len(catalog.voices),
         )
+
+        # Refresh Kokoro blend combo if Kokoro is active
+        if current_backend == TTSBackend.KOKORO.value:
+            self._populate_kokoro_blend_combo()
 
     # ── Event Handlers ───────────────────────────────────────────────
 
@@ -832,9 +1036,17 @@ class MainView(Adw.NavigationPage):
             0: TTSBackend.RHVOICE.value,
             1: TTSBackend.ESPEAK_NG.value,
             2: TTSBackend.PIPER.value,
+            3: TTSBackend.KOKORO.value,
         }
         backend = backend_map.get(index, TTSBackend.RHVOICE.value)
         logger.debug("Backend selected: index=%d → %s", index, backend)
+
+        # Show Kokoro-specific controls only for Kokoro engine
+        is_kokoro = backend == TTSBackend.KOKORO.value
+        self._kokoro_emotion_combo.set_visible(is_kokoro)
+        self._kokoro_blend_combo.set_visible(is_kokoro)
+        if is_kokoro:
+            self._populate_kokoro_blend_combo()
 
         # Stop any active speech before switching
         self._tts.stop()
@@ -911,14 +1123,13 @@ class MainView(Adw.NavigationPage):
         """Handle install dialog response."""
         if response != "install":
             # Revert to previous backend
-            self._updating_ui = True
-            prev_backend = TTSBackend.RHVOICE.value
-            self._settings.speech.backend = prev_backend
-            self._settings_service.save(self._settings)
-            self._backend_combo.set_selected(0)
-            if self._catalog:
-                self._on_voices_discovered(self._catalog)
-            self._updating_ui = False
+            with self._guard_ui():
+                prev_backend = TTSBackend.RHVOICE.value
+                self._settings.speech.backend = prev_backend
+                self._settings_service.save(self._settings)
+                self._backend_combo.set_selected(0)
+                if self._catalog:
+                    self._on_voices_discovered(self._catalog)
             return
 
         self._on_toast(_("Installing Piper TTS — this may take a moment…"), 5)
@@ -1002,10 +1213,9 @@ class MainView(Adw.NavigationPage):
             def _on_done(catalog: VoiceCatalog) -> None:
                 self._on_voices_discovered(catalog)
                 # After discovery, force selecting the Piper backend index (2)
-                self._updating_ui = True
-                self._backend_combo.set_selected(2)
-                self._on_backend_selected(2)
-                self._updating_ui = False
+                with self._guard_ui():
+                    self._backend_combo.set_selected(2)
+                    self._on_backend_selected(2)
 
             # Re-discover voices
             run_in_thread(discover_voices, on_done=_on_done)
@@ -1018,13 +1228,12 @@ class MainView(Adw.NavigationPage):
                 self._on_toast(_("Failed to install Piper — check permissions"), 5)
 
             # Revert to native RHVoice
-            self._updating_ui = True
-            self._settings.speech.backend = TTSBackend.RHVOICE.value
-            self._settings_service.save(self._settings)
-            self._backend_combo.set_selected(0)
-            if self._catalog:
-                self._on_voices_discovered(self._catalog)
-            self._updating_ui = False
+            with self._guard_ui():
+                self._settings.speech.backend = TTSBackend.RHVOICE.value
+                self._settings_service.save(self._settings)
+                self._backend_combo.set_selected(0)
+                if self._catalog:
+                    self._on_voices_discovered(self._catalog)
 
     def _on_abbreviations_toggled(self, active: bool) -> None:
         if self._updating_ui:
@@ -1143,6 +1352,11 @@ class MainView(Adw.NavigationPage):
 
     def _update_hero_state(self, state: TTSState) -> bool:
         """Update hero UI for current TTS state (main thread)."""
+        # Neural engine indicator
+        is_neural = self._settings.speech.backend in (
+            TTSBackend.PIPER.value, TTSBackend.KOKORO.value,
+        )
+
         if state == TTSState.SPEAKING:
             self._hero_icon.set_from_icon_name("audio-volume-high-symbolic")
             self._hero_icon.add_css_class("speaking-indicator")
@@ -1154,6 +1368,10 @@ class MainView(Adw.NavigationPage):
             )
             self._test_button.remove_css_class("suggested-action")
             self._test_button.add_css_class("destructive-action")
+            if is_neural:
+                self.add_css_class("status-neural")
+            else:
+                self.remove_css_class("status-neural")
 
         elif state == TTSState.ERROR:
             self._hero_icon.set_from_icon_name("dialog-warning-symbolic")
@@ -1166,6 +1384,7 @@ class MainView(Adw.NavigationPage):
             )
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
+            self.remove_css_class("status-neural")
 
         else:  # IDLE
             self._hero_icon.set_from_icon_name("audio-speakers-symbolic")
@@ -1178,6 +1397,7 @@ class MainView(Adw.NavigationPage):
             )
             self._test_button.remove_css_class("destructive-action")
             self._test_button.add_css_class("suggested-action")
+            self.remove_css_class("status-neural")
 
         return GLib.SOURCE_REMOVE
 
@@ -1189,67 +1409,84 @@ class MainView(Adw.NavigationPage):
         self._update_ui_from_settings()
 
         # Explicitly sync tray state since _update_ui_from_settings blocks callbacks
-        # via the _updating_ui guard. On restore, tray is always disabled (default).
+        # via the _updating_ui guard. Default is show_in_launcher=True (tray enabled).
         app = self.get_root().get_application()
-        if hasattr(app, "disable_tray"):
-            app.disable_tray()
+        if self._settings.shortcut.show_in_launcher:
+            if hasattr(app, "enable_tray"):
+                app.enable_tray()
+        else:
+            if hasattr(app, "disable_tray"):
+                app.disable_tray()
 
         self._on_toast(_("Settings restored to defaults"), 3)
 
     def _update_ui_from_settings(self) -> None:
         """Sync all UI widgets with current settings."""
-        self._updating_ui = True
+        with self._guard_ui():
+            # Voice settings sliders
+            self._speed_scale.set_value(self._settings.speech.rate)
+            self._pitch_scale.set_value(self._settings.speech.pitch)
+            self._volume_scale.set_value(self._settings.speech.volume)
 
-        # Voice settings sliders
-        self._speed_scale.set_value(self._settings.speech.rate)
-        self._pitch_scale.set_value(self._settings.speech.pitch)
-        self._volume_scale.set_value(self._settings.speech.volume)
+            # Text processing switches
+            self._abbr_switch.set_active(self._settings.text.expand_abbreviations)
+            self._chars_switch.set_active(self._settings.text.process_special_chars)
+            self._fmt_switch.set_active(self._settings.text.strip_formatting)
+            self._url_switch.set_active(self._settings.text.process_urls)
 
-        # Text processing switches
-        self._abbr_switch.set_active(self._settings.text.expand_abbreviations)
-        self._chars_switch.set_active(self._settings.text.process_special_chars)
-        self._fmt_switch.set_active(self._settings.text.strip_formatting)
-        self._url_switch.set_active(self._settings.text.process_urls)
+            # Character limit combo
+            current_limit = self._settings.text.max_chars
+            for i, val in enumerate(self._char_limit_values):
+                if val == current_limit:
+                    self._max_chars_combo.set_selected(i)
+                    break
 
-        # Character limit combo
-        current_limit = self._settings.text.max_chars
-        for i, val in enumerate(self._char_limit_values):
-            if val == current_limit:
-                self._max_chars_combo.set_selected(i)
-                break
+            # Backend combo
+            backend_map = {
+                TTSBackend.RHVOICE.value: 0,
+                TTSBackend.ESPEAK_NG.value: 1,
+                TTSBackend.PIPER.value: 2,
+                TTSBackend.KOKORO.value: 3,
+            }
+            current_backend = self._settings.speech.backend
+            if current_backend not in backend_map:
+                # Handle legacy/removed speech-dispatcher engine
+                current_backend = TTSBackend.RHVOICE.value
+                self._settings.speech.backend = current_backend
+                self._settings_service.save_now()
 
-        # Backend combo
-        backend_map = {
-            TTSBackend.RHVOICE.value: 0,
-            TTSBackend.ESPEAK_NG.value: 1,
-            TTSBackend.PIPER.value: 2,
-        }
-        current_backend = self._settings.speech.backend
-        if current_backend not in backend_map:
-            # Handle legacy/removed speech-dispatcher engine
-            current_backend = TTSBackend.RHVOICE.value
-            self._settings.speech.backend = current_backend
-            self._settings_service.save_now()
+            backend_idx = backend_map.get(current_backend, 0)
+            self._backend_combo.set_selected(backend_idx)
 
-        backend_idx = backend_map.get(current_backend, 0)
-        self._backend_combo.set_selected(backend_idx)
+            # Keyboard shortcut
+            accel = self._settings.shortcut.keybinding
+            self._shortcut_label.set_accelerator("" if accel == "none" else accel)
 
-        # Keyboard shortcut
-        accel = self._settings.shortcut.keybinding
-        self._shortcut_label.set_accelerator("" if accel == "none" else accel)
+            # Launcher toggle
+            self._launcher_switch_widget.set_active(
+                self._settings.shortcut.show_in_launcher
+            )
 
-        # Launcher toggle
-        self._launcher_switch_widget.set_active(
-            self._settings.shortcut.show_in_launcher
-        )
+            # History toggle
+            self._history_switch_widget.set_active(self._settings.history.enabled)
 
-        # Update KDE shortcut to default
-        DesktopIntegrationService.update_khotkeys(accel)
+            # Kokoro controls — visible only when Kokoro is selected
+            is_kokoro = current_backend == TTSBackend.KOKORO.value
+            self._kokoro_emotion_combo.set_visible(is_kokoro)
+            self._kokoro_blend_combo.set_visible(is_kokoro)
+            kokoro = self._settings.speech.kokoro
+            for i, v in enumerate(self._kokoro_emotion_values):
+                if v == kokoro.emotion_preset:
+                    self._kokoro_emotion_combo.set_selected(i)
+                    break
+            if is_kokoro:
+                self._populate_kokoro_blend_combo(kokoro.voice_blend)
 
-        # Update hero labels
-        self._update_hero_labels(self._tts.state)
+            # Update KDE shortcut to default
+            DesktopIntegrationService.update_khotkeys(accel)
 
-        self._updating_ui = False
+            # Update hero labels
+            self._update_hero_labels(self._tts.state)
 
     def set_launcher_enabled(self, enabled: bool) -> None:
         """Expose launcher toggle state change to other components."""

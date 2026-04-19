@@ -1,5 +1,14 @@
 #!/bin/bash
 # BigLinux TTS — GUI Launcher
 
+# Detect dev environment: if launched from git repo, use repo's main.py
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MAIN_PY="${SCRIPT_DIR}/../share/biglinux/tts-biglinux/main.py"
+
+if [[ -f "$MAIN_PY" && -d "${SCRIPT_DIR}/../../.git" ]]; then
+    cd "${SCRIPT_DIR}/../share/biglinux/tts-biglinux/"
+    exec -a biglinux-tts python main.py "$@"
+fi
+
 cd /usr/share/biglinux/tts-biglinux/
 exec -a biglinux-tts python main.py "$@"

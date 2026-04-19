@@ -57,6 +57,11 @@
     );
 }
 
+.status-neural.status-speaking .hero-section {
+    background: linear-gradient(135deg,
+            alpha(@accent_bg_color, 0.22),
+            alpha(@purple_3, 0.10));
+}
 .status-error .hero-section {
     background: linear-gradient(
         135deg,
@@ -154,4 +159,79 @@ scale marks mark label {
 .voice-manager-installed-badge {
     background: alpha(@success_bg_color, 0.2);
     color: @success_color;
+}
+
+/* ── History Cards ───────────────────────────────────────────────── */
+
+.history-card {
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: alpha(@card_bg_color, 0.6);
+}
+
+.history-text-preview {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.history-meta {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.history-badge {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 12px;
+    background: alpha(@accent_bg_color, 0.15);
+    color: @accent_fg_color;
+}
+
+/* ── Audio Player ────────────────────────────────────────────────── */
+
+.player-controls {
+    margin-top: 4px;
+    padding: 4px 0;
+}
+
+.player-time {
+    font-family: monospace;
+    font-size: 12px;
+    min-width: 40px;
+    opacity: 0.7;
+}
+
+.player-seek {
+    margin: 0 2px;
+}
+
+.player-seek trough {
+    min-height: 6px;
+    border-radius: 3px;
+}
+
+.player-seek highlight {
+    border-radius: 3px;
+    background: @accent_bg_color;
+}
+
+.player-seek slider {
+    min-width: 14px;
+    min-height: 14px;
+    border-radius: 50%;
+    background: @accent_bg_color;
+    border: 2px solid alpha(@accent_bg_color, 0.5);
+    transition: transform 150ms ease;
+}
+
+.player-seek slider:hover {
+    background: lighter(@accent_bg_color);
+}
+
+/* ── View Switcher ───────────────────────────────────────────────── */
+
+.tab-switcher {
+    margin: 0;
 }

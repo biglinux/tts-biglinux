@@ -1,15 +1,58 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
-.venv
+.tox/
+.nox/
+
+# Virtual environments
+.venv/
 venv/
 ENV/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Editors / IDEs
 .vscode/
 .idea/
 *.swp
+*.swo
+*~
 *.bak
-PLANNING.md
+*.orig
+\#*\#
+
+# Linters / formatters
+.ruff_cache/
+.mypy_cache/
+.audit/
+
+# Serena
+.serena/
+
+# Compiled translations
+*.mo
+
+# Rust
+tts-engine/target/
+*.so
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

@@ -22,6 +22,7 @@ from config import (
     WINDOW_WIDTH_MIN,
     save_settings,
 )
+from ui.history_view import HistoryView
 from ui.main_view import MainView
 from ui.welcome_dialog import WelcomeWindow
 from utils.i18n import _
@@ -78,31 +79,59 @@ class TTSWindow(Adw.ApplicationWindow):
         self.set_title(_(APP_NAME))
 
     def _setup_content(self) -> None:
-        """Create main window content."""
+        """Create main window content with tabbed layout."""
         # Toast overlay for inline notifications
         self._toast_overlay = Adw.ToastOverlay()
 
         # Toolbar view for header integration
         toolbar_view = Adw.ToolbarView()
 
-        # Header bar
+        # Header bar with view switcher
         header = self._create_header_bar()
         toolbar_view.add_top_bar(header)
 
-        # Navigation view
-        self._navigation_view = Adw.NavigationView()
+        # View stack for tabs
+        self._view_stack = Adw.ViewStack()
 
-        # Main settings view
+        # Tab 1 — TTS settings
         self._main_view = MainView(
             tts_service=self._app.tts_service,
             settings_service=self._app.settings_service,
             on_toast=self.show_toast,
         )
-        self._navigation_view.add(self._main_view)
+        self._view_stack.add_titled_with_icon(
+            self._main_view, "tts", _("TTS"),
+            "audio-speakers-symbolic",
+        )
 
-        toolbar_view.set_content(self._navigation_view)
+        # Tab 2 — History
+        self._history_view = HistoryView()
+        self._history_page = self._view_stack.add_titled_with_icon(
+            self._history_view, "history", _("History"),
+            "document-open-recent-symbolic",
+        )
+        # Show/hide history tab based on settings
+        history_enabled = self.settings.history.enabled
+        self._history_page.set_visible(history_enabled)
+
+        # Reload history when switching to the tab
+        self._view_stack.connect(
+            "notify::visible-child-name", self._on_tab_changed
+        )
+
+        toolbar_view.set_content(self._view_stack)
+
+        # Bottom view switcher bar (shown on narrow windows)
+        self._switcher_bar = Adw.ViewSwitcherBar()
+        self._switcher_bar.set_stack(self._view_stack)
+        self._switcher_bar.set_reveal(False)
+        toolbar_view.add_bottom_bar(self._switcher_bar)
+
         self._toast_overlay.set_child(toolbar_view)
         self.set_content(self._toast_overlay)
+
+        # Responsive breakpoints
+        self._setup_breakpoints()
 
     def show_toast(self, message: str, timeout: int = 3) -> None:
         """Show an inline toast notification."""
@@ -121,19 +150,61 @@ class TTSWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _create_header_bar(self) -> Adw.HeaderBar:
-        """Create header bar with icon and menu."""
+        """Create header bar with view switcher and menu."""
         header = Adw.HeaderBar()
         header.set_show_end_title_buttons(True)
 
-        # Title
-        title = Adw.WindowTitle.new(_(APP_NAME), "")
-        header.set_title_widget(title)
+        # View switcher as title widget
+        self._view_switcher = Adw.ViewSwitcher()
+        self._view_switcher.set_policy(Adw.ViewSwitcherPolicy.WIDE)
+        GLib.idle_add(self._connect_switcher)
+        header.set_title_widget(self._view_switcher)
 
         # Menu button
         menu_button = self._create_menu_button()
         header.pack_end(menu_button)
 
         return header
+
+    def _connect_switcher(self) -> bool:
+        """Connect view switcher to stack (called via idle_add)."""
+        if hasattr(self, "_view_stack"):
+            self._view_switcher.set_stack(self._view_stack)
+        return GLib.SOURCE_REMOVE
+
+    def _setup_breakpoints(self) -> None:
+        """Configure adaptive breakpoints for narrow/wide layouts."""
+        # < 550sp: move tab switching to bottom bar
+        bp_narrow = Adw.Breakpoint.new(
+            Adw.BreakpointCondition.parse("max-width: 550sp")
+        )
+        bp_narrow.add_setter(self._switcher_bar, "reveal", True)
+        bp_narrow.add_setter(self._view_switcher, "visible", False)
+        bp_narrow.connect("apply", self._on_narrow_apply)
+        bp_narrow.connect("unapply", self._on_narrow_unapply)
+        self.add_breakpoint(bp_narrow)
+
+    def _on_narrow_apply(self, _bp: Adw.Breakpoint) -> None:
+        """Apply narrow layout CSS class."""
+        self._main_view.add_css_class("narrow-layout")
+
+    def _on_narrow_unapply(self, _bp: Adw.Breakpoint) -> None:
+        """Remove narrow layout CSS class."""
+        self._main_view.remove_css_class("narrow-layout")
+
+    def _on_tab_changed(
+        self, stack: Adw.ViewStack, _param: object
+    ) -> None:
+        """Handle tab switch — reload history when visiting the tab."""
+        if stack.get_visible_child_name() == "history":
+            self._history_view.reload()
+
+    def update_history_tab_visibility(self, enabled: bool) -> None:
+        """Show or hide the History tab."""
+        if hasattr(self, "_history_page"):
+            self._history_page.set_visible(enabled)
+            if not enabled and hasattr(self, "_view_stack"):
+                self._view_stack.set_visible_child_name("tts")
 
     def _create_menu_button(self) -> Gtk.MenuButton:
         """Create application menu button."""

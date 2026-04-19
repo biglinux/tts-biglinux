@@ -8,8 +8,11 @@ voice packages for all TTS engines (RHVoice, Piper, espeak-ng) via pacman.
 from __future__ import annotations
 
 import logging
+import os
 import re
+import shutil
 import subprocess
+import tempfile
 import threading
 from typing import Any, Callable
 
@@ -19,6 +22,14 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk
 
+from services.kokoro_voice_service import (
+    get_voice_status as kokoro_get_voice_status,
+    download_voice as kokoro_download_voice,
+    remove_voice as kokoro_remove_voice,
+    is_kokoro_installed,
+    BASE_VOICE_IDS as KOKORO_BASE_VOICE_IDS,
+    get_active_voices_bin,
+)
 from utils.i18n import _
 
 logger = logging.getLogger(__name__)
@@ -83,11 +94,65 @@ _LANG_DISPLAY: dict[str, str] = {
     "uk-ua": "🇺🇦  Ukrainian",
     "vi-vn": "🇻🇳  Vietnamese",
     "zh-cn": "🇨🇳  Chinese",
+    # Kokoro language codes
+    "pt-br": "🇧🇷  Portuguese (Brazil)",
+    "en-us": "🇺🇸  English (US)",
+    "en-gb": "🇬🇧  English (UK)",
+    "es": "🇪🇸  Spanish",
+    "fr": "🇫🇷  French",
+    "it": "🇮🇹  Italian",
+    "ja": "🇯🇵  Japanese",
+    "hi": "🇮🇳  Hindi",
+    "zh": "🇨🇳  Chinese",
 }
 
 _GENDER_ICON: dict[str, str] = {
     "female": "♀",
     "male": "♂",
+}
+
+# Sample texts for voice preview, keyed by language prefix
+_PREVIEW_TEXT: dict[str, str] = {
+    "pt": "Olá, esta é uma demonstração de voz.",
+    "en": "Hello, this is a voice demonstration.",
+    "es": "Hola, esta es una demostración de voz.",
+    "fr": "Bonjour, ceci est une démonstration vocale.",
+    "de": "Hallo, dies ist eine Sprachdemonstration.",
+    "it": "Ciao, questa è una dimostrazione vocale.",
+    "ja": "こんにちは、これは音声デモンストレーションです。",
+    "zh": "你好，这是语音演示。",
+    "ru": "Здравствуйте, это демонстрация голоса.",
+    "hi": "नमस्ते, यह एक आवाज़ प्रदर्शन है।",
+    "pl": "Cześć, to jest demonstracja głosu.",
+    "uk": "Привіт, це демонстрація голосу.",
+    "ko": "안녕하세요, 음성 시연입니다.",
+    "ar": "مرحبًا، هذا عرض صوتي.",
+    "tr": "Merhaba, bu bir ses gösterisidir.",
+    "nl": "Hallo, dit is een stemmonstratie.",
+    "sv": "Hej, detta är en röstdemonstration.",
+    "da": "Hej, dette er en stemmedemonstration.",
+    "fi": "Hei, tämä on ääniesittely.",
+    "no": "Hei, dette er en stemmedemonstrasjon.",
+    "cs": "Ahoj, toto je ukázka hlasu.",
+    "sk": "Ahoj, toto je ukážka hlasu.",
+    "ro": "Bună, aceasta este o demonstrație vocală.",
+    "hu": "Helló, ez egy hangbemutató.",
+    "el": "Γεια σας, αυτή είναι μια ηχητική επίδειξη.",
+    "hr": "Bok, ovo je demonstracija glasa.",
+    "sr": "Здраво, ово је демонстрација гласа.",
+    "sl": "Pozdravljeni, to je glasovna predstavitev.",
+    "ka": "გამარჯობა, ეს ხმის დემონსტრაციაა.",
+    "fa": "سلام، این یک نمایش صوتی است.",
+    "vi": "Xin chào, đây là bản trình diễn giọng nói.",
+    "cy": "Helo, dyma arddangosiad llais.",
+    "is": "Halló, þetta er radddemó.",
+    "sw": "Habari, hii ni onyesho la sauti.",
+    "lb": "Moien, dëst ass eng Stëmmdemo.",
+    "ne": "नमस्ते, यो एउटा आवाज प्रदर्शन हो।",
+    "kk": "Сәлем, бұл дауыс демонстрациясы.",
+    "ky": "Салам, бул үн демонстрациясы.",
+    "uz": "Salom, bu ovozli namoyish.",
+    "ca": "Hola, aquesta és una demostració de veu.",
 }
 
 
@@ -210,6 +275,11 @@ def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
         # Prepend engine packages
         result["Piper"] = piper_engine_pkgs + result["Piper"]
 
+    # ── Kokoro TTS — individual voices ──
+    kokoro_voices = kokoro_get_voice_status()
+    if kokoro_voices:
+        result["Kokoro"] = kokoro_voices
+
     return result
 
 
@@ -245,6 +315,8 @@ class VoiceManagerDialog(Adw.Dialog):
         self._engine_filter = engine_filter
         self._all_packages: dict[str, list[dict[str, str]]] = {}
         self._busy = False
+        self._preview_proc: subprocess.Popen | None = None
+        self._preview_tmp: str | None = None
 
         self.set_title(_("Voice Manager"))
         self.set_content_width(580)
@@ -301,6 +373,7 @@ class VoiceManagerDialog(Adw.Dialog):
         # Start loading
         self._stack.set_visible_child_name("loading")
         self._spinner.start()
+        self.connect("closed", lambda _d: self._stop_preview())
         threading.Thread(target=self._load_packages, daemon=True).start()
 
     # ── Loading ──────────────────────────────────────────────────────
@@ -360,9 +433,13 @@ class VoiceManagerDialog(Adw.Dialog):
                 "icon": "audio-card-symbolic",
                 "subtitle": _("Lightweight multi-language synthesizer"),
             },
+            "Kokoro": {
+                "icon": "starred-symbolic",
+                "subtitle": _("Neural TTS — high quality multilingual voices (82M)"),
+            },
         }
 
-        for engine_name in ["RHVoice", "Piper", "espeak-ng"]:
+        for engine_name in ["Kokoro", "RHVoice", "Piper", "espeak-ng"]:
             # Apply engine filter if specified
             if self._engine_filter and self._engine_filter.lower() not in engine_name.lower():
                 continue
@@ -388,7 +465,37 @@ class VoiceManagerDialog(Adw.Dialog):
 
             # ── Available sub-section ──
             if available:
-                if engine_name == "RHVoice":
+                if engine_name == "Kokoro":
+                    # Group by language in expanders (like RHVoice)
+                    by_lang: dict[str, list[dict[str, str]]] = {}
+                    for pkg in available:
+                        by_lang.setdefault(pkg["language"], []).append(pkg)
+
+                    expander = Adw.ExpanderRow()
+                    expander.set_title(
+                        _("Add Kokoro voices — {count} available").format(count=len(available))
+                    )
+                    expander.set_subtitle(
+                        _("{langs} languages").format(langs=len(by_lang))
+                    )
+
+                    for lang in sorted(by_lang.keys()):
+                        lang_display = _LANG_DISPLAY.get(lang.lower(), lang.title())
+                        lang_exp = Adw.ExpanderRow()
+                        lang_exp.set_title(lang_display)
+                        lang_exp.set_subtitle(
+                            _("{count} voice(s)").format(count=len(by_lang[lang]))
+                        )
+
+                        for pkg in sorted(by_lang[lang], key=lambda p: p["display_name"]):
+                            row = self._make_row(pkg, is_installed=False)
+                            lang_exp.add_row(row)
+
+                        expander.add_row(lang_exp)
+
+                    group.add(expander)
+
+                elif engine_name == "RHVoice":
                     # Group by language in expanders
                     by_lang: dict[str, list[dict[str, str]]] = {}
                     for pkg in available:
@@ -469,14 +576,36 @@ class VoiceManagerDialog(Adw.Dialog):
                 row.set_subtitle("  •  ".join(parts))
 
             # Installed badge
-            badge = Gtk.Label(label=_("Installed"))
+            is_kokoro_base = (
+                pkg.get("engine") == "Kokoro"
+                and pkg.get("is_base") == "yes"
+            )
+            badge_label = _("Included") if is_kokoro_base else _("Installed")
+            badge = Gtk.Label(label=badge_label)
             badge.add_css_class("voice-manager-badge")
             badge.add_css_class("voice-manager-installed-badge")
             badge.set_valign(Gtk.Align.CENTER)
             row.add_suffix(badge)
 
-            # Only show Remove for voice packages, not core engines
-            if pkg["pkg"] not in ("espeak-ng", "piper-tts-bin", "piper-voices-common"):
+            # Preview button — available for engines with direct CLI access
+            engine = pkg.get("engine", "")
+            can_preview = engine in ("Kokoro", "RHVoice", "espeak-ng")
+            if can_preview:
+                preview_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
+                preview_btn.add_css_class("flat")
+                preview_btn.add_css_class("circular")
+                preview_btn.set_valign(Gtk.Align.CENTER)
+                preview_btn.set_tooltip_text(_("Preview voice"))
+                preview_btn.connect(
+                    "clicked", lambda b, p=pkg: self._on_preview(b, p)
+                )
+                row.add_suffix(preview_btn)
+
+            # Only show Remove for voice packages, not core engines or Kokoro base voices
+            no_remove = (
+                "espeak-ng", "piper-tts-bin", "piper-voices-common",
+            )
+            if pkg["pkg"] not in no_remove and not is_kokoro_base:
                 btn = Gtk.Button()
                 btn_content = Adw.ButtonContent()
                 btn_content.set_icon_name("user-trash-symbolic")
@@ -522,12 +651,18 @@ class VoiceManagerDialog(Adw.Dialog):
             return
 
         display = pkg.get("display_name", pkg["pkg"])
+        is_kokoro = pkg.get("engine") == "Kokoro"
+
+        body = (
+            _("Download <b>{name}</b>?\n\nThe voice will be downloaded from the internet (~512 KB).")
+            if is_kokoro
+            else _("Install <b>{name}</b>?\n\nThis requires administrator privileges.")
+        ).format(name=display)
+
         self._confirm(
             heading=_("Install Voice"),
-            body=_(
-                "Install <b>{name}</b>?\n\nThis requires administrator privileges."
-            ).format(name=display),
-            confirm_label=_("Install"),
+            body=body,
+            confirm_label=_("Download") if is_kokoro else _("Install"),
             appearance=Adw.ResponseAppearance.SUGGESTED,
             on_confirm=lambda: self._run_action("install", pkg, button),
         )
@@ -590,9 +725,18 @@ class VoiceManagerDialog(Adw.Dialog):
         button.set_child(spinner)
 
         pkg_name = pkg["pkg"]
+        is_kokoro = pkg.get("engine") == "Kokoro"
 
         def _worker() -> tuple[bool, str]:
             try:
+                if is_kokoro:
+                    # Kokoro: download/remove individual voice files
+                    voice_id = pkg.get("voice_id", "")
+                    if action == "install":
+                        return kokoro_download_voice(voice_id)
+                    else:
+                        return kokoro_remove_voice(voice_id)
+
                 if action == "install":
                     cmd = [
                         "pkexec", "pacman", "-S", "--noconfirm",
@@ -652,3 +796,166 @@ class VoiceManagerDialog(Adw.Dialog):
             GLib.idle_add(_on_done, result)
 
         threading.Thread(target=_threaded, daemon=True).start()
+
+    # ── Voice preview ────────────────────────────────────────────────
+
+    def _stop_preview(self) -> None:
+        """Kill any running preview subprocess and cleanup temp files."""
+        if self._preview_proc and self._preview_proc.poll() is None:
+            self._preview_proc.terminate()
+            try:
+                self._preview_proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                self._preview_proc.kill()
+        self._preview_proc = None
+        if self._preview_tmp:
+            try:
+                os.unlink(self._preview_tmp)
+            except OSError:
+                pass
+            self._preview_tmp = None
+
+    def _get_sample_text(self, lang: str) -> str:
+        """Get sample text for a language code."""
+        # Try exact match, then prefix
+        lang_lower = lang.lower().replace("_", "-")
+        if lang_lower in _PREVIEW_TEXT:
+            return _PREVIEW_TEXT[lang_lower]
+        prefix = lang_lower.split("-")[0]
+        if prefix in _PREVIEW_TEXT:
+            return _PREVIEW_TEXT[prefix]
+        return _PREVIEW_TEXT["en"]
+
+    def _on_preview(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
+        """Preview an installed voice."""
+        self._stop_preview()
+
+        engine = pkg.get("engine", "")
+        lang = pkg.get("language", "")
+        sample = self._get_sample_text(lang)
+
+        # Show spinner feedback on button
+        button.set_icon_name("media-playback-stop-symbolic")
+
+        def _restore_button() -> bool:
+            button.set_icon_name("media-playback-start-symbolic")
+            return False
+
+        if engine == "espeak-ng":
+            self._preview_espeak(sample, _restore_button)
+        elif engine == "RHVoice":
+            voice_name = pkg.get("voice_name", "")
+            self._preview_rhvoice(voice_name, sample, _restore_button)
+        elif engine == "Kokoro":
+            voice_id = pkg.get("voice_id", "")
+            self._preview_kokoro(voice_id, lang, sample, _restore_button)
+        else:
+            _restore_button()
+
+    def _preview_espeak(
+        self, text: str, on_done: Callable[[], bool]
+    ) -> None:
+        """Preview using espeak-ng (speaks directly, no temp file)."""
+        def _worker() -> None:
+            try:
+                proc = subprocess.Popen(
+                    ["espeak-ng", text],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                self._preview_proc = proc
+                proc.wait()
+            except (FileNotFoundError, OSError) as e:
+                logger.warning("espeak-ng preview failed: %s", e)
+            GLib.idle_add(on_done)
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _preview_rhvoice(
+        self, voice_name: str, text: str, on_done: Callable[[], bool]
+    ) -> None:
+        """Preview via speech-dispatcher with RHVoice output module."""
+        def _worker() -> None:
+            try:
+                cmd = ["spd-say", "-o", "rhvoice", "-y", voice_name, "-w", text]
+                proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                self._preview_proc = proc
+                proc.wait()
+            except (FileNotFoundError, OSError) as e:
+                logger.warning("RHVoice preview failed: %s", e)
+            GLib.idle_add(on_done)
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _preview_kokoro(
+        self, voice_id: str, lang: str, text: str,
+        on_done: Callable[[], bool],
+    ) -> None:
+        """Preview via koko CLI binary."""
+        koko_bin = shutil.which("koko")
+        if not koko_bin:
+            logger.warning("koko binary not found for preview")
+            GLib.idle_add(on_done)
+            return
+
+        # Map language to koko lang code
+        lang_lower = lang.lower().replace("_", "-")
+        lang_code = lang_lower if lang_lower else "pt-br"
+
+        def _worker() -> None:
+            tmp_path = None
+            try:
+                tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+                tmp_path = tmp.name
+                tmp.close()
+                self._preview_tmp = tmp_path
+
+                koko_env = {
+                    **os.environ,
+                    "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
+                    "KOKO_DATA_PATH": str(get_active_voices_bin()),
+                }
+
+                gen_cmd = [
+                    koko_bin, "-s", voice_id, "-l", lang_code,
+                    "--force-style", "true",
+                    "text", "-o", tmp_path, text,
+                ]
+                gen_proc = subprocess.Popen(
+                    gen_cmd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    env=koko_env,
+                )
+                self._preview_proc = gen_proc
+                gen_proc.wait()
+
+                if gen_proc.returncode != 0:
+                    logger.warning("Kokoro preview gen failed (code %d)", gen_proc.returncode)
+                    GLib.idle_add(on_done)
+                    return
+
+                # Play generated audio
+                play_proc = subprocess.Popen(
+                    ["aplay", "-q", tmp_path],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                self._preview_proc = play_proc
+                play_proc.wait()
+            except (FileNotFoundError, OSError) as e:
+                logger.warning("Kokoro preview failed: %s", e)
+            finally:
+                if tmp_path:
+                    try:
+                        os.unlink(tmp_path)
+                    except OSError:
+                        pass
+                    self._preview_tmp = None
+            GLib.idle_add(on_done)
+
+        threading.Thread(target=_worker, daemon=True).start()

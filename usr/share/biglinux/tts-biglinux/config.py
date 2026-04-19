@@ -1,5 +1,5 @@
 """
-Configuration, constants, enums and dataclasses for BigLinux TTS v3.1.2 — Leitura de texto por voz para o desktop Linux
+Configuration, constants, enums and dataclasses for BigLinux TTS v4.0.0
 Single source of truth for all application settings and defaults.
 """
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 APP_ID = "br.com.biglinux.tts"
 APP_NAME = "BigLinux TTS"
-APP_VERSION = "3.2.3"
+APP_VERSION = "4.0.0"
 APP_DEVELOPERS = ["Tales A. Mendonça", "Bruno Gonçalves Araujo", "Rafael Ruscher"]
 APP_WEBSITE = "https://www.biglinux.com.br"
 APP_ISSUE_URL = "https://github.com/biglinux/tts-biglinux/issues"
@@ -86,6 +86,7 @@ class TTSBackend(str, Enum):
     RHVOICE = "rhvoice"
     ESPEAK_NG = "espeak-ng"
     PIPER = "piper"
+    KOKORO = "kokoro"
 
 
 class SpeakAction(str, Enum):
@@ -107,6 +108,35 @@ class TTSState(str, Enum):
 # ── Dataclasses ───────────────────────────────────────────────────────
 
 
+# ── Kokoro-specific defaults ───────────────────────────────────────────
+
+KOKORO_SPEED_MIN = 0.5
+KOKORO_SPEED_MAX = 2.0
+KOKORO_SPEED_DEFAULT = 1.0
+KOKORO_SPEED_STEP = 0.05
+
+
+@dataclass
+class KokoroConfig:
+    """Kokoro TTS specific parameters."""
+
+    speed: float = KOKORO_SPEED_DEFAULT
+    voice_blend: str = ""  # e.g. "af_heart,af_bella" for mixing
+    blend_ratio: float = 0.5  # 0.0-1.0 ratio for voice blending
+    emotion_preset: str = "neutral"  # neutral, happy, calm, urgent, narrative
+    lang_code: str = "p"  # p=pt-br, a=en-us, b=en-gb, e=es, etc.
+
+
+@dataclass
+class HistoryConfig:
+    """History save configuration."""
+
+    enabled: bool = False
+    save_audio: bool = True
+    save_text: bool = True
+    playback_mode: str = "interrupt"  # interrupt | queue | simultaneous
+
+
 @dataclass
 class SpeechConfig:
     """Voice and speech parameters."""
@@ -117,6 +147,7 @@ class SpeechConfig:
     voice_id: str = ""
     backend: str = TTSBackend.RHVOICE.value
     output_module: str = ""
+    kokoro: KokoroConfig = field(default_factory=KokoroConfig)
 
 
 @dataclass
@@ -136,7 +167,7 @@ class ShortcutConfig:
 
     keybinding: str = "<Alt>v"
     enabled: bool = True
-    show_in_launcher: bool = False
+    show_in_launcher: bool = True  # Tray enabled by default
 
 
 @dataclass
@@ -157,6 +188,7 @@ class AppSettings:
     text: TextConfig = field(default_factory=TextConfig)
     shortcut: ShortcutConfig = field(default_factory=ShortcutConfig)
     window: WindowConfig = field(default_factory=WindowConfig)
+    history: HistoryConfig = field(default_factory=HistoryConfig)
     show_welcome: bool = True
 
 
@@ -203,13 +235,22 @@ def _deserialize_settings(data: dict) -> AppSettings:
 
     if "speech" in data:
         s = data["speech"]
+        kokoro_data = s.get("kokoro", {})
+        kokoro_cfg = KokoroConfig(
+            speed=float(kokoro_data.get("speed", KOKORO_SPEED_DEFAULT)),
+            voice_blend=str(kokoro_data.get("voice_blend", "")),
+            blend_ratio=float(kokoro_data.get("blend_ratio", 0.5)),
+            emotion_preset=str(kokoro_data.get("emotion_preset", "neutral")),
+            lang_code=str(kokoro_data.get("lang_code", "p")),
+        )
         settings.speech = SpeechConfig(
             rate=int(s.get("rate", RATE_DEFAULT)),
             pitch=int(s.get("pitch", PITCH_DEFAULT)),
             volume=int(s.get("volume", VOLUME_DEFAULT)),
             voice_id=str(s.get("voice_id", "")),
-            backend=str(s.get("backend", TTSBackend.SPEECH_DISPATCHER.value)),
+            backend=str(s.get("backend", TTSBackend.RHVOICE.value)),
             output_module=str(s.get("output_module", "rhvoice")),
+            kokoro=kokoro_cfg,
         )
 
     if "text" in data:
@@ -227,6 +268,7 @@ def _deserialize_settings(data: dict) -> AppSettings:
         settings.shortcut = ShortcutConfig(
             keybinding=str(sc.get("keybinding", "<Alt>v")),
             enabled=bool(sc.get("enabled", True)),
+            show_in_launcher=bool(sc.get("show_in_launcher", True)),
         )
 
     if "window" in data:
@@ -236,6 +278,15 @@ def _deserialize_settings(data: dict) -> AppSettings:
             height=int(w.get("height", WINDOW_HEIGHT_DEFAULT)),
             maximized=bool(w.get("maximized", False)),
             tray_warning_shown=bool(w.get("tray_warning_shown", False)),
+        )
+
+    if "history" in data:
+        h = data["history"]
+        settings.history = HistoryConfig(
+            enabled=bool(h.get("enabled", False)),
+            save_audio=bool(h.get("save_audio", True)),
+            save_text=bool(h.get("save_text", True)),
+            playback_mode=str(h.get("playback_mode", "interrupt")),
         )
 
     settings.show_welcome = bool(data.get("show_welcome", True))
