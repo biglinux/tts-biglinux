@@ -17,7 +17,6 @@ from collections.abc import Callable
 from typing import Any
 
 from config import TTSBackend, TTSState, KokoroConfig
-from services.kokoro_voice_service import get_active_voices_bin
 from services.text_processor import process_text
 from services.voice_manager import VoiceInfo
 from utils.speechd_utils import try_restart_speechd
@@ -47,59 +46,6 @@ OnProgress = Callable[[str], None]
 
 # Watch interval in ms for process completion
 _WATCH_INTERVAL_MS = 300
-
-# koko text crashes (SIGABRT) on input > ~410 chars.
-# Split at sentence boundaries, keeping each chunk under this limit.
-_KOKORO_MAX_CHUNK = 200
-
-# Regex: sentence-ending punctuation followed by whitespace
-import re
-_SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?;:…])\s+')
-
-
-def _split_kokoro_text(text: str) -> list[str]:
-    """Split text into chunks safe for koko text (≤ _KOKORO_MAX_CHUNK chars).
-
-    Splits at sentence boundaries first, then at word boundaries if a sentence
-    still exceeds the limit.
-    """
-    sentences = _SENTENCE_SPLIT_RE.split(text.strip())
-    chunks: list[str] = []
-    current = ""
-
-    for sentence in sentences:
-        sentence = sentence.strip()
-        if not sentence:
-            continue
-
-        # If adding this sentence fits, accumulate
-        if current and len(current) + 1 + len(sentence) <= _KOKORO_MAX_CHUNK:
-            current += " " + sentence
-        elif not current and len(sentence) <= _KOKORO_MAX_CHUNK:
-            current = sentence
-        else:
-            # Flush current chunk
-            if current:
-                chunks.append(current)
-                current = ""
-
-            if len(sentence) <= _KOKORO_MAX_CHUNK:
-                current = sentence
-            else:
-                # Sentence too long — split at word boundaries
-                words = sentence.split()
-                for word in words:
-                    if current and len(current) + 1 + len(word) <= _KOKORO_MAX_CHUNK:
-                        current += " " + word
-                    else:
-                        if current:
-                            chunks.append(current)
-                        current = word
-
-    if current:
-        chunks.append(current)
-
-    return chunks if chunks else [text[:_KOKORO_MAX_CHUNK]]
 
 
 class TTSService:
@@ -814,19 +760,18 @@ class TTSService:
     def _speak_kokoro(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
     ) -> bool:
-        """Speak via Kokoro neural TTS using the koko CLI binary.
+        """Speak via Kokoro neural TTS using the Python API.
 
         voice_id format: "kokoro:af_heart" or "kokoro:pf_dora"
-        Uses the koko binary from biglinux-kokoro-tts package.
-
-        Strategy: generate audio to a temp WAV file via `koko text`, then play
-        it back — same approach as _speak_piper.
+        Uses kokoro.KPipeline to generate audio, then plays via aplay/sox.
         """
         import tempfile
 
-        koko_bin = shutil.which("koko")
-        if not koko_bin:
-            logger.error("koko binary not found — install biglinux-kokoro-tts")
+        try:
+            from kokoro import KPipeline
+            import soundfile as sf
+        except ImportError:
+            logger.error("Kokoro library not installed — pip install kokoro soundfile")
             return False
 
         # Read Kokoro-specific settings
@@ -841,31 +786,14 @@ class TTSService:
         if not kokoro_voice:
             kokoro_voice = "pf_dora"  # Default Brazilian Portuguese
 
-        # Determine lang_code — prefer KokoroConfig, fallback to voice prefix
+        # Determine lang_code — single-letter code for KPipeline
         voice_prefix = kokoro_voice[:1] if kokoro_voice else "p"
-        lang_code_map = {
-            "a": "en-us",  # American English
-            "b": "en-gb",  # British English
-            "e": "es",     # Spanish
-            "f": "fr",     # French
-            "h": "hi",     # Hindi
-            "i": "it",     # Italian
-            "j": "ja",     # Japanese
-            "p": "pt-br",  # Brazilian Portuguese
-            "z": "zh",     # Mandarin Chinese
-        }
-        lang_code = lang_code_map.get(voice_prefix, "pt-br")
+        lang_code = voice_prefix  # KPipeline uses single-letter codes directly
         if kokoro_cfg and kokoro_cfg.lang_code:
-            # Map single-letter config codes to espeak-ng language codes
-            cfg_lang_map = {
-                "a": "en-us", "b": "en-gb", "e": "es", "f": "fr",
-                "h": "hi", "i": "it", "j": "ja", "p": "pt-br", "z": "zh",
-            }
-            lang_code = cfg_lang_map.get(kokoro_cfg.lang_code, kokoro_cfg.lang_code)
+            lang_code = kokoro_cfg.lang_code
 
         # ── Speed calculation ──
         # Base speed from rate slider: (-100..100) → (0.5..2.0)
-        # koko: 0.5=slow, 1.0=normal, 2.0=fast
         base_speed = 1.0 + (rate / 100.0)
         base_speed = max(0.5, min(2.0, base_speed))
 
@@ -881,62 +809,29 @@ class TTSService:
         emotion_factor = _EMOTION_SPEED.get(emotion, 1.0)
         speed = max(0.5, min(2.0, base_speed * emotion_factor))
 
-        # Set environment for model/data paths (needed before blend validation)
-        koko_env = {**os.environ,
-            "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
-            "KOKO_DATA_PATH": str(get_active_voices_bin()),
-        }
-
-        # ── Voice blending ──
-        style = kokoro_voice
-        if kokoro_cfg and kokoro_cfg.voice_blend:
-            blend_voice = kokoro_cfg.voice_blend.strip()
-            # Strip "kokoro:" prefix — voice_blend stores catalog IDs
-            if blend_voice.startswith("kokoro:"):
-                blend_voice = blend_voice[7:]
-            blend_ratio = max(0.0, min(1.0, kokoro_cfg.blend_ratio))
-            if blend_voice and blend_voice != kokoro_voice:
-                # Validate blend voice exists before using it —
-                # koko falls back to a random voice if the blend voice is missing
-                blend_valid = self._is_kokoro_voice_available(
-                    blend_voice, koko_bin, koko_env,
-                )
-                if blend_valid:
-                    # koko format: voice1.weight+voice2.weight (weights 0-10)
-                    w1 = round((1.0 - blend_ratio) * 10)
-                    w2 = round(blend_ratio * 10)
-                    style = f"{kokoro_voice}.{w1}+{blend_voice}.{w2}"
-                else:
-                    logger.warning(
-                        "Kokoro blend voice '%s' not installed, using '%s' alone",
-                        blend_voice, kokoro_voice,
-                    )
-
         # Volume factor (0..100 → 0.2..2.0)
         vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
 
         logger.debug(
-            "Kokoro: voice=%s, style=%s, lang=%s, speed=%.2f, "
+            "Kokoro: voice=%s, lang=%s, speed=%.2f, "
             "emotion=%s, vol=%.2f, text=%r",
-            kokoro_voice, style, lang_code, speed,
+            kokoro_voice, lang_code, speed,
             emotion, vol_factor, text[:60],
         )
 
-        # koko text crashes (SIGABRT) on text > ~410 chars.
-        # Split into sentence-boundary chunks and process sequentially.
-        chunks = _split_kokoro_text(text)
-        logger.debug("Kokoro: split into %d chunk(s)", len(chunks))
+        # Create or reuse cached pipeline
+        cached_lang = getattr(self, "_kokoro_cached_lang", None)
+        if cached_lang != lang_code or not hasattr(self, "_kokoro_api_pipeline"):
+            try:
+                self._kokoro_api_pipeline = KPipeline(lang_code=lang_code)
+                self._kokoro_cached_lang = lang_code
+            except Exception as e:
+                logger.error("Failed to create KPipeline: %s", e)
+                return False
 
-        # Base command template — text and output path filled per chunk
-        base_cmd = [
-            koko_bin,
-            "-s", style,
-            "-l", lang_code,
-            "-p", f"{speed:.2f}",
-            "--force-style", "true",
-        ]
+        pipeline = self._kokoro_api_pipeline
 
-        # Check sox availability once
+        # Check sox availability for volume control
         sox_available = shutil.which("sox") is not None
 
         def _build_play_cmd(wav_path: str) -> list[str]:
@@ -945,62 +840,31 @@ class TTSService:
             return ["aplay", "-q", wav_path]
 
         def _generate_and_play() -> None:
-            """Pipeline: generate next chunk while current plays."""
+            """Generate audio via KPipeline and play chunks sequentially."""
             tmp_paths: list[str] = []
             play_proc: subprocess.Popen | None = None
 
-            def _gen_chunk(chunk: str) -> str | None:
-                """Generate a WAV for one chunk, return path or None on failure."""
-                tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-                path = tmp.name
-                tmp.close()
-                tmp_paths.append(path)
-
-                cmd = [*base_cmd, "text", "-o", path, chunk]
-                proc = subprocess.Popen(
-                    cmd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.PIPE,
-                    env=koko_env,
-                )
-                self._kokoro_proc = proc
-                proc.wait()
-                self._kokoro_proc = None
-
-                if self._kokoro_stop_event.is_set():
-                    return None
-                if proc.returncode != 0:
-                    if proc.returncode != -9:
-                        stderr = (
-                            proc.stderr.read().decode("utf-8", errors="replace")
-                            if proc.stderr else ""
-                        )
-                        logger.error("Kokoro gen failed (code %d): %s",
-                                     proc.returncode, stderr[-200:])
-                    return None
-                if not os.path.isfile(path) or os.path.getsize(path) < 100:
-                    logger.error("Kokoro generated empty audio")
-                    return None
-                return path
-
             try:
-                for i, chunk in enumerate(chunks):
+                generator = pipeline(text, voice=kokoro_voice, speed=speed)
+
+                for _gs, _ps, audio in generator:
                     if self._kokoro_stop_event.is_set():
                         if play_proc:
                             play_proc.terminate()
                         return
 
-                    # Generate this chunk
-                    wav = _gen_chunk(chunk)
-                    if wav is None:
-                        if play_proc:
-                            play_proc.terminate()
-                        self._set_state(TTSState.ERROR)
-                        return
+                    if audio is None or len(audio) < 100:
+                        continue
 
-                    # Wait for previous chunk playback to finish
+                    # Write audio chunk to temp WAV
+                    tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+                    path = tmp.name
+                    tmp.close()
+                    tmp_paths.append(path)
+                    sf.write(path, audio, 24000)
+
+                    # Wait for previous chunk to finish playing
                     if play_proc:
-                        # Poll with stop-event check instead of blocking wait
                         while play_proc.poll() is None:
                             if self._kokoro_stop_event.is_set():
                                 play_proc.terminate()
@@ -1008,30 +872,33 @@ class TTSService:
                             self._kokoro_stop_event.wait(timeout=0.05)
 
                     # Start playing this chunk
-                    play_cmd = _build_play_cmd(wav)
+                    play_cmd = _build_play_cmd(path)
                     play_proc = subprocess.Popen(
                         play_cmd,
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
-                    # Track so stop() can kill it
                     self._process = play_proc
 
-                # Keep last play_proc tracked for watch
+                # Wait for last chunk
                 if play_proc:
-                    self._piper_tmp_path = tmp_paths[-1] if tmp_paths else None
+                    while play_proc.poll() is None:
+                        if self._kokoro_stop_event.is_set():
+                            play_proc.terminate()
+                            return
+                        self._kokoro_stop_event.wait(timeout=0.05)
 
-            except (FileNotFoundError, OSError) as e:
-                logger.error("Failed to start Kokoro: %s", e)
+            except Exception as e:
+                logger.error("Kokoro generation failed: %s", e)
+                if play_proc and play_proc.poll() is None:
+                    play_proc.terminate()
                 self._set_state(TTSState.ERROR)
             finally:
-                playing = getattr(self, "_piper_tmp_path", None)
                 for p in tmp_paths:
-                    if p != playing:
-                        try:
-                            os.unlink(p)
-                        except OSError:
-                            pass
+                    try:
+                        os.unlink(p)
+                    except OSError:
+                        pass
 
         self._kokoro_stop_event.clear()
         self._kokoro_thread = threading.Thread(
@@ -1039,45 +906,6 @@ class TTSService:
         )
         self._kokoro_thread.start()
         return True
-
-    def _is_kokoro_voice_available(
-        self,
-        voice_name: str,
-        koko_bin: str,
-        koko_env: dict[str, str],
-    ) -> bool:
-        """Check if a Kokoro voice style is installed.
-
-        Uses a cached set populated from `koko voices` on first call.
-        Cache is invalidated when the active voices.bin changes.
-        """
-        current_bin = koko_env.get("KOKO_DATA_PATH", "")
-        if (
-            not hasattr(self, "_kokoro_available_voices")
-            or getattr(self, "_kokoro_voices_bin_path", "") != current_bin
-        ):
-            self._kokoro_voices_bin_path = current_bin
-            self._kokoro_available_voices: set[str] = set()
-            try:
-                proc = subprocess.run(
-                    [koko_bin, "voices"],
-                    capture_output=True, text=True, timeout=5,
-                    env=koko_env,
-                )
-                if proc.returncode == 0:
-                    for line in proc.stdout.splitlines():
-                        stripped = line.strip()
-                        if (
-                            stripped
-                            and not stripped.startswith("Voice ID")
-                            and not stripped.startswith("---")
-                            and "loaded:" not in stripped
-                        ):
-                            vid = stripped.split()[0]
-                            self._kokoro_available_voices.add(vid)
-            except (FileNotFoundError, subprocess.TimeoutExpired):
-                pass
-        return voice_name in self._kokoro_available_voices
 
     def _start_process(self, cmd: list[str], text: str) -> bool:
         """Start a TTS process with text piped to stdin."""

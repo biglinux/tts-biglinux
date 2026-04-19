@@ -146,6 +146,8 @@ class TTSWindow(Adw.ApplicationWindow):
             application=self._app,
             settings_service=self._app.settings_service,
         )
+        win.set_transient_for(self)
+        win.set_modal(True)
         win.present()
         return GLib.SOURCE_REMOVE
 
