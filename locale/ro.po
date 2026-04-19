@@ -14,6 +14,93 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 75
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 125
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 162
+msgid "Play"
+msgstr "Joacă"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
+msgid "Stop"
+msgstr "Oprire"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 148
+msgid "Pause"
+msgstr "Pauză"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+msgid "(no text)"
+msgstr "(niciun text)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
+msgid "Open file location"
+msgstr "Deschide locația fișierului"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 128
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 342
+msgid "Delete"
+msgstr "Șterge"
+# 
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 421
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 110
+msgid "History"
+msgstr "Istoric"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 439
+msgid "Search history…"
+msgstr "Istoric căutări…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 447
+msgid "Toggle grid/list view"
+msgstr "Comutare între vizualizarea grilă/listă"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 454
+msgid "Select items"
+msgstr "Selectați elemente"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 461
+msgid "Refresh"
+msgstr "Actualizează"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 474
+msgid "Select All"
+msgstr "Selectați tot"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 479
+msgid "Deselect All"
+msgstr "Deselectează tot"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 490
+msgid "Delete selected"
+msgstr "Șterge selecția"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 518
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 542
+msgid "History entries"
+msgstr "Intrări în istoric"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 551
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 743
+msgid "No History"
+msgstr "Fără istoric"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 553
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 745
+msgid "Spoken texts will appear here when history is enabled."
+msgstr "Textele vorbite vor apărea aici când istoricul este activat."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 737
+msgid "No Results"
+msgstr "Fără rezultate"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 739
+msgid "No entries match your search."
+msgstr "Niciun rezultat nu se potrivește căutării tale."
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
 msgid "Welcome to BigLinux TTS"
@@ -111,6 +198,177 @@ msgstr "Interfață nativă GTK4/Adwaita cu utilizare minimă a resurselor"
 msgid "Show this dialog on startup"
 msgstr "Afișați acest dialog la pornire"
 # 
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 325
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 249
+msgid "Voice Manager"
+msgstr "Manager de voce"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 287
+msgid "Loading available voices…"
+msgstr "Încărcarea vocilor disponibile…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 330
+msgid "No Voice Packages Found"
+msgstr "Nu au fost găsite pachete de voce."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 332
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Nu s-au găsit pachete de voce TTS în repositoarele pacman."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 353
+msgid "High quality offline voices"
+msgstr "Voci offline de înaltă calitate"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 357
+msgid "Neural network voices — natural sounding"
+msgstr "Voci ale rețelelor neuronale — sunet natural"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 361
+msgid "Lightweight multi-language synthesizer"
+msgstr "Sintetizator ușor multi-lingvistic"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 438
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "TTS neural — voci multilingve de înaltă calitate (82M)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 476
+#, python-brace-format
+msgid "Add Kokoro voices — {count} available"
+msgstr "Adăugați vocile Kokoro — {count} disponibile"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 402
+#, python-brace-format
+msgid "{langs} languages"
+msgstr "{langs} limbi"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
+#, python-brace-format
+msgid "{count} voice(s)"
+msgstr "{count} voce(voce)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 399
+#, python-brace-format
+msgid "Add RHVoice — {count} available"
+msgstr "Adăugați RHVoice — {count} disponibile"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 425
+#, python-brace-format
+msgid "Add Piper voices — {count} available"
+msgstr "Adăugați vocile Piper — {count} disponibile"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 427
+msgid "Neural TTS voice packs by language"
+msgstr "Pachete de voce TTS neural după limbă"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 583
+msgid "Included"
+msgstr "Inclus."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 474
+msgid "Installed"
+msgstr "Instalat"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 598
+msgid "Preview voice"
+msgstr "Previzualizare voce"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 485
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 546
+msgid "Remove"
+msgstr "Elimină"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 490
+#, python-brace-format
+msgid "Remove {name}"
+msgstr "Elimină {name}"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
+msgid "Install"
+msgstr "Instalează"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 510
+#, python-brace-format
+msgid "Install {name}"
+msgstr "Instalează {name}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 657
+#, python-brace-format
+msgid ""
+"Download <b>{name}</b>?\n"
+"\n"
+"The voice will be downloaded from the internet (~512 KB)."
+msgstr ""
+"Descărcați <b>{name}</b>?\n"
+"\n"
+"Vocea va fi descărcată de pe internet (~512 KB)."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 528
+#, python-brace-format
+msgid ""
+"Install <b>{name}</b>?\n"
+"\n"
+"This requires administrator privileges."
+msgstr ""
+"Instalezi <b>{name}</b>?\n"
+"\n"
+"Aceasta necesită privilegii de administrator."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 526
+msgid "Install Voice"
+msgstr "Instalare voce"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 665
+msgid "Download"
+msgstr "Descarcă"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 542
+msgid "Remove Voice"
+msgstr "Elimină vocea"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 544
+#, python-brace-format
+msgid ""
+"Remove <b>{name}</b>?\n"
+"\n"
+"You can reinstall it later."
+msgstr ""
+"Elimină <b>{name}</b>?\n"
+"\n"
+"Îl poți reinstala mai târziu."
+# 
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
+# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
+msgid "Cancel"
+msgstr "Anulează"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 617
+msgid "Operation timed out"
+msgstr "Operațiune expirată"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 619
+msgid "pkexec or pacman not found"
+msgstr "pkexec sau pacman nu au fost găsite"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 640
+msgid "Failed"
+msgstr "Eșuat"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 641
+msgid "Removal Failed"
+msgstr "Eliminare eșuată"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 643
+msgid "Unknown error"
+msgstr "Eroare necunoscută"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -140,6 +398,34 @@ msgstr "Setări voce"
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
 msgid "Choose voice and adjust speech parameters"
 msgstr "Alegeți vocea și ajustați parametrii vocali"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 233
+msgid "RHVoice (Native)"
+msgstr "RHVoice (Nativ)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 234
+msgid "espeak-ng"
+msgstr "espeak-ng"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 235
+msgid "Piper (Neural TTS)"
+msgstr "Piper (TTS Neural)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 236
+msgid "Kokoro (Neural TTS)"
+msgstr "Kokoro (TTS Neural)"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
+msgid "TTS Backend"
+msgstr "Backend TTS"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
+msgid "Engine used for speech synthesis"
+msgstr "Motor utilizat pentru sinteză vocală"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
+msgid "Select TTS engine"
+msgstr "Selectați motorul TTS"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
 msgid "Voice"
@@ -227,32 +513,62 @@ msgstr "Mut"
 msgid "Max"
 msgstr "Maxim"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 273
-msgid "TTS Engine"
-msgstr "Motor TTS"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 342
+msgid "Neutral"
+msgstr "Neutru"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 274
-msgid "Choose which text-to-speech engine to use"
-msgstr "Alegeți ce motor text-în-vorbire să utilizați"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 343
+msgid "Happy"
+msgstr "Fericit"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
-msgid "TTS Backend"
-msgstr "Backend TTS"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 344
+msgid "Calm"
+msgstr "Calm"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 305
-msgid "Engine used for speech synthesis"
-msgstr "Motor utilizat pentru sinteză vocală"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 345
+msgid "Urgent"
+msgstr "Urgent"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 309
-msgid "Select TTS engine"
-msgstr "Selectați motorul TTS"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 346
+msgid "Narrative"
+msgstr "Narațiune"
 # 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 359
+msgid "Expression style"
+msgstr "Stil de expresie"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 325
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 249
-msgid "Voice Manager"
-msgstr "Manager de voce"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 360
+msgid "Changes speed and intonation to match the mood"
+msgstr "Schimbă viteza și intonația pentru a se potrivi cu starea de spirit."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 364
+msgid "Select expression style"
+msgstr "Selectați stilul expresiei"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 371
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 791
+msgid "None (single voice)"
+msgstr "Niciunul (voce unică)"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 374
+msgid "Voice blend"
+msgstr "Amestecare vocală"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 375
+msgid "Mix a second voice with the primary voice"
+msgstr "Amestecă o a doua voce cu vocea principală."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 379
+msgid "Select blend voice"
+msgstr "Selectați vocea de amestec"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 391
+msgid "Voice Management"
+msgstr "Gestionarea vocii"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 392
+msgid "Install or manage voice packages"
+msgstr "Instalați sau gestionați pachetele de voce"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 326
 msgid "Install or remove voice packages"
@@ -326,6 +642,26 @@ msgstr "Citește adresele URL cu voce tare"
 msgid "Unlimited"
 msgstr "Nelimitat"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 469
+msgid "1 000"
+msgstr "1 000"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 470
+msgid "5 000"
+msgstr "5 000"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 471
+msgid "10 000"
+msgstr "10 000"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 472
+msgid "50 000"
+msgstr "50 000"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 473
+msgid "100 000"
+msgstr "100 000"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 420
 msgid "Character limit"
 msgstr "Limită de caractere"
@@ -379,6 +715,38 @@ msgstr "Repară accesul rapid și permite rularea în fundal."
 msgid "Show system tray icon"
 msgstr "Afișați pictograma din zona de notificare."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 552
+msgid "Save history"
+msgstr "Salvează istoricul"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 553
+msgid "Save spoken text and audio to ~/Music/tts-biglinux"
+msgstr "Salvează textul vorbit și audio în ~/Music/tts-biglinux"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 556
+msgid "Save speech history"
+msgstr "Salvează istoricul vorbirii"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 563
+msgid "Audio playback mode"
+msgstr "Mod de redare audio"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
+msgid "Behavior when playing multiple audios or speech"
+msgstr "Comportament atunci când redați mai multe audio sau discursuri"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+msgid "Interrupt previous"
+msgstr "Interrompe anteriorul"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+msgid "Queue"
+msgstr "Coada"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+msgid "Simultaneous"
+msgstr "Simultană"
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 491
 msgid "Set new shortcut"
 msgstr "Setează scurtătură nouă"
@@ -413,6 +781,14 @@ msgstr "Iconița din sistem activată"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 609
 msgid "Tray icon disabled"
 msgstr "Iconița din sistem dezactivată"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 750
+msgid "History saving enabled"
+msgstr "Salvarea istoricului activată"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 752
+msgid "History saving disabled"
+msgstr "Salvarea istoricului dezactivată"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 647
 msgid "Refreshing voices..."
@@ -452,6 +828,10 @@ msgstr "Căutare voci..."
 msgid "Checking for Piper voices..."
 msgstr "Verificare voci Piper..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "Verificarea vocilor Kokoro..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 954
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
@@ -479,29 +859,74 @@ msgstr ""
 "\n"
 "Acest lucru necesită permisiuni de administrator."
 # 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "Instalarea Piper TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 974
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 173
-msgid "Cancel"
-msgstr "Anulează"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "Descărcarea și instalarea pachetelor…"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 975
-msgid "Install"
-msgstr "Instalează"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "Instalează Kokoro Neural TTS?"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1002
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Se instalează Piper TTS — poate dura un moment…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"Kokoro nu este instalat. Oferă voci neurale de înaltă calitate cu presetări de emoție și amestec de "
+"voci.\n"
+"\n"
+"Dependențele de sistem (PyTorch, scipy, espeak-ng) vor fi instalate prin pacman.\n"
+"Biblioteca Kokoro va fi instalată prin pip."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper instalat cu succes! Se descoperă vocile…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "Instalarea Kokoro TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "Baza de date este blocată de un alt proces."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "pacman a eșuat"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "instalarea pip a eșuat"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "Comandă negăsită: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "Timpul de instalare a expirat"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "Kokoro a fost instalat cu succes! Descoperirea vocilor…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "Instalarea a eșuat: {eroare}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "Instalarea Kokoro a eșuat - verificați permisiunile"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1050
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper instalat cu succes! Se descoperă vocile…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1054
 msgid "Failed to install Piper — check permissions"
@@ -532,130 +957,13 @@ msgstr "Nu s-a putut reda vorbirea — verificați motorul TTS"
 msgid "Select text and press Alt+V to read aloud"
 msgstr "Selectați textul și apăsați Alt+V pentru a citi cu voce tare"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1177
-msgid "Stop"
-msgstr "Oprire"
-# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1234
 msgid "Settings restored to defaults"
 msgstr "Setările au fost restabilite la valorile implicite"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 287
-msgid "Loading available voices…"
-msgstr "Încărcarea vocilor disponibile…"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 330
-msgid "No Voice Packages Found"
-msgstr "Nu au fost găsite pachete de voce."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 332
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Nu s-au găsit pachete de voce TTS în repositoarele pacman."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 353
-msgid "High quality offline voices"
-msgstr "Voci offline de înaltă calitate"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 357
-msgid "Neural network voices — natural sounding"
-msgstr "Voci ale rețelelor neuronale — sunet natural"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 361
-msgid "Lightweight multi-language synthesizer"
-msgstr "Sintetizator ușor multi-lingvistic"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 399
-#, python-brace-format
-msgid "Add RHVoice — {count} available"
-msgstr "Adăugați RHVoice — {count} disponibile"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 402
-#, python-brace-format
-msgid "{langs} languages"
-msgstr "{langs} limbi"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
-#, python-brace-format
-msgid "{count} voice(s)"
-msgstr "{count} voce(voce)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 425
-#, python-brace-format
-msgid "Add Piper voices — {count} available"
-msgstr "Adăugați vocile Piper — {count} disponibile"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 427
-msgid "Neural TTS voice packs by language"
-msgstr "Pachete de voce TTS neural după limbă"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 474
-msgid "Installed"
-msgstr "Instalat"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 485
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 546
-msgid "Remove"
-msgstr "Elimină"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 490
-#, python-brace-format
-msgid "Remove {name}"
-msgstr "Elimină {name}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 510
-#, python-brace-format
-msgid "Install {name}"
-msgstr "Instalează {name}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 526
-msgid "Install Voice"
-msgstr "Instalare voce"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 528
-#, python-brace-format
-msgid ""
-"Install <b>{name}</b>?\n"
-"\n"
-"This requires administrator privileges."
-msgstr ""
-"Instalezi <b>{name}</b>?\n"
-"\n"
-"Aceasta necesită privilegii de administrator."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 542
-msgid "Remove Voice"
-msgstr "Elimină vocea"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 544
-#, python-brace-format
-msgid ""
-"Remove <b>{name}</b>?\n"
-"\n"
-"You can reinstall it later."
-msgstr ""
-"Elimină <b>{name}</b>?\n"
-"\n"
-"Îl poți reinstala mai târziu."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 617
-msgid "Operation timed out"
-msgstr "Operațiune expirată"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 619
-msgid "pkexec or pacman not found"
-msgstr "pkexec sau pacman nu au fost găsite"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 640
-msgid "Failed"
-msgstr "Eșuat"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 641
-msgid "Removal Failed"
-msgstr "Eliminare eșuată"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 643
-msgid "Unknown error"
-msgstr "Eroare necunoscută"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 103
+msgid "TTS"
+msgstr "TTS"
 # 
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 # 
@@ -754,18 +1062,16 @@ msgstr "Restabilește"
 msgid "Text-to-speech assistant"
 msgstr "Asistent text-la-vorbire"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
+msgid "Read text"
+msgstr "Citiți textul"
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
 msgid "Settings"
 msgstr "Setări"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 168
-msgid "Minimized to System Tray"
-msgstr "Minimizat în zona de notificare"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 169
-msgid ""
-"BigLinux TTS Speak is still running in the background.\n"
-"You can access it anytime from the system tray icon."
-msgstr ""
-"BigLinux TTS Speak rulează în continuare în fundal. O poți accesa oricând din pictograma din zona "
-"de notificare a sistemului."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 206
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 218
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 238
+msgid "Playing…"
+msgstr "Se joacă…"

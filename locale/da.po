@@ -35,6 +35,12 @@ msgstr "Pause"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
 msgid "Open file location"
@@ -368,6 +374,10 @@ msgstr "Fjernelse mislykkedes"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 643
 msgid "Unknown error"
 msgstr "Ukendt fejl"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
@@ -892,6 +902,10 @@ msgstr "Søger efter stemmer..."
 msgid "Checking for Piper voices..."
 msgstr "Tjekker efter Piper-stemmer..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "Tjekker efter Kokoro-stemmer..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: 79
 #, python-brace-format
@@ -922,20 +936,75 @@ msgstr ""
 "\n"
 "Dette kræver administratortilladelser."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1034
-#: 84
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Installerer Piper TTS — dette kan tage et øjeblik…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "Installer Piper TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
-#: 85
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper installeret! Registrerer stemmer…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "Downloader og installation af pakker…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "Installer Kokoro Neural TTS?"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"Kokoro er ikke installeret. Det leverer høj-kvalitets neurale stemmer med følelsespræferencer og "
+"stemmeblanding.\n"
+"\n"
+"Systemafhængigheder (PyTorch, scipy, espeak-ng) vil blive installeret via pacman.\n"
+"Kokoro-biblioteket vil blive installeret via pip."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "Installer Kokoro TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "Databasen er låst af en anden proces"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "pacman mislykkedes"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "pip installation mislykkedes"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "Kommando ikke fundet: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "Installation timeout"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "Kokoro er installeret med succes! Opdager stemmer…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "Fejl ved installation: {error}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "Mislykkedes med at installere Kokoro - tjek tilladelser"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
+#: 85
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper installeret! Registrerer stemmer…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1086
 #: 86

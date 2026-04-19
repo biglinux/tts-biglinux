@@ -893,6 +893,10 @@ msgstr "Traženje glasova..."
 msgid "Checking for Piper voices..."
 msgstr "Provjera Piper glasova..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "Provjera Kokoro glasova..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: src/biglinux_tts/services/voice_manager.py
 #, python-brace-format
@@ -923,20 +927,75 @@ msgstr ""
 "\n"
 "Ovo zahtijeva administratorske dozvole."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1034
-#: src/biglinux_tts/services/tts_service.py
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Instalacija Piper TTS — ovo može potrajati…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "Instaliranje Piper TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
-#: src/biglinux_tts/services/tts_service.py
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper uspješno instaliran! Otkrivanje glasova…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "Preuzimanje i instaliranje paketa…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "Instalirajte Kokoro Neural TTS?"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"Kokoro nije instaliran. Pruža visokokvalitetne neuronske glasove s postavkama emocija i miješanjem "
+"glasova.\n"
+"\n"
+"Sustavne ovisnosti (PyTorch, scipy, espeak-ng) bit će instalirane putem pacmana.\n"
+"Kokoro knjižnica bit će instalirana putem pipa."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "Instaliranje Kokoro TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "Baza podataka je zaključana od strane drugog procesa."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "pacman nije uspio"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "pip instalacija nije uspjela"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "Naredba nije pronađena: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "Instalacija je istekla."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "Kokoro je uspješno instaliran! Otkrijte glasove…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "Instalacija nije uspjela: {error}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "Instalacija Kokoro nije uspjela — provjerite dozvole"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
+#: src/biglinux_tts/services/tts_service.py
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper uspješno instaliran! Otkrivanje glasova…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1086
 #: src/biglinux_tts/services/tts_service.py

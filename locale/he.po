@@ -789,6 +789,10 @@ msgstr "מצב השמעת אודיו"
 msgid "Behavior when playing multiple audios or speech"
 msgstr "התנהגות בעת השמעת מספר אודיו או דיבור"
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+msgid "Interrupt previous"
+msgstr "הפסק את הקודם"
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
@@ -891,6 +895,10 @@ msgstr "מחפש קולות..."
 msgid "Checking for Piper voices..."
 msgstr "בודק קולות פייפר..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "בודק קולות קוקורו..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: 79
 #, python-brace-format
@@ -921,20 +929,74 @@ msgstr ""
 "\n"
 "פעולה זו דורשת הרשאות מנהל."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1034
-#: 84
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "…מתקין Piper TTS — זה עשוי לקחת רגע"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "מתקין את Piper TTS"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
-#: 85
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "…!Piper הותקן בהצלחה! מגלה קולות"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "מוריד ומתקין חבילות…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "האם להתקין את Kokoro Neural TTS?"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"קוקורו לא מותקן. הוא מספק קולות נוירליים באיכות גבוהה עם הגדרות רגש ושילוב קולות.\n"
+"\n"
+"תלויות מערכת (PyTorch, scipy, espeak-ng) יותקנו באמצעות pacman.\n"
+"ספריית קוקורו תותקן באמצעות pip."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "מתקין את קוקורו TTS"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "המסד נתונים נעול על ידי תהליך אחר"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "פאקמן נכשל"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "התקנת pip נכשלה"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "פקודה לא נמצאה: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "ההתקנה פגה את הזמן المحدד"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "קוקורו הותקן בהצלחה! מגלה קולות…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "התקנה נכשלה: {error}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "כישלון בהתקנת קוקורו - בדוק הרשאות"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
+#: 85
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "…!Piper הותקן בהצלחה! מגלה קולות"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1086
 #: 86

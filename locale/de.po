@@ -863,6 +863,10 @@ msgstr "Suche nach Stimmen..."
 msgid "Checking for Piper voices..."
 msgstr "Prüfe Piper-Stimmen..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "Überprüfung der Kokoro-Stimmen..."
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 869
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
@@ -890,18 +894,74 @@ msgstr ""
 "\n"
 "Administratorrechte sind erforderlich."
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 915
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Piper TTS wird installiert — das kann einen Moment dauern…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "Piper TTS installieren"
 # 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 991
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper erfolgreich installiert! Stimmen werden gesucht…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "Pakete werden heruntergeladen und installiert…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "Kokoro Neural TTS installieren?"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"Kokoro ist nicht installiert. Es bietet hochwertige neuronale Stimmen mit Emotionsvorgaben und "
+"Sprachmischung.\n"
+"\n"
+"Systemabhängigkeiten (PyTorch, scipy, espeak-ng) werden über pacman installiert.\n"
+"Die Kokoro-Bibliothek wird über pip installiert."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "Kokoro TTS installieren"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "Datenbank ist von einem anderen Prozess gesperrt"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "pacman fehlgeschlagen"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "pip-Installation fehlgeschlagen"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "Befehl nicht gefunden: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "Installationzeitüberschreitung"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "Kokoro wurde erfolgreich installiert! Stimmen werden entdeckt…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "Fehler beim Installieren: {error}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "Installation von Kokoro fehlgeschlagen — überprüfen Sie die Berechtigungen"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 991
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper erfolgreich installiert! Stimmen werden gesucht…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1009
 msgid "Failed to install Piper — check permissions"
@@ -978,6 +1038,10 @@ msgstr "Wiederherstellen"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 170
 msgid "Text-to-speech assistant"
 msgstr "Text-zu-Sprache-Assistent"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
+msgid "Read text"
+msgstr "Text lesen"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
 # 

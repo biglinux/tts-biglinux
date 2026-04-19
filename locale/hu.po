@@ -893,6 +893,10 @@ msgstr "Hangok keresése..."
 msgid "Checking for Piper voices..."
 msgstr "Piper hangok ellenőrzése..."
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+msgid "Checking for Kokoro voices..."
+msgstr "Kokoro hangok keresése..."
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
 #: window.py
 #, python-brace-format
@@ -923,20 +927,75 @@ msgstr ""
 "\n"
 "Ehhez rendszergazdai jogosultság szükséges."
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1034
-#: window.py
-msgid "Installing Piper TTS — this may take a moment…"
-msgstr "Piper TTS telepítése — ez eltarthat egy ideig…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+msgid "Installing Piper TTS"
+msgstr "Piper TTS telepítése"
 # 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
-#: window.py
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper sikeresen telepítve! Hangok felderítése…"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+msgid "Downloading and installing packages…"
+msgstr "Csomagok letöltése és telepítése…"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
+msgid "Install Kokoro Neural TTS?"
+msgstr "Telepítse a Kokoro Neural TTS-t?"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
+msgid ""
+"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
+"blending.\n"
+"\n"
+"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
+"The Kokoro library will be installed via pip."
+msgstr ""
+"A Kokoro nincs telepítve. Magas minőségű neurális hangokat biztosít érzelem előbeállításokkal és "
+"hangkeveréssel.\n"
+"\n"
+"A rendszerfüggőségek (PyTorch, scipy, espeak-ng) a pacman segítségével lesznek telepítve.\n"
+"A Kokoro könyvtár a pip segítségével lesz telepítve."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+msgid "Installing Kokoro TTS"
+msgstr "Kokoro TTS telepítése"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
+msgid "Database is locked by another process"
+msgstr "Az adatbázis zárolva van egy másik folyamat által."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
+msgid "pacman failed"
+msgstr "a pacman hibásan zárult le"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
+msgid "pip install failed"
+msgstr "pip telepítés sikertelen"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+#, python-brace-format
+msgid "Command not found: {cmd}"
+msgstr "A parancs nem található: {cmd}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
+msgid "Installation timed out"
+msgstr "A telepítés időtúllépést szenvedett."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
+msgid "Kokoro installed successfully! Discovering voices…"
+msgstr "A Kokoro sikeresen telepítve! Hangok felfedezése…"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
 msgstr "Telepítés nem sikerült: {error}"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
+msgid "Failed to install Kokoro — check permissions"
+msgstr "Kokoro telepítése nem sikerült — ellenőrizze a jogosultságokat"
+# 
+# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
+#: window.py
+msgid "Piper installed successfully! Discovering voices…"
+msgstr "Piper sikeresen telepítve! Hangok felderítése…"
 # 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1086
 #: window.py
