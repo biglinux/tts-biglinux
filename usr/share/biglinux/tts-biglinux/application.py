@@ -195,6 +195,7 @@ class TTSApplication(Adw.Application):
     _notif_dismiss_id: int = 0
     _notif_id: int = 0  # D-Bus notification ID
     _notif_text_len: int = 0  # Length of notified text for proportional delay
+    _notif_body: str = ""  # Last notification body for re-use on countdown
 
     def _on_tts_state_changed(self, state: "TTSState") -> None:
         """Notify tray icon of TTS state changes and process speech queue."""
@@ -219,8 +220,9 @@ class TTSApplication(Adw.Application):
                 display_text = display_text[:120] + "…"
 
             self._notif_text_len = len(spoken_text) if spoken_text else 20
-            # Show or replace existing notification
-            self._show_dbus_notification(display_text)
+            self._notif_body = display_text
+            # Show persistent notification (no auto-expire during speech)
+            self._show_dbus_notification(display_text, expire_timeout=0)
         else:
             # Process speech queue (queue mode)
             if self._speech_queue:
@@ -230,14 +232,30 @@ class TTSApplication(Adw.Application):
 
             # Proportional delay: 40ms per char, min 2s
             delay_ms = max(2000, self._notif_text_len * 40)
+
+            # Re-send same text with expire_timeout → KDE shows countdown bar
+            self._show_dbus_notification(
+                self._notif_body or _("Playing…"),
+                expire_timeout=delay_ms,
+            )
+
+            # Fallback: manual dismiss if notification server ignores expire_timeout
             if self._notif_dismiss_id:
                 GLib.source_remove(self._notif_dismiss_id)
             self._notif_dismiss_id = GLib.timeout_add(
                 delay_ms, self._dismiss_notification,
             )
 
-    def _show_dbus_notification(self, body: str) -> None:
-        """Show notification via org.freedesktop.Notifications D-Bus."""
+    def _show_dbus_notification(
+        self, body: str, *, expire_timeout: int = 0,
+    ) -> None:
+        """Show notification via org.freedesktop.Notifications D-Bus.
+
+        Args:
+            body: Notification body text.
+            expire_timeout: Auto-dismiss delay in ms (0 = server decides).
+                KDE shows a countdown bar when > 0.
+        """
         try:
             proxy = Gio.DBusProxy.new_for_bus_sync(
                 Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
@@ -255,7 +273,7 @@ class TTSApplication(Adw.Application):
                     body,               # body
                     [],                 # actions
                     {},                 # hints
-                    0,                  # expire_timeout (0 = server decides)
+                    expire_timeout,     # expire_timeout (ms, 0 = server decides)
                 )),
                 Gio.DBusCallFlags.NONE, -1, None,
             )

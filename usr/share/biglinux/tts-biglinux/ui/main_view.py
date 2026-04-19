@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import logging
 import subprocess
+import threading
 from collections.abc import Callable
 from contextlib import contextmanager
+from pathlib import Path
 from typing import TYPE_CHECKING, Iterator
 
 import gi
@@ -35,6 +37,7 @@ from config import (
     VOLUME_STEP,
 )
 from services.desktop_integration_service import DesktopIntegrationService
+from services.kokoro_voice_service import is_kokoro_installed
 from services.text_processor import get_system_language
 from services.voice_manager import (
     VoiceCatalog,
@@ -1070,6 +1073,11 @@ class MainView(Adw.NavigationPage):
             )
             return
 
+        # Kokoro: check if engine is installed before anything else
+        if backend == TTSBackend.KOKORO.value and not is_kokoro_installed():
+            self._ask_install_kokoro()
+            return
+
         # Refresh voices for new backend
         if self._catalog:
             filtered = self._catalog.get_by_backend(backend)
@@ -1083,6 +1091,14 @@ class MainView(Adw.NavigationPage):
                 run_in_thread(
                     discover_voices,
                     on_done=lambda cat: self._on_piper_discovery_retry(cat),
+                )
+                return
+            elif backend == TTSBackend.KOKORO.value:
+                # Kokoro installed but no voices — re-discover
+                self._voice_combo.set_subtitle(_("Checking for Kokoro voices..."))
+                run_in_thread(
+                    discover_voices,
+                    on_done=self._on_voices_discovered,
                 )
                 return
             else:
@@ -1132,7 +1148,180 @@ class MainView(Adw.NavigationPage):
                     self._on_voices_discovered(self._catalog)
             return
 
-        self._on_toast(_("Installing Piper TTS — this may take a moment…"), 5)
+        self._run_install_with_progress(
+            title=_("Installing Piper TTS"),
+            status_text=_("Downloading and installing packages…"),
+            worker=self._install_piper_packages,
+            on_done=self._on_piper_installed,
+        )
+
+    def _ask_install_kokoro(self) -> None:
+        """Show dialog to install Kokoro Neural TTS."""
+        dialog = Adw.AlertDialog.new(
+            _("Install Kokoro Neural TTS?"),
+            _(
+                "Kokoro is not installed. It provides high-quality neural "
+                "voices with emotion presets and voice blending.\n\n"
+                "System dependencies (PyTorch, scipy, espeak-ng) will be "
+                "installed via pacman.\n"
+                "The Kokoro library will be installed via pip."
+            ),
+        )
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("install", _("Install"))
+        dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("install")
+        dialog.set_close_response("cancel")
+        dialog.connect("response", self._on_install_kokoro_response)
+
+        window = self.get_root()
+        dialog.present(window)
+
+    def _on_install_kokoro_response(
+        self, dialog: Adw.AlertDialog, response: str
+    ) -> None:
+        """Handle Kokoro install dialog response."""
+        if response != "install":
+            with self._guard_ui():
+                prev_backend = TTSBackend.RHVOICE.value
+                self._settings.speech.backend = prev_backend
+                self._settings_service.save(self._settings)
+                self._backend_combo.set_selected(0)
+                if self._catalog:
+                    self._on_voices_discovered(self._catalog)
+            return
+
+        self._run_install_with_progress(
+            title=_("Installing Kokoro TTS"),
+            status_text=_("Downloading and installing packages…"),
+            worker=self._install_kokoro_packages,
+            on_done=self._on_kokoro_installed,
+        )
+
+    def _run_install_with_progress(
+        self,
+        title: str,
+        status_text: str,
+        worker: Callable[[], tuple[bool, str]],
+        on_done: Callable[[tuple[bool, str]], None],
+    ) -> None:
+        """Show a progress dialog and run a package install in background."""
+        progress_dialog = Adw.AlertDialog.new(title, status_text)
+        progress_dialog.set_can_close(False)
+
+        # Add a progress bar as extra child
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        box.set_margin_top(12)
+
+        progress_bar = Gtk.ProgressBar()
+        progress_bar.set_show_text(False)
+        progress_bar.pulse()
+        box.append(progress_bar)
+
+        progress_dialog.set_extra_child(box)
+
+        window = self.get_root()
+        progress_dialog.present(window)
+
+        # Pulse the progress bar while installing
+        def _pulse() -> bool:
+            if not hasattr(progress_dialog, "_install_running"):
+                return False
+            progress_bar.pulse()
+            return True
+
+        progress_dialog._install_running = True
+        GLib.timeout_add(200, _pulse)
+
+        def _threaded() -> None:
+            result = worker()
+
+            def _finish() -> bool:
+                del progress_dialog._install_running
+                progress_dialog.set_can_close(True)
+                progress_dialog.force_close()
+                on_done(result)
+                return False
+
+            GLib.idle_add(_finish)
+
+        threading.Thread(target=_threaded, daemon=True).start()
+
+    def _install_kokoro_packages(self) -> tuple[bool, str]:
+        """Install Kokoro TTS: system deps via pacman + kokoro via pip."""
+        try:
+            lock_file = Path("/var/lib/pacman/db.lck")
+            if lock_file.exists():
+                return False, _("Database is locked by another process")
+
+            # Step 1: system deps via pacman (uses pkexec for graphical auth)
+            sys_deps = [
+                "python-pytorch", "python-numpy", "python-scipy",
+                "python-transformers", "python-huggingface-hub",
+                "python-loguru", "espeak-ng",
+            ]
+            result = subprocess.run(
+                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *sys_deps],
+                capture_output=True,
+                text=True,
+                timeout=600,
+            )
+            if result.returncode != 0:
+                stderr = result.stderr.strip()
+                error_msg = stderr.splitlines()[-1] if stderr else _("pacman failed")
+                return False, error_msg
+
+            # Step 2: kokoro + soundfile via pip (user-local, no root needed)
+            result = subprocess.run(
+                [
+                    "pip3", "install", "--user",
+                    "--break-system-packages",
+                    "kokoro", "soundfile",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=300,
+            )
+            if result.returncode != 0:
+                stderr = result.stderr.strip()
+                error_msg = stderr.splitlines()[-1] if stderr else _("pip install failed")
+                return False, error_msg
+
+            return True, ""
+        except FileNotFoundError as e:
+            return False, _("Command not found: {cmd}").format(cmd=str(e))
+        except subprocess.TimeoutExpired:
+            return False, _("Installation timed out")
+        except Exception as e:
+            return False, str(e)
+
+    def _on_kokoro_installed(self, result: tuple[bool, str]) -> None:
+        """Called after Kokoro install completes."""
+        success, error_msg = result
+        if success:
+            self._on_toast(_("Kokoro installed successfully! Discovering voices…"), 3)
+
+            def _on_done(catalog: VoiceCatalog) -> None:
+                self._on_voices_discovered(catalog)
+                with self._guard_ui():
+                    self._backend_combo.set_selected(3)
+                    self._on_backend_selected(3)
+
+            run_in_thread(discover_voices, on_done=_on_done)
+        else:
+            if error_msg:
+                self._on_toast(
+                    _("Failed to install: {error}").format(error=error_msg), 5
+                )
+            else:
+                self._on_toast(_("Failed to install Kokoro — check permissions"), 5)
+            with self._guard_ui():
+                self._settings.speech.backend = TTSBackend.RHVOICE.value
+                self._settings_service.save(self._settings)
+                self._backend_combo.set_selected(0)
+                if self._catalog:
+                    self._on_voices_discovered(self._catalog)
+
     def _on_piper_discovery_retry(self, catalog: VoiceCatalog) -> None:
         """Second attempt at discovery after switching to Piper."""
         self._catalog = catalog
