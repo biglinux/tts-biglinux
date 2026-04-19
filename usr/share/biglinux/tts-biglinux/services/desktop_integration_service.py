@@ -239,13 +239,14 @@ class DesktopIntegrationService:
 
     @staticmethod
     def ensure_desktop_file(kde_key: str) -> Path:
-        """Ensure the desktop file exists locally with current shortcut."""
-        from config import APP_ID
+        """Ensure the shortcut desktop file exists locally with current keybinding."""
         local_apps = Path.home() / ".local" / "share" / "applications"
-        desktop_dst = local_apps / f"{APP_ID}.desktop"
+        # Must match the component name in kglobalshortcutsrc
+        desktop_dst = local_apps / "biglinux-tts-speak.desktop"
 
         # Dynamic path detection for the executable script
-        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+        # services/ → tts-biglinux/ → biglinux/ → share/ → usr/ → repo_root
+        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent
         git_script = repo_root / "usr" / "bin" / "biglinux-tts-speak"
         exec_path = (
             str(git_script) if git_script.exists() else "/usr/bin/biglinux-tts-speak"
@@ -348,13 +349,10 @@ Exec=IntegratedRender {exec_path}
         # 4. Force kglobalaccel to re-read
         cls.reload_kglobalaccel()
 
-        # 5. Injection layer
+        # 5. Unregister stale in-memory entry, then let kglobalaccel re-read
         cls.unregister_shortcut_from_memory()
         time.sleep(0.15)
-
-        from application import TTSApplication
-
-        TTSApplication._inject_shortcut_dbus_static(kde_shortcut)
+        cls.reload_kglobalaccel()
 
     @staticmethod
     def update_desktop_database() -> None:
@@ -515,8 +513,8 @@ Key={kde_shortcut}
 Type=SHORTCUT
 """
 
-    @staticmethod
-    def sync_khotkeys(kde_shortcut: str, exec_path: str) -> None:
+    @classmethod
+    def sync_khotkeys(cls, kde_shortcut: str, exec_path: str) -> None:
         """Update khotkeys configuration for backward compatibility.
         
         Writes to local user config and development file in the repository.

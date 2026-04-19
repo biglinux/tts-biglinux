@@ -10,11 +10,13 @@ from __future__ import annotations
 import logging
 import os
 import re
+import shutil
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from config import TTSBackend
+from services.kokoro_voice_service import get_active_voices_bin
 from services.text_processor import get_system_language
 from utils.i18n import _
 from utils.speechd_utils import try_restart_speechd
@@ -190,11 +192,12 @@ def discover_voices() -> VoiceCatalog:
     catalog = VoiceCatalog()
 
     # Parallelize discovery across backends
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:
         future_spd = executor.submit(_discover_spd_voices, retrying=False)
         future_espeak = executor.submit(_discover_espeak_voices)
         future_piper = executor.submit(_discover_piper_voices)
         future_rhvoice = executor.submit(_discover_rhvoice_voices)
+        future_kokoro = executor.submit(_discover_kokoro_voices)
 
         # 1. Gather speech-dispatcher voices
         try:
@@ -231,6 +234,15 @@ def discover_voices() -> VoiceCatalog:
                 catalog.backends_available.append(TTSBackend.RHVOICE.value)
         except Exception as e:
             logger.error("Error in RHVoice discovery: %s", e)
+
+        # 5. Gather Kokoro voices
+        try:
+            kokoro_voices = future_kokoro.result()
+            catalog.voices.extend(kokoro_voices)
+            if kokoro_voices:
+                catalog.backends_available.append(TTSBackend.KOKORO.value)
+        except Exception as e:
+            logger.error("Error in Kokoro discovery: %s", e)
 
     logger.info(
         "Discovered %d voices from %d backends",
@@ -525,6 +537,181 @@ def _discover_espeak_voices() -> list[VoiceInfo]:
             )
         )
 
+    return voices
+
+
+def _discover_kokoro_voices() -> list[VoiceInfo]:
+    """Discover Kokoro TTS voices.
+
+    Kokoro voices are built into the model and don't need local files.
+    We detect the koko CLI binary (from biglinux-kokoro-tts) or the
+    kokoro Python package to confirm the engine is available, then
+    return the known voice catalog.
+    """
+    voices: list[VoiceInfo] = []
+
+    # Check if Kokoro is available via the koko CLI binary or Python package
+    koko_available = shutil.which("koko") is not None
+    if not koko_available:
+        try:
+            import kokoro as _  # noqa: F401
+            koko_available = True
+        except ImportError:
+            pass
+
+    if not koko_available:
+        logger.debug("Kokoro not installed (no koko binary or kokoro Python package), skipping voice discovery")
+        return voices
+
+    # Try to discover voices dynamically from koko CLI
+    discovered_from_cli = False
+    try:
+        proc = subprocess.run(
+            ["koko", "voices"],
+            capture_output=True, text=True, timeout=5,
+            env={**os.environ,
+                 "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
+                 "KOKO_DATA_PATH": str(get_active_voices_bin())},
+        )
+        if proc.returncode == 0:
+            lang_map = {
+                "chinese": "zh", "english (us)": "en-US", "english (gb)": "en-GB",
+                "english": "en-US", "french": "fr", "hindi": "hi",
+                "italian": "it", "japanese": "ja", "portuguese": "pt-BR",
+                "spanish": "es",
+            }
+
+            lines = proc.stdout.splitlines()
+
+            # Find the separator line (------) to determine column positions
+            col_positions: list[tuple[int, int]] = []
+            for line in lines:
+                if line.startswith("---"):
+                    pos = 0
+                    for col in line.split():
+                        end = pos + len(col)
+                        col_positions.append((pos, end))
+                        pos = end + 1  # +1 for the space separator
+                    break
+
+            if col_positions:
+                for line in lines:
+                    if not line.strip() or line.startswith("Voice ID") or line.startswith("---") or "loaded:" in line:
+                        continue
+                    # Extract fields using column positions
+                    fields = []
+                    for start, end in col_positions:
+                        fields.append(line[start:end].strip() if start < len(line) else "")
+                    # Last column extends to end of line
+                    if col_positions and len(col_positions) >= 5:
+                        fields[-1] = line[col_positions[-1][0]:].strip()
+
+                    if len(fields) < 4:
+                        continue
+                    vid, name, lang_label, gender = fields[0], fields[1], fields[2], fields[3].lower()
+                    desc = fields[4] if len(fields) > 4 else f"Kokoro {lang_label} voice"
+                    lang_code = lang_map.get(lang_label.lower(), "en-US")
+
+                    voices.append(
+                        VoiceInfo(
+                            voice_id=f"kokoro:{vid}",
+                            name=name,
+                            language=lang_code,
+                            language_name=_lang_name(lang_code.split("-")[0]),
+                            backend=TTSBackend.KOKORO.value,
+                            output_module="",
+                            gender=gender,
+                            quality="neural",
+                            description=f"Kokoro — {desc}",
+                        )
+                    )
+                if voices:
+                    discovered_from_cli = True
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+
+    # Fallback to hardcoded catalog if CLI parsing failed
+    if not discovered_from_cli:
+        kokoro_voices = [
+            # Brazilian Portuguese
+            ("pf_dora", "Dora", "pt-BR", "female", "Voz feminina neural em pt-BR"),
+            ("pm_alex", "Alex", "pt-BR", "male", "Voz masculina neural em pt-BR"),
+            ("pm_santa", "Santa", "pt-BR", "male", "Voz masculina alternativa pt-BR"),
+            # American English
+            ("af_heart", "Heart ❤️", "en-US", "female", "Primary reference voice (best quality)"),
+            ("af_bella", "Bella", "en-US", "female", "Warm feminine voice"),
+            ("af_nicole", "Nicole", "en-US", "female", "Calm feminine voice"),
+            ("af_aoede", "Aoede", "en-US", "female", "Clear feminine voice"),
+            ("af_kore", "Kore", "en-US", "female", "Bright feminine voice"),
+            ("af_sarah", "Sarah", "en-US", "female", "Neutral feminine voice"),
+            ("af_nova", "Nova", "en-US", "female", "Modern feminine voice"),
+            ("af_sky", "Sky", "en-US", "female", "Youthful feminine voice"),
+            ("af_river", "River", "en-US", "female", "Natural feminine voice"),
+            ("am_adam", "Adam", "en-US", "male", "Deep masculine voice"),
+            ("am_michael", "Michael", "en-US", "male", "Neutral masculine voice"),
+            ("am_fenrir", "Fenrir", "en-US", "male", "Strong masculine voice"),
+            ("am_liam", "Liam", "en-US", "male", "Friendly masculine voice"),
+            ("am_echo", "Echo", "en-US", "male", "Clear masculine voice"),
+            ("am_eric", "Eric", "en-US", "male", "Professional masculine voice"),
+            ("am_onyx", "Onyx", "en-US", "male", "Deep masculine voice"),
+            ("am_puck", "Puck", "en-US", "male", "Playful masculine voice"),
+            ("am_santa", "Santa", "en-US", "male", "Warm masculine voice"),
+            # British English
+            ("bf_emma", "Emma", "en-GB", "female", "British feminine voice"),
+            ("bf_isabella", "Isabella", "en-GB", "female", "British feminine voice"),
+            ("bf_alice", "Alice", "en-GB", "female", "British feminine voice"),
+            ("bf_lily", "Lily", "en-GB", "female", "British feminine voice"),
+            ("bm_george", "George", "en-GB", "male", "British masculine voice"),
+            ("bm_fable", "Fable", "en-GB", "male", "British masculine voice"),
+            ("bm_lewis", "Lewis", "en-GB", "male", "British masculine voice"),
+            ("bm_daniel", "Daniel", "en-GB", "male", "British masculine voice"),
+            # Spanish
+            ("ef_dora", "Dora", "es", "female", "Spanish feminine voice"),
+            ("em_alex", "Alex", "es", "male", "Spanish masculine voice"),
+            ("em_santa", "Santa", "es", "male", "Spanish masculine voice"),
+            # French
+            ("ff_siwis", "Siwis", "fr", "female", "French feminine voice"),
+            # Italian
+            ("if_sara", "Sara", "it", "female", "Italian feminine voice"),
+            ("im_nicola", "Nicola", "it", "male", "Italian masculine voice"),
+            # Japanese
+            ("jf_alpha", "Alpha", "ja", "female", "Japanese feminine voice"),
+            ("jf_gongitsune", "Gongitsune", "ja", "female", "Japanese feminine voice"),
+            ("jf_nezumi", "Nezumi", "ja", "female", "Japanese feminine voice"),
+            ("jf_tebukuro", "Tebukuro", "ja", "female", "Japanese feminine voice"),
+            ("jm_kumo", "Kumo", "ja", "male", "Japanese masculine voice"),
+            # Hindi
+            ("hf_alpha", "Alpha", "hi", "female", "Hindi feminine voice"),
+            ("hf_beta", "Beta", "hi", "female", "Hindi feminine voice"),
+            ("hm_omega", "Omega", "hi", "male", "Hindi masculine voice"),
+            ("hm_psi", "Psi", "hi", "male", "Hindi masculine voice"),
+            # Mandarin Chinese
+            ("zf_xiaobei", "Xiaobei", "zh", "female", "Chinese feminine voice"),
+            ("zf_xiaoni", "Xiaoni", "zh", "female", "Chinese feminine voice"),
+            ("zf_xiaoxiao", "Xiaoxiao", "zh", "female", "Chinese feminine voice"),
+            ("zf_xiaoyi", "Xiaoyi", "zh", "female", "Chinese feminine voice"),
+            ("zm_yunjian", "Yunjian", "zh", "male", "Chinese masculine voice"),
+            ("zm_yunxi", "Yunxi", "zh", "male", "Chinese masculine voice"),
+            ("zm_yunxia", "Yunxia", "zh", "male", "Chinese masculine voice"),
+            ("zm_yunyang", "Yunyang", "zh", "male", "Chinese masculine voice"),
+        ]
+
+        for voice_id, name, lang, gender, desc in kokoro_voices:
+            voices.append(
+                VoiceInfo(
+                    voice_id=f"kokoro:{voice_id}",
+                    name=name,
+                    language=lang,
+                    language_name=_lang_name(lang[:2]),
+                    backend=TTSBackend.KOKORO.value,
+                    output_module="",
+                    gender=gender,
+                    quality="neural",
+                    description=f"Kokoro — {desc}",
+                )
+            )
+
+    logger.debug("Kokoro: discovered %d voices", len(voices))
     return voices
 
 

@@ -7,7 +7,7 @@ Handles application lifecycle, services, and global actions.
 from __future__ import annotations
 
 import logging
-import os
+import subprocess
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -28,7 +28,6 @@ from config import (
 )
 from resources import load_css
 from services.settings_service import SettingsService
-from services.desktop_integration_service import DesktopIntegrationService
 from services.tray_service import MenuItem, TrayIcon
 from services.tts_service import TTSService
 from utils.i18n import _
@@ -53,8 +52,13 @@ class TTSApplication(Adw.Application):
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
         )
 
-        # State flags
-        self._is_speaking_only: bool = False
+        # Register --speak option for GApplication command line handling
+        self.add_main_option(
+            "speak", 0,
+            GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
+            "Speak selected text", None,
+        )
+
         # Services (lazy)
         self._tts_service: TTSService | None = None
         self._settings_service: SettingsService | None = None
@@ -65,6 +69,9 @@ class TTSApplication(Adw.Application):
         # Window
         self._window: TTSWindow | None = None
 
+        # Speech queue for "queue" playback mode
+        self._speech_queue: list[dict] = []
+
         # Signals
         self.connect("activate", self._on_activate)
         self.connect("startup", self._on_startup)
@@ -72,32 +79,14 @@ class TTSApplication(Adw.Application):
 
         logger.debug("Application initialized")
 
-    def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
-        """Handle command line arguments passed correctly by Gio.Application."""
-        args = command_line.get_arguments()
-        logger.debug("Received command line: %s (remote=%s)", args, command_line.get_is_remote())
-        
-        # If --speak was passed
-        if "--speak" in args:
-            self._is_speaking_only = True
-            self._on_tray_speak()
-            
-            # If this is the primary instance starting up, stay alive but hidden
-            if not command_line.get_is_remote():
-                self.activate()
-            return 0
-            
-        self._is_speaking_only = False
-        self.activate()
-        return 0
-
     # ── Service Properties ───────────────────────────────────────────
 
     @property
     def tts_service(self) -> TTSService:
         """Get TTS service (lazy init)."""
         if self._tts_service is None:
-            self._tts_service = TTSService()
+            self._tts_service = TTSService(settings=self.settings)
+            self._tts_service.add_on_state_changed(self._on_tts_state_changed)
         return self._tts_service
 
     @property
@@ -117,11 +106,6 @@ class TTSApplication(Adw.Application):
     def _on_startup(self, app: Adw.Application) -> None:
         """Application startup — load CSS and create actions."""
         logger.debug("Application startup")
-
-        # Explicitly set color scheme to prevent warnings from KDE injected settings
-        style_manager = Adw.StyleManager.get_default()
-        style_manager.set_color_scheme(Adw.ColorScheme.DEFAULT)
-
         load_css()
         self._create_actions()
         GLib.set_application_name(_(APP_NAME))
@@ -131,19 +115,21 @@ class TTSApplication(Adw.Application):
 
     def _on_activate(self, app: Adw.Application) -> None:
         """Application activate — create or present window."""
-        logger.debug("Application activated (speaking_only=%s)", self._is_speaking_only)
+        logger.debug("Application activated")
         if self._window is None:
             self._window = TTSWindow(application=app)
             self._window.connect("close-request", self._on_window_close_request)
-        
-        # Only show window if not just speaking from shortcut
-        if not self._is_speaking_only:
-            self._window.present()
+        self._window.present()
+
+    def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
+        """Handle command line — supports --speak for remote activation."""
+        options = command_line.get_options_dict()
+        if options.contains("speak"):
+            logger.debug("--speak flag received, triggering tray speak")
+            self._on_tray_speak()
         else:
-            # If speaking only, we MUST have a tray or we'll quit instantly
-            # Ensure tray is initialized even if the window is hidden
-            if self._tray is None:
-                self._setup_tray_icon()
+            self.activate()
+        return 0
 
     def _on_shutdown(self, app: Adw.Application) -> None:
         """Application shutdown — cleanup resources."""
@@ -165,122 +151,203 @@ class TTSApplication(Adw.Application):
         if not self.settings.shortcut.show_in_launcher:
             return
 
-        # Resolve icon paths for both themes.
-        # Priority: Git repo (dev) → /usr/share → ~/.local/share
-        repo_root = Path(__file__).resolve().parent.parent.parent.parent
-        
-        def _find_icon(filename: str) -> str:
-            for prefix, subdir in [
-                (str(repo_root), "usr/share/icons"),
-                ("/usr/share", "icons"),
-                (str(Path.home() / ".local/share"), "icons"),
-            ]:
-                candidate = f"{prefix}/{subdir}/hicolor/scalable/status/{filename}"
-                if Path(candidate).exists():
-                    logger.debug("Found tray icon: %s", candidate)
-                    return candidate
-            return ""
-
-        # tts-biglinux-dark.svg  = white paths → used when theme is dark
-        # tts-biglinux-light.svg = dark paths  → used when theme is light
-        icon_dark_path  = _find_icon("tts-biglinux-dark.svg")
-        icon_light_path = _find_icon("tts-biglinux-light.svg")
+        # Resolve icon fallback path for when theme lookup fails
+        # Resolve tray icons: dark-mode, light-mode, symbolic fallback
+        icon_dark = ""
+        icon_light = ""
+        icon_fallback = ""
+        # Check installed + local share, then dev repo
+        repo_status = Path(__file__).resolve().parent.parent.parent / "icons" / "hicolor" / "scalable" / "status"
+        search_dirs = [
+            "/usr/share/icons/hicolor/scalable/status",
+            str(Path.home() / ".local/share/icons/hicolor/scalable/status"),
+            str(repo_status),
+        ]
+        for d in search_dirs:
+            dp = Path(d)
+            if not dp.is_dir():
+                continue
+            if not icon_dark and (dp / "tts-biglinux-dark.svg").exists():
+                icon_dark = str(dp / "tts-biglinux-dark.svg")
+            if not icon_light and (dp / "tts-biglinux-light.svg").exists():
+                icon_light = str(dp / "tts-biglinux-light.svg")
+            if not icon_fallback and (dp / "tts-biglinux-symbolic.svg").exists():
+                icon_fallback = str(dp / "tts-biglinux-symbolic.svg")
 
         self._tray = TrayIcon(
             title=_(APP_NAME),
             tooltip=_("Text-to-speech assistant"),
-            icon_dark_path=icon_dark_path,
-            icon_light_path=icon_light_path,
+            icon_dark_path=icon_dark,
+            icon_light_path=icon_light,
+            icon_path=icon_fallback,
         )
         self._tray.on_activate = self._on_tray_speak
-        self._tray.set_menu(
-            [
-                MenuItem(1, _("Settings"), self._on_tray_settings),
-                MenuItem(2, "", separator=True),
-                MenuItem(3, _("Quit"), self._on_tray_quit),
-            ]
-        )
+        self._tray.set_menu([
+            MenuItem(1, _("Read text"), self._on_tray_speak),
+            MenuItem(2, _("Settings"), self._on_tray_settings),
+            MenuItem(3, "", separator=True),
+            MenuItem(4, _("Quit"), self._on_tray_quit),
+        ])
         self._tray.register()
         # Keep app alive when all windows are closed
         self.hold()
 
+    _notif_dismiss_id: int = 0
+    _notif_id: int = 0  # D-Bus notification ID
+    _notif_text_len: int = 0  # Length of notified text for proportional delay
+
+    def _on_tts_state_changed(self, state: "TTSState") -> None:
+        """Notify tray icon of TTS state changes and process speech queue."""
+        from config import TTSState
+        if self._tray is None:
+            return
+        speaking = state == TTSState.SPEAKING
+        self._tray.set_speaking(speaking, _("Playing…") if speaking else "")
+
+        if speaking:
+            # Cancel pending dismiss
+            if self._notif_dismiss_id:
+                GLib.source_remove(self._notif_dismiss_id)
+                self._notif_dismiss_id = 0
+
+            # Get text being spoken
+            spoken_text = ""
+            if self._tts_service:
+                spoken_text = getattr(self._tts_service, "_last_spoken_text", "")
+            display_text = spoken_text or _("Playing…")
+            if len(display_text) > 120:
+                display_text = display_text[:120] + "…"
+
+            self._notif_text_len = len(spoken_text) if spoken_text else 20
+            # Show or replace existing notification
+            self._show_dbus_notification(display_text)
+        else:
+            # Process speech queue (queue mode)
+            if self._speech_queue:
+                params = self._speech_queue.pop(0)
+                GLib.idle_add(lambda p=params: self.tts_service.speak(**p) and False)
+                return
+
+            # Proportional delay: 40ms per char, min 2s
+            delay_ms = max(2000, self._notif_text_len * 40)
+            if self._notif_dismiss_id:
+                GLib.source_remove(self._notif_dismiss_id)
+            self._notif_dismiss_id = GLib.timeout_add(
+                delay_ms, self._dismiss_notification,
+            )
+
+    def _show_dbus_notification(self, body: str) -> None:
+        """Show notification via org.freedesktop.Notifications D-Bus."""
+        try:
+            proxy = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
+                "org.freedesktop.Notifications",
+                "/org/freedesktop/Notifications",
+                "org.freedesktop.Notifications", None,
+            )
+            result = proxy.call_sync(
+                "Notify",
+                GLib.Variant("(susssasa{sv}i)", (
+                    APP_NAME,           # app_name
+                    self._notif_id,     # replaces_id (0 = new)
+                    "tts-biglinux",     # icon
+                    APP_NAME,           # summary
+                    body,               # body
+                    [],                 # actions
+                    {},                 # hints
+                    0,                  # expire_timeout (0 = server decides)
+                )),
+                Gio.DBusCallFlags.NONE, -1, None,
+            )
+            self._notif_id = result.unpack()[0]
+        except Exception:
+            pass
+
+    def _dismiss_notification(self) -> bool:
+        """Close notification via D-Bus after debounce period."""
+        self._notif_dismiss_id = 0
+        if self._notif_id:
+            try:
+                proxy = Gio.DBusProxy.new_for_bus_sync(
+                    Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
+                    "org.freedesktop.Notifications",
+                    "/org/freedesktop/Notifications",
+                    "org.freedesktop.Notifications", None,
+                )
+                proxy.call_sync(
+                    "CloseNotification",
+                    GLib.Variant("(u)", (self._notif_id,)),
+                    Gio.DBusCallFlags.NONE, -1, None,
+                )
+            except Exception:
+                pass
+            self._notif_id = 0
+        return False
+
     def _on_window_close_request(self, window: Gtk.Window) -> bool:
         """Hide window to tray instead of quitting."""
         if self._tray is not None:
-            if not self.settings.window.tray_warning_shown:
-                from gi.repository import Adw
-
-                def _on_dialog_response(
-                    dialog: Adw.MessageDialog, response: str
-                ) -> None:
-                    window.set_visible(False)
-                    self.settings.window.tray_warning_shown = True
-                    self.settings_service.save()
-
-                dialog = Adw.MessageDialog(
-                    heading=_("Minimized to System Tray"),
-                    body=_(
-                        "BigLinux TTS Speak is still running in the background.\nYou can access it anytime from the system tray icon."
-                    ),
-                    transient_for=window,
-                )
-                dialog.add_response("ok", _("OK"))
-                dialog.set_default_response("ok")
-                dialog.connect("response", _on_dialog_response)
-                dialog.present()
-            else:
-                window.set_visible(False)
+            window.set_visible(False)
             return True  # Prevent default close/destroy
         return False  # No tray — allow normal close
 
     def _on_tray_speak(self) -> None:
-        """Speak selected text or toggle stop (left-click on tray)."""
+        """Speak selected text (left-click on tray).
+
+        Respects playback_mode setting:
+        - interrupt: stop previous speech, start new
+        - queue: enqueue if speaking, auto-play when done
+        - simultaneous: play new speech without stopping
+        """
         import threading
 
         from services.clipboard_service import get_selected_text
-        from services.text_processor import process_text
 
         tts = self.tts_service
-        if tts.is_speaking:
-            tts.stop()
-            return
+        mode = self.settings.history.playback_mode  # interrupt|queue|simultaneous
 
         def _capture_and_speak() -> None:
             result = get_selected_text(self.settings.text.max_chars)
             logger.debug("Tray speak: clipboard result=%s", result)
             if not result.text:
+                # No new text — stop and clear queue
+                self._speech_queue.clear()
+                if tts.is_speaking:
+                    GLib.idle_add(tts.stop)
                 return
 
-            processed = process_text(
-                result.text,
-                expand_abbreviations=self.settings.text.expand_abbreviations,
-                process_special_chars=self.settings.text.process_special_chars,
-                process_urls=self.settings.text.process_urls,
-                strip_formatting=self.settings.text.strip_formatting,
-            )
-            logger.debug(
-                "Tray speak: processed text length=%d",
-                len(processed) if processed else 0,
-            )
-            if not processed:
-                return
+            raw_text = result.text
+            logger.debug("Tray speak: raw text length=%d, mode=%s", len(raw_text), mode)
 
             speech = self.settings.speech
-            logger.debug(
-                "Tray speak: backend=%s, voice=%s", speech.backend, speech.voice_id
+            text_cfg = self.settings.text
+
+            speak_params = dict(
+                text=raw_text,
+                rate=speech.rate,
+                pitch=speech.pitch,
+                volume=speech.volume,
+                backend=speech.backend,
+                output_module=speech.output_module,
+                voice_id=speech.voice_id,
+                expand_abbreviations=text_cfg.expand_abbreviations,
+                process_special_chars=text_cfg.process_special_chars,
+                process_urls=text_cfg.process_urls,
+                strip_formatting=text_cfg.strip_formatting,
             )
 
             def _do_speak() -> bool:
-                tts.speak(
-                    processed,
-                    rate=speech.rate,
-                    pitch=speech.pitch,
-                    volume=speech.volume,
-                    backend=speech.backend,
-                    output_module=speech.output_module,
-                    voice_id=speech.voice_id,
-                )
-                return False  # run only once
+                if mode == "queue" and tts.is_speaking:
+                    # Enqueue — will auto-play when current finishes
+                    self._speech_queue.append(speak_params)
+                    logger.debug("Speech queued (%d pending)", len(self._speech_queue))
+                elif mode == "simultaneous":
+                    # Play without stopping previous
+                    tts.speak(**speak_params, stop_previous=False)
+                else:
+                    # Interrupt (default): stop + start
+                    tts.speak(**speak_params)
+                return False
 
             GLib.idle_add(_do_speak)
 
@@ -325,7 +392,9 @@ class TTSApplication(Adw.Application):
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Control>q"])
 
-    def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
+    def _on_about(
+        self, action: Gio.SimpleAction, param: GLib.Variant | None
+    ) -> None:
         """Show about dialog."""
         about = Adw.AboutWindow(
             transient_for=self._window,
@@ -339,7 +408,9 @@ class TTSApplication(Adw.Application):
         )
         about.present()
 
-    def _on_quit(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
+    def _on_quit(
+        self, action: Gio.SimpleAction, param: GLib.Variant | None
+    ) -> None:
         """Quit the application."""
         logger.info("Quit action triggered")
         if self._tray is not None:
@@ -353,6 +424,11 @@ class TTSApplication(Adw.Application):
         import subprocess
         from pathlib import Path
 
+        # Disable legacy khotkeys binding (it hardcodes Alt+V and conflicts
+        # with the new configurable shortcut mechanism)
+        self._disable_legacy_khotkeys()
+
+        rc_path = Path.home() / ".config" / "kglobalshortcutsrc"
         shortcut = self.settings.shortcut.keybinding
 
         # Convert GTK accelerator to KDE format
@@ -367,341 +443,112 @@ class TTSApplication(Adw.Application):
         else:
             kde_shortcut = kde_shortcut.upper()
 
-        # ── Smart Path Detection ──────────────────────────────────────
-        # Use script from Git repo if running from there, otherwise system path
-        import sys
-        # application.py is in usr/share/biglinux/tts-biglinux/
-        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-        main_py = repo_root / "usr" / "share" / "biglinux" / "tts-biglinux" / "main.py"
-        
-        logger.debug("Path detection: repo_root=%s, main_py=%s (exists=%s)", 
-                     repo_root, main_py, main_py.exists())
-
-          # ── Zombie Nuke ──────────────────────────────────────────────
-        # Clean up old/conflicting desktop files in ~/.local/share/applications/
-        local_apps = Path.home() / ".local" / "share" / "applications"
-        zombies = ["tts-speak.desktop", "bigtts.desktop", "biglinux-tts-speak.desktop"]
-        for z in zombies:
-            z_path = local_apps / z
-            if z_path.exists():
-                try:
-                    z_path.unlink()
-                    logger.info("Deleted zombie desktop file: %s", z_path)
-                except Exception as e:
-                    logger.warning("Could not delete zombie file %s: %s", z_path, e)
-
-        # ── Unified Registration ─────────────────────────────────────
-        # Update both modern (KGlobalAccel via .desktop) and legacy (KHotKeys via .khotkeys)
-        # using the centralized DesktopIntegrationService.
-        logger.debug("Ensuring unified shortcut registration for: %s", kde_shortcut)
-        DesktopIntegrationService.update_khotkeys(shortcut)
-
-        # Rebuild sycoca (KDE service cache)
-        for scmd in ["kbuildsycoca6", "kbuildsycoca5"]:
+        # Check if already registered correctly in the services group
+        already_correct = False
+        if rc_path.exists():
             try:
-                subprocess.run(
-                    [scmd, "--noincremental"],
-                    timeout=5,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+                content = rc_path.read_text(encoding="utf-8")
+                import re
+                # Match within [services][biglinux-tts-speak.desktop] group
+                match = re.search(
+                    r"\[services\]\[biglinux-tts-speak\.desktop\]\s*\n_launch=([^\t\n]+)",
+                    content,
                 )
-            except:
+                if match and match.group(1) == kde_shortcut:
+                    already_correct = True
+            except OSError:
                 pass
 
-        # Notify systems
-        self._reload_kglobalaccel()
-
-        # ── Real-Time DBus Injection ────────────────────────────────
-        # Force the change in memory so it works WITHOUT log out
-        self._inject_shortcut_dbus(kde_shortcut)
-
-    @staticmethod
-    def _kde_shortcut_to_qt_keycode(kde_shortcut: str) -> int:
-        """Convert a KDE shortcut string (e.g. 'Alt+V') to Qt key code integer.
-
-        Qt combines modifier flags and key value into a single int:
-          Alt   = 0x08000000
-          Ctrl  = 0x04000000
-          Shift = 0x02000000
-          Meta  = 0x10000000
-        Letter keys use their uppercase ASCII value (e.g. V = 0x56).
-        Function keys use Qt::Key_F1 = 0x01000030, F2 = 0x01000031, etc.
-        """
-        code = 0
-        if "Alt+" in kde_shortcut:
-            code |= 0x08000000
-        if "Ctrl+" in kde_shortcut:
-            code |= 0x04000000
-        if "Shift+" in kde_shortcut:
-            code |= 0x02000000
-        if "Meta+" in kde_shortcut:
-            code |= 0x10000000
-
-        key = kde_shortcut.split("+")[-1].upper()
-
-        # Single character key — use ASCII value (matches Qt::Key_A..Z, 0..9)
-        if len(key) == 1 and key.isascii():
-            code |= ord(key)
-        # Function keys F1–F35
-        elif key.startswith("F") and key[1:].isdigit():
-            fn = int(key[1:])
-            if 1 <= fn <= 35:
-                code |= 0x01000030 + (fn - 1)
-        # Common named keys
-        else:
-            named = {
-                "SPACE": 0x20,
-                "TAB": 0x01000001,
-                "RETURN": 0x01000004,
-                "ENTER": 0x01000005,
-                "BACKSPACE": 0x01000003,
-                "ESCAPE": 0x01000000,
-                "DELETE": 0x01000007,
-                "INSERT": 0x01000006,
-                "HOME": 0x01000010,
-                "END": 0x01000011,
-                "PAGEUP": 0x01000016,
-                "PAGEDOWN": 0x01000017,
-                "LEFT": 0x01000012,
-                "UP": 0x01000013,
-                "RIGHT": 0x01000014,
-                "DOWN": 0x01000015,
-                "PRINT": 0x01000009,
-                "PAUSE": 0x01000008,
-                "CAPSLOCK": 0x01000024,
-                "NUMLOCK": 0x01000025,
-                "SCROLLLOCK": 0x01000026,
-            }
-            code |= named.get(key, 0)
-        return code
-
-    @staticmethod
-    def _inject_shortcut_dbus_static(kde_shortcut: str) -> None:
-        """Inject the shortcut directly into KGlobalAccel memory via DBus.
-
-        Uses gdbus call with the correct Plasma 6 API:
-          setShortcutKeys(as action_id, a(iiii) keys)
-        where action_id = [component, action, friendlyName, friendlyDesc]
-        and each key tuple = (qt_keycode, 0, 0, 0).
-        """
-        import subprocess
-
-        qt_code = TTSApplication._kde_shortcut_to_qt_keycode(kde_shortcut)
-        if qt_code == 0:
-            logger.warning("Could not compute Qt key code for '%s'", kde_shortcut)
+        if already_correct:
+            logger.debug("Shortcut already registered correctly: %s", kde_shortcut)
             return
 
-        comp = "br.com.biglinux.tts.desktop"
-        action_id = (
-            f"['{comp}', '_launch', "
-            f"'BigLinux TTS Speak', 'Speech or stop selected text']"
-        )
-        keys = f"[({qt_code}, 0, 0, 0)]"
+        logger.info("Registering global shortcut: %s", kde_shortcut)
 
-        # Method 1: gdbus call — supports complex GVariant types properly
+        # Remove stale component-level entry if present (legacy, wrong group)
         try:
-            result = subprocess.run(
+            subprocess.run(
                 [
-                    "gdbus",
-                    "call",
-                    "--session",
-                    "--dest",
-                    "org.kde.kglobalaccel",
-                    "--object-path",
-                    "/kglobalaccel",
-                    "--method",
-                    "org.kde.KGlobalAccel.setShortcutKeys",
-                    action_id,
-                    keys,
+                    "kwriteconfig6",
+                    "--file", "kglobalshortcutsrc",
+                    "--group", "biglinux-tts-speak.desktop",
+                    "--key", "_launch",
+                    "--delete",
                 ],
-                timeout=3,
+                timeout=5,
                 check=False,
-                capture_output=True,
-                text=True,
             )
-            if result.returncode == 0:
-                logger.info(
-                    "Shortcut injected via gdbus setShortcutKeys: %s (Qt code %d)",
-                    kde_shortcut,
-                    qt_code,
-                )
-                return
-            logger.debug(
-                "gdbus setShortcutKeys returned %d: %s",
-                result.returncode,
-                result.stderr.strip(),
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+
+        # Register via kwriteconfig6 in the services group (Plasma 6)
+        try:
+            subprocess.run(
+                [
+                    "kwriteconfig6",
+                    "--file", "kglobalshortcutsrc",
+                    "--group", "services",
+                    "--group", "biglinux-tts-speak.desktop",
+                    "--key", "_launch",
+                    f"{kde_shortcut}\t{kde_shortcut}\tSpeech or stop selected text",
+                ],
+                timeout=5,
+                check=False,
             )
+            logger.info("Shortcut registered in kglobalshortcutsrc [services]")
         except (OSError, subprocess.TimeoutExpired) as e:
-            logger.debug("gdbus setShortcutKeys failed: %s", e)
+            logger.warning("Could not register shortcut: %s", e)
 
-        # Method 2: Fallback using qdbus6 / qdbus
-        for qcmd in ["qdbus6", "qdbus"]:
-            try:
-                subprocess.run(
-                    [
-                        qcmd,
-                        "org.kde.kglobalaccel",
-                        "/kglobalaccel",
-                        "org.kde.KGlobalAccel.setShortcutKeys",
-                        comp,
-                        "_launch",
-                        "BigLinux TTS Speak",
-                        "Speech or stop selected text",
-                        str(qt_code),
-                        "0",
-                        "0",
-                        "0",
-                    ],
-                    timeout=3,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
-
-    def _inject_shortcut_dbus(self, kde_shortcut: str) -> None:
-        """Instance wrapper for the static injection."""
-        self._inject_shortcut_dbus_static(kde_shortcut)
-
-    @staticmethod
-    def _reload_kglobalaccel() -> None:
-        """Force KGlobalAccel to reload shortcut configuration."""
-        import subprocess
-        import time
-
-        # Method 1: block/unblock cycle forces re-read
+        # Notify KGlobalAccel to reload
         try:
             subprocess.run(
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
-                    "boolean:true",
-                ],
-                timeout=2,
+                ["dbus-send", "--type=signal", "--session",
+                 "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
+                 "int32:3", "int32:0"],
+                timeout=5,
                 check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
             )
-            time.sleep(0.1)
-            subprocess.run(
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                    "/kglobalaccel",
-                    "org.kde.KGlobalAccel.blockGlobalShortcuts",
-                    "boolean:false",
-                ],
-                timeout=2,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except:
+        except (OSError, subprocess.TimeoutExpired):
             pass
-
-        # Method 2: Plasma 6/5 reparseConfiguration
-        for cmd in ["qdbus6", "qdbus"]:
-            try:
-                subprocess.run(
-                    [
-                        cmd,
-                        "org.kde.kglobalaccel",
-                        "/kglobalaccel",
-                        "org.kde.KGlobalAccel.reparseConfiguration",
-                    ],
-                    timeout=2,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-            except:
-                pass
-
-        # Method 3: also notify KGlobalSettings (Legacy)
-        try:
-            subprocess.run(
-                [
-                    "dbus-send",
-                    "--type=signal",
-                    "--session",
-                    "/KGlobalSettings",
-                    "org.kde.KGlobalSettings.notifyChange",
-                    "int32:3",
-                    "int32:0",
-                ],
-                timeout=2,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except:
-            pass
-
-    @staticmethod
-    def _radical_dbus_cleanup() -> None:
-        """Explicitly unregister legacy components from KGlobalAccel via DBus."""
-        import subprocess
-
-        zombies = [
-            # ("khotkeys", "Launch tts-biglinux"),  # Managed by sync
-            ("bigtts.desktop", "_launch"),
-            ("tts-speak.desktop", "_launch"),
-            ("biglinux-tts-speak.desktop", "_launch"),
-            ("biglinux-tts-speak.desktop", "IntegratedRender"),
-            ("biglinux-tts-speak.desktop", "SoftwareRender"),
-            ("biglinux-tts-speak.desktop", "AmdRender"),
-        ]
-        for comp, action in zombies:
-            for dbus_cmd in [
-                ["qdbus6"],
-                ["qdbus"],
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                ],
-            ]:
-                try:
-                    if "dbus-send" in dbus_cmd:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                f"string:{comp}",
-                                f"string:{action}",
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                    else:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "org.kde.kglobalaccel",
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                comp,
-                                action,
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                except:
-                    pass
 
     @staticmethod
     def _disable_legacy_khotkeys() -> None:
-        # Replaced by DesktopIntegrationService methods
-        pass
+        """Disable legacy khotkeys binding if still active.
+
+        On Plasma 6, the khotkeys module is typically not loaded. This method
+        checks if it is and, if so, asks kded to unload it to prevent the
+        hardcoded Alt+V from /usr/share/khotkeys/ttsbiglinux.khotkeys from
+        interfering with the configurable shortcut.
+        """
+        import subprocess
+
+        # Check if khotkeys module is loaded in kded6
+        try:
+            result = subprocess.run(
+                [
+                    "qdbus6", "org.kde.kded6", "/kded",
+                    "org.kde.kded6.loadedModules",
+                ],
+                capture_output=True, text=True, timeout=3,
+            )
+            if "khotkeys" not in result.stdout:
+                return  # module not loaded, nothing to do
+        except (OSError, subprocess.TimeoutExpired):
+            return
+
+        # khotkeys is loaded — try to tell it to reload so it picks up
+        # the disabled version of ttsbiglinux.khotkeys
+        logger.info("khotkeys module is loaded, requesting reload")
+        try:
+            subprocess.run(
+                [
+                    "dbus-send", "--session", "--type=method_call",
+                    "--dest=org.kde.kded6",
+                    "/modules/khotkeys",
+                    "org.kde.khotkeys.reread_configuration",
+                ],
+                timeout=3, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass

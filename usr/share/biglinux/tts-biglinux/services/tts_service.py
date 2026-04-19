@@ -9,18 +9,36 @@ from __future__ import annotations
 
 import logging
 import os
+import shutil
 import signal
 import subprocess
 import threading
 from collections.abc import Callable
 from typing import Any
 
-from config import TTSBackend, TTSState
+from config import TTSBackend, TTSState, KokoroConfig
+from services.kokoro_voice_service import get_active_voices_bin
 from services.text_processor import process_text
 from services.voice_manager import VoiceInfo
 from utils.speechd_utils import try_restart_speechd
 
 logger = logging.getLogger(__name__)
+
+# Native Rust TTS engine (optional — falls back to subprocess if unavailable)
+_tts_engine = None
+
+def _get_tts_engine():
+    """Lazy-load the native Rust TTS engine module."""
+    global _tts_engine
+    if _tts_engine is None:
+        try:
+            import tts_engine as _mod
+            _tts_engine = _mod
+            logger.info("Native tts_engine loaded (v%s)", _mod.version())
+        except ImportError:
+            _tts_engine = False  # Sentinel: tried and failed
+            logger.debug("Native tts_engine not available, using subprocess")
+    return _tts_engine if _tts_engine else None
 
 # ── Callbacks ────────────────────────────────────────────────────────
 
@@ -29,6 +47,59 @@ OnProgress = Callable[[str], None]
 
 # Watch interval in ms for process completion
 _WATCH_INTERVAL_MS = 300
+
+# koko text crashes (SIGABRT) on input > ~410 chars.
+# Split at sentence boundaries, keeping each chunk under this limit.
+_KOKORO_MAX_CHUNK = 200
+
+# Regex: sentence-ending punctuation followed by whitespace
+import re
+_SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?;:…])\s+')
+
+
+def _split_kokoro_text(text: str) -> list[str]:
+    """Split text into chunks safe for koko text (≤ _KOKORO_MAX_CHUNK chars).
+
+    Splits at sentence boundaries first, then at word boundaries if a sentence
+    still exceeds the limit.
+    """
+    sentences = _SENTENCE_SPLIT_RE.split(text.strip())
+    chunks: list[str] = []
+    current = ""
+
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+
+        # If adding this sentence fits, accumulate
+        if current and len(current) + 1 + len(sentence) <= _KOKORO_MAX_CHUNK:
+            current += " " + sentence
+        elif not current and len(sentence) <= _KOKORO_MAX_CHUNK:
+            current = sentence
+        else:
+            # Flush current chunk
+            if current:
+                chunks.append(current)
+                current = ""
+
+            if len(sentence) <= _KOKORO_MAX_CHUNK:
+                current = sentence
+            else:
+                # Sentence too long — split at word boundaries
+                words = sentence.split()
+                for word in words:
+                    if current and len(current) + 1 + len(word) <= _KOKORO_MAX_CHUNK:
+                        current += " " + word
+                    else:
+                        if current:
+                            chunks.append(current)
+                        current = word
+
+    if current:
+        chunks.append(current)
+
+    return chunks if chunks else [text[:_KOKORO_MAX_CHUNK]]
 
 
 class TTSService:
@@ -39,13 +110,23 @@ class TTSService:
     espeak-ng (direct), and Piper (neural).
     """
 
-    def __init__(self) -> None:
+    def __init__(self, settings=None) -> None:
         self._state: TTSState = TTSState.IDLE
         self._process: subprocess.Popen[bytes] | None = None
         self._spd_client: Any = None  # speechd.SSIPClient
         self._on_state_changed: OnStateChanged | None = None
+        self._on_state_changed_extra: list[OnStateChanged] = []
         self._on_progress: OnProgress | None = None
         self._watch_id: int = 0
+        self._kokoro_pipeline: Any = None  # Unused, kept for compat
+        self._kokoro_proc: subprocess.Popen[bytes] | None = None
+        self._kokoro_thread: threading.Thread | None = None
+        self._kokoro_stop_event = threading.Event()  # Signal to stop generation
+        self._bg_thread: threading.Thread | None = None  # Generic background thread (Piper, etc.)
+        self._last_spoken_text: str = ""  # For history
+        self._last_backend: str = ""
+        self._last_voice_id: str = ""
+        self._settings = settings  # AppSettings reference
 
     @property
     def state(self) -> TTSState:
@@ -68,6 +149,10 @@ class TTSService:
         """Set callback for state changes."""
         self._on_state_changed = callback
 
+    def add_on_state_changed(self, callback: OnStateChanged) -> None:
+        """Add an additional state change listener (not replaced by set_on_state_changed)."""
+        self._on_state_changed_extra.append(callback)
+
     def set_on_progress(self, callback: OnProgress | None) -> None:
         """Set callback for progress updates."""
         self._on_progress = callback
@@ -87,6 +172,7 @@ class TTSService:
         process_special_chars: bool = True,
         process_urls: bool = False,
         strip_formatting: bool = True,
+        stop_previous: bool = True,
     ) -> bool:
         """
         Speak the given text.
@@ -104,6 +190,7 @@ class TTSService:
             process_special_chars: Read special chars aloud.
             process_urls: Read URLs aloud.
             strip_formatting: Remove markdown/HTML.
+            stop_previous: Stop any current speech before starting (default True).
 
         Returns:
             True if speech started successfully.
@@ -112,13 +199,16 @@ class TTSService:
             logger.debug("No text to speak")
             return False
 
-        # Stop any current speech first
-        if self.is_speaking:
+        if stop_previous:
+            # Always stop any previous speech (even if state tracking says idle,
+            # a background thread might still be alive between chunks)
+            was_speaking = self.is_speaking
             self.stop()
-            # Brief pause to let the output module fully release
-            import time
+            if was_speaking:
+                # Brief pause to let the output module fully release
+                import time
 
-            time.sleep(0.15)
+                time.sleep(0.15)
 
         # Resolve voice parameters
         if voice:
@@ -152,11 +242,16 @@ class TTSService:
             success = self._speak_espeak(processed, voice_id, rate, pitch, volume)
         elif backend == TTSBackend.PIPER.value:
             success = self._speak_piper(processed, voice_id, rate, pitch, volume)
+        elif backend == TTSBackend.KOKORO.value:
+            success = self._speak_kokoro(processed, voice_id, rate, pitch, volume)
         else:
             logger.error("Unknown backend: %s", backend)
             return False
 
         if success:
+            self._last_spoken_text = processed
+            self._last_backend = backend
+            self._last_voice_id = voice_id
             self._set_state(TTSState.SPEAKING)
             self._start_watch()
             if self._on_progress:
@@ -226,6 +321,28 @@ class TTSService:
             except OSError:
                 pass
             self._piper_tmp_path = None
+
+        # Kill Kokoro sub-process if active
+        kokoro = getattr(self, "_kokoro_proc", None)
+        if kokoro:
+            try:
+                kokoro.kill()
+            except ProcessLookupError:
+                pass
+            self._kokoro_proc = None
+
+        # Signal and join Kokoro thread
+        self._kokoro_stop_event.set()
+        kt = self._kokoro_thread
+        if kt and kt.is_alive():
+            kt.join(timeout=2)
+        self._kokoro_thread = None
+
+        # Join generic background thread (Piper, etc.)
+        bt = self._bg_thread
+        if bt and bt.is_alive():
+            bt.join(timeout=2)
+        self._bg_thread = None
 
         # Also kill any lingering backends
         self._kill_backends()
@@ -481,63 +598,57 @@ class TTSService:
         pitch: int,
         volume: int,
     ) -> bool:
-        """Speak via espeak-ng directly."""
-        cmd = ["espeak-ng"]
-
+        """Speak via espeak-ng (native FFI or subprocess fallback)."""
         # Extract actual voice name from our ID format
         actual_voice = (
             voice_id.removeprefix("espeak-")
             if voice_id.startswith("espeak-")
             else voice_id
         )
+
+        # Convert from UI range to espeak-ng raw parameters
+        wpm = max(80, min(450, 175 + int(rate * 1.5)))
+        esp_pitch = max(0, min(99, 50 + int(pitch * 0.5)))
+        esp_vol = min(200, max(10, int(volume * 2)) if volume > 0 else 10)
+
+        # Try native Rust engine first
+        engine = _get_tts_engine()
+        if engine:
+            try:
+                return engine.speak_espeak(
+                    text, actual_voice or "en", wpm, esp_pitch, esp_vol,
+                )
+            except Exception as e:
+                logger.warning("Native espeak failed, falling back: %s", e)
+
+        # Subprocess fallback
+        cmd = ["espeak-ng"]
         if actual_voice:
             cmd.extend(["-v", actual_voice])
-
-        # espeak rate is in WPM (default 175), speech-dispatcher is -100..100
-        wpm = 175 + int(rate * 1.5)
-        cmd.extend(["-s", str(max(80, min(450, wpm)))])
-
-        # espeak pitch is 0-99 (default 50)
-        esp_pitch = 50 + int(pitch * 0.5)
-        cmd.extend(["-p", str(max(0, min(99, esp_pitch)))])
-
-        # espeak volume is 0-200 (default 100)
-        # Ensure minimum audible volume (10) to avoid silent output
-        esp_vol = max(10, int(volume * 2)) if volume > 0 else 10
-        cmd.extend(["-a", str(min(200, esp_vol))])
-
-        # espeak-ng takes text as positional argument
+        cmd.extend(["-s", str(wpm)])
+        cmd.extend(["-p", str(esp_pitch)])
+        cmd.extend(["-a", str(esp_vol)])
         cmd.append(text)
 
-        result = self._start_process_no_stdin(cmd)
-        return result
+        return self._start_process_no_stdin(cmd)
 
     def _speak_piper(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
     ) -> bool:
-        """Speak via Piper neural TTS.
+        """Speak via Piper neural TTS (native ONNX or subprocess fallback).
 
         voice_id format: "piper:/absolute/path/to/model.onnx"
-        The binary is piper-tts (BigLinux) or piper.
 
-        Strategy: pre-generate all audio to a temp file in a background thread,
-        then play it back.  This eliminates inter-sentence pauses caused by
-        per-sentence inference latency in the streaming pipeline.
+        Strategy: synthesize WAV to temp file, then play via aplay/sox.
+        Native engine (tts_engine.synthesize_piper) is ~7x faster for short text
+        due to cached model + no subprocess overhead.
 
         Rate/Pitch/Volume mapping:
           rate (-100..100) → length_scale: -100=0.3 (fast), 0=1.0, 100=2.5 (slow)
           pitch (-100..100) → noise_scale: maps to voice expressiveness
-          volume (0..100) → sox vol factor for playback
+          volume (0..100) → volume factor
         """
         import tempfile
-        import threading
-
-        from services.voice_manager import _find_piper_binary
-
-        piper_bin = _find_piper_binary()
-        if not piper_bin:
-            logger.error("Piper binary not found (tried piper-tts, piper)")
-            return False
 
         # Extract model path from voice_id
         model_path = (
@@ -558,84 +669,101 @@ class TTSService:
 
         # Convert pitch (-100..100) to noise_scale
         noise_scale = 0.667 + (pitch / 100.0) * 0.333
-
         noise_w = 0.8
-        sentence_silence = 0.05  # Minimal gap — audio is pre-generated
 
         # Volume factor (0..100 → 0.2..2.0)
         vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
 
-        # Create temp file for pre-generated audio
+        # Create temp file for audio
         tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
         tmp_path = tmp.name
         tmp.close()
 
-        logger.debug(
-            "Piper: bin=%s, model=%s, length_scale=%.2f, noise_scale=%.3f, tmp=%s",
-            piper_bin,
-            model_path,
-            length_scale,
-            noise_scale,
-            tmp_path,
-        )
+        engine = _get_tts_engine()
 
-        # Build piper command — output to WAV file (pre-generate all audio)
-        cmd_piper = [
-            piper_bin,
-            "--model",
-            model_path,
-            "--output_file",
-            tmp_path,
-            "--length_scale",
-            f"{length_scale:.2f}",
-            "--noise_scale",
-            f"{noise_scale:.3f}",
-            "--noise_w",
-            f"{noise_w:.2f}",
-            "--sentence_silence",
-            f"{sentence_silence:.2f}",
-        ]
+        def _generate_native() -> bool:
+            """Synthesize via native Rust ONNX engine."""
+            try:
+                wav_bytes = engine.synthesize_piper(
+                    text, model_path, length_scale, noise_scale, noise_w, vol_factor,
+                )
+                if not wav_bytes or len(wav_bytes) < 100:
+                    return False
+                with open(tmp_path, "wb") as f:
+                    f.write(wav_bytes)
+                return True
+            except Exception as e:
+                logger.warning("Native Piper synthesis failed: %s", e)
+                return False
+
+        def _generate_subprocess() -> bool:
+            """Synthesize via piper-tts subprocess (fallback)."""
+            from services.voice_manager import _find_piper_binary
+
+            piper_bin = _find_piper_binary()
+            if not piper_bin:
+                logger.error("Piper binary not found (tried piper-tts, piper)")
+                return False
+
+            cmd_piper = [
+                piper_bin, "--model", model_path,
+                "--output_file", tmp_path,
+                "--length_scale", f"{length_scale:.2f}",
+                "--noise_scale", f"{noise_scale:.3f}",
+                "--noise_w", f"{noise_w:.2f}",
+                "--sentence_silence", "0.05",
+            ]
+
+            gen_proc = subprocess.Popen(
+                cmd_piper,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+            )
+            self._piper_proc = gen_proc
+
+            if gen_proc.stdin:
+                gen_proc.stdin.write(text.encode("utf-8"))
+                gen_proc.stdin.close()
+
+            gen_proc.wait()
+
+            if gen_proc.returncode != 0:
+                if gen_proc.returncode == -9:
+                    logger.debug("Piper stopped by user")
+                else:
+                    stderr = (
+                        gen_proc.stderr.read().decode("utf-8", errors="replace")
+                        if gen_proc.stderr else ""
+                    )
+                    logger.error(
+                        "Piper generation failed (code %d): %s",
+                        gen_proc.returncode, stderr[-200:],
+                    )
+                return False
+
+            if not os.path.isfile(tmp_path) or os.path.getsize(tmp_path) < 100:
+                logger.error("Piper generated empty or missing audio file")
+                return False
+
+            return True
 
         def _generate_and_play() -> None:
             try:
-                # Phase 1: pre-generate audio to file
-                gen_proc = subprocess.Popen(
-                    cmd_piper,
-                    stdin=subprocess.PIPE,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.PIPE,
-                )
-                self._piper_proc = gen_proc
+                # Phase 1: synthesize (native or subprocess)
+                ok = False
+                if engine:
+                    logger.debug(
+                        "Piper native: model=%s length_scale=%.2f noise_scale=%.3f",
+                        model_path, length_scale, noise_scale,
+                    )
+                    ok = _generate_native()
 
-                if gen_proc.stdin:
-                    gen_proc.stdin.write(text.encode("utf-8"))
-                    gen_proc.stdin.close()
+                if not ok:
+                    logger.debug("Piper subprocess fallback: model=%s", model_path)
+                    ok = _generate_subprocess()
 
-                gen_proc.wait()
-
-                if gen_proc.returncode != 0:
-                    if gen_proc.returncode == -9:
-                        logger.debug("Piper stopped by user")
-                    else:
-                        stderr = (
-                            gen_proc.stderr.read().decode("utf-8", errors="replace")
-                            if gen_proc.stderr
-                            else ""
-                        )
-                        logger.error(
-                            "Piper generation failed (code %d): %s",
-                            gen_proc.returncode,
-                            stderr[-200:],
-                        )
-                    try:
-                        os.unlink(tmp_path)
-                    except OSError:
-                        pass
-                    self._set_state(TTSState.ERROR)
-                    return
-
-                if not os.path.isfile(tmp_path) or os.path.getsize(tmp_path) < 100:
-                    logger.error("Piper generated empty or missing audio file")
+                if not ok:
                     try:
                         os.unlink(tmp_path)
                     except OSError:
@@ -644,23 +772,17 @@ class TTSService:
                     return
 
                 # Phase 2: play the pre-generated audio
-                if vol_factor != 1.0:
+                # Native already applied volume, subprocess needs sox
+                if not engine and vol_factor != 1.0:
                     sox_available = (
                         subprocess.run(
                             ["which", "sox"],
-                            capture_output=True,
-                            timeout=2,
-                        ).returncode
-                        == 0
+                            capture_output=True, timeout=2,
+                        ).returncode == 0
                     )
-
                     if sox_available:
                         play_cmd = [
-                            "play",
-                            "-q",
-                            tmp_path,
-                            "vol",
-                            f"{vol_factor:.2f}",
+                            "play", "-q", tmp_path, "vol", f"{vol_factor:.2f}",
                         ]
                     else:
                         play_cmd = ["aplay", "-q", tmp_path]
@@ -685,8 +807,277 @@ class TTSService:
                 self._set_state(TTSState.ERROR)
 
         thread = threading.Thread(target=_generate_and_play, daemon=True)
+        self._bg_thread = thread
         thread.start()
         return True
+
+    def _speak_kokoro(
+        self, text: str, voice_id: str, rate: int, pitch: int, volume: int
+    ) -> bool:
+        """Speak via Kokoro neural TTS using the koko CLI binary.
+
+        voice_id format: "kokoro:af_heart" or "kokoro:pf_dora"
+        Uses the koko binary from biglinux-kokoro-tts package.
+
+        Strategy: generate audio to a temp WAV file via `koko text`, then play
+        it back — same approach as _speak_piper.
+        """
+        import tempfile
+
+        koko_bin = shutil.which("koko")
+        if not koko_bin:
+            logger.error("koko binary not found — install biglinux-kokoro-tts")
+            return False
+
+        # Read Kokoro-specific settings
+        kokoro_cfg = self._settings.speech.kokoro if self._settings else None
+
+        # Extract voice name from voice_id
+        kokoro_voice = (
+            voice_id.removeprefix("kokoro:")
+            if voice_id.startswith("kokoro:")
+            else voice_id
+        )
+        if not kokoro_voice:
+            kokoro_voice = "pf_dora"  # Default Brazilian Portuguese
+
+        # Determine lang_code — prefer KokoroConfig, fallback to voice prefix
+        voice_prefix = kokoro_voice[:1] if kokoro_voice else "p"
+        lang_code_map = {
+            "a": "en-us",  # American English
+            "b": "en-gb",  # British English
+            "e": "es",     # Spanish
+            "f": "fr",     # French
+            "h": "hi",     # Hindi
+            "i": "it",     # Italian
+            "j": "ja",     # Japanese
+            "p": "pt-br",  # Brazilian Portuguese
+            "z": "zh",     # Mandarin Chinese
+        }
+        lang_code = lang_code_map.get(voice_prefix, "pt-br")
+        if kokoro_cfg and kokoro_cfg.lang_code:
+            # Map single-letter config codes to espeak-ng language codes
+            cfg_lang_map = {
+                "a": "en-us", "b": "en-gb", "e": "es", "f": "fr",
+                "h": "hi", "i": "it", "j": "ja", "p": "pt-br", "z": "zh",
+            }
+            lang_code = cfg_lang_map.get(kokoro_cfg.lang_code, kokoro_cfg.lang_code)
+
+        # ── Speed calculation ──
+        # Base speed from rate slider: (-100..100) → (0.5..2.0)
+        # koko: 0.5=slow, 1.0=normal, 2.0=fast
+        base_speed = 1.0 + (rate / 100.0)
+        base_speed = max(0.5, min(2.0, base_speed))
+
+        # Apply emotion preset speed modifier
+        _EMOTION_SPEED = {
+            "neutral": 1.0,
+            "happy": 1.1,
+            "calm": 0.8,
+            "urgent": 1.4,
+            "narrative": 0.9,
+        }
+        emotion = kokoro_cfg.emotion_preset if kokoro_cfg else "neutral"
+        emotion_factor = _EMOTION_SPEED.get(emotion, 1.0)
+        speed = max(0.5, min(2.0, base_speed * emotion_factor))
+
+        # Set environment for model/data paths (needed before blend validation)
+        koko_env = {**os.environ,
+            "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
+            "KOKO_DATA_PATH": str(get_active_voices_bin()),
+        }
+
+        # ── Voice blending ──
+        style = kokoro_voice
+        if kokoro_cfg and kokoro_cfg.voice_blend:
+            blend_voice = kokoro_cfg.voice_blend.strip()
+            # Strip "kokoro:" prefix — voice_blend stores catalog IDs
+            if blend_voice.startswith("kokoro:"):
+                blend_voice = blend_voice[7:]
+            blend_ratio = max(0.0, min(1.0, kokoro_cfg.blend_ratio))
+            if blend_voice and blend_voice != kokoro_voice:
+                # Validate blend voice exists before using it —
+                # koko falls back to a random voice if the blend voice is missing
+                blend_valid = self._is_kokoro_voice_available(
+                    blend_voice, koko_bin, koko_env,
+                )
+                if blend_valid:
+                    # koko format: voice1.weight+voice2.weight (weights 0-10)
+                    w1 = round((1.0 - blend_ratio) * 10)
+                    w2 = round(blend_ratio * 10)
+                    style = f"{kokoro_voice}.{w1}+{blend_voice}.{w2}"
+                else:
+                    logger.warning(
+                        "Kokoro blend voice '%s' not installed, using '%s' alone",
+                        blend_voice, kokoro_voice,
+                    )
+
+        # Volume factor (0..100 → 0.2..2.0)
+        vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
+
+        logger.debug(
+            "Kokoro: voice=%s, style=%s, lang=%s, speed=%.2f, "
+            "emotion=%s, vol=%.2f, text=%r",
+            kokoro_voice, style, lang_code, speed,
+            emotion, vol_factor, text[:60],
+        )
+
+        # koko text crashes (SIGABRT) on text > ~410 chars.
+        # Split into sentence-boundary chunks and process sequentially.
+        chunks = _split_kokoro_text(text)
+        logger.debug("Kokoro: split into %d chunk(s)", len(chunks))
+
+        # Base command template — text and output path filled per chunk
+        base_cmd = [
+            koko_bin,
+            "-s", style,
+            "-l", lang_code,
+            "-p", f"{speed:.2f}",
+            "--force-style", "true",
+        ]
+
+        # Check sox availability once
+        sox_available = shutil.which("sox") is not None
+
+        def _build_play_cmd(wav_path: str) -> list[str]:
+            if vol_factor != 1.0 and sox_available:
+                return ["play", "-q", wav_path, "vol", f"{vol_factor:.2f}"]
+            return ["aplay", "-q", wav_path]
+
+        def _generate_and_play() -> None:
+            """Pipeline: generate next chunk while current plays."""
+            tmp_paths: list[str] = []
+            play_proc: subprocess.Popen | None = None
+
+            def _gen_chunk(chunk: str) -> str | None:
+                """Generate a WAV for one chunk, return path or None on failure."""
+                tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+                path = tmp.name
+                tmp.close()
+                tmp_paths.append(path)
+
+                cmd = [*base_cmd, "text", "-o", path, chunk]
+                proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.PIPE,
+                    env=koko_env,
+                )
+                self._kokoro_proc = proc
+                proc.wait()
+                self._kokoro_proc = None
+
+                if self._kokoro_stop_event.is_set():
+                    return None
+                if proc.returncode != 0:
+                    if proc.returncode != -9:
+                        stderr = (
+                            proc.stderr.read().decode("utf-8", errors="replace")
+                            if proc.stderr else ""
+                        )
+                        logger.error("Kokoro gen failed (code %d): %s",
+                                     proc.returncode, stderr[-200:])
+                    return None
+                if not os.path.isfile(path) or os.path.getsize(path) < 100:
+                    logger.error("Kokoro generated empty audio")
+                    return None
+                return path
+
+            try:
+                for i, chunk in enumerate(chunks):
+                    if self._kokoro_stop_event.is_set():
+                        if play_proc:
+                            play_proc.terminate()
+                        return
+
+                    # Generate this chunk
+                    wav = _gen_chunk(chunk)
+                    if wav is None:
+                        if play_proc:
+                            play_proc.terminate()
+                        self._set_state(TTSState.ERROR)
+                        return
+
+                    # Wait for previous chunk playback to finish
+                    if play_proc:
+                        # Poll with stop-event check instead of blocking wait
+                        while play_proc.poll() is None:
+                            if self._kokoro_stop_event.is_set():
+                                play_proc.terminate()
+                                return
+                            self._kokoro_stop_event.wait(timeout=0.05)
+
+                    # Start playing this chunk
+                    play_cmd = _build_play_cmd(wav)
+                    play_proc = subprocess.Popen(
+                        play_cmd,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
+                    # Track so stop() can kill it
+                    self._process = play_proc
+
+                # Keep last play_proc tracked for watch
+                if play_proc:
+                    self._piper_tmp_path = tmp_paths[-1] if tmp_paths else None
+
+            except (FileNotFoundError, OSError) as e:
+                logger.error("Failed to start Kokoro: %s", e)
+                self._set_state(TTSState.ERROR)
+            finally:
+                playing = getattr(self, "_piper_tmp_path", None)
+                for p in tmp_paths:
+                    if p != playing:
+                        try:
+                            os.unlink(p)
+                        except OSError:
+                            pass
+
+        self._kokoro_stop_event.clear()
+        self._kokoro_thread = threading.Thread(
+            target=_generate_and_play, daemon=True
+        )
+        self._kokoro_thread.start()
+        return True
+
+    def _is_kokoro_voice_available(
+        self,
+        voice_name: str,
+        koko_bin: str,
+        koko_env: dict[str, str],
+    ) -> bool:
+        """Check if a Kokoro voice style is installed.
+
+        Uses a cached set populated from `koko voices` on first call.
+        Cache is invalidated when the active voices.bin changes.
+        """
+        current_bin = koko_env.get("KOKO_DATA_PATH", "")
+        if (
+            not hasattr(self, "_kokoro_available_voices")
+            or getattr(self, "_kokoro_voices_bin_path", "") != current_bin
+        ):
+            self._kokoro_voices_bin_path = current_bin
+            self._kokoro_available_voices: set[str] = set()
+            try:
+                proc = subprocess.run(
+                    [koko_bin, "voices"],
+                    capture_output=True, text=True, timeout=5,
+                    env=koko_env,
+                )
+                if proc.returncode == 0:
+                    for line in proc.stdout.splitlines():
+                        stripped = line.strip()
+                        if (
+                            stripped
+                            and not stripped.startswith("Voice ID")
+                            and not stripped.startswith("---")
+                            and "loaded:" not in stripped
+                        ):
+                            vid = stripped.split()[0]
+                            self._kokoro_available_voices.add(vid)
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                pass
+        return voice_name in self._kokoro_available_voices
 
     def _start_process(self, cmd: list[str], text: str) -> bool:
         """Start a TTS process with text piped to stdin."""
@@ -747,6 +1138,14 @@ class TTSService:
             except (FileNotFoundError, subprocess.TimeoutExpired):
                 pass
 
+    def _has_active_bg_thread(self) -> bool:
+        """Check if any background TTS thread is still alive."""
+        if self._kokoro_thread is not None and self._kokoro_thread.is_alive():
+            return True
+        if self._bg_thread is not None and self._bg_thread.is_alive():
+            return True
+        return False
+
     def _start_watch(self) -> None:
         """Start polling for process completion."""
         self._stop_watch()
@@ -789,9 +1188,17 @@ class TTSService:
             if rc != 0:
                 logger.warning("TTS process exited with code %d", rc)
             self._process = None
+
+            # Background thread (Kokoro multi-chunk, Piper generation) may
+            # still be alive — don't set IDLE yet, keep polling
+            if self._has_active_bg_thread():
+                return True
+
             # Clean up Piper temp audio file after playback
             tmp_path = getattr(self, "_piper_tmp_path", None)
             if tmp_path:
+                # Save history before cleanup
+                self._maybe_save_history(tmp_path)
                 try:
                     os.unlink(tmp_path)
                 except OSError:
@@ -801,6 +1208,9 @@ class TTSService:
             self._watch_id = 0
             return False  # Stop the timer
         if self._process is None:
+            # Background thread may still be generating audio (no process yet)
+            if self._has_active_bg_thread():
+                return True  # Keep polling — generation in progress
             self._set_state(TTSState.IDLE)
             self._watch_id = 0
             return False
@@ -814,6 +1224,35 @@ class TTSService:
             logger.debug("TTS state: %s → %s", old, state)
             if self._on_state_changed:
                 self._on_state_changed(state)
+            for cb in self._on_state_changed_extra:
+                try:
+                    cb(state)
+                except Exception as e:
+                    logger.warning("State change listener error: %s", e)
+
+    def _maybe_save_history(self, audio_path: str | None = None) -> None:
+        """Save history entry if history is enabled in settings."""
+        if not self._settings:
+            return
+        history = getattr(self._settings, "history", None)
+        if not history or not history.enabled:
+            return
+        if not self._last_spoken_text:
+            return
+
+        try:
+            from services.history_service import save_history_entry
+
+            save_history_entry(
+                text=self._last_spoken_text,
+                audio_path=audio_path,
+                backend=self._last_backend,
+                voice_id=self._last_voice_id,
+                save_audio=history.save_audio,
+                save_text=history.save_text,
+            )
+        except Exception as e:
+            logger.error("Failed to save history: %s", e)
 
     def cleanup(self) -> None:
         """Clean up resources on shutdown."""
