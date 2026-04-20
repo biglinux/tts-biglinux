@@ -610,3 +610,296 @@ Type=SHORTCUT
                 )
             except:
                 pass
+
+    # ── Cross-DE Shortcut Support ────────────────────────────────────
+
+    @staticmethod
+    def detect_desktop_environment() -> str:
+        """Detect current desktop environment from XDG_CURRENT_DESKTOP.
+
+        Returns one of: 'kde', 'gnome', 'xfce', 'cinnamon', 'unknown'.
+        """
+        xdg = os.environ.get("XDG_CURRENT_DESKTOP", "").lower()
+        if "kde" in xdg or "plasma" in xdg:
+            return "kde"
+        if "gnome" in xdg or "unity" in xdg:
+            return "gnome"
+        if "xfce" in xdg:
+            return "xfce"
+        if "cinnamon" in xdg or "x-cinnamon" in xdg:
+            return "cinnamon"
+        # Fallback: check DESKTOP_SESSION
+        session = os.environ.get("DESKTOP_SESSION", "").lower()
+        for key, val in [
+            ("plasma", "kde"), ("kde", "kde"),
+            ("gnome", "gnome"), ("ubuntu", "gnome"),
+            ("xfce", "xfce"), ("xubuntu", "xfce"),
+            ("cinnamon", "cinnamon"),
+        ]:
+            if key in session:
+                return val
+        return "unknown"
+
+    @staticmethod
+    def _exec_path_for_speak() -> str:
+        """Resolve the exec path for the speak command."""
+        import sys
+        repo_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent
+        main_py = repo_root / "usr" / "share" / "biglinux" / "tts-biglinux" / "main.py"
+        if main_py.exists() and (repo_root / ".git").exists():
+            return f"{sys.executable} {main_py} --speak"
+        return "/usr/bin/biglinux-tts-speak"
+
+    @staticmethod
+    def gtk_accel_to_xdg(accel: str) -> str:
+        """Convert GTK accelerator to XDG/gsettings format (used by GNOME/Cinnamon).
+
+        GTK: '<Alt>v' → XDG: '<Alt>v' (same format, just ensure consistency).
+        """
+        # gsettings uses the same format as GTK accelerators
+        return accel
+
+    @classmethod
+    def register_gnome_shortcut(cls, accel: str, exec_path: str) -> bool:
+        """Register custom keybinding in GNOME via gsettings.
+
+        GNOME stores custom shortcuts under:
+          org.gnome.settings-daemon.plugins.media-keys custom-keybindings
+        Each binding is a separate dconf path: .../customN/
+        """
+        import json
+
+        schema = "org.gnome.settings-daemon.plugins.media-keys"
+        base_path = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+        binding_name = "BigLinux TTS Speak"
+        slot_path = f"{base_path}/biglinux-tts/"
+
+        # Check if our slot already exists
+        try:
+            result = subprocess.run(
+                ["gsettings", "get", schema, "custom-keybindings"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode != 0:
+                logger.warning("gsettings not available for GNOME shortcuts")
+                return False
+            # Parse the list (GVariant format: ['path1', 'path2'])
+            raw = result.stdout.strip()
+            if raw == "@as []" or raw == "[]":
+                current_paths: list[str] = []
+            else:
+                # GVariant uses single-quotes; parse manually
+                current_paths = [
+                    p.strip().strip("'\"")
+                    for p in raw.strip("[]").split(",")
+                    if p.strip()
+                ]
+        except (OSError, subprocess.TimeoutExpired):
+            logger.warning("Failed to read GNOME custom-keybindings")
+            return False
+
+        # Add our slot path if missing
+        if slot_path not in current_paths:
+            current_paths.append(slot_path)
+            paths_str = "[" + ", ".join(f"'{p}'" for p in current_paths) + "]"
+            try:
+                subprocess.run(
+                    ["gsettings", "set", schema, "custom-keybindings", paths_str],
+                    timeout=5, check=True,
+                )
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to register GNOME keybinding slot: %s", e)
+                return False
+
+        # Set the binding properties
+        custom_schema = f"{schema}.custom-keybinding"
+        custom_path = slot_path
+        cmds = [
+            ["gsettings", "set", f"{custom_schema}:{custom_path}", "name", binding_name],
+            ["gsettings", "set", f"{custom_schema}:{custom_path}", "command", exec_path],
+            ["gsettings", "set", f"{custom_schema}:{custom_path}", "binding", accel],
+        ]
+        for cmd in cmds:
+            try:
+                subprocess.run(cmd, timeout=5, check=True)
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to set GNOME keybinding property: %s", e)
+                return False
+
+        logger.info("GNOME shortcut registered: %s → %s", accel, exec_path)
+        return True
+
+    @classmethod
+    def register_xfce_shortcut(cls, accel: str, exec_path: str) -> bool:
+        """Register custom keybinding in XFCE via xfconf-query.
+
+        XFCE stores shortcuts in xfce4-keyboard-shortcuts channel.
+        Path format: /commands/custom/<accel>
+        """
+        import shutil
+
+        if not shutil.which("xfconf-query"):
+            logger.warning("xfconf-query not available — cannot register XFCE shortcut")
+            return False
+
+        # Convert GTK accel to XFCE format — XFCE uses same style but
+        # may need uppercase key name
+        xfce_accel = accel  # '<Alt>v' works in XFCE
+
+        channel = "xfce4-keyboard-shortcuts"
+        prop_path = f"/commands/custom/{xfce_accel}"
+
+        # First, remove any previous biglinux-tts binding
+        try:
+            result = subprocess.run(
+                ["xfconf-query", "-c", channel, "-l", "-v"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0:
+                for line in result.stdout.splitlines():
+                    if "biglinux-tts" in line:
+                        parts = line.split(None, 1)
+                        if parts:
+                            old_prop = parts[0]
+                            subprocess.run(
+                                ["xfconf-query", "-c", channel, "-p", old_prop, "-r"],
+                                timeout=3, check=False,
+                            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+
+        # Register the new binding
+        try:
+            subprocess.run(
+                [
+                    "xfconf-query", "-c", channel,
+                    "-p", prop_path,
+                    "-n", "-t", "string", "-s", exec_path,
+                ],
+                timeout=5, check=True,
+            )
+            logger.info("XFCE shortcut registered: %s → %s", xfce_accel, exec_path)
+            return True
+        except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+            logger.error("Failed to register XFCE shortcut: %s", e)
+            return False
+
+    @classmethod
+    def register_cinnamon_shortcut(cls, accel: str, exec_path: str) -> bool:
+        """Register custom keybinding in Cinnamon via gsettings.
+
+        Cinnamon uses a numbered list of custom keybindings under:
+          org.cinnamon.desktop.keybindings custom-list
+        Each binding: org.cinnamon.desktop.keybindings.custom-keybinding:/…/customN/
+        """
+        binding_name = "BigLinux TTS Speak"
+        list_schema = "org.cinnamon.desktop.keybindings"
+        custom_schema = "org.cinnamon.desktop.keybindings.custom-keybinding"
+        base_path = "/org/cinnamon/desktop/keybindings/custom-keybindings"
+
+        # Read current custom-list
+        try:
+            result = subprocess.run(
+                ["gsettings", "get", list_schema, "custom-list"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode != 0:
+                logger.warning("gsettings not available for Cinnamon shortcuts")
+                return False
+
+            raw = result.stdout.strip()
+            if raw == "@as []" or raw == "[]":
+                current_list: list[str] = []
+            else:
+                current_list = [
+                    p.strip().strip("'\"")
+                    for p in raw.strip("[]").split(",")
+                    if p.strip()
+                ]
+        except (OSError, subprocess.TimeoutExpired):
+            return False
+
+        # Check if we already have a slot — look for existing biglinux entry
+        our_slot: str | None = None
+        for slot_id in current_list:
+            slot_path = f"{base_path}/{slot_id}/"
+            try:
+                result = subprocess.run(
+                    ["gsettings", "get", f"{custom_schema}:{slot_path}", "name"],
+                    capture_output=True, text=True, timeout=3,
+                )
+                if binding_name in result.stdout:
+                    our_slot = slot_id
+                    break
+            except (OSError, subprocess.TimeoutExpired):
+                continue
+
+        # Allocate new slot if needed
+        if our_slot is None:
+            # Find next available number
+            existing_nums = set()
+            for s in current_list:
+                if s.startswith("custom"):
+                    try:
+                        existing_nums.add(int(s.removeprefix("custom")))
+                    except ValueError:
+                        pass
+            next_num = 0
+            while next_num in existing_nums:
+                next_num += 1
+            our_slot = f"custom{next_num}"
+            current_list.append(our_slot)
+
+            # Update the list
+            list_str = "[" + ", ".join(f"'{s}'" for s in current_list) + "]"
+            try:
+                subprocess.run(
+                    ["gsettings", "set", list_schema, "custom-list", list_str],
+                    timeout=5, check=True,
+                )
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to update Cinnamon custom-list: %s", e)
+                return False
+
+        # Set binding properties
+        slot_path = f"{base_path}/{our_slot}/"
+        cmds = [
+            ["gsettings", "set", f"{custom_schema}:{slot_path}", "name", binding_name],
+            ["gsettings", "set", f"{custom_schema}:{slot_path}", "command", exec_path],
+            ["gsettings", "set", f"{custom_schema}:{slot_path}", "binding", f"['{accel}']"],
+        ]
+        for cmd in cmds:
+            try:
+                subprocess.run(cmd, timeout=5, check=True)
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to set Cinnamon keybinding: %s", e)
+                return False
+
+        logger.info("Cinnamon shortcut registered: %s → %s", accel, exec_path)
+        return True
+
+    @classmethod
+    def register_shortcut_for_current_de(cls, accel: str) -> bool:
+        """Register the global shortcut using the appropriate DE mechanism.
+
+        Detects the current DE and calls the correct registration method.
+        On KDE, delegates to existing update_khotkeys flow.
+        Returns True if successfully registered.
+        """
+        de = cls.detect_desktop_environment()
+        exec_path = cls._exec_path_for_speak()
+        logger.info("Registering shortcut '%s' for DE: %s", accel, de)
+
+        if de == "kde":
+            cls.update_khotkeys(accel)
+            return True
+        elif de == "gnome":
+            return cls.register_gnome_shortcut(accel, exec_path)
+        elif de == "xfce":
+            return cls.register_xfce_shortcut(accel, exec_path)
+        elif de == "cinnamon":
+            return cls.register_cinnamon_shortcut(accel, exec_path)
+        else:
+            # Unknown DE — try GNOME gsettings as fallback (many DEs are GNOME-based)
+            logger.info("Unknown DE '%s', trying GNOME gsettings as fallback", de)
+            return cls.register_gnome_shortcut(accel, exec_path)

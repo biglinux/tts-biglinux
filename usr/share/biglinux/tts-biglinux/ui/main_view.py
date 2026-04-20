@@ -707,10 +707,9 @@ class MainView(Adw.NavigationPage):
         self._on_toast(_("Shortcut changed to {keys}").format(keys=display_name), 3)
         logger.info("Shortcut changed to: %s (%s)", accel, display_name)
 
-        # Update KDE shortcut files in a background thread so the UI
-        # doesn't freeze during subprocess calls and the brief sleep
+        # Update shortcut for the current desktop environment in background
         threading.Thread(
-            target=DesktopIntegrationService.update_khotkeys,
+            target=DesktopIntegrationService.register_shortcut_for_current_de,
             args=(accel,),
             daemon=True,
         ).start()
