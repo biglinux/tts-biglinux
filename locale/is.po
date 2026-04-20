@@ -382,6 +382,10 @@ msgstr "Ókunnug villa"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 #: 1
 msgid "BigLinux TTS"
@@ -798,6 +802,10 @@ msgstr "Hljóðspilunarhamur"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 561
 msgid "Behavior when playing multiple audios or speech"
 msgstr "Hegðun þegar spilað er fleiri hljóð eða tal."
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
 # 

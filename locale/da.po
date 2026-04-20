@@ -47,6 +47,12 @@ msgstr "Pause"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+# 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
 msgid "Open file location"
@@ -380,6 +386,10 @@ msgstr "Fjernelse mislykkedes"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 643
 msgid "Unknown error"
 msgstr "Ukendt fejl"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+msgid "OK"
+msgstr "OK"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 

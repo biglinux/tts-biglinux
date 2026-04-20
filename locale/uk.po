@@ -376,6 +376,10 @@ msgstr "Невідома помилка"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -1070,6 +1074,10 @@ msgstr "Відновити"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
 msgid "Text-to-speech assistant"
 msgstr "Асистент перетворення тексту в мову"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 187
+msgid "Read text"
+msgstr "Читати текст"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 187
 # 

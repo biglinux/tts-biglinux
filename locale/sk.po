@@ -376,6 +376,10 @@ msgstr "Neznáma chyba"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 #: 1
 msgid "BigLinux TTS"
