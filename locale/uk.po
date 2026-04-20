@@ -372,6 +372,10 @@ msgstr "Невідома помилка"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
 # 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
+# 
 # File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -737,6 +741,12 @@ msgid "Behavior when playing multiple audios or speech"
 msgstr "Поведение при воспроизведении нескольких аудио или речи"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+msgid "Interrupt previous"
+msgstr "Перервати попереднє"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 567
 # 
@@ -1062,6 +1072,10 @@ msgstr "Відновити"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
 msgid "Text-to-speech assistant"
 msgstr "Асистент перетворення тексту в мову"
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
+# 
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
 # 
