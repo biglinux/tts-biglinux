@@ -28,6 +28,7 @@ from config import (
 )
 from resources import load_css
 from services.settings_service import SettingsService
+from services.desktop_integration_service import DesktopIntegrationService
 from services.tray_service import MenuItem, TrayIcon
 from services.tts_service import TTSService
 from utils.i18n import _
@@ -438,28 +439,29 @@ class TTSApplication(Adw.Application):
     # ── Shortcut Registration ────────────────────────────────────────
 
     def _ensure_shortcut_registered(self) -> None:
-        """Register shortcut with KGlobalAccel (services group) on Plasma 6."""
-        import subprocess
-        from pathlib import Path
+        """Register global shortcut for the current desktop environment.
 
+        Supports KDE/Plasma, GNOME, XFCE, and Cinnamon.
+        """
+        shortcut = self.settings.shortcut.keybinding
+        de = DesktopIntegrationService.detect_desktop_environment()
+
+        if de == "kde":
+            self._ensure_shortcut_registered_kde(shortcut)
+        else:
+            # GNOME, XFCE, Cinnamon, or unknown — use cross-DE dispatcher
+            DesktopIntegrationService.register_shortcut_for_current_de(shortcut)
+
+    def _ensure_shortcut_registered_kde(self, shortcut: str) -> None:
+        """Register shortcut with KGlobalAccel (services group) on Plasma 6."""
         # Disable legacy khotkeys binding (it hardcodes Alt+V and conflicts
         # with the new configurable shortcut mechanism)
         self._disable_legacy_khotkeys()
 
         rc_path = Path.home() / ".config" / "kglobalshortcutsrc"
-        shortcut = self.settings.shortcut.keybinding
 
         # Convert GTK accelerator to KDE format
-        kde_shortcut = shortcut
-        kde_shortcut = kde_shortcut.replace("<Control>", "Ctrl+")
-        kde_shortcut = kde_shortcut.replace("<Shift>", "Shift+")
-        kde_shortcut = kde_shortcut.replace("<Alt>", "Alt+")
-        kde_shortcut = kde_shortcut.replace("<Super>", "Meta+")
-        if "+" in kde_shortcut:
-            parts = kde_shortcut.rsplit("+", 1)
-            kde_shortcut = parts[0] + "+" + parts[1].upper()
-        else:
-            kde_shortcut = kde_shortcut.upper()
+        kde_shortcut = DesktopIntegrationService.gtk_accel_to_kde(shortcut)
 
         # Check if already registered correctly in the services group
         already_correct = False
@@ -467,7 +469,6 @@ class TTSApplication(Adw.Application):
             try:
                 content = rc_path.read_text(encoding="utf-8")
                 import re
-                # Match within [services][biglinux-tts-speak.desktop] group
                 match = re.search(
                     r"\[services\]\[biglinux-tts-speak\.desktop\]\s*\n_launch=([^\t\n]+)",
                     content,
@@ -481,7 +482,7 @@ class TTSApplication(Adw.Application):
             logger.debug("Shortcut already registered correctly: %s", kde_shortcut)
             return
 
-        logger.info("Registering global shortcut: %s", kde_shortcut)
+        logger.info("Registering KDE global shortcut: %s", kde_shortcut)
 
         # Remove stale component-level entry if present (legacy, wrong group)
         try:

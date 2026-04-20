@@ -126,23 +126,44 @@ _CATALOG_BY_ID: dict[str, KokoroVoiceEntry] = {v.voice_id: v for v in KOKORO_CAT
 # ── Public API ───────────────────────────────────────────────────────
 
 def is_kokoro_installed() -> bool:
-    """Check if the Kokoro Python library is importable."""
+    """Check if Kokoro TTS is available (Python library OR koko binary)."""
     try:
         import kokoro  # noqa: F401
         return True
     except ImportError:
-        return False
+        pass
+    # Fallback: check for koko binary (biglinux-kokoro-tts package)
+    return shutil.which("koko") is not None
+
+
+def kokoro_backend_type() -> str:
+    """Return which Kokoro backend is available.
+
+    Returns:
+        'python' if kokoro Python library is installed,
+        'koko' if koko binary is available,
+        'none' if neither.
+    """
+    try:
+        import kokoro  # noqa: F401
+        return "python"
+    except ImportError:
+        pass
+    if shutil.which("koko") is not None:
+        return "koko"
+    return "none"
 
 
 def get_installed_voice_ids() -> set[str]:
     """Return set of voice IDs available.
 
-    With the Python API, all catalog voices are available on demand
-    (KPipeline downloads from HuggingFace on first use).
-    Falls back to voices.bin if present.
+    - Python kokoro library: all catalog voices (downloads on demand).
+    - koko binary: only voices present in voices.bin.
     """
-    if is_kokoro_installed():
+    backend = kokoro_backend_type()
+    if backend == "python":
         return {v.voice_id for v in KOKORO_CATALOG}
+    # koko binary or detection-only: read from voices.bin
     voices_bin = _active_voices_bin()
     if not voices_bin.exists():
         return set()

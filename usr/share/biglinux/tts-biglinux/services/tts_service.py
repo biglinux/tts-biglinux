@@ -760,10 +760,10 @@ class TTSService:
     def _speak_kokoro(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
     ) -> bool:
-        """Speak via Kokoro neural TTS using the Python API.
+        """Speak via Kokoro neural TTS.
 
-        voice_id format: "kokoro:af_heart" or "kokoro:pf_dora"
-        Uses kokoro.KPipeline to generate audio, then plays via aplay/sox.
+        Tries Python kokoro library first (KPipeline), falls back to koko binary
+        (biglinux-kokoro-tts package) if Python lib is not installed.
         """
         import tempfile
 
@@ -771,8 +771,8 @@ class TTSService:
             from kokoro import KPipeline
             import soundfile as sf
         except ImportError:
-            logger.error("Kokoro library not installed — pip install kokoro soundfile")
-            return False
+            # Python kokoro not available — fallback to koko binary
+            return self._speak_kokoro_koko(text, voice_id, rate, pitch, volume)
 
         # Read Kokoro-specific settings
         kokoro_cfg = self._settings.speech.kokoro if self._settings else None
@@ -906,6 +906,48 @@ class TTSService:
         )
         self._kokoro_thread.start()
         return True
+
+    def _speak_kokoro_koko(
+        self, text: str, voice_id: str, rate: int, pitch: int, volume: int
+    ) -> bool:
+        """Speak via koko binary (biglinux-kokoro-tts package).
+
+        Fallback when Python kokoro library is not installed.
+        Uses /usr/bin/koko subprocess with voices.bin.
+        """
+        koko_path = shutil.which("koko")
+        if not koko_path:
+            logger.error("Neither kokoro Python library nor koko binary available")
+            return False
+
+        from services.kokoro_voice_service import get_active_voices_bin
+
+        voices_bin = get_active_voices_bin()
+        if not voices_bin.exists():
+            logger.error("Kokoro voices.bin not found: %s", voices_bin)
+            return False
+
+        # Extract voice name from voice_id
+        kokoro_voice = (
+            voice_id.removeprefix("kokoro:")
+            if voice_id.startswith("kokoro:")
+            else voice_id
+        )
+        if not kokoro_voice:
+            kokoro_voice = "pf_dora"
+
+        # Speed: rate (-100..100) → (0.5..2.0)
+        speed = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
+
+        cmd = [
+            koko_path,
+            "--voice", kokoro_voice,
+            "--voices-bin", str(voices_bin),
+            "--speed", f"{speed:.2f}",
+        ]
+
+        logger.info("Kokoro (koko binary): voice=%s, speed=%.2f", kokoro_voice, speed)
+        return self._start_process(cmd, text)
 
     def _start_process(self, cmd: list[str], text: str) -> bool:
         """Start a TTS process with text piped to stdin."""
