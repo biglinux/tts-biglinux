@@ -816,15 +816,37 @@ class VoiceManagerDialog(Adw.Dialog):
             self._preview_tmp = None
 
     def _get_sample_text(self, lang: str) -> str:
-        """Get sample text for a language code."""
-        # Try exact match, then prefix
-        lang_lower = lang.lower().replace("_", "-")
-        if lang_lower in _PREVIEW_TEXT:
+        """Get sample text for a language code.
+
+        Never silently falls back to English: for an unknown/empty/multi
+        language, use the system locale's sample instead.
+        """
+        lang_lower = (lang or "").lower().replace("_", "-")
+        if lang_lower and lang_lower in _PREVIEW_TEXT:
             return _PREVIEW_TEXT[lang_lower]
-        prefix = lang_lower.split("-")[0]
-        if prefix in _PREVIEW_TEXT:
+        prefix = lang_lower.split("-")[0] if lang_lower else ""
+        if prefix and prefix in _PREVIEW_TEXT:
             return _PREVIEW_TEXT[prefix]
-        return _PREVIEW_TEXT["en"]
+        # Unknown/empty/"multi" → prefer the system language over English.
+        from services.text_processor import get_system_language
+
+        sys_lang = get_system_language()
+        if sys_lang in _PREVIEW_TEXT:
+            return _PREVIEW_TEXT[sys_lang]
+        return _PREVIEW_TEXT.get("en", next(iter(_PREVIEW_TEXT.values())))
+
+    @staticmethod
+    def _espeak_voice_for_lang(lang: str) -> str:
+        """Map a voice language to an espeak-ng voice code (never default en)."""
+        from services.text_processor import get_system_language
+
+        loc = (lang or "").lower().replace("_", "-")
+        if not loc or loc in ("multi", "unknown"):
+            sys_lang = get_system_language()
+            return "pt-br" if sys_lang == "pt" else (sys_lang or "pt-br")
+        if loc.startswith("pt"):
+            return "pt-br" if "br" in loc else "pt"
+        return loc
 
     def _on_preview(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
         """Preview an installed voice."""
@@ -842,7 +864,7 @@ class VoiceManagerDialog(Adw.Dialog):
             return False
 
         if engine == "espeak-ng":
-            self._preview_espeak(sample, _restore_button)
+            self._preview_espeak(sample, _restore_button, lang)
         elif engine == "RHVoice":
             voice_name = pkg.get("voice_name", "")
             self._preview_rhvoice(voice_name, sample, _restore_button)
@@ -853,13 +875,23 @@ class VoiceManagerDialog(Adw.Dialog):
             _restore_button()
 
     def _preview_espeak(
-        self, text: str, on_done: Callable[[], bool]
+        self, text: str, on_done: Callable[[], bool], lang: str = ""
     ) -> None:
-        """Preview using espeak-ng (speaks directly, no temp file)."""
+        """Preview using espeak-ng (speaks directly, no temp file).
+
+        Always passes an explicit voice so the preview never uses espeak's
+        default English voice for a non-English sample.
+        """
+        voice = self._espeak_voice_for_lang(lang)
+
         def _worker() -> None:
             try:
+                cmd = ["espeak-ng"]
+                if voice:
+                    cmd += ["-v", voice]
+                cmd.append(text)
                 proc = subprocess.Popen(
-                    ["espeak-ng", text],
+                    cmd,
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                 )
