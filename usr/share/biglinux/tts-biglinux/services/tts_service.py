@@ -740,6 +740,124 @@ class TTSService:
                 pass
             self._set_state(TTSState.ERROR)
 
+    def _stream_piper(
+        self, chunks: list[str], model_path: str, length_scale: float,
+        noise_scale: float, noise_w: float, vol_factor: float, gen: int, engine,
+    ) -> None:
+        """Stream Piper synthesis: synth chunk N+1 while chunk N plays.
+
+        TTFA equals the time to synthesize the first chunk, not the whole text.
+        Runs in a background thread; honors the generation race-guard so a newer
+        speak()/stop() aborts it. History is saved text-only for streamed speech.
+        """
+        import tempfile
+        import time
+
+        from services.voice_manager import _find_piper_binary
+
+        sox_available = shutil.which("sox") is not None
+        piper_bin = None if engine else _find_piper_binary()
+
+        def _synth(chunk: str) -> str | None:
+            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+            path = tmp.name
+            tmp.close()
+            if engine:
+                try:
+                    wav = engine.synthesize_piper(
+                        chunk, model_path, length_scale, noise_scale, noise_w, vol_factor,
+                    )
+                    if wav and len(wav) >= 100:
+                        with open(path, "wb") as f:
+                            f.write(wav)
+                        return path
+                except Exception as e:
+                    logger.debug("stream native synth failed: %s", e)
+            if piper_bin:
+                try:
+                    p = subprocess.Popen(
+                        [piper_bin, "--model", model_path, "--output_file", path,
+                         "--length_scale", f"{length_scale:.2f}",
+                         "--noise_scale", f"{noise_scale:.3f}",
+                         "--noise_w", f"{noise_w:.2f}", "--sentence_silence", "0.05"],
+                        stdin=subprocess.PIPE, stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
+                    self._piper_proc = p
+                    if p.stdin:
+                        p.stdin.write(chunk.encode("utf-8"))
+                        p.stdin.close()
+                    p.wait()
+                    self._piper_proc = None
+                    if p.returncode == 0 and os.path.getsize(path) >= 100:
+                        return path
+                except (OSError, FileNotFoundError) as e:
+                    logger.debug("stream subprocess synth failed: %s", e)
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
+            return None
+
+        def _play(path: str) -> subprocess.Popen | None:
+            if not engine and vol_factor != 1.0 and sox_available:
+                cmd = ["play", "-q", path, "vol", f"{vol_factor:.2f}"]
+            else:
+                cmd = ["aplay", "-q", path]
+            try:
+                return subprocess.Popen(
+                    cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except (OSError, FileNotFoundError):
+                return None
+
+        def _wait(proc: subprocess.Popen) -> bool:
+            """Wait for playback; return False if superseded/stopped."""
+            while proc.poll() is None:
+                if not self._is_current(gen):
+                    proc.terminate()
+                    return False
+                time.sleep(0.03)
+            return True
+
+        play_proc: subprocess.Popen | None = None
+        cur = _synth(chunks[0])  # first synth defines TTFA
+        temps: list[str] = []
+        try:
+            i = 0
+            while i < len(chunks):
+                if not self._is_current(gen):
+                    break
+                if cur is None:  # this chunk failed; try the next
+                    cur = _synth(chunks[i + 1]) if i + 1 < len(chunks) else None
+                    i += 1
+                    continue
+                if play_proc is not None and not _wait(play_proc):
+                    break
+                temps.append(cur)
+                play_proc = _play(cur)
+                if play_proc is not None:
+                    self._process = play_proc
+                # Prefetch the next chunk while the current one plays.
+                nxt = _synth(chunks[i + 1]) if i + 1 < len(chunks) else None
+                i += 1
+                cur = nxt
+            if play_proc is not None:
+                _wait(play_proc)
+        finally:
+            for p in temps:
+                try:
+                    os.unlink(p)
+                except OSError:
+                    pass
+            if cur:
+                try:
+                    os.unlink(cur)
+                except OSError:
+                    pass
+            if self._is_current(gen):
+                self._maybe_save_history(None)  # text-only history for streams
+
     def _speak_piper(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
     ) -> bool:
@@ -777,13 +895,32 @@ class TTSService:
         # silent WAV at 0.0; the subprocess path skips playback when muted.
         vol_factor = volume_factor(volume)
 
+        engine = _get_tts_engine()
+        gen = self._dispatch_gen
+
+        # Streaming path for long text: synthesize + play sentence chunks with
+        # prefetch, so audio starts after the FIRST chunk (~0.25 s) instead of
+        # after the whole text. Short text keeps the single-shot path below
+        # (already fast, and it preserves per-entry audio history).
+        from services.text_processor import chunk_text
+
+        if len(text) > 600 and vol_factor > 0.0:
+            chunks = chunk_text(text, max_chars=600)
+            if len(chunks) > 1:
+                thread = threading.Thread(
+                    target=self._stream_piper,
+                    args=(chunks, model_path, length_scale, noise_scale,
+                          noise_w, vol_factor, gen, engine),
+                    daemon=True,
+                )
+                self._bg_thread = thread
+                thread.start()
+                return True
+
         # Create temp file for audio
         tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
         tmp_path = tmp.name
         tmp.close()
-
-        engine = _get_tts_engine()
-        gen = self._dispatch_gen
 
         def _generate_native() -> bool:
             """Synthesize via native Rust ONNX engine."""

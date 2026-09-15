@@ -89,19 +89,28 @@ ORT_LIB_LOCATION=/usr/lib python3 scripts/benchmark_tts.py                      
     removido `pip install --break-system-packages` (Kokoro agora via `python-kokoro`/`python-soundfile` pacman).
 14. **Pitch do Piper → "Expressividade"** na UI (não é pitch; é noise_scale) — relabel dinâmico por backend.
 
-Testes totais: **30 Python + 3 Rust + 4 native-engine — todos passam.** `ruff` limpo nos arquivos de lógica.
+15. **Histórico — congelamento com muitas entradas (PRIORIDADE ALTÍSSIMA)** — atacada a causa dominante:
+    `AudioPlayerWidget` cria o pipeline GStreamer **só ao tocar** (não mais ~2000 pipelines eager); apenas
+    **uma view** (lista OU grade) é materializada; construção **em lotes** por `idle`; carga do JSON **fora
+    do main thread**; busca com **debounce** (200 ms). Teste headless do pipeline preguiçoso.
+16. **Streaming por sentença (Piper)** — textos > 600 chars são divididos e sintetizados/tocados em chunks
+    com **prefetch** (sintetiza o próximo enquanto o atual toca): TTFA passa de "texto inteiro" (~segundos)
+    para ~o primeiro chunk (~0.25 s). Honra a guarda de corrida; limpa temporários; histórico texto-only.
+    Testes headless (ordenação/limpeza/abort): `tests/test_piper_streaming.py`.
+
+Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivos que editei.
 
 ## Problemas restantes (declarados abertamente)
-- Histórico grande ainda pode travar até o rework virtualizado (doc 07) — **maior item pendente**.
+- Histórico: causa dominante do freeze resolvida (pipelines preguiçosos + view única + lotes); falta a
+  **virtualização real** (`Gtk.ListView`) para não realizar todos os widgets — melhora incremental (doc 07).
 - Controlador assíncrono completo (state machine formal) — a guarda de corrida por geração já cobre o pior
   caso do Alt+V rápido; a máquina de estados completa continua especificada (doc 05/06).
 - Download: progresso ainda é spinner (não barra com bytes/velocidade); atomicidade/retry/sanitização já
   feitos (doc 08).
 - Preview de voz ainda pode cair em inglês para idiomas não reconhecidos (doc 08).
-- Streaming por sentença: `chunk_text` pronto, mas a reprodução em streaming (tocar chunk enquanto sintetiza
-  o próximo) ainda não foi ligada ao `_speak_piper` (doc 05).
-- Reprodução final do bug carro-chefe, stress Alt+V, Wayland/X11, perfil de RAM/órfãos — **[pendente hardware]**
-  (exigem o desktop ao vivo).
+- **SQLite** para histórico (doc 12) — ainda `history.json` (agora com ids únicos e sem perda de dados).
+- Reprodução final do bug carro-chefe, stress Alt+V, Wayland/X11, perfil de RAM/órfãos, teste de scroll do
+  Histórico com 5000 entradas — **[pendente hardware]** (exigem o desktop ao vivo).
 
 ## Como validar no seu desktop
 1. `cd tts-engine && ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo build --release`

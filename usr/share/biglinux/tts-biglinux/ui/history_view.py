@@ -433,6 +433,12 @@ class HistoryView(Adw.NavigationPage):
         self._all_entries: list[dict] = []
         self._grid_mode: bool = False
         self._selection_mode: bool = False
+        # Batched-build state
+        self._build_cancel: bool = False
+        self._build_queue: list[dict] = []
+        self._build_index: int = 0
+        # Search debounce
+        self._search_debounce_id: int = 0
         self._build_ui()
 
     def _build_ui(self) -> None:
@@ -571,7 +577,7 @@ class HistoryView(Adw.NavigationPage):
         self.set_child(outer)
 
     def reload(self) -> None:
-        """Reload history entries from disk."""
+        """Reload history entries from disk (JSON parse off the main thread)."""
         self._cleanup_all()
 
         history_dir = get_history_dir()
@@ -582,46 +588,92 @@ class HistoryView(Adw.NavigationPage):
             self._outer_stack.set_visible_child_name("empty")
             return
 
-        try:
-            self._all_entries = json.loads(
-                index_file.read_text(encoding="utf-8")
-            )
-        except (json.JSONDecodeError, OSError):
-            self._all_entries = []
+        def _load() -> None:
+            try:
+                data = json.loads(index_file.read_text(encoding="utf-8"))
+                if not isinstance(data, list):
+                    data = []
+            except (json.JSONDecodeError, OSError):
+                data = []
+            GLib.idle_add(self._on_entries_loaded, data)
 
-        if not self._all_entries:
+        import threading
+
+        threading.Thread(target=_load, daemon=True).start()
+
+    def _on_entries_loaded(self, entries: list[dict]) -> bool:
+        self._all_entries = entries
+        if not entries:
             self._outer_stack.set_visible_child_name("empty")
-            return
-
+            return False
         self._outer_stack.set_visible_child_name("content")
-        self._populate(self._all_entries, history_dir)
-        self._apply_view_mode()
+        self._rebuild_active()
+        return False
 
     def _cleanup_all(self) -> None:
+        # Cancel any in-progress batched build.
+        self._build_cancel = True
         for row in self._rows:
             row.cleanup()
         self._rows.clear()
         for card in self._grid_cards:
             card.cleanup()
         self._grid_cards.clear()
-        # Clear list
         while (child := self._list_box.get_first_child()):
             self._list_box.remove(child)
-        # Clear grid
         while (child := self._flow_box.get_first_child()):
             self._flow_box.remove(child)
 
-    def _populate(self, entries: list[dict], history_dir: Path) -> None:
-        """Populate both list and grid with entry widgets (newest first)."""
-        sel = self._selection_mode
-        for entry in reversed(entries):
-            row = HistoryEntryRow(entry, history_dir, selection_mode=sel)
-            self._list_box.append(row)
-            self._rows.append(row)
+    def _rebuild_active(self) -> None:
+        """(Re)build ONLY the currently visible view (list or grid).
 
-            card = HistoryGridCard(entry, history_dir, selection_mode=sel)
-            self._flow_box.append(card)
-            self._grid_cards.append(card)
+        Building a single non-dual view, with audio players whose GStreamer
+        pipeline is created lazily on play, and batching widget creation across
+        idle cycles, keeps the History responsive even with thousands of rows.
+        """
+        # Clear existing widgets of both containers (only active was populated).
+        for row in self._rows:
+            row.cleanup()
+        self._rows.clear()
+        for card in self._grid_cards:
+            card.cleanup()
+        self._grid_cards.clear()
+        while (child := self._list_box.get_first_child()):
+            self._list_box.remove(child)
+        while (child := self._flow_box.get_first_child()):
+            self._flow_box.remove(child)
+
+        self._content_stack.set_visible_child_name("grid" if self._grid_mode else "list")
+
+        self._build_cancel = False
+        self._build_queue = list(reversed(self._all_entries))  # newest first
+        self._build_index = 0
+        GLib.idle_add(self._build_batch)
+
+    def _build_batch(self) -> bool:
+        """Build a batch of widgets per idle cycle (keeps the UI responsive)."""
+        if self._build_cancel:
+            return False
+        history_dir = get_history_dir()
+        sel = self._selection_mode
+        end = min(self._build_index + 40, len(self._build_queue))
+        for i in range(self._build_index, end):
+            entry = self._build_queue[i]
+            if self._grid_mode:
+                card = HistoryGridCard(entry, history_dir, selection_mode=sel)
+                self._flow_box.append(card)
+                self._grid_cards.append(card)
+            else:
+                row = HistoryEntryRow(entry, history_dir, selection_mode=sel)
+                self._list_box.append(row)
+                self._rows.append(row)
+        self._build_index = end
+        if end < len(self._build_queue):
+            return True  # continue on the next idle cycle
+        # Done — apply any active search filter.
+        query = self._search_entry.get_text().strip().lower()
+        self._filter_items(query or None)
+        return False
 
     def _apply_view_mode(self) -> None:
         self._content_stack.set_visible_child_name("grid" if self._grid_mode else "list")
@@ -633,7 +685,11 @@ class HistoryView(Adw.NavigationPage):
         btn.set_icon_name(
             "view-list-symbolic" if self._grid_mode else "view-grid-symbolic"
         )
-        self._apply_view_mode()
+        # Rebuild the now-active view lazily (only one view is materialized).
+        if self._all_entries:
+            self._rebuild_active()
+        else:
+            self._apply_view_mode()
 
     def _on_select_toggle(self, btn: Gtk.ToggleButton) -> None:
         self._selection_mode = btn.get_active()
@@ -717,28 +773,33 @@ class HistoryView(Adw.NavigationPage):
         if not self._all_entries:
             self._outer_stack.set_visible_child_name("empty")
 
-    def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
-        query = entry.get_text().strip().lower()
-        if not query:
-            self._filter_items(None)
-            return
-        self._filter_items(query)
+    def _on_search_changed(self, _entry: Gtk.SearchEntry) -> None:
+        # Debounce: coalesce rapid keystrokes so filtering doesn't run per key.
+        if self._search_debounce_id:
+            GLib.source_remove(self._search_debounce_id)
+        self._search_debounce_id = GLib.timeout_add(200, self._run_search)
+
+    def _run_search(self) -> bool:
+        self._search_debounce_id = 0
+        query = self._search_entry.get_text().strip().lower()
+        self._filter_items(query or None)
+        return False
 
     def _filter_items(self, query: str | None) -> None:
-        """Show/hide rows and cards based on search query."""
+        """Show/hide items of the ACTIVE view based on search query."""
+        items = self._grid_cards if self._grid_mode else self._rows
         visible_count = 0
-        for row, card in zip(self._rows, self._grid_cards):
+        for item in items:
             if query is None:
-                row.set_visible(True)
-                card.set_visible(True)
+                item.set_visible(True)
                 visible_count += 1
             else:
-                text = row._entry.get("text_preview", "").lower()
-                backend = row._entry.get("backend", "").lower()
-                voice = row._entry.get("voice_id", "").lower()
+                entry = item._entry
+                text = entry.get("text_preview", "").lower()
+                backend = entry.get("backend", "").lower()
+                voice = entry.get("voice_id", "").lower()
                 match = query in text or query in backend or query in voice
-                row.set_visible(match)
-                card.set_visible(match)
+                item.set_visible(match)
                 if match:
                     visible_count += 1
 
