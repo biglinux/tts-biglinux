@@ -250,6 +250,165 @@ def get_system_language() -> str:
     return lang[:2].lower()
 
 
+# ── Portuguese number normalization ──────────────────────────────────
+#
+# TTS engines read raw digits inconsistently, and pt-BR formatting
+# ("1.250,90") confuses them (dot = thousands, comma = decimal). We convert
+# currency, percentages and separator-formatted numbers into spoken words so
+# "R$ 1.250,90" is read as "mil duzentos e cinquenta reais e noventa centavos".
+
+_UNIDADES_PT = [
+    "zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito",
+    "nove", "dez", "onze", "doze", "treze", "catorze", "quinze", "dezesseis",
+    "dezessete", "dezoito", "dezenove",
+]
+_DEZENAS_PT = [
+    "", "", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta",
+    "oitenta", "noventa",
+]
+_CENTENAS_PT = [
+    "", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos",
+    "seiscentos", "setecentos", "oitocentos", "novecentos",
+]
+# Scale word per 1000-group index: index 1 = mil, 2 = milhão, ...
+_ESCALAS_PT = [
+    ("", ""), ("mil", "mil"), ("milhão", "milhões"), ("bilhão", "bilhões"),
+    ("trilhão", "trilhões"),
+]
+
+
+def _tres_pt(n: int) -> str:
+    """Spell an integer 0..999 in Portuguese (no leading/trailing spaces)."""
+    if n == 0:
+        return ""
+    if n == 100:
+        return "cem"
+    parts: list[str] = []
+    centena, resto = divmod(n, 100)
+    if centena:
+        parts.append(_CENTENAS_PT[centena])
+    if resto:
+        if resto < 20:
+            parts.append(_UNIDADES_PT[resto])
+        else:
+            dezena, unidade = divmod(resto, 10)
+            if unidade:
+                parts.append(f"{_DEZENAS_PT[dezena]} e {_UNIDADES_PT[unidade]}")
+            else:
+                parts.append(_DEZENAS_PT[dezena])
+    return " e ".join(parts)
+
+
+def num_to_words_pt(n: int) -> str:
+    """Spell a non-negative integer (0..10^15) in Brazilian Portuguese.
+
+    Applies the standard "e" conjunction rules, e.g.
+    1250 → "mil duzentos e cinquenta", 2500 → "dois mil e quinhentos".
+    """
+    n = int(n)
+    if n < 0:
+        return "menos " + num_to_words_pt(-n)
+    if n == 0:
+        return "zero"
+
+    grupos: list[int] = []
+    while n > 0:
+        grupos.append(n % 1000)
+        n //= 1000
+    if len(grupos) > len(_ESCALAS_PT):
+        return None  # out of supported range — leave the digits untouched
+
+    # Build most-significant-first.
+    parts: list[str] = []
+    vals: list[int] = []
+    for idx in range(len(grupos) - 1, -1, -1):
+        g = grupos[idx]
+        if g == 0:
+            continue
+        if idx == 0:
+            txt = _tres_pt(g)
+        elif idx == 1:
+            txt = "mil" if g == 1 else f"{_tres_pt(g)} mil"
+        else:
+            sing, plur = _ESCALAS_PT[idx]
+            txt = f"{_tres_pt(g)} {sing if g == 1 else plur}"
+        parts.append(txt)
+        vals.append(g)
+
+    result = parts[0]
+    for k in range(1, len(parts)):
+        g = vals[k]
+        # "e" before the final group when it is < 100 or a round hundred.
+        if k == len(parts) - 1 and (g < 100 or g % 100 == 0):
+            result += f" e {parts[k]}"
+        else:
+            result += f" {parts[k]}"
+    return result
+
+
+_RE_CURRENCY_PT = re.compile(r"R\$\s*(\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d{1,2}))?")
+_RE_PERCENT_PT = re.compile(r"(\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d+))?\s*%")
+_RE_NUMBER_PT = re.compile(r"(?<![\d.,])(\d{1,3}(?:\.\d{3})+|\d+),(\d+)|(?<![\d.,/-])(\d{1,3}(?:\.\d{3})+)(?![\d.,])")
+
+
+def _int_from_grouped(s: str) -> int:
+    """Parse a pt-BR grouped integer string ('1.250') to int (1250)."""
+    return int(s.replace(".", ""))
+
+
+def _decimal_digits_pt(frac: str) -> str:
+    """Spell the fractional part digit-by-digit ('90' → 'noventa'? no — read
+    as a whole small number when 1-2 digits, else digit by digit)."""
+    if len(frac) <= 2:
+        return num_to_words_pt(int(frac))
+    return " ".join(_UNIDADES_PT[int(d)] for d in frac)
+
+
+def _currency_repl_pt(m: re.Match) -> str:
+    reais = _int_from_grouped(m.group(1))
+    centavos = int(m.group(2)) if m.group(2) else 0
+    out = []
+    reais_words = num_to_words_pt(reais)
+    if reais_words is None:
+        return m.group(0)
+    out.append(f"{reais_words} {'real' if reais == 1 else 'reais'}")
+    if centavos:
+        cent_words = num_to_words_pt(centavos)
+        out.append(f"{cent_words} {'centavo' if centavos == 1 else 'centavos'}")
+    return " e ".join(out)
+
+
+def _percent_repl_pt(m: re.Match) -> str:
+    inteiro = _int_from_grouped(m.group(1))
+    words = num_to_words_pt(inteiro)
+    if words is None:
+        return m.group(0)
+    if m.group(2):
+        words += " vírgula " + _decimal_digits_pt(m.group(2))
+    return f"{words} por cento"
+
+
+def _number_repl_pt(m: re.Match) -> str:
+    # Two alternatives: grouped-with-decimal, or grouped integer.
+    if m.group(1) is not None:  # has decimal
+        inteiro = _int_from_grouped(m.group(1))
+        words = num_to_words_pt(inteiro)
+        if words is None:
+            return m.group(0)
+        return words + " vírgula " + _decimal_digits_pt(m.group(2))
+    inteiro = _int_from_grouped(m.group(3))
+    words = num_to_words_pt(inteiro)
+    return words if words is not None else m.group(0)
+
+
+def _normalize_numbers_pt(text: str) -> str:
+    """Normalize pt-BR currency, percentages and grouped/decimal numbers to words."""
+    text = _RE_CURRENCY_PT.sub(_currency_repl_pt, text)
+    text = _RE_PERCENT_PT.sub(_percent_repl_pt, text)
+    text = _RE_NUMBER_PT.sub(_number_repl_pt, text)
+    return text
+
+
 def process_text(
     text: str,
     *,
@@ -257,6 +416,7 @@ def process_text(
     process_special_chars: bool = True,
     process_urls: bool = False,
     strip_formatting: bool = True,
+    normalize_numbers: bool = True,
     language: str | None = None,
 ) -> str:
     """
@@ -285,6 +445,11 @@ def process_text(
     # Handle URLs
     if not process_urls:
         text = _RE_URL.sub("", text)
+
+    # Normalize numbers/currency/percent (pt only) BEFORE special chars so the
+    # "%", "R$" and separators are turned into words rather than symbol names.
+    if normalize_numbers and lang == "pt":
+        text = _normalize_numbers_pt(text)
 
     # Expand abbreviations
     if expand_abbreviations:
@@ -363,3 +528,78 @@ def _process_special_chars(text: str, language: str) -> str:
     for char, spoken in chars.items():
         text = text.replace(char, spoken)
     return text
+
+
+# ── Chunking for long texts ──────────────────────────────────────────
+
+_RE_SENTENCE_SPLIT = re.compile(r"(?<=[.!?…])\s+|\n{2,}")
+
+
+def chunk_text(text: str, max_chars: int = 2000) -> list[str]:
+    """Split text into chunks of at most `max_chars`, preserving semantics.
+
+    Prefers sentence/paragraph boundaries; falls back to word boundaries and,
+    only as a last resort, a hard cut (for pathological inputs with no spaces).
+    Enables streaming synthesis (synthesize/play one chunk while preparing the
+    next) so very long texts don't go to the engine as a single huge block.
+    """
+    text = (text or "").strip()
+    if not text:
+        return []
+    if len(text) <= max_chars:
+        return [text]
+
+    # Split into sentence-ish units first.
+    units: list[str] = []
+    for part in _RE_SENTENCE_SPLIT.split(text):
+        part = part.strip()
+        if part:
+            units.append(part)
+    if not units:
+        units = [text]
+
+    chunks: list[str] = []
+    current = ""
+    for unit in units:
+        if len(unit) > max_chars:
+            # Flush current, then break the oversized unit on word boundaries.
+            if current:
+                chunks.append(current)
+                current = ""
+            chunks.extend(_split_long_unit(unit, max_chars))
+            continue
+        if not current:
+            current = unit
+        elif len(current) + 1 + len(unit) <= max_chars:
+            current = f"{current} {unit}"
+        else:
+            chunks.append(current)
+            current = unit
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def _split_long_unit(unit: str, max_chars: int) -> list[str]:
+    """Break a single oversized unit on word boundaries (hard cut if needed)."""
+    out: list[str] = []
+    current = ""
+    for word in unit.split(" "):
+        if len(word) > max_chars:
+            if current:
+                out.append(current)
+                current = ""
+            # Hard cut a pathologically long token.
+            for i in range(0, len(word), max_chars):
+                out.append(word[i:i + max_chars])
+            continue
+        if not current:
+            current = word
+        elif len(current) + 1 + len(word) <= max_chars:
+            current = f"{current} {word}"
+        else:
+            out.append(current)
+            current = word
+    if current:
+        out.append(current)
+    return out

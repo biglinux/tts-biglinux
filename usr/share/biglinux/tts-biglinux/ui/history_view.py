@@ -22,12 +22,27 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk, Pango
 
-from services.history_service import get_history_dir
+from services.history_service import (
+    LEGACY_TIMESTAMP_FMT,
+    TIMESTAMP_FMT,
+    get_history_dir,
+)
 from ui.audio_player import AudioPlayerWidget
 from utils.i18n import _
 
 if TYPE_CHECKING:
     pass
+
+
+def _parse_timestamp(timestamp: str) -> datetime | None:
+    """Parse a history timestamp, tolerating both the current (microsecond)
+    and legacy (second-resolution) formats. Returns None if unparseable."""
+    for fmt in (TIMESTAMP_FMT, LEGACY_TIMESTAMP_FMT):
+        try:
+            return datetime.strptime(timestamp, fmt)
+        except ValueError:
+            continue
+    return None
 
 logger = logging.getLogger(__name__)
 
@@ -151,11 +166,8 @@ class HistoryEntryRow(Gtk.ListBoxRow):
 
         timestamp = entry.get("timestamp", "")
         if timestamp:
-            try:
-                dt = datetime.strptime(timestamp, "%Y-%m-%d_%H-%M-%S")
-                time_str = dt.strftime("%d/%m/%Y %H:%M")
-            except ValueError:
-                time_str = timestamp
+            dt = _parse_timestamp(timestamp)
+            time_str = dt.strftime("%d/%m/%Y %H:%M") if dt else timestamp
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)
@@ -298,11 +310,8 @@ class HistoryGridCard(Gtk.FlowBoxChild):
 
         timestamp = entry.get("timestamp", "")
         if timestamp:
-            try:
-                dt = datetime.strptime(timestamp, "%Y-%m-%d_%H-%M-%S")
-                time_str = dt.strftime("%d/%m %H:%M")
-            except ValueError:
-                time_str = timestamp
+            dt = _parse_timestamp(timestamp)
+            time_str = dt.strftime("%d/%m %H:%M") if dt else timestamp
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)

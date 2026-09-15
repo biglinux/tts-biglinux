@@ -113,6 +113,18 @@ class TTSApplication(Adw.Application):
         Gtk.Window.set_default_icon_name("tts-biglinux")
         self._ensure_shortcut_registered()
         self._setup_tray_icon()
+        # Prewarm the selected neural model during idle (no audio) so the first
+        # Alt+V is warm. Delayed so it never competes with UI startup.
+        GLib.timeout_add_seconds(1, self._idle_prewarm)
+
+    def _idle_prewarm(self) -> bool:
+        """Idle callback: preload the selected Piper model (no audio)."""
+        try:
+            speech = self.settings.speech
+            self.tts_service.prewarm(speech.backend, speech.voice_id)
+        except Exception as e:
+            logger.debug("Idle prewarm skipped: %s", e)
+        return False  # one-shot
 
     def _on_activate(self, app: Adw.Application) -> None:
         """Application activate — create or present window."""
@@ -353,6 +365,7 @@ class TTSApplication(Adw.Application):
                 process_special_chars=text_cfg.process_special_chars,
                 process_urls=text_cfg.process_urls,
                 strip_formatting=text_cfg.strip_formatting,
+                normalize_numbers=text_cfg.normalize_numbers,
             )
 
             def _do_speak() -> bool:

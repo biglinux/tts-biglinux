@@ -18,7 +18,11 @@ pyo3 = { version = "0.25", features = ["extension-module"] }
 rodio = { version = "0.20", default-features = false, features = ["wav"] }
 
 # ONNX Runtime for Piper inference (use system library, no auto-download)
-ort = { version = "2.0.0-rc.9", default-features = false, features = ["std"] }
+# Pinned exactly: ort is a pre-release and its ABI tracks a specific ONNX
+# Runtime. An unpinned range let cargo drift to a build linked against an
+# incompatible onnxruntime, breaking the .so at runtime. Keep in sync with
+# the system `onnxruntime` package + Cargo.lock (built with --locked).
+ort = { version = "=2.0.0-rc.10", default-features = false, features = ["std"] }
 
 # WAV encoding
 hound = "3.5"

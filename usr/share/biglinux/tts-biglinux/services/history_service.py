@@ -6,10 +6,18 @@ import json
 import logging
 import os
 import shutil
+import uuid
 from datetime import datetime
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+# Timestamp format used for history entry ids / on-disk file base names.
+# Microsecond resolution (%f) guarantees uniqueness: two entries generated in
+# the same second no longer collide and overwrite each other's files.
+TIMESTAMP_FMT = "%Y-%m-%d_%H-%M-%S-%f"
+# Legacy second-resolution format (pre-fix entries) — still parsed for display.
+LEGACY_TIMESTAMP_FMT = "%Y-%m-%d_%H-%M-%S"
 
 # XDG Music directory detection
 _MUSIC_DIR: Path | None = None
@@ -73,7 +81,8 @@ def save_history_entry(
     """
     try:
         history_dir = ensure_history_dir()
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        timestamp = datetime.now().strftime(TIMESTAMP_FMT)
+        entry_id = uuid.uuid4().hex
         base_name = f"{timestamp}_{backend}"
 
         # Save text
@@ -98,6 +107,7 @@ def save_history_entry(
 
         entries.append(
             {
+                "id": entry_id,
                 "timestamp": timestamp,
                 "backend": backend,
                 "voice_id": voice_id,

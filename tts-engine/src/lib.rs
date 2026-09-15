@@ -19,8 +19,10 @@ fn tts_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     m.add_function(wrap_pyfunction!(version, m)?)?;
     m.add_function(wrap_pyfunction!(speak_espeak, m)?)?;
+    m.add_function(wrap_pyfunction!(synthesize_espeak, m)?)?;
     m.add_function(wrap_pyfunction!(speak_piper, m)?)?;
     m.add_function(wrap_pyfunction!(synthesize_piper, m)?)?;
+    m.add_function(wrap_pyfunction!(load_piper, m)?)?;
     m.add_function(wrap_pyfunction!(stop, m)?)?;
     Ok(())
 }
@@ -50,6 +52,33 @@ fn speak_espeak(
     volume: i32,
 ) -> PyResult<bool> {
     backends::espeak::speak(text, voice, rate, pitch, volume)
+        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
+}
+
+/// Synthesize text to WAV bytes via espeak-ng (no playback).
+///
+/// Uses espeak-ng's synchronous (audio-free) mode — never touches the speaker.
+#[pyfunction]
+#[pyo3(signature = (text, voice="pt-BR", rate=175, pitch=50, volume=100))]
+fn synthesize_espeak<'py>(
+    py: Python<'py>,
+    text: &str,
+    voice: &str,
+    rate: i32,
+    pitch: i32,
+    volume: i32,
+) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
+    let wav = backends::espeak::synthesize(text, voice, rate, pitch, volume)
+        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
+    Ok(pyo3::types::PyBytes::new(py, &wav))
+}
+
+/// Prewarm a Piper model (load ONNX session into cache) without any audio.
+///
+/// Run during idle to make the first real synthesis warm. Never plays sound.
+#[pyfunction]
+fn load_piper(model_path: &str) -> PyResult<()> {
+    backends::piper::load(model_path)
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
 

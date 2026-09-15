@@ -317,6 +317,7 @@ class MainView(Adw.NavigationPage):
             title_size_group=title_sg,
         )
         group.add(self._pitch_row)
+        self._update_pitch_row_for_backend(self._settings.speech.backend)
 
         # Volume
         self._volume_row, self._volume_scale = create_action_row_with_scale(
@@ -1014,11 +1015,30 @@ class MainView(Adw.NavigationPage):
             self._settings.speech.output_module = voice.output_module
             self._settings_service.save(self._settings)
             logger.debug("Voice selected: %s (%s)", voice.name, voice.voice_id)
+            # Prewarm the newly-selected model (no audio) for a warm first Alt+V.
+            self._tts.prewarm(voice.backend, voice.voice_id)
 
     def _on_rate_changed(self, value: float) -> None:
         """Handle speed change."""
         self._settings.speech.rate = int(value)
         self._settings_service.save(self._settings)
+
+    def _update_pitch_row_for_backend(self, backend: str) -> None:
+        """Relabel the pitch control per backend.
+
+        Piper has no real pitch control — the slider maps to noise_scale
+        (voice expressiveness). Labeling it "Pitch" would mislead the user, so
+        it is shown as "Expressiveness" for Piper. See docs/04.
+        """
+        row = getattr(self, "_pitch_row", None)
+        if row is None:
+            return
+        if backend == TTSBackend.PIPER.value:
+            row.set_title(_("Expressiveness"))
+            row.set_subtitle(_("Voice variation (Piper has no true pitch)"))
+        else:
+            row.set_title(_("Pitch"))
+            row.set_subtitle(_("Voice tone"))
 
     def _on_pitch_changed(self, value: float) -> None:
         """Handle pitch change."""
@@ -1055,6 +1075,9 @@ class MainView(Adw.NavigationPage):
 
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
+        self._update_pitch_row_for_backend(backend)
+        # Prewarm the new backend's model (no audio) so the first Alt+V is warm.
+        self._tts.prewarm(backend, self._settings.speech.voice_id)
 
         # Use existing catalog for immediate update
         if self._catalog:
@@ -1247,43 +1270,29 @@ class MainView(Adw.NavigationPage):
         threading.Thread(target=_threaded, daemon=True).start()
 
     def _install_kokoro_packages(self) -> tuple[bool, str]:
-        """Install Kokoro TTS: system deps via pacman + kokoro via pip."""
+        """Install Kokoro TTS via distro packages (pacman only).
+
+        Uses the Arch/BigLinux packages `python-kokoro` and `python-soundfile`
+        (which pull PyTorch and the rest as dependencies) instead of
+        `pip install --break-system-packages`, which mixes package managers on a
+        pacman-managed system and can corrupt the Python environment.
+        """
         try:
             lock_file = Path("/var/lib/pacman/db.lck")
             if lock_file.exists():
                 return False, _("Database is locked by another process")
 
-            # Step 1: system deps via pacman (uses pkexec for graphical auth)
-            sys_deps = [
-                "python-pytorch", "python-numpy", "python-scipy",
-                "python-transformers", "python-huggingface-hub",
-                "python-loguru", "espeak-ng",
-            ]
+            # Single pacman transaction — distro packages resolve their own deps.
+            pkgs = ["python-kokoro", "python-soundfile", "espeak-ng"]
             result = subprocess.run(
-                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *sys_deps],
+                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *pkgs],
                 capture_output=True,
                 text=True,
-                timeout=600,
+                timeout=900,
             )
             if result.returncode != 0:
                 stderr = result.stderr.strip()
                 error_msg = stderr.splitlines()[-1] if stderr else _("pacman failed")
-                return False, error_msg
-
-            # Step 2: kokoro + soundfile via pip (user-local, no root needed)
-            result = subprocess.run(
-                [
-                    "pip3", "install", "--user",
-                    "--break-system-packages",
-                    "kokoro", "soundfile",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=300,
-            )
-            if result.returncode != 0:
-                stderr = result.stderr.strip()
-                error_msg = stderr.splitlines()[-1] if stderr else _("pip install failed")
                 return False, error_msg
 
             return True, ""
