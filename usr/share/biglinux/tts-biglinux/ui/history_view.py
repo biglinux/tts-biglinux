@@ -8,7 +8,6 @@ Supports grid/list toggle, multi-select with bulk delete, and open-in-folder.
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import subprocess
@@ -25,7 +24,9 @@ from gi.repository import Adw, GLib, Gtk, Pango
 from services.history_service import (
     LEGACY_TIMESTAMP_FMT,
     TIMESTAMP_FMT,
+    delete_history_by_ts,
     get_history_dir,
+    load_history_entries,
 )
 from ui.audio_player import AudioPlayerWidget
 from utils.i18n import _
@@ -407,18 +408,10 @@ class HistoryGridCard(Gtk.FlowBoxChild):
 
 
 def _remove_entry_from_index(history_dir: Path, timestamp: str) -> None:
-    """Remove an entry from history.json by timestamp."""
-    index_file = history_dir / "history.json"
-    if not index_file.exists():
-        return
+    """Remove an entry from the history index (SQLite) by timestamp."""
     try:
-        entries = json.loads(index_file.read_text(encoding="utf-8"))
-        entries = [e for e in entries if e.get("timestamp") != timestamp]
-        index_file.write_text(
-            json.dumps(entries, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
-    except (json.JSONDecodeError, OSError) as e:
+        delete_history_by_ts(timestamp)
+    except Exception as e:
         logger.error("Failed to update history index: %s", e)
 
 
@@ -577,23 +570,14 @@ class HistoryView(Adw.NavigationPage):
         self.set_child(outer)
 
     def reload(self) -> None:
-        """Reload history entries from disk (JSON parse off the main thread)."""
+        """Reload history entries from SQLite (query off the main thread)."""
         self._cleanup_all()
-
-        history_dir = get_history_dir()
-        index_file = history_dir / "history.json"
-
-        if not index_file.exists():
-            self._all_entries = []
-            self._outer_stack.set_visible_child_name("empty")
-            return
 
         def _load() -> None:
             try:
-                data = json.loads(index_file.read_text(encoding="utf-8"))
-                if not isinstance(data, list):
-                    data = []
-            except (json.JSONDecodeError, OSError):
+                data = load_history_entries()
+            except Exception as e:
+                logger.error("Failed to load history: %s", e)
                 data = []
             GLib.idle_add(self._on_entries_loaded, data)
 
@@ -712,7 +696,6 @@ class HistoryView(Adw.NavigationPage):
 
     def _on_delete_selected(self, _btn: Gtk.Button) -> None:
         """Delete all selected entries."""
-        history_dir = get_history_dir()
         # Collect timestamps to delete from active view
         items = self._grid_cards if self._grid_mode else self._rows
         to_delete: list[str] = []
@@ -725,8 +708,8 @@ class HistoryView(Adw.NavigationPage):
         if not to_delete:
             return
 
-        # Delete files
         for ts in to_delete:
+            # Remove the widget from the active view.
             for item in list(self._rows):
                 if item._entry.get("timestamp") == ts:
                     if item._player:
@@ -741,35 +724,13 @@ class HistoryView(Adw.NavigationPage):
                     self._flow_box.remove(item)
                     self._grid_cards.remove(item)
                     break
+            # Delete files + index row from SQLite in one call.
+            delete_history_by_ts(ts)
 
-            # Remove associated files
-            for entry in self._all_entries:
-                if entry.get("timestamp") == ts:
-                    backend = entry.get("backend", "")
-                    base = f"{ts}_{backend}"
-                    for ext in (".wav", ".mp3", ".ogg", ".flac", ".txt"):
-                        path = history_dir / f"{base}{ext}"
-                        try:
-                            if path.is_file():
-                                os.remove(path)
-                        except OSError:
-                            pass
-                    break
-
-        # Update index
         self._all_entries = [
             e for e in self._all_entries
             if e.get("timestamp") not in to_delete
         ]
-        index_file = history_dir / "history.json"
-        try:
-            index_file.write_text(
-                json.dumps(self._all_entries, indent=2, ensure_ascii=False),
-                encoding="utf-8",
-            )
-        except OSError as e:
-            logger.error("Failed to update history index: %s", e)
-
         if not self._all_entries:
             self._outer_stack.set_visible_child_name("empty")
 

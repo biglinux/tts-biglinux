@@ -116,3 +116,12 @@ Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivo
 1. `cd tts-engine && ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo build --release`
 2. Rodar o app (dev): `usr/bin/biglinux-tts`
 3. Selecionar texto pt-BR, backend Piper, Alt+V → só o texto; volume 0 → silêncio; parar → imediato.
+
+## Fase E — Histórico em SQLite (entregue e testado)
+- `services/history_db.py`: índice SQLite (WAL) substitui as reescritas O(N) do `history.json`. Insert O(1),
+  busca indexada com `LIKE`, paginação (`limit`/`offset`), contagem.
+- Migração automática e idempotente de `history.json` → SQLite (renomeia para `.json.migrated`).
+- Retenção: `max_entries` + `max_age_days` (0 = ilimitado), aplicada no save; nunca exclui silenciosamente
+  fora da política — deleta também os arquivos de áudio/texto associados.
+- `history_view` agora carrega/deleta via SQLite (mantendo o render lazy/em-lotes já feito).
+- Testes: **9 novos** (`test_history_db.py` + `test_history.py` atualizado). Total do projeto: **44 Python + 3 Rust**.

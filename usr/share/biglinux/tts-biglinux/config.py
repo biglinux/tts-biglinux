@@ -139,6 +139,10 @@ class HistoryConfig:
     save_audio: bool = True
     save_text: bool = True
     playback_mode: str = "interrupt"  # interrupt | queue | simultaneous
+    # Retention (0 = unlimited). Enforced on save; never deletes silently
+    # outside these limits.
+    max_entries: int = 1000
+    max_age_days: int = 0
 
 
 @dataclass
@@ -339,6 +343,8 @@ def _deserialize_settings(data: dict) -> AppSettings:
             save_audio=_safe_bool(h, "save_audio", True),
             save_text=_safe_bool(h, "save_text", True),
             playback_mode=_safe_str(h, "playback_mode", "interrupt"),
+            max_entries=_safe_int(h, "max_entries", 1000),
+            max_age_days=_safe_int(h, "max_age_days", 0),
         )
 
     settings.show_welcome = _safe_bool(data, "show_welcome", True)

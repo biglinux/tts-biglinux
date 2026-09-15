@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import shutil
@@ -68,6 +67,8 @@ def save_history_entry(
     voice_id: str,
     save_audio: bool = True,
     save_text: bool = True,
+    max_entries: int = 0,
+    max_age_days: int = 0,
 ) -> None:
     """Save a history entry (text + optional audio copy).
 
@@ -96,36 +97,92 @@ def save_history_entry(
             audio_dest = history_dir / f"{base_name}{audio_ext}"
             shutil.copy2(audio_path, audio_dest)
 
-        # Append to history index
-        index_file = history_dir / "history.json"
-        entries = []
-        if index_file.exists():
-            try:
-                entries = json.loads(index_file.read_text(encoding="utf-8"))
-            except (json.JSONDecodeError, OSError):
-                entries = []
+        # Index into SQLite (O(1) insert, indexed) instead of rewriting a JSON
+        # file on every save. Migrate any legacy history.json first.
+        from services import history_db
 
-        entries.append(
-            {
-                "id": entry_id,
-                "timestamp": timestamp,
-                "backend": backend,
-                "voice_id": voice_id,
-                "text_preview": text[:200],
-                "has_audio": save_audio and audio_path is not None,
-            }
+        _ensure_migrated(history_dir)
+        history_db.insert_entry(
+            ts=timestamp,
+            backend=backend,
+            voice_id=voice_id,
+            text=text,
+            text_preview=text[:200],
+            has_audio=save_audio and audio_path is not None,
+            entry_id=entry_id,
         )
-
-        # Keep last 1000 entries
-        if len(entries) > 1000:
-            entries = entries[-1000:]
-
-        index_file.write_text(
-            json.dumps(entries, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
-
         logger.debug("History saved: %s", base_name)
+
+        # Enforce retention (never deletes outside the configured limits).
+        if (max_entries and max_entries > 0) or (max_age_days and max_age_days > 0):
+            apply_history_retention(
+                max_entries=max_entries or None,
+                max_age_days=max_age_days or None,
+            )
 
     except Exception as e:
         logger.error("Failed to save history: %s", e)
+
+
+def _ensure_migrated(history_dir: Path) -> None:
+    """Migrate a legacy history.json into SQLite exactly once."""
+    from services import history_db
+
+    json_path = history_dir / "history.json"
+    if json_path.exists():
+        history_db.migrate_from_json(json_path)
+
+
+def load_history_entries(
+    limit: int | None = None, offset: int = 0, query: str | None = None
+) -> list[dict]:
+    """Return history entries (newest first) from SQLite, migrating JSON first."""
+    from services import history_db
+
+    _ensure_migrated(ensure_history_dir())
+    return history_db.list_entries(limit=limit, offset=offset, query=query)
+
+
+def count_history_entries() -> int:
+    from services import history_db
+
+    _ensure_migrated(ensure_history_dir())
+    return history_db.count_entries()
+
+
+def _delete_entry_files(history_dir: Path, ts: str, backend: str) -> None:
+    base = f"{ts}_{backend}"
+    for ext in (".wav", ".mp3", ".ogg", ".flac", ".txt"):
+        path = history_dir / f"{base}{ext}"
+        try:
+            if path.is_file():
+                os.remove(path)
+        except OSError as e:
+            logger.warning("Failed to delete %s: %s", path, e)
+
+
+def delete_history_by_ts(ts: str, backend: str = "") -> None:
+    """Delete history entries with the given timestamp plus their files."""
+    from services import history_db
+
+    history_dir = get_history_dir()
+    rows = history_db.get_by_ts(ts)
+    backends = {r.get("backend", "") for r in rows} or {backend}
+    for b in backends:
+        _delete_entry_files(history_dir, ts, b)
+    history_db.delete_by_ts(ts)
+
+
+def apply_history_retention(
+    max_entries: int | None = None, max_age_days: int | None = None
+) -> None:
+    """Enforce retention policy and delete the associated files."""
+    from services import history_db
+
+    _ensure_migrated(ensure_history_dir())
+    deleted = history_db.enforce_retention(
+        max_entries=max_entries, max_age_days=max_age_days
+    )
+    history_dir = get_history_dir()
+    for row in deleted:
+        _delete_entry_files(history_dir, row.get("timestamp", ""), row.get("backend", ""))

@@ -1418,6 +1418,8 @@ class TTSService:
                 voice_id=self._last_voice_id,
                 save_audio=history.save_audio,
                 save_text=history.save_text,
+                max_entries=getattr(history, "max_entries", 0),
+                max_age_days=getattr(history, "max_age_days", 0),
             )
         except Exception as e:
             logger.error("Failed to save history: %s", e)
