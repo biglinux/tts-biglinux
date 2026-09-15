@@ -118,47 +118,48 @@ class MainView(Adw.NavigationPage):
     # ── UI Construction ──────────────────────────────────────────────
 
     def _build_ui(self) -> None:
-        """Build the complete main view."""
-        # Scrollable content
-        scrolled = Gtk.ScrolledWindow()
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled.set_vexpand(True)
+        """Build the view content into two reusable boxes for a split layout.
 
-        # Clamp for responsive width
+        `sidebar_box` holds the settings (placed in the window's left sidebar),
+        `content_box` holds the main hero/text/speak area (right content pane) —
+        mirroring the big-audio-converter two-pane layout. The boxes are left
+        unparented so the window can place them; MainView itself is a logic/state
+        holder and is not displayed directly.
+        """
+        # ── Sidebar: settings (voice, speech params, text, backend, advanced) ──
+        self.sidebar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        self.sidebar_box.set_margin_top(12)
+        self.sidebar_box.set_margin_bottom(24)
+        self.sidebar_box.set_margin_start(12)
+        self.sidebar_box.set_margin_end(12)
+
+        self.sidebar_box.append(self._build_quick_settings())
+        self.sidebar_box.append(self._build_text_processing_section())
+        self.sidebar_box.append(self._build_backend_section())
+        self.sidebar_box.append(self._build_advanced_section())
+
+        # ── Content: hero (status + text entry + speak), centered in the pane ──
+        self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.content_box.set_vexpand(True)
+        self.content_box.set_hexpand(True)
+
         clamp = Adw.Clamp()
-        clamp.set_maximum_size(600)
+        clamp.set_maximum_size(560)
         clamp.set_tightening_threshold(400)
-
-        # Main vertical box
-        content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        content.set_margin_top(12)
-        content.set_margin_bottom(24)
-        content.set_margin_start(12)
-        content.set_margin_end(12)
-
-        # 1. Hero section
+        clamp.set_hexpand(True)
+        clamp.set_halign(Gtk.Align.FILL)
+        clamp.set_vexpand(True)
+        clamp.set_valign(Gtk.Align.CENTER)
+        clamp.set_margin_top(18)
+        clamp.set_margin_bottom(18)
+        clamp.set_margin_start(18)
+        clamp.set_margin_end(18)
         self._hero = self._build_hero_section()
-        content.append(self._hero)
+        clamp.set_child(self._hero)
+        self.content_box.append(clamp)
 
-        # 2. Quick settings
-        quick = self._build_quick_settings()
-        content.append(quick)
-
-        # 3. Text processing expander
-        text_group = self._build_text_processing_section()
-        content.append(text_group)
-
-        # 4. Backend expander
-        backend_group = self._build_backend_section()
-        content.append(backend_group)
-
-        # 5. Advanced expander
-        advanced_group = self._build_advanced_section()
-        content.append(advanced_group)
-
-        clamp.set_child(content)
-        scrolled.set_child(clamp)
-        self.set_child(scrolled)
+        # MainView is not shown directly; keep a harmless empty child.
+        self.set_child(Gtk.Box())
 
     # ── Hero Section ─────────────────────────────────────────────────
 
@@ -1033,12 +1034,17 @@ class MainView(Adw.NavigationPage):
         row = getattr(self, "_pitch_row", None)
         if row is None:
             return
+        title_lbl = getattr(row, "_title_label", None)
+        sub_lbl = getattr(row, "_subtitle_label", None)
         if backend == TTSBackend.PIPER.value:
-            row.set_title(_("Expressiveness"))
-            row.set_subtitle(_("Voice variation (Piper has no true pitch)"))
+            title, subtitle = _("Expressiveness"), _("Voice variation (not pitch)")
         else:
-            row.set_title(_("Pitch"))
-            row.set_subtitle(_("Voice tone"))
+            title, subtitle = _("Pitch"), _("Voice tone")
+        if title_lbl is not None:
+            title_lbl.set_label(title)
+        if sub_lbl is not None:
+            sub_lbl.set_label(subtitle)
+            sub_lbl.set_visible(bool(subtitle))
 
     def _on_pitch_changed(self, value: float) -> None:
         """Handle pitch change."""
@@ -1469,6 +1475,17 @@ class MainView(Adw.NavigationPage):
             self._settings_service.save()
 
     # ── Test Voice ───────────────────────────────────────────────────
+
+    def trigger_speak(self) -> None:
+        """Public entry point for the window's bottom controls bar (speak/stop)."""
+        self._on_test_voice()
+
+    def current_voice_label(self) -> str:
+        """Human-readable name of the currently selected voice (for the bar)."""
+        idx = self._voice_combo.get_selected() if hasattr(self, "_voice_combo") else -1
+        if self._voice_list and 0 <= idx < len(self._voice_list):
+            return self._voice_list[idx].name
+        return ""
 
     def _on_test_voice(self) -> None:
         """Test the selected voice / stop if already speaking."""

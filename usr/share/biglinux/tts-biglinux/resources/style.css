@@ -235,3 +235,30 @@ scale marks mark label {
 .tab-switcher {
     margin: 0;
 }
+/* ── Two-pane shell (BigLinux Audio Converter visual identity) ────────── */
+
+.sidebar {
+    background-color: @sidebar_bg_color;
+}
+
+/* Persistent dark player/controls bar at the bottom of the window */
+.dark-controls-bar {
+    background-color: #1a1a1e;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark-controls-bar label {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.dark-controls-bar button.pill {
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-weight: bold;
+    min-height: 20px;
+}
+
+.dark-controls-bar button.pill:hover {
+    filter: brightness(1.08);
+}
