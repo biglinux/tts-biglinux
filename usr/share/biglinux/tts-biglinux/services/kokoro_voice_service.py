@@ -221,8 +221,19 @@ def get_active_voices_bin() -> Path:
     return _active_voices_bin()
 
 
-def download_voice(voice_id: str) -> tuple[bool, str]:
+def download_voice(
+    voice_id: str,
+    progress_cb=None,
+    cancel_check=None,
+) -> tuple[bool, str]:
     """Download a voice from HuggingFace and add to user voices.bin.
+
+    Args:
+        voice_id: catalog voice id.
+        progress_cb: optional callable(downloaded_bytes, total_bytes) for a
+            real progress bar (total may be 0 if the server omits Content-Length).
+        cancel_check: optional callable() -> bool; when it returns True the
+            download aborts cleanly.
 
     Returns (success, error_message).
     """
@@ -237,16 +248,39 @@ def download_voice(voice_id: str) -> tuple[bool, str]:
     if voice_id in BASE_VOICE_IDS and not USER_VOICES_BIN.exists():
         return True, ""  # Already in system voices.bin
 
-    # Download .pt from HuggingFace, with retries on transient failures.
+    # Download .pt from HuggingFace, in chunks (real progress), with retries.
     url = f"{HF_BASE_URL}/{voice_id}.pt"
     pt_data = b""
     last_err = ""
     for attempt in range(3):
+        if cancel_check and cancel_check():
+            return False, "cancelled"
         try:
             logger.info("Downloading Kokoro voice %s (attempt %d)", voice_id, attempt + 1)
             req = Request(url, headers={"User-Agent": "biglinux-tts/1.0"})  # noqa: S310
             with urlopen(req, timeout=60) as resp:  # noqa: S310
-                pt_data = resp.read()
+                try:
+                    total = int(resp.headers.get("Content-Length", 0) or 0)
+                except (TypeError, ValueError):
+                    total = 0
+                buf = bytearray()
+                cancelled = False
+                while True:
+                    if cancel_check and cancel_check():
+                        cancelled = True
+                        break
+                    chunk = resp.read(65536)
+                    if not chunk:
+                        break
+                    buf += chunk
+                    if progress_cb:
+                        try:
+                            progress_cb(len(buf), total)
+                        except Exception:
+                            pass
+                if cancelled:
+                    return False, "cancelled"
+                pt_data = bytes(buf)
             if pt_data:
                 break
             last_err = "empty response"

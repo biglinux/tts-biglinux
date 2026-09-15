@@ -9,6 +9,13 @@
 - **Duas enumerações divergentes** de vozes (catálogo vs diálogo/pacman); dois `_guess_gender` conflitantes.
 - Piper/RHVoice/espeak instalam via `pkexec pacman` (seguro); Kokoro é o caminho frágil.
 
+## Já corrigido
+- ✅ Download atômico do `voices.bin` (temp + `os.replace` + fsync) — não perde vozes num crash.
+- ✅ Retry (3×) com backoff; sanitização de `voice_id` (anti path-traversal).
+- ✅ **Progresso real**: download em chunks com callback → barra `Gtk.ProgressBar` mostrando %, KB/s;
+  cancelamento (fecha o diálogo = cancela). Testes: `tests/test_download_progress.py`, `test_kokoro_download.py`.
+- ✅ Preview usa a língua da voz / locale do sistema, nunca inglês por engano; espeak preview com `-v`.
+
 ## Plano
 - Download atômico: baixar para `*.part` → validar tamanho/hash → `os.replace`. Nunca deixar `.onnx`/voz
   parcial parecendo válida.

@@ -317,6 +317,7 @@ class VoiceManagerDialog(Adw.Dialog):
         self._busy = False
         self._preview_proc: subprocess.Popen | None = None
         self._preview_tmp: str | None = None
+        self._cancel_download = threading.Event()
 
         self.set_title(_("Voice Manager"))
         self.set_content_width(580)
@@ -373,7 +374,7 @@ class VoiceManagerDialog(Adw.Dialog):
         # Start loading
         self._stack.set_visible_child_name("loading")
         self._spinner.start()
-        self.connect("closed", lambda _d: self._stop_preview())
+        self.connect("closed", lambda _d: (self._stop_preview(), self._cancel_download.set()))
         threading.Thread(target=self._load_packages, daemon=True).start()
 
     # ── Loading ──────────────────────────────────────────────────────
@@ -726,6 +727,36 @@ class VoiceManagerDialog(Adw.Dialog):
 
         pkg_name = pkg["pkg"]
         is_kokoro = pkg.get("engine") == "Kokoro"
+        is_download = is_kokoro and action == "install"
+
+        # Real progress bar for Kokoro downloads (percent + speed).
+        progress_cb = None
+        if is_download:
+            import time as _time
+
+            self._cancel_download.clear()
+            progress = Gtk.ProgressBar()
+            progress.set_show_text(True)
+            progress.set_text("0%")
+            progress.set_size_request(90, -1)
+            progress.set_valign(Gtk.Align.CENTER)
+            button.set_child(progress)
+            start = _time.monotonic()
+
+            def progress_cb(downloaded: int, total: int) -> None:
+                def _update() -> bool:
+                    elapsed = max(0.001, _time.monotonic() - start)
+                    speed = downloaded / elapsed / 1024  # KB/s
+                    if total > 0:
+                        frac = min(1.0, downloaded / total)
+                        progress.set_fraction(frac)
+                        progress.set_text(f"{int(frac * 100)}% · {speed:.0f} KB/s")
+                    else:
+                        progress.pulse()
+                        progress.set_text(f"{downloaded // 1024} KB · {speed:.0f} KB/s")
+                    return False
+
+                GLib.idle_add(_update)
 
         def _worker() -> tuple[bool, str]:
             try:
@@ -733,7 +764,11 @@ class VoiceManagerDialog(Adw.Dialog):
                     # Kokoro: download/remove individual voice files
                     voice_id = pkg.get("voice_id", "")
                     if action == "install":
-                        return kokoro_download_voice(voice_id)
+                        return kokoro_download_voice(
+                            voice_id,
+                            progress_cb=progress_cb,
+                            cancel_check=self._cancel_download.is_set,
+                        )
                     else:
                         return kokoro_remove_voice(voice_id)
 
@@ -778,6 +813,9 @@ class VoiceManagerDialog(Adw.Dialog):
 
                 if self._on_voices_changed:
                     self._on_voices_changed()
+            elif error == "cancelled":
+                # User cancelled (e.g. closed the dialog) — no error popup.
+                pass
             else:
                 err_dialog = Adw.AlertDialog()
                 err_dialog.set_heading(

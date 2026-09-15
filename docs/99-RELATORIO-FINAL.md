@@ -107,8 +107,9 @@ Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivo
   caso do Alt+V rápido; a máquina de estados completa continua especificada (doc 05/06).
 - Download: progresso ainda é spinner (não barra com bytes/velocidade); atomicidade/retry/sanitização já
   feitos (doc 08).
-- Preview de voz ainda pode cair em inglês para idiomas não reconhecidos (doc 08).
-- **SQLite** para histórico (doc 12) — ainda `history.json` (agora com ids únicos e sem perda de dados).
+- ✅ Preview de voz — corrigido: usa a língua da voz / locale do sistema, nunca inglês por engano (doc 08).
+- ✅ **SQLite** para histórico (doc 12) — migração automática do `history.json`, retenção configurável.
+- Virtualização real do Histórico (`Gtk.ListView`) — incremento sobre o render lazy/em-lotes já feito (doc 07).
 - Reprodução final do bug carro-chefe, stress Alt+V, Wayland/X11, perfil de RAM/órfãos, teste de scroll do
   Histórico com 5000 entradas — **[pendente hardware]** (exigem o desktop ao vivo).
 
@@ -125,3 +126,9 @@ Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivo
   fora da política — deleta também os arquivos de áudio/texto associados.
 - `history_view` agora carrega/deleta via SQLite (mantendo o render lazy/em-lotes já feito).
 - Testes: **9 novos** (`test_history_db.py` + `test_history.py` atualizado). Total do projeto: **44 Python + 3 Rust**.
+
+## Fase F — Downloads e Preview (entregue e testado)
+- Download Kokoro em **chunks** com callback de progresso (bytes/total) e cancelamento — `Gtk.ProgressBar`
+  real (%, KB/s), cancela ao fechar o diálogo. Testes: `test_download_progress.py`.
+- Preview de voz nunca mais fala inglês por engano (língua da voz / locale). Teste: `test_preview_lang.py`.
+Total do projeto: **46 Python + 3 Rust**.
