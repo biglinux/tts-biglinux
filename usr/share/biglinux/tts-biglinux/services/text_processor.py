@@ -401,8 +401,51 @@ def _number_repl_pt(m: re.Match) -> str:
     return words if words is not None else m.group(0)
 
 
+_MESES_PT = [
+    "", "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
+    "agosto", "setembro", "outubro", "novembro", "dezembro",
+]
+_RE_DATE_PT = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
+_RE_TIME_PT = re.compile(r"\b(\d{1,2})[:h](\d{2})\b")
+_RE_HOUR_PT = re.compile(r"\b(\d{1,2})h\b")
+
+
+def _date_repl_pt(m: re.Match) -> str:
+    dia, mes, ano = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    if not (1 <= dia <= 31 and 1 <= mes <= 12):
+        return m.group(0)
+    dia_w = "primeiro" if dia == 1 else num_to_words_pt(dia)
+    ano_w = num_to_words_pt(ano)
+    if dia_w is None or ano_w is None:
+        return m.group(0)
+    return f"{dia_w} de {_MESES_PT[mes]} de {ano_w}"
+
+
+def _time_repl_pt(m: re.Match) -> str:
+    h, mnt = int(m.group(1)), int(m.group(2))
+    if not (0 <= h <= 23 and 0 <= mnt <= 59):
+        return m.group(0)
+    h_w = num_to_words_pt(h)
+    out = f"{h_w} {'hora' if h == 1 else 'horas'}"
+    if mnt:
+        m_w = num_to_words_pt(mnt)
+        out += f" e {m_w} {'minuto' if mnt == 1 else 'minutos'}"
+    return out
+
+
+def _hour_repl_pt(m: re.Match) -> str:
+    h = int(m.group(1))
+    if not (0 <= h <= 23):
+        return m.group(0)
+    return f"{num_to_words_pt(h)} {'hora' if h == 1 else 'horas'}"
+
+
 def _normalize_numbers_pt(text: str) -> str:
-    """Normalize pt-BR currency, percentages and grouped/decimal numbers to words."""
+    """Normalize pt-BR dates, times, currency, percentages and numbers to words."""
+    # Dates and times first, so their digits aren't consumed by number rules.
+    text = _RE_DATE_PT.sub(_date_repl_pt, text)
+    text = _RE_TIME_PT.sub(_time_repl_pt, text)
+    text = _RE_HOUR_PT.sub(_hour_repl_pt, text)
     text = _RE_CURRENCY_PT.sub(_currency_repl_pt, text)
     text = _RE_PERCENT_PT.sub(_percent_repl_pt, text)
     text = _RE_NUMBER_PT.sub(_number_repl_pt, text)

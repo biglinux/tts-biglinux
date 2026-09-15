@@ -45,3 +45,20 @@ def test_disabled_toggle_keeps_raw():
 def test_non_pt_untouched():
     out = tp.process_text("R$ 1.250,90", language="en", process_special_chars=False)
     assert "1.250,90" in out or "1250" in out.replace(".", "")
+
+
+def test_dates_pt():
+    assert tp.process_text("15/09/2026", language="pt") == "quinze de setembro de dois mil e vinte e seis"
+    assert tp.process_text("01/01/2000", language="pt").startswith("primeiro de janeiro")
+
+
+def test_times_pt():
+    assert tp.process_text("14:30", language="pt") == "catorze horas e trinta minutos"
+    assert tp.process_text("9h", language="pt") == "nove horas"
+    assert tp.process_text("1h", language="pt") == "uma hora" or tp.process_text("1h", language="pt") == "um hora"
+
+
+def test_invalid_date_untouched():
+    # 45/13 is not a valid date → left as-is (special chars will handle the slash)
+    out = tp.process_text("45/13/2026", language="pt", process_special_chars=False, normalize_numbers=True)
+    assert "45" in out
