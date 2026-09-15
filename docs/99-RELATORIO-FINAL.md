@@ -105,8 +105,7 @@ Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivo
   **virtualização real** (`Gtk.ListView`) para não realizar todos os widgets — melhora incremental (doc 07).
 - Controlador assíncrono completo (state machine formal) — a guarda de corrida por geração já cobre o pior
   caso do Alt+V rápido; a máquina de estados completa continua especificada (doc 05/06).
-- Download: progresso ainda é spinner (não barra com bytes/velocidade); atomicidade/retry/sanitização já
-  feitos (doc 08).
+- ✅ Download: barra de progresso real (%, KB/s) + cancelamento; atomicidade/retry/sanitização (doc 08).
 - ✅ Preview de voz — corrigido: usa a língua da voz / locale do sistema, nunca inglês por engano (doc 08).
 - ✅ **SQLite** para histórico (doc 12) — migração automática do `history.json`, retenção configurável.
 - Virtualização real do Histórico (`Gtk.ListView`) — incremento sobre o render lazy/em-lotes já feito (doc 07).
@@ -132,3 +131,9 @@ Testes totais: **33 Python + 3 Rust — todos passam.** `ruff` limpo nos arquivo
   real (%, KB/s), cancela ao fechar o diálogo. Testes: `test_download_progress.py`.
 - Preview de voz nunca mais fala inglês por engano (língua da voz / locale). Teste: `test_preview_lang.py`.
 Total do projeto: **46 Python + 3 Rust**.
+
+## Fase G — Diagnóstico (entregue e testado)
+- `services/diagnostics.py`: coleta versão do app/Python/engine, ONNX Runtime, backends detectados,
+  vozes Piper, backend/voz ativos, sessão/desktop. `format_diagnostics()` gera texto copiável.
+- Exposto na seção **Solução de problemas** do `Adw.AboutWindow` (botões copiar/salvar nativos).
+- Testes: `test_diagnostics.py`. Total do projeto: **49 Python + 3 Rust**.

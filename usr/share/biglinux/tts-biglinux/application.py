@@ -438,6 +438,15 @@ class TTSApplication(Adw.Application):
             website=APP_WEBSITE,
             issue_url=APP_ISSUE_URL,
         )
+        # Populate the built-in "Troubleshooting" section with diagnostics —
+        # it provides copy/save buttons for support (see docs Diagnóstico).
+        try:
+            from services.diagnostics import collect_diagnostics, format_diagnostics
+
+            about.set_debug_info(format_diagnostics(collect_diagnostics(self.settings)))
+            about.set_debug_info_filename("biglinux-tts-diagnostic.txt")
+        except Exception as e:
+            logger.debug("Could not attach diagnostics: %s", e)
         about.present()
 
     def _on_quit(
