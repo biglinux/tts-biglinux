@@ -722,7 +722,8 @@ class VoiceManagerDialog(Adw.Dialog):
         old_child = button.get_child()
         button.set_child(spinner)
 
-        self._progress.set_show_text(True)
+        # Thin OSD bar only — no text.
+        self._progress.set_show_text(False)
         self._progress.set_fraction(0.0)
         self._progress.set_visible(True)
 
@@ -734,29 +735,18 @@ class VoiceManagerDialog(Adw.Dialog):
         progress_cb = None
         if is_download:
             self._cancel_download.clear()
-            self._progress.set_text(_("Starting…"))
 
             def progress_cb(downloaded: int, total: int) -> None:
                 def _update() -> bool:
-                    dl_mb = downloaded / 1048576
                     if total > 0:
-                        frac = min(1.0, downloaded / total)
-                        self._progress.set_fraction(frac)
-                        self._progress.set_text(
-                            f"{dl_mb:.1f} / {total / 1048576:.1f} MB · {int(frac * 100)}%"
-                        )
+                        self._progress.set_fraction(min(1.0, downloaded / total))
                     else:
                         self._progress.pulse()
-                        self._progress.set_text(f"{dl_mb:.1f} MB")
                     return False
 
                 GLib.idle_add(_update)
         else:
             # pacman install/remove has no byte-level progress → pulse the bar.
-            self._progress.set_text(
-                _("Installing…") if action == "install" else _("Removing…")
-            )
-
             def _pulse() -> bool:
                 self._progress.pulse()
                 return True
