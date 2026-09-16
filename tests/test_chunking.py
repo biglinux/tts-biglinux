@@ -37,7 +37,7 @@ def test_pathological_no_spaces():
 
 
 def test_huge_text_bounded():
-    text = ("A inteligência artificial transforma tudo. " * 3000)
+    text = ("A síntese de fala transforma tudo. " * 3000)
     chunks = tp.chunk_text(text, 2000)
     assert all(len(c) <= 2000 for c in chunks)
     assert len(chunks) > 1

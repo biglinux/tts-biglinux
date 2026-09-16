@@ -24,7 +24,7 @@ TEXTS = {
     50: "O rato roeu a roupa do rei de Roma ontem à noite.",
     200: ("A tecnologia de síntese de fala evoluiu muito nos últimos anos, "
           "permitindo vozes cada vez mais naturais e expressivas em português. "),
-    1000: ("A inteligência artificial transforma a computação. " * 18),
+    1000: ("A síntese de fala transforma texto em áudio natural. " * 18),
 }
 
 
