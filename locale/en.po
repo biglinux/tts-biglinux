@@ -15,247 +15,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 75
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 125
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 162
-msgid "Play"
-msgstr "Play"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 103
+msgid "TTS"
+msgstr "TTS"
 
 #
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 83
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1553
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1555
-msgid "Stop"
-msgstr "Stop"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 148
-msgid "Pause"
-msgstr "Pause"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
-msgid "(no text)"
-msgstr "(no text)"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
-msgid "Open file location"
-msgstr "Open file location"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 128
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 342
-msgid "Delete"
-msgstr "Delete"
-
-#
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 421
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 110
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 421
 msgid "History"
 msgstr "History"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 439
-msgid "Search history…"
-msgstr "Search history…"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 216
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 541
+msgid "Tray icon"
+msgstr "Tray icon"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 447
-msgid "Toggle grid/list view"
-msgstr "Toggle grid/list view"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 219
+msgid "Restore Defaults"
+msgstr "Restore Defaults"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 454
-msgid "Select items"
-msgstr "Select items"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 223
+msgid "Welcome"
+msgstr "Welcome"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 461
-msgid "Refresh"
-msgstr "Refresh"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 224
+msgid "About"
+msgstr "About"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 474
-msgid "Select All"
-msgstr "Select All"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 225
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 190
+msgid "Quit"
+msgstr "Quit"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 479
-msgid "Deselect All"
-msgstr "Deselect All"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 231
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 232
+msgid "Main menu"
+msgstr "Main menu"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 490
-msgid "Delete selected"
-msgstr "Delete selected"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 258
+msgid "Restore settings?"
+msgstr "Restore settings?"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 518
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 542
-msgid "History entries"
-msgstr "History entries"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 259
+msgid "This will return all adjustments to their original defaults."
+msgstr "This will return all adjustments to their original defaults."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 551
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 743
-msgid "No History"
-msgstr "No History"
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+#
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 261
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 699
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1125
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1169
+msgid "Cancel"
+msgstr "Cancel"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 553
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 745
-msgid "Spoken texts will appear here when history is enabled."
-msgstr "Spoken texts will appear here when history is enabled."
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 737
-msgid "No Results"
-msgstr "No Results"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 739
-msgid "No entries match your search."
-msgstr "No entries match your search."
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
-msgid "Welcome to BigLinux TTS"
-msgstr "Welcome to BigLinux TTS"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
-msgid "Let's Start"
-msgstr "Let's Start"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 129
-msgid "Your text-to-speech assistant"
-msgstr "Your text-to-speech assistant"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 156
-msgid "Multiple TTS Engines"
-msgstr "Multiple TTS Engines"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 158
-msgid ""
-"RHVoice, espeak-ng and Piper Neural TTS\n"
-"with automatic voice discovery"
-msgstr ""
-"RHVoice, espeak-ng and Piper Neural TTS\n"
-"with automatic voice discovery"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 163
-msgid "Multilingual Support"
-msgstr "Multilingual Support"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 164
-msgid ""
-"Voices in dozens of languages\n"
-"including Portuguese (Brazil)"
-msgstr ""
-"Voices in dozens of languages\n"
-"including Portuguese (Brazil)"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
-msgid "Global Shortcut"
-msgstr "Global Shortcut"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 168
-msgid ""
-"Press Alt+V to read selected text\n"
-"from any application"
-msgstr ""
-"Press Alt+V to read selected text\n"
-"from any application"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 173
-msgid "Clipboard Reading"
-msgstr "Clipboard Reading"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
-msgid ""
-"Paste or type text directly\n"
-"and listen instantly"
-msgstr ""
-"Paste or type text directly\n"
-"and listen instantly"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 187
-msgid "Fine-Tune Speech"
-msgstr "Fine-Tune Speech"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 188
-msgid ""
-"Adjust speed, pitch and volume\n"
-"to your preference"
-msgstr ""
-"Adjust speed, pitch and volume\n"
-"to your preference"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
-msgid "Neural Voices"
-msgstr "Neural Voices"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 192
-msgid ""
-"Install Piper voices for natural,\n"
-"high-quality speech synthesis"
-msgstr ""
-"Install Piper voices for natural,\n"
-"high-quality speech synthesis"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 195
-msgid "Easy Installation"
-msgstr "Easy Installation"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 196
-msgid ""
-"Install new voices and engines\n"
-"directly from the interface"
-msgstr ""
-"Install new voices and engines\n"
-"directly from the interface"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 199
-msgid "Lightweight & Fast"
-msgstr "Lightweight & Fast"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
-msgid ""
-"Native GTK4/Adwaita interface\n"
-"with minimal resource usage"
-msgstr ""
-"Native GTK4/Adwaita interface\n"
-"with minimal resource usage"
-
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 211
-msgid "Show this dialog on startup"
-msgstr "Show this dialog on startup"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 262
+msgid "Restore"
+msgstr "Restore"
 
 #
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
@@ -430,18 +264,6 @@ msgstr ""
 "Remove <b>{name}</b>?\n"
 "\n"
 "You can reinstall it later."
-
-#
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 699
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1125
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1169
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 261
-msgid "Cancel"
-msgstr "Cancel"
 
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 761
@@ -890,14 +712,6 @@ msgid "Change"
 msgstr "Change"
 
 #
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 541
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 216
-msgid "Tray icon"
-msgstr "Tray icon"
-
-#
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 542
 msgid "Fixes quick access and allows running in the background"
 msgstr "Fixes quick access and allows running in the background"
@@ -1202,58 +1016,244 @@ msgid "Select text and press Alt+V to read aloud"
 msgstr "Select text and press Alt+V to read aloud"
 
 #
+# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1553
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1555
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 83
+msgid "Stop"
+msgstr "Stop"
+
+#
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1609
 msgid "Settings restored to defaults"
 msgstr "Settings restored to defaults"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 103
-msgid "TTS"
-msgstr "TTS"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
+msgid "Welcome to BigLinux TTS"
+msgstr "Welcome to BigLinux TTS"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 219
-msgid "Restore Defaults"
-msgstr "Restore Defaults"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
+msgid "Let's Start"
+msgstr "Let's Start"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 223
-msgid "Welcome"
-msgstr "Welcome"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 129
+msgid "Your text-to-speech assistant"
+msgstr "Your text-to-speech assistant"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 224
-msgid "About"
-msgstr "About"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 156
+msgid "Multiple TTS Engines"
+msgstr "Multiple TTS Engines"
 
 #
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-#
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 225
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 190
-msgid "Quit"
-msgstr "Quit"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 158
+msgid ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
+msgstr ""
+"RHVoice, espeak-ng and Piper Neural TTS\n"
+"with automatic voice discovery"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 231
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 232
-msgid "Main menu"
-msgstr "Main menu"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 163
+msgid "Multilingual Support"
+msgstr "Multilingual Support"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 258
-msgid "Restore settings?"
-msgstr "Restore settings?"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 164
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 259
-msgid "This will return all adjustments to their original defaults."
-msgstr "This will return all adjustments to their original defaults."
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
+msgid "Global Shortcut"
+msgstr "Global Shortcut"
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 262
-msgid "Restore"
-msgstr "Restore"
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 168
+msgid ""
+"Press Alt+V to read selected text\n"
+"from any application"
+msgstr ""
+"Press Alt+V to read selected text\n"
+"from any application"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 173
+msgid "Clipboard Reading"
+msgstr "Clipboard Reading"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr ""
+"Paste or type text directly\n"
+"and listen instantly"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 187
+msgid "Fine-Tune Speech"
+msgstr "Fine-Tune Speech"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 188
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
+msgid "Neural Voices"
+msgstr "Neural Voices"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 192
+msgid ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+msgstr ""
+"Install Piper voices for natural,\n"
+"high-quality speech synthesis"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 195
+msgid "Easy Installation"
+msgstr "Easy Installation"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 196
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr ""
+"Install new voices and engines\n"
+"directly from the interface"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 199
+msgid "Lightweight & Fast"
+msgstr "Lightweight & Fast"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
+msgid ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+msgstr ""
+"Native GTK4/Adwaita interface\n"
+"with minimal resource usage"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 211
+msgid "Show this dialog on startup"
+msgstr "Show this dialog on startup"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 75
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 125
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 162
+msgid "Play"
+msgstr "Play"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 148
+msgid "Pause"
+msgstr "Pause"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+msgid "(no text)"
+msgstr "(no text)"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
+msgid "Open file location"
+msgstr "Open file location"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 128
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 342
+msgid "Delete"
+msgstr "Delete"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 439
+msgid "Search history…"
+msgstr "Search history…"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 447
+msgid "Toggle grid/list view"
+msgstr "Toggle grid/list view"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 454
+msgid "Select items"
+msgstr "Select items"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 461
+msgid "Refresh"
+msgstr "Refresh"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 474
+msgid "Select All"
+msgstr "Select All"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 479
+msgid "Deselect All"
+msgstr "Deselect All"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 490
+msgid "Delete selected"
+msgstr "Delete selected"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 518
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 542
+msgid "History entries"
+msgstr "History entries"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 551
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 743
+msgid "No History"
+msgstr "No History"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 553
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 745
+msgid "Spoken texts will appear here when history is enabled."
+msgstr "Spoken texts will appear here when history is enabled."
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 737
+msgid "No Results"
+msgstr "No Results"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 739
+msgid "No entries match your search."
+msgstr "No entries match your search."
 
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 180
