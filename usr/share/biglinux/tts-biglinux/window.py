@@ -172,8 +172,39 @@ class TTSWindow(Adw.ApplicationWindow):
         # ── BOTTOM: dark controls bar (persistent player) ──
         root.append(self._build_controls_bar())
 
-        self._toast_overlay.set_child(root)
+        # Thin OSD progress bar overlaid at the very top of the window, shown
+        # only while an engine install runs (no text, no trough, no modal).
+        overlay = Gtk.Overlay()
+        overlay.set_child(root)
+        self._install_pulse_id = 0
+        self._install_progress = Gtk.ProgressBar()
+        self._install_progress.add_css_class("osd")
+        self._install_progress.set_valign(Gtk.Align.START)
+        self._install_progress.set_halign(Gtk.Align.FILL)
+        self._install_progress.set_show_text(False)
+        self._install_progress.set_visible(False)
+        overlay.add_overlay(self._install_progress)
+
+        self._toast_overlay.set_child(overlay)
         self.set_content(self._toast_overlay)
+
+    def start_install_progress(self) -> None:
+        """Reveal the top OSD progress bar (pulsing) during an install."""
+        self._install_progress.set_show_text(False)
+        self._install_progress.set_visible(True)
+        if not self._install_pulse_id:
+            self._install_pulse_id = GLib.timeout_add(120, self._pulse_install)
+
+    def _pulse_install(self) -> bool:
+        self._install_progress.pulse()
+        return True
+
+    def stop_install_progress(self) -> None:
+        """Hide the top OSD progress bar."""
+        if self._install_pulse_id:
+            GLib.source_remove(self._install_pulse_id)
+            self._install_pulse_id = 0
+        self._install_progress.set_visible(False)
 
         # History toggle only when history is enabled.
         self._history_toggle.set_visible(self.settings.history.enabled)

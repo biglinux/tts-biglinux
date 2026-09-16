@@ -1311,41 +1311,18 @@ class MainView(Adw.NavigationPage):
         worker: Callable[[], tuple[bool, str]],
         on_done: Callable[[tuple[bool, str]], None],
     ) -> None:
-        """Show a progress dialog and run a package install in background."""
-        progress_dialog = Adw.AlertDialog.new(title, status_text)
-        progress_dialog.set_can_close(False)
-
-        # Add a progress bar as extra child
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        box.set_margin_top(12)
-
-        progress_bar = Gtk.ProgressBar()
-        progress_bar.set_show_text(False)
-        progress_bar.pulse()
-        box.append(progress_bar)
-
-        progress_dialog.set_extra_child(box)
-
+        """Run a package install in the background, showing only the thin OSD
+        progress bar at the top of the window (no modal, no text)."""
         window = self._root_window()
-        progress_dialog.present(window)
-
-        # Pulse the progress bar while installing
-        def _pulse() -> bool:
-            if not hasattr(progress_dialog, "_install_running"):
-                return False
-            progress_bar.pulse()
-            return True
-
-        progress_dialog._install_running = True
-        GLib.timeout_add(200, _pulse)
+        if window is not None and hasattr(window, "start_install_progress"):
+            window.start_install_progress()
 
         def _threaded() -> None:
             result = worker()
 
             def _finish() -> bool:
-                del progress_dialog._install_running
-                progress_dialog.set_can_close(True)
-                progress_dialog.force_close()
+                if window is not None and hasattr(window, "stop_install_progress"):
+                    window.stop_install_progress()
                 on_done(result)
                 return False
 
