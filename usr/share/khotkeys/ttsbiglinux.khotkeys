@@ -29,5 +29,5 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1Triggers0]
-Key=Alt+H
+Key=Alt+V
 Type=SHORTCUT

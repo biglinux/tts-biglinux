@@ -49,7 +49,6 @@ from ui.components import (
     create_action_row_with_switch,
     create_button_row,
     create_combo_row,
-    create_expander_row,
     create_icon_button,
     create_preferences_group,
 )
@@ -635,7 +634,32 @@ class MainView(Adw.NavigationPage):
         playback_row.connect("notify::selected", self._on_playback_mode_changed)
         group.add(playback_row)
 
+        # ── Media player (MPRIS mini-player while reading) ──
+        media_row, self._media_switch_widget = create_action_row_with_switch(
+            title=_("Media player"),
+            subtitle=_("Show a system mini-player (play/stop, time) while reading"),
+            active=getattr(self._settings, "show_media_player", True),
+            on_toggled=self._on_media_player_toggle,
+            accessible_name=_("Show system media player"),
+        )
+        media_row.set_icon_name("multimedia-player-symbolic")
+        group.add(media_row)
+
         return group
+
+    def _on_media_player_toggle(self, active: bool) -> None:
+        """Enable/disable the MPRIS media player."""
+        if self._updating_ui:
+            return
+        self._settings.show_media_player = active
+        self._settings_service.save(self._settings)
+        app = self._root_app()
+        if app is None:
+            return
+        if active and hasattr(app, "enable_media_player"):
+            app.enable_media_player()
+        elif not active and hasattr(app, "disable_media_player"):
+            app.disable_media_player()
 
     def _on_shortcut_change_clicked(self, button: Gtk.Button) -> None:
         """Open a small key-capture window for shortcut recording."""
@@ -757,6 +781,9 @@ class MainView(Adw.NavigationPage):
         # Update UI
         self._shortcut_label.set_accelerator("" if accel == "none" else accel)
         self._update_hero_labels(self._tts.state)
+        win = self._root_window()
+        if win is not None and hasattr(win, "refresh_status"):
+            win.refresh_status()
 
         # Unblock global shortcuts before updating KDE bindings
         DesktopIntegrationService.block_global_shortcuts(False)

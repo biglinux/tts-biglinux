@@ -35,7 +35,7 @@ from utils.i18n import _
 from window import TTSWindow
 
 if TYPE_CHECKING:
-    from config import AppSettings
+    from config import AppSettings, TTSState
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,9 @@ class TTSApplication(Adw.Application):
 
         # System tray icon
         self._tray: TrayIcon | None = None
+
+        # MPRIS media player (system mini-player while reading)
+        self._mpris = None
 
         # Window
         self._window: TTSWindow | None = None
@@ -113,6 +116,8 @@ class TTSApplication(Adw.Application):
         Gtk.Window.set_default_icon_name("tts-biglinux")
         self._ensure_shortcut_registered()
         self._setup_tray_icon()
+        if self.settings.show_media_player:
+            self.enable_media_player()
         # Prewarm the selected neural model during idle (no audio) so the first
         # Alt+V is warm. Delayed so it never competes with UI startup.
         GLib.timeout_add_seconds(1, self._idle_prewarm)
@@ -151,11 +156,27 @@ class TTSApplication(Adw.Application):
         if self._tray is not None:
             self._tray.unregister()
 
+        if self._mpris is not None:
+            self._mpris.disable()
+
         if self._tts_service is not None:
             self._tts_service.cleanup()
 
         if self._settings_service is not None:
             self._settings_service.save_now()
+
+    def enable_media_player(self) -> None:
+        """Register the MPRIS media player (system mini-player)."""
+        if self._mpris is None:
+            from services.mpris_service import MprisService
+
+            self._mpris = MprisService(self)
+        self._mpris.enable()
+
+    def disable_media_player(self) -> None:
+        """Unregister the MPRIS media player."""
+        if self._mpris is not None:
+            self._mpris.disable()
 
     # ── Actions ──────────────────────────────────────────────────────
 
@@ -211,11 +232,27 @@ class TTSApplication(Adw.Application):
     _notif_body: str = ""  # Last notification body for re-use on countdown
 
     def _on_tts_state_changed(self, state: "TTSState") -> None:
-        """Notify tray icon of TTS state changes and process speech queue."""
+        """Notify tray icon / MPRIS of TTS state changes and process the queue."""
         from config import TTSState
+        speaking = state == TTSState.SPEAKING
+
+        # MPRIS media player: present only while reading.
+        if self._mpris is not None:
+            if speaking:
+                spoken = (
+                    getattr(self._tts_service, "_last_spoken_text", "")
+                    if self._tts_service else ""
+                )
+                title = spoken[:120] if spoken else _("Reading text")
+                # Rough length estimate (~60 ms/char); playback stops the player
+                # exactly when speech ends regardless of the estimate.
+                length_us = max(2_000_000, len(spoken) * 60_000) if spoken else 0
+                self._mpris.set_playing(title, length_us)
+            else:
+                self._mpris.set_stopped()
+
         if self._tray is None:
             return
-        speaking = state == TTSState.SPEAKING
         self._tray.set_speaking(speaking, _("Playing…") if speaking else "")
 
         if speaking:

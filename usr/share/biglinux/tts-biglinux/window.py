@@ -229,25 +229,12 @@ class TTSWindow(Adw.ApplicationWindow):
         )
 
     def _build_controls_bar(self) -> Gtk.Box:
-        """Build the dark bottom controls bar (Speak/Stop + instructions + voice)."""
+        """Build the dark bottom status bar (instructions + shortcut + voice)."""
         bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         bar.add_css_class("dark-controls-bar")
 
-        self._speak_btn = Gtk.Button()
-        self._speak_content = Adw.ButtonContent(
-            icon_name="media-playback-start-symbolic", label=_("Speak")
-        )
-        self._speak_btn.set_child(self._speak_content)
-        self._speak_btn.add_css_class("suggested-action")
-        self._speak_btn.add_css_class("pill")
-        self._speak_btn.set_tooltip_text(
-            _("Speak the text ({key})").format(key=self._shortcut_display())
-        )
-        self._speak_btn.connect("clicked", lambda *_: self._main_view.trigger_speak())
-        bar.append(self._speak_btn)
-
-        # Status area: instructions + configured shortcut (becomes the live
-        # state — "Speaking…"/"Error" — during playback).
+        # Status area: usage instructions + configured shortcut (becomes the
+        # live state — "Speaking…"/"Error" — during playback).
         self._state_label = Gtk.Label(label=self._idle_status_text())
         self._state_label.add_css_class("caption")
         self._state_label.set_ellipsize(Pango.EllipsizeMode.END)
@@ -265,6 +252,15 @@ class TTSWindow(Adw.ApplicationWindow):
 
         return bar
 
+    def refresh_status(self) -> None:
+        """Refresh the status-bar instruction (e.g. after the shortcut changes)."""
+        if not hasattr(self, "_state_label"):
+            return
+        from config import TTSState
+
+        if self._app.tts_service.state != TTSState.SPEAKING:
+            self._state_label.set_label(self._idle_status_text())
+
     def _on_history_toggled(self, btn: Gtk.ToggleButton) -> None:
         """Switch the content pane between the TTS area and History."""
         if btn.get_active():
@@ -280,18 +276,10 @@ class TTSWindow(Adw.ApplicationWindow):
         def _update() -> bool:
             if state == TTSState.SPEAKING:
                 self._state_label.set_label(_("Speaking…"))
-                self._speak_content.set_icon_name("media-playback-stop-symbolic")
-                self._speak_content.set_label(_("Stop"))
-                self._speak_btn.remove_css_class("suggested-action")
-                self._speak_btn.add_css_class("destructive-action")
             else:
                 self._state_label.set_label(
                     _("Error") if state == TTSState.ERROR else self._idle_status_text()
                 )
-                self._speak_content.set_icon_name("media-playback-start-symbolic")
-                self._speak_content.set_label(_("Speak"))
-                self._speak_btn.remove_css_class("destructive-action")
-                self._speak_btn.add_css_class("suggested-action")
             if hasattr(self, "_main_view"):
                 self._bar_voice.set_label(self._main_view.current_voice_label())
             return False

@@ -199,6 +199,8 @@ class AppSettings:
     window: WindowConfig = field(default_factory=WindowConfig)
     history: HistoryConfig = field(default_factory=HistoryConfig)
     show_welcome: bool = True
+    # Expose an MPRIS media player (system taskbar mini-player) while reading.
+    show_media_player: bool = True
     config_version: int = CONFIG_VERSION
 
 
@@ -348,6 +350,7 @@ def _deserialize_settings(data: dict) -> AppSettings:
         )
 
     settings.show_welcome = _safe_bool(data, "show_welcome", True)
+    settings.show_media_player = _safe_bool(data, "show_media_player", True)
 
     return settings
 
