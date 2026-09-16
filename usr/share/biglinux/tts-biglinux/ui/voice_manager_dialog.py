@@ -562,85 +562,58 @@ class VoiceManagerDialog(Adw.Dialog):
         else:
             row.set_title(display)
 
-        if is_installed:
-            lang = pkg.get("language", "")
-            lang_display = _LANG_DISPLAY.get(lang, lang.title()) if lang else ""
-            
-            # For Piper, title is often the language display name. Avoid repeating.
-            parts = []
-            if lang_display and lang_display.strip().lower() != display.strip().lower():
-                parts.append(lang_display)
-            if pkg.get("version"):
-                parts.append(pkg["version"])
-            
-            if parts:
+        # Subtitle: language (and version when installed), avoiding duplication.
+        lang = pkg.get("language", "")
+        lang_display = _LANG_DISPLAY.get(lang, lang.title()) if lang else ""
+        if lang_display and lang_display.strip().lower() != display.strip().lower():
+            if pkg.get("engine") != "Piper":  # Piper titles already carry the lang
+                parts = [lang_display]
+                if is_installed and pkg.get("version"):
+                    parts.append(pkg["version"])
                 row.set_subtitle("  •  ".join(parts))
 
-            # Installed badge
-            is_kokoro_base = (
-                pkg.get("engine") == "Kokoro"
-                and pkg.get("is_base") == "yes"
-            )
-            badge_label = _("Included") if is_kokoro_base else _("Installed")
-            badge = Gtk.Label(label=badge_label)
-            badge.add_css_class("voice-manager-badge")
-            badge.add_css_class("voice-manager-installed-badge")
-            badge.set_valign(Gtk.Align.CENTER)
-            row.add_suffix(badge)
+        engine = pkg.get("engine", "")
+        is_kokoro_base = engine == "Kokoro" and pkg.get("is_base") == "yes"
+        no_remove = ("espeak-ng", "piper-tts-bin", "piper-voices-common")
+        removable = is_installed and pkg["pkg"] not in no_remove and not is_kokoro_base
 
-            # Preview button — available for engines with direct CLI access
-            engine = pkg.get("engine", "")
-            can_preview = engine in ("Kokoro", "RHVoice", "espeak-ng")
-            if can_preview:
-                preview_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
-                preview_btn.add_css_class("flat")
-                preview_btn.add_css_class("circular")
-                preview_btn.set_valign(Gtk.Align.CENTER)
-                preview_btn.set_tooltip_text(_("Preview voice"))
-                preview_btn.connect(
-                    "clicked", lambda b, p=pkg: self._on_preview(b, p)
-                )
-                row.add_suffix(preview_btn)
+        # Preview button for installed voices on engines with direct CLI access.
+        if is_installed and engine in ("Kokoro", "RHVoice", "espeak-ng"):
+            preview_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
+            preview_btn.add_css_class("flat")
+            preview_btn.add_css_class("circular")
+            preview_btn.set_valign(Gtk.Align.CENTER)
+            preview_btn.set_tooltip_text(_("Preview voice"))
+            preview_btn.connect("clicked", lambda b, p=pkg: self._on_preview(b, p))
+            row.add_suffix(preview_btn)
 
-            # Only show Remove for voice packages, not core engines or Kokoro base voices
-            no_remove = (
-                "espeak-ng", "piper-tts-bin", "piper-voices-common",
-            )
-            if pkg["pkg"] not in no_remove and not is_kokoro_base:
-                btn = Gtk.Button()
-                btn_content = Adw.ButtonContent()
-                btn_content.set_icon_name("user-trash-symbolic")
-                btn_content.set_label(_("Remove"))
-                btn.set_child(btn_content)
-                btn.set_valign(Gtk.Align.CENTER)
-                btn.add_css_class("flat")
-                btn.set_tooltip_text(
-                    _("Remove {name}").format(name=display)
-                )
-                btn.connect("clicked", lambda b, p=pkg: self._on_remove(b, p))
-                row.add_suffix(btn)
-        else:
-            lang = pkg.get("language", "")
-            lang_display = _LANG_DISPLAY.get(lang, lang.title()) if lang else ""
-            
-            # Avoid duplicating title and subtitle if they are essentially the same (e.g. Piper voices)
-            if lang_display and lang_display.strip().lower() != display.strip().lower():
-                # Skip subtitle if mostly same or if Piper section
-                if pkg.get("engine") != "Piper":
-                    row.set_subtitle(lang_display)
-
-            btn = Gtk.Button()
-            btn_content = Adw.ButtonContent()
-            btn_content.set_icon_name("list-add-symbolic")
-            btn_content.set_label(_("Install"))
-            btn.set_child(btn_content)
+        # Single action icon that alternates install ⇄ uninstall — no text tag.
+        if not is_installed:
+            btn = Gtk.Button(icon_name="folder-download-symbolic")
+            btn.add_css_class("flat")
+            btn.add_css_class("circular")
+            btn.add_css_class("vm-install")
             btn.set_valign(Gtk.Align.CENTER)
-            btn.add_css_class("suggested-action")
-            btn.set_tooltip_text(
-                _("Install {name}").format(name=display)
-            )
+            btn.set_tooltip_text(_("Install {name}").format(name=display))
             btn.connect("clicked", lambda b, p=pkg: self._on_install(b, p))
             row.add_suffix(btn)
+        elif removable:
+            btn = Gtk.Button(icon_name="user-trash-symbolic")
+            btn.add_css_class("flat")
+            btn.add_css_class("circular")
+            btn.add_css_class("vm-remove")
+            btn.set_valign(Gtk.Align.CENTER)
+            btn.set_tooltip_text(_("Remove {name}").format(name=display))
+            btn.connect("clicked", lambda b, p=pkg: self._on_remove(b, p))
+            row.add_suffix(btn)
+        else:
+            # Installed but not removable (core engine / base voice): a quiet
+            # check mark, no "Installed" text tag.
+            check = Gtk.Image.new_from_icon_name("object-select-symbolic")
+            check.add_css_class("dim-label")
+            check.set_valign(Gtk.Align.CENTER)
+            check.set_tooltip_text(_("Installed"))
+            row.add_suffix(check)
 
         return row
 

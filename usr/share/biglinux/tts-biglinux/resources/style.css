@@ -262,3 +262,15 @@ scale marks mark label {
 .dark-controls-bar button.pill:hover {
     filter: brightness(1.08);
 }
+
+/* Voice manager — alternating install/uninstall icon buttons */
+.vm-install {
+    color: @accent_color;
+}
+.vm-install:hover {
+    background-color: alpha(@accent_bg_color, 0.15);
+}
+.vm-remove:hover {
+    color: @destructive_color;
+    background-color: alpha(@destructive_color, 0.12);
+}
