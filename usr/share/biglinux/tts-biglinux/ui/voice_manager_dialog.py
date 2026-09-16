@@ -210,6 +210,63 @@ def _query_packages(search_term: str, prefix: str) -> list[dict[str, str]]:
     return packages
 
 
+def _humanize_size(val: str) -> str:
+    """'111.19 MiB' → '111.19 MB' (drop the binary 'i' for a friendlier label)."""
+    return val.replace("MiB", "MB").replace("KiB", "KB").replace("GiB", "GB")
+
+
+def _parse_pacman_sizes(cmd: list[str], field: str) -> dict[str, str]:
+    """Run a pacman info command and map package name → humanized size."""
+    out: dict[str, str] = {}
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env={**os.environ, "LC_ALL": "C"},  # stable English field labels
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+        logger.debug("pacman size query failed: %s", e)
+        return out
+    name: str | None = None
+    for line in proc.stdout.splitlines():
+        if line.startswith("Name"):
+            name = line.split(":", 1)[1].strip()
+        elif line.startswith(field) and name:
+            out[name] = _humanize_size(line.split(":", 1)[1].strip())
+            name = None
+    return out
+
+
+def _annotate_sizes(data: dict[str, list[dict[str, str]]]) -> None:
+    """Add a 'size' field (download size available, installed size for installed)
+    to each package. pacman engines are queried in batch; Kokoro voices are a
+    small fixed download."""
+    avail_names: list[str] = []
+    inst_names: list[str] = []
+    by_name: dict[str, dict[str, str]] = {}
+
+    for engine, pkgs in data.items():
+        if engine == "Kokoro":
+            for p in pkgs:
+                if p.get("installed") == "no":
+                    p["size"] = "≈ 0.5 MB"
+            continue
+        for p in pkgs:
+            by_name[p["pkg"]] = p
+            (inst_names if p.get("installed") == "yes" else avail_names).append(p["pkg"])
+
+    sizes: dict[str, str] = {}
+    if avail_names:
+        sizes.update(_parse_pacman_sizes(["pacman", "-Si", *avail_names], "Download Size"))
+    if inst_names:
+        sizes.update(_parse_pacman_sizes(["pacman", "-Qi", *inst_names], "Installed Size"))
+    for name, sz in sizes.items():
+        if name in by_name:
+            by_name[name]["size"] = sz
+
+
 def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
     """Query pacman for all voice packages across all engines.
 
@@ -395,8 +452,9 @@ class VoiceManagerDialog(Adw.Dialog):
     # ── Loading ──────────────────────────────────────────────────────
 
     def _load_packages(self) -> None:
-        """Load all packages in background."""
+        """Load all packages (with sizes) in background."""
         data = _query_all_voice_packages()
+        _annotate_sizes(data)
         GLib.idle_add(self._populate, data)
 
     def _populate(self, data: dict[str, list[dict[str, str]]]) -> None:
@@ -610,15 +668,24 @@ class VoiceManagerDialog(Adw.Dialog):
         else:
             row.set_title(display)
 
-        # Subtitle: language (and version when installed), avoiding duplication.
+        # Subtitle: language • version • size (download size before install,
+        # installed size once installed). Piper titles already carry the
+        # language, so skip it there — but always show the size.
         lang = pkg.get("language", "")
         lang_display = _LANG_DISPLAY.get(lang, lang.title()) if lang else ""
-        if lang_display and lang_display.strip().lower() != display.strip().lower():
-            if pkg.get("engine") != "Piper":  # Piper titles already carry the lang
-                parts = [lang_display]
-                if is_installed and pkg.get("version"):
-                    parts.append(pkg["version"])
-                row.set_subtitle("  •  ".join(parts))
+        sub_parts: list[str] = []
+        if (
+            lang_display
+            and lang_display.strip().lower() != display.strip().lower()
+            and pkg.get("engine") != "Piper"
+        ):
+            sub_parts.append(lang_display)
+        if is_installed and pkg.get("version"):
+            sub_parts.append(pkg["version"])
+        if pkg.get("size"):
+            sub_parts.append(pkg["size"])
+        if sub_parts:
+            row.set_subtitle("  •  ".join(sub_parts))
 
         engine = pkg.get("engine", "")
         is_kokoro_base = engine == "Kokoro" and pkg.get("is_base") == "yes"
