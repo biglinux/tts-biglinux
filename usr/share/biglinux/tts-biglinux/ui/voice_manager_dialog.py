@@ -441,7 +441,18 @@ class VoiceManagerDialog(Adw.Dialog):
         self._stack.add_named(self._scroll, "content")
 
         toolbarview.set_content(self._stack)
-        self.set_child(toolbarview)
+
+        # Thin OSD progress bar overlaid at the very top of the dialog, shown
+        # only while installing/downloading (no trough, minimal height).
+        overlay = Gtk.Overlay()
+        overlay.set_child(toolbarview)
+        self._progress = Gtk.ProgressBar()
+        self._progress.add_css_class("osd")
+        self._progress.set_valign(Gtk.Align.START)
+        self._progress.set_halign(Gtk.Align.FILL)
+        self._progress.set_visible(False)
+        overlay.add_overlay(self._progress)
+        self.set_child(overlay)
 
         # Start loading
         self._stack.set_visible_child_name("loading")
@@ -565,91 +576,16 @@ class VoiceManagerDialog(Adw.Dialog):
                     row = self._make_row(pkg, is_installed=True)
                     group.add(row)
 
-            # ── Available sub-section ──
-            if available:
-                if engine_name == "Kokoro":
-                    # Group by language in expanders (like RHVoice)
-                    by_lang: dict[str, list[dict[str, str]]] = {}
-                    for pkg in available:
-                        by_lang.setdefault(pkg["language"], []).append(pkg)
+            # ── Available voices — listed directly (no expanders) ──
+            def _sort_key(p: dict[str, str]) -> tuple[str, str]:
+                lang = p.get("language", "")
+                return (
+                    _LANG_DISPLAY.get(lang.lower(), lang).lower(),
+                    p.get("display_name", "").lower(),
+                )
 
-                    expander = Adw.ExpanderRow()
-                    expander.set_expanded(bool(self._search_query))
-                    expander.set_title(
-                        _("Add Kokoro voices — {count} available").format(count=len(available))
-                    )
-                    expander.set_subtitle(
-                        _("{langs} languages").format(langs=len(by_lang))
-                    )
-
-                    for lang in sorted(by_lang.keys()):
-                        lang_display = _LANG_DISPLAY.get(lang.lower(), lang.title())
-                        lang_exp = Adw.ExpanderRow()
-                        lang_exp.set_expanded(bool(self._search_query))
-                        lang_exp.set_title(lang_display)
-                        lang_exp.set_subtitle(
-                            _("{count} voice(s)").format(count=len(by_lang[lang]))
-                        )
-
-                        for pkg in sorted(by_lang[lang], key=lambda p: p["display_name"]):
-                            row = self._make_row(pkg, is_installed=False)
-                            lang_exp.add_row(row)
-
-                        expander.add_row(lang_exp)
-
-                    group.add(expander)
-
-                elif engine_name == "RHVoice":
-                    # Group by language in expanders
-                    by_lang: dict[str, list[dict[str, str]]] = {}
-                    for pkg in available:
-                        by_lang.setdefault(pkg["language"], []).append(pkg)
-
-                    expander = Adw.ExpanderRow()
-                    expander.set_expanded(bool(self._search_query))
-                    expander.set_title(
-                        _("Add RHVoice — {count} available").format(count=len(available))
-                    )
-                    expander.set_subtitle(
-                        _("{langs} languages").format(langs=len(by_lang))
-                    )
-
-                    for lang in sorted(by_lang.keys()):
-                        lang_display = _LANG_DISPLAY.get(lang, lang.title())
-                        lang_exp = Adw.ExpanderRow()
-                        lang_exp.set_expanded(bool(self._search_query))
-                        lang_exp.set_title(lang_display)
-                        lang_exp.set_subtitle(
-                            _("{count} voice(s)").format(count=len(by_lang[lang]))
-                        )
-
-                        for pkg in sorted(by_lang[lang], key=lambda p: p["display_name"]):
-                            row = self._make_row(pkg, is_installed=False)
-                            lang_exp.add_row(row)
-
-                        expander.add_row(lang_exp)
-
-                    group.add(expander)
-
-                elif engine_name == "Piper":
-                    expander = Adw.ExpanderRow()
-                    expander.set_expanded(bool(self._search_query))
-                    expander.set_title(
-                        _("Add Piper voices — {count} available").format(count=len(available))
-                    )
-                    expander.set_subtitle(_("Neural TTS voice packs by language"))
-
-                    for pkg in sorted(available, key=lambda p: p.get("display_name", "")):
-                        row = self._make_row(pkg, is_installed=False)
-                        expander.add_row(row)
-
-                    group.add(expander)
-
-                else:
-                    # espeak-ng — single package
-                    for pkg in available:
-                        row = self._make_row(pkg, is_installed=False)
-                        group.add(row)
+            for pkg in sorted(available, key=_sort_key):
+                group.add(self._make_row(pkg, is_installed=False))
 
             self._content_box.append(group)
 
@@ -705,18 +641,16 @@ class VoiceManagerDialog(Adw.Dialog):
         # Single action icon that alternates install ⇄ uninstall — no text tag.
         if not is_installed:
             btn = Gtk.Button(icon_name="folder-download-symbolic")
-            btn.add_css_class("flat")
             btn.add_css_class("circular")
-            btn.add_css_class("vm-install")
+            btn.add_css_class("suggested-action")
             btn.set_valign(Gtk.Align.CENTER)
             btn.set_tooltip_text(_("Install {name}").format(name=display))
             btn.connect("clicked", lambda b, p=pkg: self._on_install(b, p))
             row.add_suffix(btn)
         elif removable:
             btn = Gtk.Button(icon_name="user-trash-symbolic")
-            btn.add_css_class("flat")
             btn.add_css_class("circular")
-            btn.add_css_class("vm-remove")
+            btn.add_css_class("destructive-action")
             btn.set_valign(Gtk.Align.CENTER)
             btn.set_tooltip_text(_("Remove {name}").format(name=display))
             btn.connect("clicked", lambda b, p=pkg: self._on_remove(b, p))
@@ -735,42 +669,16 @@ class VoiceManagerDialog(Adw.Dialog):
     # ── Actions ──────────────────────────────────────────────────────
 
     def _on_install(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
-        """Install a package after confirmation."""
+        """Install a package directly (no confirmation)."""
         if self._busy:
             return
-
-        display = pkg.get("display_name", pkg["pkg"])
-        is_kokoro = pkg.get("engine") == "Kokoro"
-
-        body = (
-            _("Download <b>{name}</b>?\n\nThe voice will be downloaded from the internet.")
-            if is_kokoro
-            else _("Install <b>{name}</b>?\n\nThis requires administrator privileges.")
-        ).format(name=display)
-
-        self._confirm(
-            heading=_("Install Voice"),
-            body=body,
-            confirm_label=_("Download") if is_kokoro else _("Install"),
-            appearance=Adw.ResponseAppearance.SUGGESTED,
-            on_confirm=lambda: self._run_action("install", pkg, button),
-        )
+        self._run_action("install", pkg, button)
 
     def _on_remove(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
-        """Remove a package after confirmation."""
+        """Remove a package directly (no confirmation)."""
         if self._busy:
             return
-
-        display = pkg.get("display_name", pkg["pkg"])
-        self._confirm(
-            heading=_("Remove Voice"),
-            body=_(
-                "Remove <b>{name}</b>?\n\nYou can reinstall it later."
-            ).format(name=display),
-            confirm_label=_("Remove"),
-            appearance=Adw.ResponseAppearance.DESTRUCTIVE,
-            on_confirm=lambda: self._run_action("remove", pkg, button),
-        )
+        self._run_action("remove", pkg, button)
 
     def _confirm(
         self,
@@ -803,53 +711,54 @@ class VoiceManagerDialog(Adw.Dialog):
         self, action: str, pkg: dict[str, str], button: Gtk.Button
     ) -> None:
         """Execute pacman install/remove in background."""
-        import time as _time
-
         self._busy = True
         button.set_sensitive(False)
 
-        # Turn the action icon into an inline progress bar right in the row.
-        for cls in ("circular", "flat", "vm-install", "vm-remove", "suggested-action"):
-            button.remove_css_class(cls)
-        progress = Gtk.ProgressBar()
-        progress.set_show_text(True)
-        progress.set_size_request(160, -1)
-        progress.set_valign(Gtk.Align.CENTER)
+        # Busy spinner in the row's action slot; the actual progress is shown by
+        # the thin OSD bar overlaid at the top of the dialog.
+        spinner = Gtk.Spinner()
+        spinner.set_size_request(16, 16)
+        spinner.start()
         old_child = button.get_child()
-        button.set_child(progress)
+        button.set_child(spinner)
+
+        self._progress.set_show_text(True)
+        self._progress.set_fraction(0.0)
+        self._progress.set_visible(True)
 
         pkg_name = pkg["pkg"]
         is_kokoro = pkg.get("engine") == "Kokoro"
         is_download = is_kokoro and action == "install"
-        start = _time.monotonic()
         state = {"pulse_id": 0}
 
         progress_cb = None
         if is_download:
             self._cancel_download.clear()
-            progress.set_text(_("Starting…"))
+            self._progress.set_text(_("Starting…"))
 
             def progress_cb(downloaded: int, total: int) -> None:
                 def _update() -> bool:
                     dl_mb = downloaded / 1048576
                     if total > 0:
                         frac = min(1.0, downloaded / total)
-                        progress.set_fraction(frac)
-                        progress.set_text(
+                        self._progress.set_fraction(frac)
+                        self._progress.set_text(
                             f"{dl_mb:.1f} / {total / 1048576:.1f} MB · {int(frac * 100)}%"
                         )
                     else:
-                        progress.pulse()
-                        progress.set_text(f"{dl_mb:.1f} MB")
+                        self._progress.pulse()
+                        self._progress.set_text(f"{dl_mb:.1f} MB")
                     return False
 
                 GLib.idle_add(_update)
         else:
             # pacman install/remove has no byte-level progress → pulse the bar.
-            progress.set_text(_("Installing…") if action == "install" else _("Removing…"))
+            self._progress.set_text(
+                _("Installing…") if action == "install" else _("Removing…")
+            )
 
             def _pulse() -> bool:
-                progress.pulse()
+                self._progress.pulse()
                 return True
 
             state["pulse_id"] = GLib.timeout_add(120, _pulse)
@@ -901,6 +810,7 @@ class VoiceManagerDialog(Adw.Dialog):
             if state["pulse_id"]:
                 GLib.source_remove(state["pulse_id"])
                 state["pulse_id"] = 0
+            self._progress.set_visible(False)
             button.set_child(old_child)
             button.set_sensitive(True)
 
