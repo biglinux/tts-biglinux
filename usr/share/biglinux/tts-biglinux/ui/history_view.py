@@ -8,6 +8,7 @@ Supports grid/list toggle, multi-select with bulk delete, and open-in-folder.
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import subprocess
@@ -21,29 +22,12 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk, Pango
 
-from services.history_service import (
-    LEGACY_TIMESTAMP_FMT,
-    TIMESTAMP_FMT,
-    delete_history_by_ts,
-    get_history_dir,
-    load_history_entries,
-)
+from services.history_service import get_history_dir
 from ui.audio_player import AudioPlayerWidget
 from utils.i18n import _
 
 if TYPE_CHECKING:
     pass
-
-
-def _parse_timestamp(timestamp: str) -> datetime | None:
-    """Parse a history timestamp, tolerating both the current (microsecond)
-    and legacy (second-resolution) formats. Returns None if unparseable."""
-    for fmt in (TIMESTAMP_FMT, LEGACY_TIMESTAMP_FMT):
-        try:
-            return datetime.strptime(timestamp, fmt)
-        except ValueError:
-            continue
-    return None
 
 logger = logging.getLogger(__name__)
 
@@ -167,8 +151,11 @@ class HistoryEntryRow(Gtk.ListBoxRow):
 
         timestamp = entry.get("timestamp", "")
         if timestamp:
-            dt = _parse_timestamp(timestamp)
-            time_str = dt.strftime("%d/%m/%Y %H:%M") if dt else timestamp
+            try:
+                dt = datetime.strptime(timestamp, "%Y-%m-%d_%H-%M-%S")
+                time_str = dt.strftime("%d/%m/%Y %H:%M")
+            except ValueError:
+                time_str = timestamp
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)
@@ -311,8 +298,11 @@ class HistoryGridCard(Gtk.FlowBoxChild):
 
         timestamp = entry.get("timestamp", "")
         if timestamp:
-            dt = _parse_timestamp(timestamp)
-            time_str = dt.strftime("%d/%m %H:%M") if dt else timestamp
+            try:
+                dt = datetime.strptime(timestamp, "%Y-%m-%d_%H-%M-%S")
+                time_str = dt.strftime("%d/%m %H:%M")
+            except ValueError:
+                time_str = timestamp
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)
@@ -408,10 +398,18 @@ class HistoryGridCard(Gtk.FlowBoxChild):
 
 
 def _remove_entry_from_index(history_dir: Path, timestamp: str) -> None:
-    """Remove an entry from the history index (SQLite) by timestamp."""
+    """Remove an entry from history.json by timestamp."""
+    index_file = history_dir / "history.json"
+    if not index_file.exists():
+        return
     try:
-        delete_history_by_ts(timestamp)
-    except Exception as e:
+        entries = json.loads(index_file.read_text(encoding="utf-8"))
+        entries = [e for e in entries if e.get("timestamp") != timestamp]
+        index_file.write_text(
+            json.dumps(entries, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except (json.JSONDecodeError, OSError) as e:
         logger.error("Failed to update history index: %s", e)
 
 
@@ -426,12 +424,6 @@ class HistoryView(Adw.NavigationPage):
         self._all_entries: list[dict] = []
         self._grid_mode: bool = False
         self._selection_mode: bool = False
-        # Batched-build state
-        self._build_cancel: bool = False
-        self._build_queue: list[dict] = []
-        self._build_index: int = 0
-        # Search debounce
-        self._search_debounce_id: int = 0
         self._build_ui()
 
     def _build_ui(self) -> None:
@@ -570,94 +562,57 @@ class HistoryView(Adw.NavigationPage):
         self.set_child(outer)
 
     def reload(self) -> None:
-        """Reload history entries from SQLite (query off the main thread)."""
+        """Reload history entries from disk."""
         self._cleanup_all()
 
-        def _load() -> None:
-            try:
-                data = load_history_entries()
-            except Exception as e:
-                logger.error("Failed to load history: %s", e)
-                data = []
-            GLib.idle_add(self._on_entries_loaded, data)
+        history_dir = get_history_dir()
+        index_file = history_dir / "history.json"
 
-        import threading
-
-        threading.Thread(target=_load, daemon=True).start()
-
-    def _on_entries_loaded(self, entries: list[dict]) -> bool:
-        self._all_entries = entries
-        if not entries:
+        if not index_file.exists():
+            self._all_entries = []
             self._outer_stack.set_visible_child_name("empty")
-            return False
+            return
+
+        try:
+            self._all_entries = json.loads(
+                index_file.read_text(encoding="utf-8")
+            )
+        except (json.JSONDecodeError, OSError):
+            self._all_entries = []
+
+        if not self._all_entries:
+            self._outer_stack.set_visible_child_name("empty")
+            return
+
         self._outer_stack.set_visible_child_name("content")
-        self._rebuild_active()
-        return False
+        self._populate(self._all_entries, history_dir)
+        self._apply_view_mode()
 
     def _cleanup_all(self) -> None:
-        # Cancel any in-progress batched build.
-        self._build_cancel = True
         for row in self._rows:
             row.cleanup()
         self._rows.clear()
         for card in self._grid_cards:
             card.cleanup()
         self._grid_cards.clear()
+        # Clear list
         while (child := self._list_box.get_first_child()):
             self._list_box.remove(child)
+        # Clear grid
         while (child := self._flow_box.get_first_child()):
             self._flow_box.remove(child)
 
-    def _rebuild_active(self) -> None:
-        """(Re)build ONLY the currently visible view (list or grid).
-
-        Building a single non-dual view, with audio players whose GStreamer
-        pipeline is created lazily on play, and batching widget creation across
-        idle cycles, keeps the History responsive even with thousands of rows.
-        """
-        # Clear existing widgets of both containers (only active was populated).
-        for row in self._rows:
-            row.cleanup()
-        self._rows.clear()
-        for card in self._grid_cards:
-            card.cleanup()
-        self._grid_cards.clear()
-        while (child := self._list_box.get_first_child()):
-            self._list_box.remove(child)
-        while (child := self._flow_box.get_first_child()):
-            self._flow_box.remove(child)
-
-        self._content_stack.set_visible_child_name("grid" if self._grid_mode else "list")
-
-        self._build_cancel = False
-        self._build_queue = list(reversed(self._all_entries))  # newest first
-        self._build_index = 0
-        GLib.idle_add(self._build_batch)
-
-    def _build_batch(self) -> bool:
-        """Build a batch of widgets per idle cycle (keeps the UI responsive)."""
-        if self._build_cancel:
-            return False
-        history_dir = get_history_dir()
+    def _populate(self, entries: list[dict], history_dir: Path) -> None:
+        """Populate both list and grid with entry widgets (newest first)."""
         sel = self._selection_mode
-        end = min(self._build_index + 40, len(self._build_queue))
-        for i in range(self._build_index, end):
-            entry = self._build_queue[i]
-            if self._grid_mode:
-                card = HistoryGridCard(entry, history_dir, selection_mode=sel)
-                self._flow_box.append(card)
-                self._grid_cards.append(card)
-            else:
-                row = HistoryEntryRow(entry, history_dir, selection_mode=sel)
-                self._list_box.append(row)
-                self._rows.append(row)
-        self._build_index = end
-        if end < len(self._build_queue):
-            return True  # continue on the next idle cycle
-        # Done — apply any active search filter.
-        query = self._search_entry.get_text().strip().lower()
-        self._filter_items(query or None)
-        return False
+        for entry in reversed(entries):
+            row = HistoryEntryRow(entry, history_dir, selection_mode=sel)
+            self._list_box.append(row)
+            self._rows.append(row)
+
+            card = HistoryGridCard(entry, history_dir, selection_mode=sel)
+            self._flow_box.append(card)
+            self._grid_cards.append(card)
 
     def _apply_view_mode(self) -> None:
         self._content_stack.set_visible_child_name("grid" if self._grid_mode else "list")
@@ -669,11 +624,7 @@ class HistoryView(Adw.NavigationPage):
         btn.set_icon_name(
             "view-list-symbolic" if self._grid_mode else "view-grid-symbolic"
         )
-        # Rebuild the now-active view lazily (only one view is materialized).
-        if self._all_entries:
-            self._rebuild_active()
-        else:
-            self._apply_view_mode()
+        self._apply_view_mode()
 
     def _on_select_toggle(self, btn: Gtk.ToggleButton) -> None:
         self._selection_mode = btn.get_active()
@@ -696,6 +647,7 @@ class HistoryView(Adw.NavigationPage):
 
     def _on_delete_selected(self, _btn: Gtk.Button) -> None:
         """Delete all selected entries."""
+        history_dir = get_history_dir()
         # Collect timestamps to delete from active view
         items = self._grid_cards if self._grid_mode else self._rows
         to_delete: list[str] = []
@@ -708,8 +660,8 @@ class HistoryView(Adw.NavigationPage):
         if not to_delete:
             return
 
+        # Delete files
         for ts in to_delete:
-            # Remove the widget from the active view.
             for item in list(self._rows):
                 if item._entry.get("timestamp") == ts:
                     if item._player:
@@ -724,43 +676,60 @@ class HistoryView(Adw.NavigationPage):
                     self._flow_box.remove(item)
                     self._grid_cards.remove(item)
                     break
-            # Delete files + index row from SQLite in one call.
-            delete_history_by_ts(ts)
 
+            # Remove associated files
+            for entry in self._all_entries:
+                if entry.get("timestamp") == ts:
+                    backend = entry.get("backend", "")
+                    base = f"{ts}_{backend}"
+                    for ext in (".wav", ".mp3", ".ogg", ".flac", ".txt"):
+                        path = history_dir / f"{base}{ext}"
+                        try:
+                            if path.is_file():
+                                os.remove(path)
+                        except OSError:
+                            pass
+                    break
+
+        # Update index
         self._all_entries = [
             e for e in self._all_entries
             if e.get("timestamp") not in to_delete
         ]
+        index_file = history_dir / "history.json"
+        try:
+            index_file.write_text(
+                json.dumps(self._all_entries, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+        except OSError as e:
+            logger.error("Failed to update history index: %s", e)
+
         if not self._all_entries:
             self._outer_stack.set_visible_child_name("empty")
 
-    def _on_search_changed(self, _entry: Gtk.SearchEntry) -> None:
-        # Debounce: coalesce rapid keystrokes so filtering doesn't run per key.
-        if self._search_debounce_id:
-            GLib.source_remove(self._search_debounce_id)
-        self._search_debounce_id = GLib.timeout_add(200, self._run_search)
-
-    def _run_search(self) -> bool:
-        self._search_debounce_id = 0
-        query = self._search_entry.get_text().strip().lower()
-        self._filter_items(query or None)
-        return False
+    def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
+        query = entry.get_text().strip().lower()
+        if not query:
+            self._filter_items(None)
+            return
+        self._filter_items(query)
 
     def _filter_items(self, query: str | None) -> None:
-        """Show/hide items of the ACTIVE view based on search query."""
-        items = self._grid_cards if self._grid_mode else self._rows
+        """Show/hide rows and cards based on search query."""
         visible_count = 0
-        for item in items:
+        for row, card in zip(self._rows, self._grid_cards):
             if query is None:
-                item.set_visible(True)
+                row.set_visible(True)
+                card.set_visible(True)
                 visible_count += 1
             else:
-                entry = item._entry
-                text = entry.get("text_preview", "").lower()
-                backend = entry.get("backend", "").lower()
-                voice = entry.get("voice_id", "").lower()
+                text = row._entry.get("text_preview", "").lower()
+                backend = row._entry.get("backend", "").lower()
+                voice = row._entry.get("voice_id", "").lower()
                 match = query in text or query in backend or query in voice
-                item.set_visible(match)
+                row.set_visible(match)
+                card.set_visible(match)
                 if match:
                     visible_count += 1
 

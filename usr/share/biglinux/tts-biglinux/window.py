@@ -14,7 +14,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, Gio, GLib, Gtk, Pango
+from gi.repository import Adw, Gio, GLib, Gtk
 
 from config import (
     APP_NAME,
@@ -29,7 +29,6 @@ from utils.i18n import _
 
 if TYPE_CHECKING:
     from application import TTSApplication
-    from config import TTSState
 
 logger = logging.getLogger(__name__)
 
@@ -80,211 +79,59 @@ class TTSWindow(Adw.ApplicationWindow):
         self.set_title(_(APP_NAME))
 
     def _setup_content(self) -> None:
-        """Two-pane layout: settings sidebar + content, with a dark controls bar.
-
-        Mirrors the BigLinux Audio Converter visual identity — dual header bars,
-        a `.sidebar` options pane on the left, the main text/speak area on the
-        right, and a persistent dark player bar at the bottom.
-        """
+        """Create main window content with tabbed layout."""
+        # Toast overlay for inline notifications
         self._toast_overlay = Adw.ToastOverlay()
 
-        # MainView holds the logic + the two content boxes (sidebar/content).
+        # Toolbar view for header integration
+        toolbar_view = Adw.ToolbarView()
+
+        # Header bar with view switcher
+        header = self._create_header_bar()
+        toolbar_view.add_top_bar(header)
+
+        # View stack for tabs
+        self._view_stack = Adw.ViewStack()
+
+        # Tab 1 — TTS settings
         self._main_view = MainView(
             tts_service=self._app.tts_service,
             settings_service=self._app.settings_service,
             on_toast=self.show_toast,
         )
-
-        root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-
-        split = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
-        split.set_position(320)
-        split.set_vexpand(True)
-        split.set_shrink_start_child(False)
-        split.set_shrink_end_child(False)
-        split.set_resize_start_child(False)
-        self._split = split
-
-        # ── LEFT: settings sidebar (own header with app icon + title) ──
-        left = Adw.ToolbarView()
-        left.add_css_class("sidebar")
-        left.set_size_request(280, -1)
-        self._left_pane = left
-
-        # Minimal sidebar header — no title/icon/window-controls (those live on
-        # the right header). Kept only so the sidebar aligns with the content
-        # header height. A "Settings" label gives the pane a quiet heading.
-        left_header = Adw.HeaderBar()
-        left_header.add_css_class("sidebar")
-        left_header.set_show_start_title_buttons(False)
-        left_header.set_show_end_title_buttons(False)
-        # App icon at the top-left corner of the sidebar.
-        app_icon = Gtk.Image.new_from_icon_name("tts-biglinux")
-        app_icon.set_pixel_size(22)
-        app_icon.set_margin_start(4)
-        left_header.pack_start(app_icon)
-        left_header.set_title_widget(Gtk.Label(label=_("Settings")))
-        left.add_top_bar(left_header)
-
-        left_scroll = Gtk.ScrolledWindow()
-        left_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        left_scroll.set_vexpand(True)
-        left_scroll.set_child(self._main_view.sidebar_box)
-        left.set_content(left_scroll)
-
-        # ── RIGHT: main content (own header with history toggle + menu) ──
-        right = Adw.ToolbarView()
-        right.set_size_request(340, -1)
-
-        right_header = Adw.HeaderBar()
-        # No start title-buttons here (that's where the decoration puts the app
-        # icon/menu) — the app icon lives only in the sidebar. Keep the end
-        # buttons (minimize/maximize/close).
-        right_header.set_show_start_title_buttons(False)
-
-        # History toggle lives on the RIGHT of the header (next to the menu).
-        self._history_toggle = Gtk.ToggleButton()
-        self._history_toggle.set_icon_name("document-open-recent-symbolic")
-        self._history_toggle.set_tooltip_text(_("History"))
-        self._history_toggle.add_css_class("flat")
-        self._history_toggle.connect("toggled", self._on_history_toggled)
-        right_header.pack_end(self._create_menu_button())
-        right_header.pack_end(self._history_toggle)
-        right_header.set_title_widget(
-            Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
+        self._view_stack.add_titled_with_icon(
+            self._main_view, "tts", _("TTS"),
+            "audio-speakers-symbolic",
         )
-        right.add_top_bar(right_header)
 
-        self._content_stack = Gtk.Stack()
-        self._content_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
-        self._content_stack.set_vexpand(True)
-
-        self._content_stack.add_named(self._main_view.content_box, "tts")
-
+        # Tab 2 — History
         self._history_view = HistoryView()
-        self._content_stack.add_named(self._history_view, "history")
-        right.set_content(self._content_stack)
+        self._history_page = self._view_stack.add_titled_with_icon(
+            self._history_view, "history", _("History"),
+            "document-open-recent-symbolic",
+        )
+        # Show/hide history tab based on settings
+        history_enabled = self.settings.history.enabled
+        self._history_page.set_visible(history_enabled)
 
-        split.set_start_child(left)
-        split.set_end_child(right)
-        root.append(split)
+        # Reload history when switching to the tab
+        self._view_stack.connect(
+            "notify::visible-child-name", self._on_tab_changed
+        )
 
-        # ── BOTTOM: dark controls bar (persistent player) ──
-        root.append(self._build_controls_bar())
+        toolbar_view.set_content(self._view_stack)
 
-        # Thin OSD progress bar overlaid at the very top of the window, shown
-        # only while an engine install runs (no text, no trough, no modal).
-        overlay = Gtk.Overlay()
-        overlay.set_child(root)
-        self._install_pulse_id = 0
-        self._install_progress = Gtk.ProgressBar()
-        self._install_progress.add_css_class("osd")
-        self._install_progress.set_valign(Gtk.Align.START)
-        self._install_progress.set_halign(Gtk.Align.FILL)
-        self._install_progress.set_show_text(False)
-        self._install_progress.set_visible(False)
-        overlay.add_overlay(self._install_progress)
+        # Bottom view switcher bar (shown on narrow windows)
+        self._switcher_bar = Adw.ViewSwitcherBar()
+        self._switcher_bar.set_stack(self._view_stack)
+        self._switcher_bar.set_reveal(False)
+        toolbar_view.add_bottom_bar(self._switcher_bar)
 
-        self._toast_overlay.set_child(overlay)
+        self._toast_overlay.set_child(toolbar_view)
         self.set_content(self._toast_overlay)
 
-    def start_install_progress(self) -> None:
-        """Reveal the top OSD progress bar (pulsing) during an install."""
-        self._install_progress.set_show_text(False)
-        self._install_progress.set_visible(True)
-        if not self._install_pulse_id:
-            self._install_pulse_id = GLib.timeout_add(120, self._pulse_install)
-
-    def _pulse_install(self) -> bool:
-        self._install_progress.pulse()
-        return True
-
-    def stop_install_progress(self) -> None:
-        """Hide the top OSD progress bar."""
-        if self._install_pulse_id:
-            GLib.source_remove(self._install_pulse_id)
-            self._install_pulse_id = 0
-        self._install_progress.set_visible(False)
-
-        # History toggle only when history is enabled.
-        self._history_toggle.set_visible(self.settings.history.enabled)
-
-        # Keep the bottom bar in sync with TTS state.
-        self._app.tts_service.add_on_state_changed(self._on_bar_state_changed)
-
+        # Responsive breakpoints
         self._setup_breakpoints()
-
-    def _shortcut_display(self) -> str:
-        """The configured global shortcut in a readable form (e.g. 'Alt+V')."""
-        from services.desktop_integration_service import DesktopIntegrationService
-
-        return DesktopIntegrationService.gtk_accel_to_kde(
-            self.settings.shortcut.keybinding
-        )
-
-    def _idle_status_text(self) -> str:
-        """Instruction shown in the status bar when idle, with the shortcut."""
-        return _("Select text and press {key} to read it aloud").format(
-            key=self._shortcut_display()
-        )
-
-    def _build_controls_bar(self) -> Gtk.Box:
-        """Build the dark bottom status bar (instructions + shortcut + voice)."""
-        bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        bar.add_css_class("dark-controls-bar")
-
-        # Status area: usage instructions + configured shortcut (becomes the
-        # live state — "Speaking…"/"Error" — during playback).
-        self._state_label = Gtk.Label(label=self._idle_status_text())
-        self._state_label.add_css_class("caption")
-        self._state_label.set_ellipsize(Pango.EllipsizeMode.END)
-        bar.append(self._state_label)
-
-        spacer = Gtk.Box()
-        spacer.set_hexpand(True)
-        bar.append(spacer)
-
-        self._bar_voice = Gtk.Label()
-        self._bar_voice.add_css_class("caption")
-        self._bar_voice.set_ellipsize(Pango.EllipsizeMode.END)
-        self._bar_voice.set_max_width_chars(28)
-        bar.append(self._bar_voice)
-
-        return bar
-
-    def refresh_status(self) -> None:
-        """Refresh the status-bar instruction (e.g. after the shortcut changes)."""
-        if not hasattr(self, "_state_label"):
-            return
-        from config import TTSState
-
-        if self._app.tts_service.state != TTSState.SPEAKING:
-            self._state_label.set_label(self._idle_status_text())
-
-    def _on_history_toggled(self, btn: Gtk.ToggleButton) -> None:
-        """Switch the content pane between the TTS area and History."""
-        if btn.get_active():
-            self._history_view.reload()
-            self._content_stack.set_visible_child_name("history")
-        else:
-            self._content_stack.set_visible_child_name("tts")
-
-    def _on_bar_state_changed(self, state: TTSState) -> None:
-        """Reflect TTS state on the bottom controls bar."""
-        from config import TTSState
-
-        def _update() -> bool:
-            if state == TTSState.SPEAKING:
-                self._state_label.set_label(_("Speaking…"))
-            else:
-                self._state_label.set_label(
-                    _("Error") if state == TTSState.ERROR else self._idle_status_text()
-                )
-            if hasattr(self, "_main_view"):
-                self._bar_voice.set_label(self._main_view.current_voice_label())
-            return False
-
-        GLib.idle_add(_update)
 
     def show_toast(self, message: str, timeout: int = 3) -> None:
         """Show an inline toast notification."""
@@ -304,35 +151,62 @@ class TTSWindow(Adw.ApplicationWindow):
         win.present()
         return GLib.SOURCE_REMOVE
 
+    def _create_header_bar(self) -> Adw.HeaderBar:
+        """Create header bar with view switcher and menu."""
+        header = Adw.HeaderBar()
+        header.set_show_end_title_buttons(True)
+
+        # View switcher as title widget
+        self._view_switcher = Adw.ViewSwitcher()
+        self._view_switcher.set_policy(Adw.ViewSwitcherPolicy.WIDE)
+        GLib.idle_add(self._connect_switcher)
+        header.set_title_widget(self._view_switcher)
+
+        # Menu button
+        menu_button = self._create_menu_button()
+        header.pack_end(menu_button)
+
+        return header
+
+    def _connect_switcher(self) -> bool:
+        """Connect view switcher to stack (called via idle_add)."""
+        if hasattr(self, "_view_stack"):
+            self._view_switcher.set_stack(self._view_stack)
+        return GLib.SOURCE_REMOVE
+
     def _setup_breakpoints(self) -> None:
-        """Adaptive layout: collapse the sidebar on narrow windows."""
+        """Configure adaptive breakpoints for narrow/wide layouts."""
+        # < 550sp: move tab switching to bottom bar
         bp_narrow = Adw.Breakpoint.new(
-            Adw.BreakpointCondition.parse("max-width: 600sp")
+            Adw.BreakpointCondition.parse("max-width: 550sp")
         )
+        bp_narrow.add_setter(self._switcher_bar, "reveal", True)
+        bp_narrow.add_setter(self._view_switcher, "visible", False)
         bp_narrow.connect("apply", self._on_narrow_apply)
         bp_narrow.connect("unapply", self._on_narrow_unapply)
         self.add_breakpoint(bp_narrow)
 
     def _on_narrow_apply(self, _bp: Adw.Breakpoint) -> None:
-        """Narrow: give the content more room (the split stays draggable)."""
-        if hasattr(self, "_split"):
-            self._split.set_position(220)
-        self.add_css_class("narrow-layout")
+        """Apply narrow layout CSS class."""
+        self._main_view.add_css_class("narrow-layout")
 
     def _on_narrow_unapply(self, _bp: Adw.Breakpoint) -> None:
-        """Wide: restore the sidebar width."""
-        if hasattr(self, "_split"):
-            self._split.set_position(320)
-        self.remove_css_class("narrow-layout")
+        """Remove narrow layout CSS class."""
+        self._main_view.remove_css_class("narrow-layout")
+
+    def _on_tab_changed(
+        self, stack: Adw.ViewStack, _param: object
+    ) -> None:
+        """Handle tab switch — reload history when visiting the tab."""
+        if stack.get_visible_child_name() == "history":
+            self._history_view.reload()
 
     def update_history_tab_visibility(self, enabled: bool) -> None:
-        """Show or hide the History toggle button."""
-        if hasattr(self, "_history_toggle"):
-            self._history_toggle.set_visible(enabled)
-            if not enabled:
-                self._history_toggle.set_active(False)
-                if hasattr(self, "_content_stack"):
-                    self._content_stack.set_visible_child_name("tts")
+        """Show or hide the History tab."""
+        if hasattr(self, "_history_page"):
+            self._history_page.set_visible(enabled)
+            if not enabled and hasattr(self, "_view_stack"):
+                self._view_stack.set_visible_child_name("tts")
 
     def _create_menu_button(self) -> Gtk.MenuButton:
         """Create application menu button."""

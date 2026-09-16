@@ -35,7 +35,7 @@ from utils.i18n import _
 from window import TTSWindow
 
 if TYPE_CHECKING:
-    from config import AppSettings, TTSState
+    from config import AppSettings
 
 logger = logging.getLogger(__name__)
 
@@ -66,9 +66,6 @@ class TTSApplication(Adw.Application):
 
         # System tray icon
         self._tray: TrayIcon | None = None
-
-        # MPRIS media player (system mini-player while reading)
-        self._mpris = None
 
         # Window
         self._window: TTSWindow | None = None
@@ -116,20 +113,6 @@ class TTSApplication(Adw.Application):
         Gtk.Window.set_default_icon_name("tts-biglinux")
         self._ensure_shortcut_registered()
         self._setup_tray_icon()
-        if self.settings.show_media_player:
-            self.enable_media_player()
-        # Prewarm the selected neural model during idle (no audio) so the first
-        # Alt+V is warm. Delayed so it never competes with UI startup.
-        GLib.timeout_add_seconds(1, self._idle_prewarm)
-
-    def _idle_prewarm(self) -> bool:
-        """Idle callback: preload the selected Piper model (no audio)."""
-        try:
-            speech = self.settings.speech
-            self.tts_service.prewarm(speech.backend, speech.voice_id)
-        except Exception as e:
-            logger.debug("Idle prewarm skipped: %s", e)
-        return False  # one-shot
 
     def _on_activate(self, app: Adw.Application) -> None:
         """Application activate — create or present window."""
@@ -156,27 +139,11 @@ class TTSApplication(Adw.Application):
         if self._tray is not None:
             self._tray.unregister()
 
-        if self._mpris is not None:
-            self._mpris.disable()
-
         if self._tts_service is not None:
             self._tts_service.cleanup()
 
         if self._settings_service is not None:
             self._settings_service.save_now()
-
-    def enable_media_player(self) -> None:
-        """Register the MPRIS media player (system mini-player)."""
-        if self._mpris is None:
-            from services.mpris_service import MprisService
-
-            self._mpris = MprisService(self)
-        self._mpris.enable()
-
-    def disable_media_player(self) -> None:
-        """Unregister the MPRIS media player."""
-        if self._mpris is not None:
-            self._mpris.disable()
 
     # ── Actions ──────────────────────────────────────────────────────
 
@@ -216,7 +183,6 @@ class TTSApplication(Adw.Application):
             icon_path=icon_fallback,
         )
         self._tray.on_activate = self._on_tray_speak
-        self._tray.on_player = self._on_tray_player
         self._tray.set_menu([
             MenuItem(1, _("Read text"), self._on_tray_speak),
             MenuItem(2, _("Settings"), self._on_tray_settings),
@@ -233,36 +199,12 @@ class TTSApplication(Adw.Application):
     _notif_body: str = ""  # Last notification body for re-use on countdown
 
     def _on_tts_state_changed(self, state: "TTSState") -> None:
-        """Notify tray icon / MPRIS of TTS state changes and process the queue."""
+        """Notify tray icon of TTS state changes and process speech queue."""
         from config import TTSState
-        speaking = state == TTSState.SPEAKING
-
-        # Shared title + duration estimate for both players.
-        spoken = (
-            getattr(self._tts_service, "_last_spoken_text", "")
-            if self._tts_service else ""
-        )
-        title = spoken[:120] if spoken else _("Reading text")
-        # Rough length estimate (~60 ms/char); both players stop exactly when
-        # speech ends regardless of the estimate.
-        duration_ms = max(2000, len(spoken) * 60) if spoken else 0
-
-        # MPRIS media player (KDE media controls / media keys): only while reading.
-        if self._mpris is not None:
-            if speaking:
-                self._mpris.set_playing(title, duration_ms * 1000)
-            else:
-                self._mpris.set_stopped()
-
         if self._tray is None:
             return
-        # Mini player that pops out of the tray icon while reading.
-        self._tray.set_speaking(
-            speaking,
-            title if speaking else "",
-            duration_ms=duration_ms,
-            show_player=self.settings.show_media_player,
-        )
+        speaking = state == TTSState.SPEAKING
+        self._tray.set_speaking(speaking, _("Playing…") if speaking else "")
 
         if speaking:
             # Cancel pending dismiss
@@ -411,7 +353,6 @@ class TTSApplication(Adw.Application):
                 process_special_chars=text_cfg.process_special_chars,
                 process_urls=text_cfg.process_urls,
                 strip_formatting=text_cfg.strip_formatting,
-                normalize_numbers=text_cfg.normalize_numbers,
             )
 
             def _do_speak() -> bool:
@@ -430,31 +371,6 @@ class TTSApplication(Adw.Application):
             GLib.idle_add(_do_speak)
 
         threading.Thread(target=_capture_and_speak, daemon=True).start()
-
-    def _on_tray_player(self, action: str) -> None:
-        """Handle play/stop clicks from the tray mini player."""
-        tts = self.tts_service
-        if action == "stop":
-            GLib.idle_add(tts.stop)
-        elif action == "play":
-            GLib.idle_add(self._replay_last)
-
-    def _replay_last(self) -> bool:
-        """Re-read the last spoken text (tray mini player Play button)."""
-        tts = self.tts_service
-        text = getattr(tts, "_last_spoken_text", "")
-        if text:
-            speech = self.settings.speech
-            tts.speak(
-                text,
-                rate=speech.rate,
-                pitch=speech.pitch,
-                volume=speech.volume,
-                backend=speech.backend,
-                output_module=speech.output_module,
-                voice_id=speech.voice_id,
-            )
-        return False
 
     def _on_tray_settings(self) -> None:
         """Show settings window from tray menu."""
@@ -509,15 +425,6 @@ class TTSApplication(Adw.Application):
             website=APP_WEBSITE,
             issue_url=APP_ISSUE_URL,
         )
-        # Populate the built-in "Troubleshooting" section with diagnostics —
-        # it provides copy/save buttons for support (see docs Diagnóstico).
-        try:
-            from services.diagnostics import collect_diagnostics, format_diagnostics
-
-            about.set_debug_info(format_diagnostics(collect_diagnostics(self.settings)))
-            about.set_debug_info_filename("biglinux-tts-diagnostic.txt")
-        except Exception as e:
-            logger.debug("Could not attach diagnostics: %s", e)
         about.present()
 
     def _on_quit(

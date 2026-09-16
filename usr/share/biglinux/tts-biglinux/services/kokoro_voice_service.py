@@ -11,10 +11,7 @@ from __future__ import annotations
 import io
 import logging
 import os
-import re
 import shutil
-import tempfile
-import time
 import zipfile
 from pathlib import Path
 from typing import NamedTuple
@@ -24,10 +21,6 @@ from urllib.error import URLError
 import numpy as np
 
 logger = logging.getLogger(__name__)
-
-# Voice ids are safe identifiers only — never allow path separators / traversal
-# into a download URL or a ZIP entry name.
-_RE_SAFE_VOICE_ID = re.compile(r"^[A-Za-z0-9_]+$")
 
 # ── Paths ────────────────────────────────────────────────────────────
 
@@ -221,75 +214,26 @@ def get_active_voices_bin() -> Path:
     return _active_voices_bin()
 
 
-def download_voice(
-    voice_id: str,
-    progress_cb=None,
-    cancel_check=None,
-) -> tuple[bool, str]:
+def download_voice(voice_id: str) -> tuple[bool, str]:
     """Download a voice from HuggingFace and add to user voices.bin.
-
-    Args:
-        voice_id: catalog voice id.
-        progress_cb: optional callable(downloaded_bytes, total_bytes) for a
-            real progress bar (total may be 0 if the server omits Content-Length).
-        cancel_check: optional callable() -> bool; when it returns True the
-            download aborts cleanly.
 
     Returns (success, error_message).
     """
     if voice_id not in _CATALOG_BY_ID:
         return False, f"Unknown voice: {voice_id}"
 
-    # Defense-in-depth: never interpolate an unsafe id into a URL or ZIP name,
-    # even though the catalog whitelist already gates this.
-    if not _RE_SAFE_VOICE_ID.match(voice_id):
-        return False, f"Invalid voice id: {voice_id!r}"
-
     if voice_id in BASE_VOICE_IDS and not USER_VOICES_BIN.exists():
         return True, ""  # Already in system voices.bin
 
-    # Download .pt from HuggingFace, in chunks (real progress), with retries.
+    # Download .pt from HuggingFace
     url = f"{HF_BASE_URL}/{voice_id}.pt"
-    pt_data = b""
-    last_err = ""
-    for attempt in range(3):
-        if cancel_check and cancel_check():
-            return False, "cancelled"
-        try:
-            logger.info("Downloading Kokoro voice %s (attempt %d)", voice_id, attempt + 1)
-            req = Request(url, headers={"User-Agent": "biglinux-tts/1.0"})  # noqa: S310
-            with urlopen(req, timeout=60) as resp:  # noqa: S310
-                try:
-                    total = int(resp.headers.get("Content-Length", 0) or 0)
-                except (TypeError, ValueError):
-                    total = 0
-                buf = bytearray()
-                cancelled = False
-                while True:
-                    if cancel_check and cancel_check():
-                        cancelled = True
-                        break
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    buf += chunk
-                    if progress_cb:
-                        try:
-                            progress_cb(len(buf), total)
-                        except Exception:
-                            pass
-                if cancelled:
-                    return False, "cancelled"
-                pt_data = bytes(buf)
-            if pt_data:
-                break
-            last_err = "empty response"
-        except (URLError, OSError, TimeoutError) as e:
-            last_err = str(e)
-            if attempt < 2:
-                time.sleep(1.5 * (attempt + 1))  # backoff
-    if not pt_data:
-        return False, f"Download failed after retries: {last_err}"
+    try:
+        logger.info("Downloading Kokoro voice %s from %s", voice_id, url)
+        req = Request(url, headers={"User-Agent": "biglinux-tts/1.0"})  # noqa: S310
+        with urlopen(req, timeout=60) as resp:  # noqa: S310
+            pt_data = resp.read()
+    except (URLError, OSError, TimeoutError) as e:
+        return False, f"Download failed: {e}"
 
     # Convert .pt → .npy
     try:
@@ -384,35 +328,11 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
     return buf.getvalue()
 
 
-def _write_voices_bin_atomic(entries: dict[str, bytes]) -> None:
-    """Write voices.bin atomically: temp file in same dir → os.replace.
-
-    Guarantees the user's existing voices.bin is never left truncated/corrupt
-    if the process is interrupted mid-write (the previous in-place rewrite could
-    destroy ALL installed voices).
-    """
-    USER_VOICES_DIR.mkdir(parents=True, exist_ok=True)
-    fd, tmp_path = tempfile.mkstemp(dir=str(USER_VOICES_DIR), suffix=".bin.part")
-    try:
-        with os.fdopen(fd, "wb") as f:
-            with zipfile.ZipFile(f, "w", zipfile.ZIP_STORED) as z:
-                for name, data in sorted(entries.items()):
-                    z.writestr(name, data)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp_path, str(USER_VOICES_BIN))
-    except BaseException:
-        try:
-            os.unlink(tmp_path)
-        except OSError:
-            pass
-        raise
-
-
 def _add_voice_to_zip(voice_id: str, npy_data: bytes) -> None:
-    """Add or replace a voice .npy in user voices.bin (atomic)."""
+    """Add or replace a voice .npy in user voices.bin."""
     npy_name = f"{voice_id}.npy"
 
+    # Read existing, filter out the voice if already present, re-write
     entries: dict[str, bytes] = {}
     if USER_VOICES_BIN.exists():
         with zipfile.ZipFile(USER_VOICES_BIN, "r") as z:
@@ -420,7 +340,10 @@ def _add_voice_to_zip(voice_id: str, npy_data: bytes) -> None:
                 entries[name] = z.read(name)
 
     entries[npy_name] = npy_data
-    _write_voices_bin_atomic(entries)
+
+    with zipfile.ZipFile(USER_VOICES_BIN, "w", zipfile.ZIP_STORED) as z:
+        for name, data in sorted(entries.items()):
+            z.writestr(name, data)
 
 
 def _remove_voice_from_zip(voice_id: str) -> None:
@@ -444,4 +367,6 @@ def _remove_voice_from_zip(voice_id: str) -> None:
         USER_VOICES_BIN.unlink(missing_ok=True)
         return
 
-    _write_voices_bin_atomic(entries)
+    with zipfile.ZipFile(USER_VOICES_BIN, "w", zipfile.ZIP_STORED) as z:
+        for name, data in sorted(entries.items()):
+            z.writestr(name, data)

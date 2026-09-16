@@ -16,7 +16,7 @@ import threading
 from collections.abc import Callable
 from typing import Any
 
-from config import TTSBackend, TTSState
+from config import TTSBackend, TTSState, KokoroConfig
 from services.text_processor import process_text
 from services.voice_manager import VoiceInfo
 from utils.speechd_utils import try_restart_speechd
@@ -48,58 +48,6 @@ OnProgress = Callable[[str], None]
 _WATCH_INTERVAL_MS = 300
 
 
-# ── Parameter mapping (pure functions — unit-tested) ─────────────────
-#
-# Semantic convention across ALL backends:
-#   rate:   -100 (slowest) … +100 (fastest)
-#   pitch:  -100 (lowest)  … +100 (highest)
-#   volume:    0 (MUTE)    … 100 (loudest)   — 0 must always be silent.
-# Each backend adapts these to its own native parameters below.
-
-
-def espeak_wpm(rate: int) -> int:
-    """UI rate (-100..100) → espeak words-per-minute (80..450, higher=faster)."""
-    return max(80, min(450, 175 + int(rate * 1.5)))
-
-
-def espeak_pitch(pitch: int) -> int:
-    """UI pitch (-100..100) → espeak pitch (0..99, 50=normal)."""
-    return max(0, min(99, 50 + int(pitch * 0.5)))
-
-
-def espeak_volume(volume: int) -> int:
-    """UI volume (0..100) → espeak amplitude (0..200). 0 == true mute."""
-    if volume <= 0:
-        return 0
-    return min(200, max(10, int(volume * 2)))
-
-
-def piper_length_scale(rate: int) -> float:
-    """UI rate (-100..100) → Piper length_scale (smaller=faster).
-
-    rate=+100 → 0.30 (fast), rate=0 → 1.0, rate=-100 → 2.50 (slow).
-    """
-    if rate >= 0:
-        return 1.0 - (rate / 100.0) * 0.7
-    return 1.0 - (rate / 100.0) * 1.5
-
-
-def piper_noise_scale(pitch: int) -> float:
-    """UI pitch (-100..100) → Piper noise_scale (voice expressiveness proxy).
-
-    Note: Piper has no true pitch control; this maps to noise_scale. The UI
-    labels this as "expressiveness" for Piper rather than pitch.
-    """
-    return 0.667 + (pitch / 100.0) * 0.333
-
-
-def volume_factor(volume: int) -> float:
-    """UI volume (0..100) → linear gain factor. 0 == true mute (0.0)."""
-    if volume <= 0:
-        return 0.0
-    return max(0.2, min(2.0, volume / 50.0))
-
-
 class TTSService:
     """
     Text-to-Speech service managing speak/stop lifecycle.
@@ -125,16 +73,6 @@ class TTSService:
         self._last_backend: str = ""
         self._last_voice_id: str = ""
         self._settings = settings  # AppSettings reference
-        # Monotonic request generation. Incremented on every speak()/stop().
-        # Background synthesis captures the generation at dispatch and refuses
-        # to start playback if a newer request has since arrived — this prevents
-        # stale audio from a previous Alt+V starting after a newer one.
-        self._generation: int = 0
-        self._dispatch_gen: int = 0
-
-    def _is_current(self, gen: int) -> bool:
-        """True if `gen` is still the active request generation."""
-        return gen == self._generation
 
     @property
     def state(self) -> TTSState:
@@ -180,7 +118,6 @@ class TTSService:
         process_special_chars: bool = True,
         process_urls: bool = False,
         strip_formatting: bool = True,
-        normalize_numbers: bool = True,
         stop_previous: bool = True,
     ) -> bool:
         """
@@ -210,11 +147,14 @@ class TTSService:
 
         if stop_previous:
             # Always stop any previous speech (even if state tracking says idle,
-            # a background thread might still be alive between chunks).
-            # NOTE: no sleep here — speak() may run on the GTK main thread, and a
-            # blocking sleep would freeze the UI. stop() already cancels speechd
-            # (SSIP cancel + close + `spd-say -C`) and terminates our processes.
+            # a background thread might still be alive between chunks)
+            was_speaking = self.is_speaking
             self.stop()
+            if was_speaking:
+                # Brief pause to let the output module fully release
+                import time
+
+                time.sleep(0.15)
 
         # Resolve voice parameters
         if voice:
@@ -229,7 +169,6 @@ class TTSService:
             process_special_chars=process_special_chars,
             process_urls=process_urls,
             strip_formatting=strip_formatting,
-            normalize_numbers=normalize_numbers,
         )
 
         if not processed:
@@ -237,13 +176,6 @@ class TTSService:
             return False
 
         logger.debug("Processed text: %r", processed[:80])
-
-        # Capture the current request generation for background synths. In
-        # interrupt mode stop() (above) already bumped it, so stale synths from
-        # the previous request abort. In simultaneous mode (stop_previous=False)
-        # the generation is unchanged, so concurrent speeches coexist and only
-        # an explicit stop() invalidates them.
-        self._dispatch_gen = self._generation
 
         # Speak via appropriate backend
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
@@ -277,8 +209,6 @@ class TTSService:
 
     def stop(self) -> None:
         """Stop current speech immediately."""
-        # Invalidate any in-flight background synthesis so it won't start audio.
-        self._generation += 1
         self._stop_watch()
 
         # Stop speech-dispatcher via SSIP API
@@ -299,12 +229,11 @@ class TTSService:
         except (FileNotFoundError, subprocess.TimeoutExpired):
             pass
 
-        # Kill running process. stop() may run on the GTK main thread, so keep
-        # the reap bounded and short — aplay/spd-say die immediately on SIGTERM.
+        # Kill running process
         if self._process:
             try:
                 self._process.send_signal(signal.SIGTERM)
-                self._process.wait(timeout=0.5)
+                self._process.wait(timeout=2)
             except (ProcessLookupError, subprocess.TimeoutExpired):
                 try:
                     self._process.kill()
@@ -361,6 +290,9 @@ class TTSService:
             bt.join(timeout=2)
         self._bg_thread = None
 
+        # Also kill any lingering backends
+        self._kill_backends()
+
         self._set_state(TTSState.IDLE)
         logger.debug("Speech stopped")
 
@@ -402,9 +334,6 @@ class TTSService:
         Uses the `speechd` Python module for reliable text delivery,
         bypassing spd-say which can drop text in some configurations.
         """
-        if volume <= 0:
-            return True  # true mute — nothing audible
-
         try:
             import speechd
         except ImportError:
@@ -552,8 +481,6 @@ class TTSService:
         volume: int,
     ) -> bool:
         """Speak via RHVoice-test directly, bypassing speech-dispatcher."""
-        if volume <= 0:
-            return True  # true mute — nothing audible
         cmd = ["RHVoice-test"]
 
         if voice_id:
@@ -609,25 +536,6 @@ class TTSService:
             logger.error("Failed to start RHVoice native: %s", e)
             return False
 
-    def _default_espeak_voice(self) -> str:
-        """System-locale espeak voice, never a silent English default.
-
-        Avoids the "speaks English" surprise when no voice is configured by
-        falling back to the system language rather than espeak's built-in en.
-        """
-        import locale
-
-        try:
-            loc = (locale.getlocale()[0] or locale.getdefaultlocale()[0] or "")
-        except (ValueError, IndexError):
-            loc = ""
-        loc = loc.lower()
-        if loc.startswith("pt"):
-            return "pt-br" if "br" in loc else "pt"
-        if "_" in loc:
-            return loc.split("_", 1)[0]
-        return loc or "pt-br"
-
     def _speak_espeak(
         self,
         text: str,
@@ -636,227 +544,39 @@ class TTSService:
         pitch: int,
         volume: int,
     ) -> bool:
-        """Speak via espeak-ng (native FFI or subprocess fallback).
-
-        Runs off the GTK main thread: native synthesis + playback are done in a
-        background thread so the UI never blocks for the speech duration.
-        volume == 0 is a true mute (no audible output).
-        """
+        """Speak via espeak-ng (native FFI or subprocess fallback)."""
+        # Extract actual voice name from our ID format
         actual_voice = (
             voice_id.removeprefix("espeak-")
             if voice_id.startswith("espeak-")
             else voice_id
-        ) or self._default_espeak_voice()
+        )
 
-        wpm = espeak_wpm(rate)
-        esp_pitch = espeak_pitch(pitch)
-        esp_vol = espeak_volume(volume)
+        # Convert from UI range to espeak-ng raw parameters
+        wpm = max(80, min(450, 175 + int(rate * 1.5)))
+        esp_pitch = max(0, min(99, 50 + int(pitch * 0.5)))
+        esp_vol = min(200, max(10, int(volume * 2)) if volume > 0 else 10)
 
-        # True mute: nothing audible, but register the request so state/history
-        # remain consistent.
-        if esp_vol <= 0:
-            self._bg_thread = None
-            return True
-
+        # Try native Rust engine first
         engine = _get_tts_engine()
-        gen = self._dispatch_gen
-
-        def _generate_and_play() -> None:
-            # Native path: synthesize to WAV (audio-free) then play via aplay,
-            # so the process is cancellable and never blocks the main thread.
-            if engine and hasattr(engine, "synthesize_espeak"):
-                try:
-                    wav_bytes = engine.synthesize_espeak(
-                        text, actual_voice, wpm, esp_pitch, esp_vol,
-                    )
-                    if not self._is_current(gen):
-                        return  # superseded — discard stale audio
-                    if wav_bytes and len(wav_bytes) > 100:
-                        self._play_wav_bytes(wav_bytes)
-                        return
-                except Exception as e:
-                    logger.warning("Native espeak synth failed, falling back: %s", e)
-
-            # Subprocess fallback: espeak-ng writes WAV to a temp file, we play it.
-            import tempfile
-
-            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-            tmp_path = tmp.name
-            tmp.close()
-            cmd = [
-                "espeak-ng", "-v", actual_voice,
-                "-s", str(wpm), "-p", str(esp_pitch), "-a", str(esp_vol),
-                "-w", tmp_path, text,
-            ]
+        if engine:
             try:
-                proc = subprocess.run(cmd, capture_output=True, timeout=120)
-                if not self._is_current(gen):
-                    try:
-                        os.unlink(tmp_path)
-                    except OSError:
-                        pass
-                    return  # superseded — discard stale audio
-                if proc.returncode == 0 and os.path.getsize(tmp_path) > 100:
-                    play_proc = subprocess.Popen(
-                        ["aplay", "-q", tmp_path],
-                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                    )
-                    self._process = play_proc
-                    self._piper_tmp_path = tmp_path
-                    return
-            except (FileNotFoundError, OSError, subprocess.TimeoutExpired) as e:
-                logger.error("espeak-ng subprocess failed: %s", e)
-            try:
-                os.unlink(tmp_path)
-            except OSError:
-                pass
-            self._set_state(TTSState.ERROR)
-
-        thread = threading.Thread(target=_generate_and_play, daemon=True)
-        self._bg_thread = thread
-        thread.start()
-        return True
-
-    def _play_wav_bytes(self, wav_bytes: bytes) -> None:
-        """Write WAV bytes to a temp file and play via aplay (cancellable)."""
-        import tempfile
-
-        tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-        tmp_path = tmp.name
-        tmp.write(wav_bytes)
-        tmp.close()
-        try:
-            play_proc = subprocess.Popen(
-                ["aplay", "-q", tmp_path],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-            self._process = play_proc
-            self._piper_tmp_path = tmp_path
-        except (FileNotFoundError, OSError) as e:
-            logger.error("aplay failed: %s", e)
-            try:
-                os.unlink(tmp_path)
-            except OSError:
-                pass
-            self._set_state(TTSState.ERROR)
-
-    def _stream_piper(
-        self, chunks: list[str], model_path: str, length_scale: float,
-        noise_scale: float, noise_w: float, vol_factor: float, gen: int, engine,
-    ) -> None:
-        """Stream Piper synthesis: synth chunk N+1 while chunk N plays.
-
-        TTFA equals the time to synthesize the first chunk, not the whole text.
-        Runs in a background thread; honors the generation race-guard so a newer
-        speak()/stop() aborts it. History is saved text-only for streamed speech.
-        """
-        import tempfile
-        import time
-
-        from services.voice_manager import _find_piper_binary
-
-        sox_available = shutil.which("sox") is not None
-        piper_bin = None if engine else _find_piper_binary()
-
-        def _synth(chunk: str) -> str | None:
-            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-            path = tmp.name
-            tmp.close()
-            if engine:
-                try:
-                    wav = engine.synthesize_piper(
-                        chunk, model_path, length_scale, noise_scale, noise_w, vol_factor,
-                    )
-                    if wav and len(wav) >= 100:
-                        with open(path, "wb") as f:
-                            f.write(wav)
-                        return path
-                except Exception as e:
-                    logger.debug("stream native synth failed: %s", e)
-            if piper_bin:
-                try:
-                    p = subprocess.Popen(
-                        [piper_bin, "--model", model_path, "--output_file", path,
-                         "--length_scale", f"{length_scale:.2f}",
-                         "--noise_scale", f"{noise_scale:.3f}",
-                         "--noise_w", f"{noise_w:.2f}", "--sentence_silence", "0.05"],
-                        stdin=subprocess.PIPE, stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,
-                    )
-                    self._piper_proc = p
-                    if p.stdin:
-                        p.stdin.write(chunk.encode("utf-8"))
-                        p.stdin.close()
-                    p.wait()
-                    self._piper_proc = None
-                    if p.returncode == 0 and os.path.getsize(path) >= 100:
-                        return path
-                except (OSError, FileNotFoundError) as e:
-                    logger.debug("stream subprocess synth failed: %s", e)
-            try:
-                os.unlink(path)
-            except OSError:
-                pass
-            return None
-
-        def _play(path: str) -> subprocess.Popen | None:
-            if not engine and vol_factor != 1.0 and sox_available:
-                cmd = ["play", "-q", path, "vol", f"{vol_factor:.2f}"]
-            else:
-                cmd = ["aplay", "-q", path]
-            try:
-                return subprocess.Popen(
-                    cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                return engine.speak_espeak(
+                    text, actual_voice or "en", wpm, esp_pitch, esp_vol,
                 )
-            except (OSError, FileNotFoundError):
-                return None
+            except Exception as e:
+                logger.warning("Native espeak failed, falling back: %s", e)
 
-        def _wait(proc: subprocess.Popen) -> bool:
-            """Wait for playback; return False if superseded/stopped."""
-            while proc.poll() is None:
-                if not self._is_current(gen):
-                    proc.terminate()
-                    return False
-                time.sleep(0.03)
-            return True
+        # Subprocess fallback
+        cmd = ["espeak-ng"]
+        if actual_voice:
+            cmd.extend(["-v", actual_voice])
+        cmd.extend(["-s", str(wpm)])
+        cmd.extend(["-p", str(esp_pitch)])
+        cmd.extend(["-a", str(esp_vol)])
+        cmd.append(text)
 
-        play_proc: subprocess.Popen | None = None
-        cur = _synth(chunks[0])  # first synth defines TTFA
-        temps: list[str] = []
-        try:
-            i = 0
-            while i < len(chunks):
-                if not self._is_current(gen):
-                    break
-                if cur is None:  # this chunk failed; try the next
-                    cur = _synth(chunks[i + 1]) if i + 1 < len(chunks) else None
-                    i += 1
-                    continue
-                if play_proc is not None and not _wait(play_proc):
-                    break
-                temps.append(cur)
-                play_proc = _play(cur)
-                if play_proc is not None:
-                    self._process = play_proc
-                # Prefetch the next chunk while the current one plays.
-                nxt = _synth(chunks[i + 1]) if i + 1 < len(chunks) else None
-                i += 1
-                cur = nxt
-            if play_proc is not None:
-                _wait(play_proc)
-        finally:
-            for p in temps:
-                try:
-                    os.unlink(p)
-                except OSError:
-                    pass
-            if cur:
-                try:
-                    os.unlink(cur)
-                except OSError:
-                    pass
-            if self._is_current(gen):
-                self._maybe_save_history(None)  # text-only history for streams
+        return self._start_process_no_stdin(cmd)
 
     def _speak_piper(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
@@ -887,40 +607,25 @@ class TTSService:
             logger.error("Piper model not found: %s", model_path)
             return False
 
-        length_scale = piper_length_scale(rate)
-        noise_scale = piper_noise_scale(pitch)
+        # Convert rate (-100..100) to length_scale
+        if rate >= 0:
+            length_scale = 1.0 - (rate / 100.0) * 0.7  # 1.0 → 0.3
+        else:
+            length_scale = 1.0 - (rate / 100.0) * 1.5  # 1.0 → 2.5
+
+        # Convert pitch (-100..100) to noise_scale
+        noise_scale = 0.667 + (pitch / 100.0) * 0.333
         noise_w = 0.8
 
-        # Volume factor — 0 == true mute (0.0). The native engine renders a
-        # silent WAV at 0.0; the subprocess path skips playback when muted.
-        vol_factor = volume_factor(volume)
-
-        engine = _get_tts_engine()
-        gen = self._dispatch_gen
-
-        # Streaming path for long text: synthesize + play sentence chunks with
-        # prefetch, so audio starts after the FIRST chunk (~0.25 s) instead of
-        # after the whole text. Short text keeps the single-shot path below
-        # (already fast, and it preserves per-entry audio history).
-        from services.text_processor import chunk_text
-
-        if len(text) > 600 and vol_factor > 0.0:
-            chunks = chunk_text(text, max_chars=600)
-            if len(chunks) > 1:
-                thread = threading.Thread(
-                    target=self._stream_piper,
-                    args=(chunks, model_path, length_scale, noise_scale,
-                          noise_w, vol_factor, gen, engine),
-                    daemon=True,
-                )
-                self._bg_thread = thread
-                thread.start()
-                return True
+        # Volume factor (0..100 → 0.2..2.0)
+        vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
 
         # Create temp file for audio
         tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
         tmp_path = tmp.name
         tmp.close()
+
+        engine = _get_tts_engine()
 
         def _generate_native() -> bool:
             """Synthesize via native Rust ONNX engine."""
@@ -1012,28 +717,15 @@ class TTSService:
                     self._set_state(TTSState.ERROR)
                     return
 
-                # Race guard: a newer speak()/stop() arrived while we were
-                # synthesizing — discard this (stale) audio, never play it.
-                if not self._is_current(gen):
-                    try:
-                        os.unlink(tmp_path)
-                    except OSError:
-                        pass
-                    return
-
-                # True mute: volume 0 → nothing audible. Skip playback entirely.
-                if vol_factor <= 0.0:
-                    self._piper_proc = None
-                    try:
-                        os.unlink(tmp_path)
-                    except OSError:
-                        pass
-                    return
-
                 # Phase 2: play the pre-generated audio
                 # Native already applied volume, subprocess needs sox
                 if not engine and vol_factor != 1.0:
-                    sox_available = shutil.which("sox") is not None
+                    sox_available = (
+                        subprocess.run(
+                            ["which", "sox"],
+                            capture_output=True, timeout=2,
+                        ).returncode == 0
+                    )
                     if sox_available:
                         play_cmd = [
                             "play", "-q", tmp_path, "vol", f"{vol_factor:.2f}",
@@ -1117,8 +809,8 @@ class TTSService:
         emotion_factor = _EMOTION_SPEED.get(emotion, 1.0)
         speed = max(0.5, min(2.0, base_speed * emotion_factor))
 
-        # Volume factor — 0 == true mute (0.0)
-        vol_factor = volume_factor(volume)
+        # Volume factor (0..100 → 0.2..2.0)
+        vol_factor = max(0.2, min(2.0, volume / 50.0)) if volume > 0 else 0.2
 
         logger.debug(
             "Kokoro: voice=%s, lang=%s, speed=%.2f, "
@@ -1142,9 +834,7 @@ class TTSService:
         # Check sox availability for volume control
         sox_available = shutil.which("sox") is not None
 
-        def _build_play_cmd(wav_path: str) -> list[str] | None:
-            if vol_factor <= 0.0:
-                return None  # true mute — no playback
+        def _build_play_cmd(wav_path: str) -> list[str]:
             if vol_factor != 1.0 and sox_available:
                 return ["play", "-q", wav_path, "vol", f"{vol_factor:.2f}"]
             return ["aplay", "-q", wav_path]
@@ -1154,12 +844,11 @@ class TTSService:
             tmp_paths: list[str] = []
             play_proc: subprocess.Popen | None = None
 
-            gen = self._dispatch_gen
             try:
                 generator = pipeline(text, voice=kokoro_voice, speed=speed)
 
                 for _gs, _ps, audio in generator:
-                    if self._kokoro_stop_event.is_set() or not self._is_current(gen):
+                    if self._kokoro_stop_event.is_set():
                         if play_proc:
                             play_proc.terminate()
                         return
@@ -1182,10 +871,8 @@ class TTSService:
                                 return
                             self._kokoro_stop_event.wait(timeout=0.05)
 
-                    # Start playing this chunk (skip when muted)
+                    # Start playing this chunk
                     play_cmd = _build_play_cmd(path)
-                    if play_cmd is None:
-                        continue
                     play_proc = subprocess.Popen(
                         play_cmd,
                         stdout=subprocess.DEVNULL,
@@ -1228,8 +915,6 @@ class TTSService:
         Fallback when Python kokoro library is not installed.
         Uses /usr/bin/koko subprocess with voices.bin.
         """
-        if volume <= 0:
-            return True  # true mute — nothing audible
         koko_path = shutil.which("koko")
         if not koko_path:
             logger.error("Neither kokoro Python library nor koko binary available")
@@ -1254,31 +939,14 @@ class TTSService:
         # Speed: rate (-100..100) → (0.5..2.0)
         speed = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
 
-        # koko infers language from an espeak id; derive it from the voice
-        # prefix (pf_/pm_ = Portuguese, af_/am_ = US English, etc.).
-        _koko_lang = {
-            "a": "en-us", "b": "en-gb", "p": "pt-br", "e": "es", "f": "fr",
-            "i": "it", "h": "hi", "j": "ja", "z": "zh",
-        }
-        lang = _koko_lang.get(kokoro_voice[:1], "en-us")
-
-        # koko requires a subcommand. `pipe` reads text from stdin, splits into
-        # sentences and streams the audio to the speaker. `--force-style true`
-        # makes it use the chosen voice instead of auto-selecting.
         cmd = [
             koko_path,
-            "-s", kokoro_voice,
-            "-d", str(voices_bin),
-            "-l", lang,
-            "--force-style", "true",
-            "-p", f"{speed:.2f}",
-            "pipe",
+            "--voice", kokoro_voice,
+            "--voices-bin", str(voices_bin),
+            "--speed", f"{speed:.2f}",
         ]
 
-        logger.info(
-            "Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f",
-            kokoro_voice, lang, speed,
-        )
+        logger.info("Kokoro (koko binary): voice=%s, speed=%.2f", kokoro_voice, speed)
         return self._start_process(cmd, text)
 
     def _start_process(self, cmd: list[str], text: str) -> bool:
@@ -1322,6 +990,23 @@ class TTSService:
         except OSError as e:
             logger.error("Failed to start TTS: %s", e)
             return False
+
+    def _kill_backends(self) -> None:
+        """Kill any lingering TTS backend processes owned by us.
+
+        Only kills espeak-ng, piper processes and RHVoice, which we launch directly.
+        Never kills speech-dispatcher components (sd_rhvoice, spd-say) as
+        those are managed by the speech-dispatcher daemon.
+        """
+        for proc_name in ["espeak-ng", "piper-tts", "RHVoice-test"]:
+            try:
+                subprocess.run(
+                    ["pkill", "-f", proc_name],
+                    capture_output=True,
+                    timeout=2,
+                )
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                pass
 
     def _has_active_bg_thread(self) -> bool:
         """Check if any background TTS thread is still alive."""
@@ -1435,41 +1120,9 @@ class TTSService:
                 voice_id=self._last_voice_id,
                 save_audio=history.save_audio,
                 save_text=history.save_text,
-                max_entries=getattr(history, "max_entries", 0),
-                max_age_days=getattr(history, "max_age_days", 0),
             )
         except Exception as e:
             logger.error("Failed to save history: %s", e)
-
-    _prewarmed_model: str = ""
-
-    def prewarm(self, backend: str, voice_id: str) -> None:
-        """Preload the selected neural model in a background thread (no audio).
-
-        Reduces the first Alt+V TTFA from ~1.0 s (cold model load) to ~0.06 s.
-        Safe to call repeatedly — it is a no-op if the model is already warm or
-        the backend has no preloadable model. NEVER produces sound.
-        """
-        if backend != TTSBackend.PIPER.value:
-            return
-        model_path = voice_id.removeprefix("piper:") if voice_id.startswith("piper:") else voice_id
-        if not model_path or not os.path.isfile(model_path):
-            return
-        if self._prewarmed_model == model_path:
-            return
-        engine = _get_tts_engine()
-        if not engine or not hasattr(engine, "load_piper"):
-            return
-
-        def _load() -> None:
-            try:
-                engine.load_piper(model_path)
-                self._prewarmed_model = model_path
-                logger.debug("Piper model prewarmed: %s", model_path)
-            except Exception as e:
-                logger.debug("Prewarm failed (non-fatal): %s", e)
-
-        threading.Thread(target=_load, daemon=True).start()
 
     def cleanup(self) -> None:
         """Clean up resources on shutdown."""

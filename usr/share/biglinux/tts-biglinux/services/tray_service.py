@@ -4,24 +4,16 @@ System tray icon via Qt6 subprocess.
 Runs a minimal PySide6 QSystemTrayIcon in a separate process to avoid
 GTK3/GTK4 conflicts. Communicates via stdin/stdout lines.
 
-The context menu embeds a mini player (title + play/stop + progress bar) at the
-top via a QWidgetAction; it is shown only while reading. The player pops out of
-the tray icon with the native right-click menu (compositor-anchored, so it works
-on Wayland where a free-floating popup would not).
-
 Protocol (parent → child): JSON lines
   {"cmd": "quit"}
   {"cmd": "set_menu", "items": [{"id":1,"label":"X"}, {"id":2,"separator":true}]}
   {"cmd": "set_tooltip", "text": "..."}
-  {"cmd": "set_speaking", "speaking": true, "label": "...",
-       "duration_ms": 3660, "show_player": true}   # drives the mini player
-  {"cmd": "update_icon"}
+  {"cmd": "set_icon", "path": "/path/to/icon.svg"}
 
 Protocol (child → parent): JSON lines
-  {"event": "activate"}                       # left-click → read selection
-  {"event": "menu", "id": 1}                  # menu item clicked
-  {"event": "player", "action": "stop"}       # player stop/play clicked
-  {"event": "ready"}                          # tray icon visible
+  {"event": "activate"}          # left-click
+  {"event": "menu", "id": 1}     # menu item clicked
+  {"event": "ready"}             # tray icon visible
 """
 
 from __future__ import annotations
@@ -41,10 +33,14 @@ logger = logging.getLogger(__name__)
 
 _HELPER_SCRIPT = textwrap.dedent("""
 import json
-import select
+import math
+import os
+import random
 import signal
+import struct
+import subprocess
 import sys
-import time
+import threading
 
 def send(data: dict) -> None:
     try:
@@ -54,107 +50,250 @@ def send(data: dict) -> None:
         pass
 
 try:
-    from PySide6.QtCore import Qt, QTimer
-    from PySide6.QtGui import QIcon, QCursor
-    from PySide6.QtWidgets import (
-        QApplication, QMenu, QSystemTrayIcon, QWidget, QWidgetAction,
-        QVBoxLayout, QHBoxLayout, QLabel, QToolButton, QProgressBar,
+    from PySide6.QtCore import Qt, QTimer, QRect, QPoint, QSize, Signal, QObject
+    from PySide6.QtGui import (
+        QAction, QColor, QIcon, QLinearGradient, QPainter, QPainterPath, QPen,
     )
+    from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon, QWidget
 except ImportError:
     send({"event": "error", "message": "PySide6 not installed (python-pyside6). Tray icon is disabled."})
     sys.exit(1)
 
 
-def _fmt(ms) -> str:
-    s = max(0, int(ms / 1000))
-    return "%d:%02d" % (s // 60, s % 60)
+class AudioLevelSignal(QObject):
+    '''Thread-safe bridge: audio thread emits levels → UI thread receives.'''
+    levels_ready = Signal(list)
 
 
-class MiniPlayer(QWidget):
-    '''Mini player embedded at the top of the tray context menu: title being
-    read + play/stop buttons + elapsed/total time + progress bar. Rendered by
-    the compositor anchored to the tray icon, so it "pops out of the systray".'''
+class AudioMonitor:
+    '''Captures audio peaks from PulseAudio/PipeWire default sink monitor.
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.setObjectName("player")
-        self.setFixedWidth(300)
+    Reads raw s16le 1ch 16kHz from parec, splits into NUM_BANDS frequency-ish
+    buckets by sub-dividing each read chunk, and emits RMS per bucket.
+    '''
+    NUM_BANDS = 7
 
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(14, 12, 14, 12)
-        lay.setSpacing(10)
+    def __init__(self, signal_bridge: AudioLevelSignal) -> None:
+        self._signal = signal_bridge
+        self._proc: subprocess.Popen | None = None
+        self._thread: threading.Thread | None = None
+        self._running = False
 
-        self.title = QLabel("BigLinux TTS")
-        self.title.setObjectName("title")
-        self.title.setWordWrap(True)
-        self.title.setMaximumHeight(42)
-        lay.addWidget(self.title)
+    def start(self) -> None:
+        if self._running:
+            return
+        self._running = True
+        self._thread = threading.Thread(target=self._read_loop, daemon=True)
+        self._thread.start()
 
-        row = QHBoxLayout()
-        row.setSpacing(10)
-        self.play_btn = QToolButton()
-        self.play_btn.setText("\\u25B6")
-        self.play_btn.setToolTip("Play")
-        self.play_btn.clicked.connect(lambda: send({"event": "player", "action": "play"}))
-        self.stop_btn = QToolButton()
-        self.stop_btn.setText("\\u25A0")
-        self.stop_btn.setToolTip("Stop")
-        self.stop_btn.clicked.connect(lambda: send({"event": "player", "action": "stop"}))
-        row.addWidget(self.play_btn)
-        row.addWidget(self.stop_btn)
+    def stop(self) -> None:
+        self._running = False
+        if self._proc:
+            try:
+                self._proc.kill()
+            except Exception:
+                pass
+            self._proc = None
 
-        self.elapsed = QLabel("0:00")
-        self.elapsed.setObjectName("time")
-        row.addWidget(self.elapsed)
-        self.bar = QProgressBar()
-        self.bar.setRange(0, 1000)
-        self.bar.setTextVisible(False)
-        row.addWidget(self.bar, 1)
-        self.total = QLabel("0:00")
-        self.total.setObjectName("time")
-        row.addWidget(self.total)
-        lay.addLayout(row)
+    def _read_loop(self) -> None:
+        try:
+            # Record from default sink monitor, mono 16-bit 16 kHz
+            self._proc = subprocess.Popen(
+                [
+                    "parec",
+                    "--format=s16le",
+                    "--channels=1",
+                    "--rate=16000",
+                    "--device=@DEFAULT_MONITOR@",
+                    "--latency-msec=50",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+            )
+        except FileNotFoundError:
+            self._running = False
+            return
 
-        self.setStyleSheet('''
-          #player { background: #2b2b31; border-radius: 10px; }
-          #title { color: #f2f2f2; font-weight: bold; }
-          #time { color: rgba(255,255,255,0.70); font-size: 11px; }
-          QProgressBar { background: rgba(255,255,255,0.15); border: none; border-radius: 3px; min-height: 6px; max-height: 6px; }
-          QProgressBar::chunk { background: #3584e4; border-radius: 3px; }
-          QToolButton { color: #fff; background: rgba(255,255,255,0.12); border: none; border-radius: 15px; min-width: 30px; min-height: 30px; font-size: 13px; }
-          QToolButton:hover { background: rgba(255,255,255,0.22); }
-        ''')
+        CHUNK = 1024  # 512 samples (16-bit) → ~32ms at 16kHz
+        while self._running and self._proc and self._proc.poll() is None:
+            data = self._proc.stdout.read(CHUNK)
+            if not data:
+                break
+            samples = struct.unpack(f"<{len(data)//2}h", data)
+            bands = self._compute_bands(samples)
+            self._signal.levels_ready.emit(bands)
 
-        self._dur = 0
-        self._t0 = 0.0
-        self._timer = QTimer(self)
-        self._timer.setInterval(200)
-        self._timer.timeout.connect(self._tick)
+        self.stop()
 
-    def start(self, title, dur_ms) -> None:
-        self.title.setText(title or "BigLinux TTS")
-        self._dur = max(0, int(dur_ms))
-        self._t0 = time.monotonic()
-        self.total.setText(_fmt(self._dur))
-        self.elapsed.setText("0:00")
-        self.bar.setValue(0)
-        self._timer.start()
+    def _compute_bands(self, samples) -> list:
+        '''Split samples into NUM_BANDS sub-chunks and compute normalised RMS.'''
+        n = len(samples)
+        band_size = max(1, n // self.NUM_BANDS)
+        levels = []
+        for i in range(self.NUM_BANDS):
+            start = i * band_size
+            end = min(start + band_size, n)
+            chunk = samples[start:end]
+            if not chunk:
+                levels.append(0.0)
+                continue
+            rms = math.sqrt(sum(s * s for s in chunk) / len(chunk))
+            # Normalise: max s16 = 32767
+            level = min(1.0, rms / 12000.0)
+            levels.append(level)
+        return levels
 
-    def stop_ui(self) -> None:
-        self._timer.stop()
 
-    def _tick(self) -> None:
-        el = (time.monotonic() - self._t0) * 1000
-        self.elapsed.setText(_fmt(el))
-        if self._dur > 0:
-            self.bar.setValue(int(min(1.0, el / self._dur) * 1000))
+class EqualizerPopup(QWidget):
+    '''Frameless popup drawn above the tray icon with animated equalizer bars
+    and a persistent "Playing…" label.'''
+
+    NUM_BARS = 7
+    BAR_WIDTH = 6
+    BAR_GAP = 3
+    EQ_H = 44        # Height for equalizer bars area
+    LABEL_H = 18     # Height for text label area
+    CORNER_RADIUS = 8
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        total_w = max(
+            self.NUM_BARS * self.BAR_WIDTH + (self.NUM_BARS - 1) * self.BAR_GAP + 16,
+            100,  # Minimum width for label
+        )
+        total_h = self.EQ_H + self.LABEL_H
+        self.setFixedSize(total_w, total_h)
+        self.setWindowFlags(
+            Qt.WindowType.ToolTip
+            | Qt.WindowType.FramelessWindowHint
+            | Qt.WindowType.WindowStaysOnTopHint
+            | Qt.WindowType.WindowDoesNotAcceptFocus
+        )
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+
+        self._label_text = "Playing…"
+
+        # Current and target bar heights (0.0 → 1.0)
+        self._levels = [0.0] * self.NUM_BARS
+        self._targets = [0.0] * self.NUM_BARS
+
+        # Smooth animation timer
+        self._anim_timer = QTimer(self)
+        self._anim_timer.timeout.connect(self._animate_step)
+        self._anim_timer.setInterval(33)  # ~30 fps
+
+    def set_label(self, text: str) -> None:
+        '''Update the persistent label text.'''
+        self._label_text = text
+        self.update()
+
+    def set_levels(self, levels: list) -> None:
+        '''Set target levels from audio monitor (0.0-1.0 per band).'''
+        for i in range(min(len(levels), self.NUM_BARS)):
+            self._targets[i] = levels[i]
+
+    def show_at_tray(self, tray_geometry: QRect) -> None:
+        '''Position popup above the tray icon and show it.'''
+        if tray_geometry.isValid() and not tray_geometry.isNull() and tray_geometry.width() > 0:
+            x = tray_geometry.center().x() - self.width() // 2
+            y = tray_geometry.top() - self.height() - 4
+            # If tray is at top of screen, show below instead
+            if y < 0:
+                y = tray_geometry.bottom() + 4
+            self.move(x, y)
+        else:
+            # Fallback: bottom-right corner of primary screen
+            screen = QApplication.primaryScreen()
+            if screen:
+                avail = screen.availableGeometry()
+                x = avail.right() - self.width() - 8
+                y = avail.bottom() - self.height() - 8
+                self.move(x, y)
+        self.show()
+        self.raise_()
+        self._anim_timer.start()
+
+    def hide_popup(self) -> None:
+        self._anim_timer.stop()
+        self._levels = [0.0] * self.NUM_BARS
+        self._targets = [0.0] * self.NUM_BARS
+        self.hide()
+
+    def _animate_step(self) -> None:
+        '''Smoothly interpolate current levels toward targets.'''
+        changed = False
+        for i in range(self.NUM_BARS):
+            diff = self._targets[i] - self._levels[i]
+            if abs(diff) > 0.005:
+                # Fast attack, slower decay
+                speed = 0.35 if diff > 0 else 0.18
+                self._levels[i] += diff * speed
+                changed = True
+            else:
+                if self._levels[i] != self._targets[i]:
+                    self._levels[i] = self._targets[i]
+                    changed = True
+        if changed:
+            self.update()
+
+    def paintEvent(self, event) -> None:
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        # Background with rounded corners
+        bg_path = QPainterPath()
+        bg_path.addRoundedRect(0.0, 0.0, self.width(), self.height(),
+                               self.CORNER_RADIUS, self.CORNER_RADIUS)
+        bg_color = QColor(30, 30, 30, 210)
+        p.fillPath(bg_path, bg_color)
+
+        # Draw equalizer bars in top area
+        margin_x = (self.width() - (self.NUM_BARS * self.BAR_WIDTH + (self.NUM_BARS - 1) * self.BAR_GAP)) // 2
+        bar_area_h = self.EQ_H - 16  # vertical padding
+        base_y = self.EQ_H - 4
+
+        for i in range(self.NUM_BARS):
+            x = margin_x + i * (self.BAR_WIDTH + self.BAR_GAP)
+            level = max(0.05, self._levels[i])  # Minimum visible height
+            bar_h = int(level * bar_area_h)
+
+            # Gradient: green at bottom → yellow → orange at top
+            grad = QLinearGradient(x, base_y, x, base_y - bar_h)
+            grad.setColorAt(0.0, QColor(76, 175, 80))    # green
+            grad.setColorAt(0.5, QColor(255, 235, 59))   # yellow
+            grad.setColorAt(1.0, QColor(255, 87, 34))    # orange-red
+
+            p.setPen(Qt.PenStyle.NoPen)
+            p.setBrush(grad)
+            bar_path = QPainterPath()
+            bar_path.addRoundedRect(
+                float(x), float(base_y - bar_h),
+                float(self.BAR_WIDTH), float(bar_h),
+                2.0, 2.0,
+            )
+            p.drawPath(bar_path)
+
+        # Draw label text below bars
+        if self._label_text:
+            from PySide6.QtGui import QFont
+            font = QFont()
+            font.setPointSize(8)
+            font.setBold(True)
+            p.setFont(font)
+            p.setPen(QColor(220, 220, 220))
+            label_rect = QRect(4, self.EQ_H, self.width() - 8, self.LABEL_H)
+            p.drawText(label_rect, Qt.AlignmentFlag.AlignCenter, self._label_text)
+
+        p.end()
 
 
 try:
+    # argv: icon_name, title, tooltip, icon_dark_path, icon_light_path
     title       = sys.argv[1] if len(sys.argv) > 1 else "App"
     tooltip     = sys.argv[2] if len(sys.argv) > 2 else title
-    icon_dark   = sys.argv[3] if len(sys.argv) > 3 else ""
-    icon_light  = sys.argv[4] if len(sys.argv) > 4 else ""
+    icon_dark   = sys.argv[3] if len(sys.argv) > 3 else ""   # for dark bg (white icon)
+    icon_light  = sys.argv[4] if len(sys.argv) > 4 else ""   # for light bg (dark icon)
 
     sys.argv[0] = title
     app = QApplication(sys.argv)
@@ -163,55 +302,56 @@ try:
     app.setQuitOnLastWindowClosed(False)
 
     def is_dark_theme() -> bool:
-        return app.palette().window().color().lightness() < 128
+        '''Detect if the current system palette is dark.'''
+        palette = app.palette()
+        bg = palette.window().color()
+        return bg.lightness() < 128
 
-    def get_icon_for_theme():
-        path = icon_dark if is_dark_theme() else icon_light
+    def get_icon_for_theme() -> "QIcon":
+        '''Return white icon for dark bg, dark icon for light bg.'''
+        if is_dark_theme():
+            path = icon_dark
+        else:
+            path = icon_light
         if path:
             return QIcon(path)
         return QIcon.fromTheme("tts-biglinux-symbolic")
 
-    tray = QSystemTrayIcon(get_icon_for_theme(), app)
+    icon = get_icon_for_theme()
+    tray = QSystemTrayIcon(icon, app)
     tray.setToolTip(tooltip)
 
     def update_icon_from_theme():
-        tray.setIcon(get_icon_for_theme())
+        '''Reload icon when system palette changes.'''
+        new_icon = get_icon_for_theme()
+        tray.setIcon(new_icon)
 
     app.paletteChanged.connect(lambda _: update_icon_from_theme())
 
     menu = QMenu()
     tray.setContextMenu(menu)
 
-    # Mini player embedded at the top of the tray menu (parented to app so
-    # rebuilding the item actions never deletes it).
-    player = MiniPlayer()
-    player_action = QWidgetAction(app)
-    player_action.setDefaultWidget(player)
-    menu.addAction(player_action)
-    player_sep = menu.addSeparator()
-    player_action.setVisible(False)
-    player_sep.setVisible(False)
+    # ── Equalizer popup & audio monitor ──
+    eq_popup = EqualizerPopup()
+    audio_signal = AudioLevelSignal()
+    audio_monitor = AudioMonitor(audio_signal)
 
-    item_actions = []
+    def _on_levels(levels: list) -> None:
+        eq_popup.set_levels(levels)
 
-    def set_player_visible(vis) -> None:
-        player_action.setVisible(vis)
-        player_sep.setVisible(vis)
+    audio_signal.levels_ready.connect(_on_levels)
+
+    action_map: dict = {}
 
     def on_activated(reason) -> None:
-        # Left-click = quick "read selection"; right-click shows the native
-        # context menu (with the mini player) anchored to the tray icon.
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
             send({"event": "activate"})
-        elif reason == QSystemTrayIcon.ActivationReason.MiddleClick:
-            # Middle-click pops the menu; the activation carries a valid input
-            # serial so the compositor accepts the popup.
-            menu.popup(QCursor.pos())
 
-    def on_menu_click(item_id) -> None:
+    def on_menu_click(item_id: int) -> None:
         send({"event": "menu", "id": item_id})
 
     def handle_input() -> None:
+        import select
         while select.select([sys.stdin], [], [], 0)[0]:
             line = sys.stdin.readline()
             if not line:
@@ -223,33 +363,34 @@ try:
                 continue
             cmd = msg.get("cmd")
             if cmd == "quit":
+                audio_monitor.stop()
                 app.quit()
             elif cmd == "set_menu":
-                for a in item_actions:
-                    menu.removeAction(a)
-                item_actions.clear()
+                menu.clear()
+                action_map.clear()
                 for item in msg.get("items", []):
                     if item.get("separator"):
-                        a = menu.addSeparator()
+                        menu.addSeparator()
                     else:
                         item_id = item["id"]
-                        a = menu.addAction(item["label"])
-                        a.triggered.connect(lambda checked, iid=item_id: on_menu_click(iid))
-                    item_actions.append(a)
+                        action = menu.addAction(item["label"])
+                        action.triggered.connect(lambda checked, iid=item_id: on_menu_click(iid))
+                        action_map[item_id] = action
             elif cmd == "set_tooltip":
                 tray.setToolTip(msg.get("text", ""))
             elif cmd == "set_speaking":
                 speaking = msg.get("speaking", False)
-                label = msg.get("label", "")
-                if speaking and msg.get("show_player", True):
-                    tray.setToolTip(label or tooltip)
-                    player.start(label, msg.get("duration_ms", 0))
-                    set_player_visible(True)
+                label = msg.get("label", "Playing…")
+                if speaking:
+                    tray.setToolTip(label)
+                    eq_popup.set_label(label)
+                    tray_geo = tray.geometry()
+                    eq_popup.show_at_tray(tray_geo)
+                    audio_monitor.start()
                 else:
-                    player.stop_ui()
-                    set_player_visible(False)
-                    if not speaking:
-                        tray.setToolTip(tooltip)
+                    audio_monitor.stop()
+                    eq_popup.hide_popup()
+                    tray.setToolTip(tooltip)
             elif cmd == "update_icon":
                 update_icon_from_theme()
 
@@ -266,6 +407,7 @@ try:
     theme_timer.start(2000)
 
     def _cleanup(*_):
+        audio_monitor.stop()
         app.quit()
 
     signal.signal(signal.SIGTERM, _cleanup)
@@ -323,8 +465,6 @@ class TrayIcon:
 
         # Callbacks
         self.on_activate: Callable[[], None] | None = None
-        # on_player(action) where action is "play" or "stop"
-        self.on_player: Callable[[str], None] | None = None
 
     def set_menu(self, items: list[MenuItem]) -> None:
         """Set the context menu items."""
@@ -406,26 +546,11 @@ class TrayIcon:
                 items.append({"id": m.item_id, "label": m.label})
         self._send({"cmd": "set_menu", "items": items})
 
-    def set_speaking(
-        self,
-        speaking: bool,
-        label: str = "",
-        *,
-        duration_ms: int = 0,
-        show_player: bool = True,
-    ) -> None:
-        """Update the tray tooltip and the pop-out mini player while speaking.
-
-        When ``speaking`` is True and ``show_player`` is set, the helper pops a
-        mini player out of the tray icon with play/stop controls and a progress
-        bar that fills over ``duration_ms``.
-        """
+    def set_speaking(self, speaking: bool, label: str = "") -> None:
+        """Update tray icon tooltip and equalizer popup while speaking."""
         msg: dict = {"cmd": "set_speaking", "speaking": speaking}
         if label:
             msg["label"] = label
-        if speaking:
-            msg["duration_ms"] = max(0, int(duration_ms))
-            msg["show_player"] = bool(show_player)
         self._send(msg)
 
     def _on_child_output(
@@ -461,9 +586,6 @@ class TrayIcon:
                         if m.item_id == item_id and m.callback:
                             m.callback()
                             break
-                elif event == "player":
-                    if self.on_player:
-                        self.on_player(msg.get("action", ""))
                 elif event == "ready":
                     logger.info("Tray icon is visible")
                     self._send_menu()
