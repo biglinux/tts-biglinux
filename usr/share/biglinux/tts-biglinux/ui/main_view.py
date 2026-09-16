@@ -567,16 +567,8 @@ class MainView(Adw.NavigationPage):
     # ── Advanced Section ─────────────────────────────────────────────
 
     def _build_advanced_section(self) -> Adw.PreferencesGroup:
-        """Build advanced settings with functional shortcut editor."""
-        group = create_preferences_group(
-            title=_("Advanced"),
-        )
-
-        expander = create_expander_row(
-            title=_("Advanced options"),
-            subtitle=_("Shortcut, behavior settings"),
-            icon_name="preferences-other-symbolic",
-        )
+        """Build advanced settings (shown flat inside the Advanced modal)."""
+        group = Adw.PreferencesGroup()
 
         # ── Shortcut editor ──
         shortcut_row = Adw.ActionRow()
@@ -604,7 +596,7 @@ class MainView(Adw.NavigationPage):
         shortcut_box.append(self._shortcut_button)
         shortcut_row.add_suffix(shortcut_box)
 
-        expander.add_row(shortcut_row)
+        group.add(shortcut_row)
 
         # ── Show speak action in app launcher ──
         launcher_row, self._launcher_switch_widget = create_action_row_with_switch(
@@ -615,7 +607,7 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Show system tray icon"),
         )
         launcher_row.set_icon_name("view-pin-symbolic")
-        expander.add_row(launcher_row)
+        group.add(launcher_row)
 
         # ── History save ──
         history_row, self._history_switch_widget = create_action_row_with_switch(
@@ -626,7 +618,7 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Save speech history"),
         )
         history_row.set_icon_name("document-save-symbolic")
-        expander.add_row(history_row)
+        group.add(history_row)
 
         # ── Playback mode for history player ──
         playback_row = Adw.ComboRow()
@@ -641,7 +633,7 @@ class MainView(Adw.NavigationPage):
         current = self._settings.history.playback_mode
         playback_row.set_selected(mode_map.get(current, 0))
         playback_row.connect("notify::selected", self._on_playback_mode_changed)
-        expander.add_row(playback_row)
+        group.add(playback_row)
 
         return group
 
