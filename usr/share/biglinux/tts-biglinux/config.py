@@ -43,8 +43,8 @@ DEV_LOCALE_DIR = Path(__file__).parent.parent.parent / "usr" / "share" / "locale
 
 # ── Window Defaults ───────────────────────────────────────────────────
 
-WINDOW_WIDTH_DEFAULT = 560
-WINDOW_HEIGHT_DEFAULT = 680
+WINDOW_WIDTH_DEFAULT = 900
+WINDOW_HEIGHT_DEFAULT = 740
 WINDOW_WIDTH_MIN = 360
 WINDOW_HEIGHT_MIN = 480
 
