@@ -216,6 +216,7 @@ class TTSApplication(Adw.Application):
             icon_path=icon_fallback,
         )
         self._tray.on_activate = self._on_tray_speak
+        self._tray.on_player = self._on_tray_player
         self._tray.set_menu([
             MenuItem(1, _("Read text"), self._on_tray_speak),
             MenuItem(2, _("Settings"), self._on_tray_settings),
@@ -236,24 +237,32 @@ class TTSApplication(Adw.Application):
         from config import TTSState
         speaking = state == TTSState.SPEAKING
 
-        # MPRIS media player: present only while reading.
+        # Shared title + duration estimate for both players.
+        spoken = (
+            getattr(self._tts_service, "_last_spoken_text", "")
+            if self._tts_service else ""
+        )
+        title = spoken[:120] if spoken else _("Reading text")
+        # Rough length estimate (~60 ms/char); both players stop exactly when
+        # speech ends regardless of the estimate.
+        duration_ms = max(2000, len(spoken) * 60) if spoken else 0
+
+        # MPRIS media player (KDE media controls / media keys): only while reading.
         if self._mpris is not None:
             if speaking:
-                spoken = (
-                    getattr(self._tts_service, "_last_spoken_text", "")
-                    if self._tts_service else ""
-                )
-                title = spoken[:120] if spoken else _("Reading text")
-                # Rough length estimate (~60 ms/char); playback stops the player
-                # exactly when speech ends regardless of the estimate.
-                length_us = max(2_000_000, len(spoken) * 60_000) if spoken else 0
-                self._mpris.set_playing(title, length_us)
+                self._mpris.set_playing(title, duration_ms * 1000)
             else:
                 self._mpris.set_stopped()
 
         if self._tray is None:
             return
-        self._tray.set_speaking(speaking, _("Playing…") if speaking else "")
+        # Mini player that pops out of the tray icon while reading.
+        self._tray.set_speaking(
+            speaking,
+            title if speaking else "",
+            duration_ms=duration_ms,
+            show_player=self.settings.show_media_player,
+        )
 
         if speaking:
             # Cancel pending dismiss
@@ -421,6 +430,31 @@ class TTSApplication(Adw.Application):
             GLib.idle_add(_do_speak)
 
         threading.Thread(target=_capture_and_speak, daemon=True).start()
+
+    def _on_tray_player(self, action: str) -> None:
+        """Handle play/stop clicks from the tray mini player."""
+        tts = self.tts_service
+        if action == "stop":
+            GLib.idle_add(tts.stop)
+        elif action == "play":
+            GLib.idle_add(self._replay_last)
+
+    def _replay_last(self) -> bool:
+        """Re-read the last spoken text (tray mini player Play button)."""
+        tts = self.tts_service
+        text = getattr(tts, "_last_spoken_text", "")
+        if text:
+            speech = self.settings.speech
+            tts.speak(
+                text,
+                rate=speech.rate,
+                pitch=speech.pitch,
+                volume=speech.volume,
+                backend=speech.backend,
+                output_module=speech.output_module,
+                voice_id=speech.voice_id,
+            )
+        return False
 
     def _on_tray_settings(self) -> None:
         """Show settings window from tray menu."""
