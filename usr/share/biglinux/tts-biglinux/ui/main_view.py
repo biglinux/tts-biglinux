@@ -212,7 +212,7 @@ class MainView(Adw.NavigationPage):
         if self._advanced_dialog is None:
             dlg = Adw.Window()
             dlg.set_title(_("Advanced options"))
-            dlg.set_default_size(540, 660)
+            dlg.set_default_size(540, 420)
             dlg.set_modal(True)
             dlg.set_hide_on_close(True)
 
