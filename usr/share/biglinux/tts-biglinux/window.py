@@ -111,16 +111,14 @@ class TTSWindow(Adw.ApplicationWindow):
         left.set_size_request(280, -1)
         self._left_pane = left
 
+        # Minimal sidebar header — no title/icon/window-controls (those live on
+        # the right header). Kept only so the sidebar aligns with the content
+        # header height. A "Settings" label gives the pane a quiet heading.
         left_header = Adw.HeaderBar()
         left_header.add_css_class("sidebar")
-        title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        app_icon = Gtk.Image.new_from_icon_name("tts-biglinux")
-        app_icon.set_pixel_size(20)
-        title_box.append(app_icon)
-        title_lbl = Gtk.Label(label=_(APP_NAME))
-        title_lbl.add_css_class("heading")
-        title_box.append(title_lbl)
-        left_header.set_title_widget(title_box)
+        left_header.set_show_start_title_buttons(False)
+        left_header.set_show_end_title_buttons(False)
+        left_header.set_title_widget(Gtk.Label(label=_("Settings")))
         left.add_top_bar(left_header)
 
         left_scroll = Gtk.ScrolledWindow()

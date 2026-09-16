@@ -1254,14 +1254,31 @@ class TTSService:
         # Speed: rate (-100..100) → (0.5..2.0)
         speed = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
 
+        # koko infers language from an espeak id; derive it from the voice
+        # prefix (pf_/pm_ = Portuguese, af_/am_ = US English, etc.).
+        _koko_lang = {
+            "a": "en-us", "b": "en-gb", "p": "pt-br", "e": "es", "f": "fr",
+            "i": "it", "h": "hi", "j": "ja", "z": "zh",
+        }
+        lang = _koko_lang.get(kokoro_voice[:1], "en-us")
+
+        # koko requires a subcommand. `pipe` reads text from stdin, splits into
+        # sentences and streams the audio to the speaker. `--force-style true`
+        # makes it use the chosen voice instead of auto-selecting.
         cmd = [
             koko_path,
-            "--voice", kokoro_voice,
-            "--voices-bin", str(voices_bin),
-            "--speed", f"{speed:.2f}",
+            "-s", kokoro_voice,
+            "-d", str(voices_bin),
+            "-l", lang,
+            "--force-style", "true",
+            "-p", f"{speed:.2f}",
+            "pipe",
         ]
 
-        logger.info("Kokoro (koko binary): voice=%s, speed=%.2f", kokoro_voice, speed)
+        logger.info(
+            "Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f",
+            kokoro_voice, lang, speed,
+        )
         return self._start_process(cmd, text)
 
     def _start_process(self, cmd: list[str], text: str) -> bool:

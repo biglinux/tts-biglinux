@@ -115,6 +115,25 @@ class MainView(Adw.NavigationPage):
         finally:
             self._updating_ui = prev
 
+    # ── Root resolution ──────────────────────────────────────────────
+    # MainView is not itself in the widget tree (only its sidebar_box/content_box
+    # are reparented into the window), so self._root_window() is None. Resolve the
+    # window/application through a widget that IS in the tree.
+
+    def _root_window(self):
+        for w in (getattr(self, "content_box", None),
+                  getattr(self, "sidebar_box", None),
+                  getattr(self, "_hero", None)):
+            if w is not None:
+                root = w.get_root()
+                if root is not None:
+                    return root
+        return None
+
+    def _root_app(self):
+        win = self._root_window()
+        return win.get_application() if win is not None else None
+
     # ── UI Construction ──────────────────────────────────────────────
 
     def _build_ui(self) -> None:
@@ -126,7 +145,9 @@ class MainView(Adw.NavigationPage):
         unparented so the window can place them; MainView itself is a logic/state
         holder and is not displayed directly.
         """
-        # ── Sidebar: settings (voice, speech params, text, backend, advanced) ──
+        # ── Sidebar: only the essential voice/speech settings + Advanced button.
+        # Text processing moves to the content pane (next to the text area) and
+        # advanced options open in a modal, keeping the sidebar simple.
         self.sidebar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
         self.sidebar_box.set_margin_top(12)
         self.sidebar_box.set_margin_bottom(24)
@@ -134,32 +155,89 @@ class MainView(Adw.NavigationPage):
         self.sidebar_box.set_margin_end(12)
 
         self.sidebar_box.append(self._build_quick_settings())
-        self.sidebar_box.append(self._build_text_processing_section())
-        self.sidebar_box.append(self._build_backend_section())
-        self.sidebar_box.append(self._build_advanced_section())
+        self.sidebar_box.append(self._build_advanced_button())
 
-        # ── Content: hero (status + text entry + speak), centered in the pane ──
+        # Advanced options live in a modal (built lazily); build the group now so
+        # its widgets exist for restore_defaults / launcher toggle references.
+        self._advanced_group = self._build_advanced_section()
+        self._advanced_dialog: Adw.Window | None = None
+
+        # ── Content pane: hero (status + text + speak) with Text Processing
+        # options directly below it (it's a text/speech area).
         self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.content_box.set_vexpand(True)
         self.content_box.set_hexpand(True)
 
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scroll.set_vexpand(True)
+
         clamp = Adw.Clamp()
-        clamp.set_maximum_size(560)
+        clamp.set_maximum_size(600)
         clamp.set_tightening_threshold(400)
-        clamp.set_hexpand(True)
-        clamp.set_halign(Gtk.Align.FILL)
-        clamp.set_vexpand(True)
-        clamp.set_valign(Gtk.Align.CENTER)
-        clamp.set_margin_top(18)
-        clamp.set_margin_bottom(18)
-        clamp.set_margin_start(18)
-        clamp.set_margin_end(18)
+
+        col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        col.set_margin_top(24)
+        col.set_margin_bottom(24)
+        col.set_margin_start(18)
+        col.set_margin_end(18)
         self._hero = self._build_hero_section()
-        clamp.set_child(self._hero)
-        self.content_box.append(clamp)
+        col.append(self._hero)
+        col.append(self._build_text_processing_section())
+
+        clamp.set_child(col)
+        scroll.set_child(clamp)
+        self.content_box.append(scroll)
 
         # MainView is not shown directly; keep a harmless empty child.
         self.set_child(Gtk.Box())
+
+    def _build_advanced_button(self) -> Adw.PreferencesGroup:
+        """A single row that opens the Advanced options modal."""
+        group = create_preferences_group(title="", description="")
+        row = Adw.ActionRow()
+        row.set_title(_("Advanced options"))
+        row.set_subtitle(_("Shortcut, performance, behavior"))
+        row.set_icon_name("emblem-system-symbolic")
+        row.set_activatable(True)
+        row.connect("activated", self._open_advanced_dialog)
+        arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
+        arrow.set_valign(Gtk.Align.CENTER)
+        arrow.add_css_class("dim-label")
+        row.add_suffix(arrow)
+        group.add(row)
+        return group
+
+    def _open_advanced_dialog(self, *_args) -> None:
+        """Present the Advanced options in a modal window."""
+        if self._advanced_dialog is None:
+            dlg = Adw.Window()
+            dlg.set_title(_("Advanced options"))
+            dlg.set_default_size(540, 660)
+            dlg.set_modal(True)
+            dlg.set_hide_on_close(True)
+
+            toolbar = Adw.ToolbarView()
+            toolbar.add_top_bar(Adw.HeaderBar())
+            adv_scroll = Gtk.ScrolledWindow()
+            adv_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+            adv_scroll.set_vexpand(True)
+            adv_clamp = Adw.Clamp()
+            adv_clamp.set_maximum_size(600)
+            adv_clamp.set_margin_top(18)
+            adv_clamp.set_margin_bottom(18)
+            adv_clamp.set_margin_start(12)
+            adv_clamp.set_margin_end(12)
+            adv_clamp.set_child(self._advanced_group)
+            adv_scroll.set_child(adv_clamp)
+            toolbar.set_content(adv_scroll)
+            dlg.set_content(toolbar)
+            self._advanced_dialog = dlg
+
+        win = self._root_window()
+        if win is not None:
+            self._advanced_dialog.set_transient_for(win)
+        self._advanced_dialog.present()
 
     # ── Hero Section ─────────────────────────────────────────────────
 
@@ -580,7 +658,7 @@ class MainView(Adw.NavigationPage):
 
     def _on_shortcut_change_clicked(self, button: Gtk.Button) -> None:
         """Open a small key-capture window for shortcut recording."""
-        parent = self.get_root()
+        parent = self._root_window()
 
         # Block global shortcuts so the current binding does not fire
         DesktopIntegrationService.block_global_shortcuts(True)
@@ -729,7 +807,7 @@ class MainView(Adw.NavigationPage):
         self._settings_service.save()
 
         # Toggle system tray icon
-        app = self.get_root().get_application()
+        app = self._root_app()
         if hasattr(app, "enable_tray") and active:
             app.enable_tray()
             self._on_toast(_("Tray icon enabled"), 2)
@@ -753,7 +831,7 @@ class MainView(Adw.NavigationPage):
             self._on_toast(_("History saving disabled"), 2)
 
         # Notify window to show/hide history tab
-        window = self.get_root()
+        window = self._root_window()
         if hasattr(window, "update_history_tab_visibility"):
             window.update_history_tab_visibility(active)
 
@@ -853,7 +931,7 @@ class MainView(Adw.NavigationPage):
             on_voices_changed=self._on_refresh_voices,
             engine_filter=engine_filter,
         )
-        parent = self.get_root()
+        parent = self._root_window()
         dialog.present(parent)
 
 
@@ -1158,7 +1236,7 @@ class MainView(Adw.NavigationPage):
         dialog.set_close_response("cancel")
         dialog.connect("response", self._on_install_piper_response)
 
-        window = self.get_root()
+        window = self._root_window()
         dialog.present(window)
 
     def _on_install_piper_response(
@@ -1202,7 +1280,7 @@ class MainView(Adw.NavigationPage):
         dialog.set_close_response("cancel")
         dialog.connect("response", self._on_install_kokoro_response)
 
-        window = self.get_root()
+        window = self._root_window()
         dialog.present(window)
 
     def _on_install_kokoro_response(
@@ -1248,7 +1326,7 @@ class MainView(Adw.NavigationPage):
 
         progress_dialog.set_extra_child(box)
 
-        window = self.get_root()
+        window = self._root_window()
         progress_dialog.present(window)
 
         # Pulse the progress bar while installing
@@ -1624,7 +1702,7 @@ class MainView(Adw.NavigationPage):
 
         # Explicitly sync tray state since _update_ui_from_settings blocks callbacks
         # via the _updating_ui guard. Default is show_in_launcher=True (tray enabled).
-        app = self.get_root().get_application()
+        app = self._root_app()
         if self._settings.shortcut.show_in_launcher:
             if hasattr(app, "enable_tray"):
                 app.enable_tray()
