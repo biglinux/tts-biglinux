@@ -118,6 +118,11 @@ class TTSWindow(Adw.ApplicationWindow):
         left_header.add_css_class("sidebar")
         left_header.set_show_start_title_buttons(False)
         left_header.set_show_end_title_buttons(False)
+        # App icon at the top-left corner of the sidebar.
+        app_icon = Gtk.Image.new_from_icon_name("tts-biglinux")
+        app_icon.set_pixel_size(22)
+        app_icon.set_margin_start(4)
+        left_header.pack_start(app_icon)
         left_header.set_title_widget(Gtk.Label(label=_("Settings")))
         left.add_top_bar(left_header)
 
@@ -132,24 +137,19 @@ class TTSWindow(Adw.ApplicationWindow):
         right.set_size_request(340, -1)
 
         right_header = Adw.HeaderBar()
-        # Sidebar reveal toggle — only shown when the window is narrow.
-        self._sidebar_toggle = Gtk.ToggleButton()
-        self._sidebar_toggle.set_icon_name("sidebar-show-symbolic")
-        self._sidebar_toggle.set_tooltip_text(_("Settings"))
-        self._sidebar_toggle.add_css_class("flat")
-        self._sidebar_toggle.set_visible(False)
-        self._sidebar_toggle.connect(
-            "toggled", lambda b: self._left_pane.set_visible(b.get_active())
-        )
-        right_header.pack_start(self._sidebar_toggle)
+        # No start title-buttons here (that's where the decoration puts the app
+        # icon/menu) — the app icon lives only in the sidebar. Keep the end
+        # buttons (minimize/maximize/close).
+        right_header.set_show_start_title_buttons(False)
 
+        # History toggle lives on the RIGHT of the header (next to the menu).
         self._history_toggle = Gtk.ToggleButton()
         self._history_toggle.set_icon_name("document-open-recent-symbolic")
         self._history_toggle.set_tooltip_text(_("History"))
         self._history_toggle.add_css_class("flat")
         self._history_toggle.connect("toggled", self._on_history_toggled)
-        right_header.pack_start(self._history_toggle)
         right_header.pack_end(self._create_menu_button())
+        right_header.pack_end(self._history_toggle)
         right_header.set_title_widget(
             Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
         )
@@ -214,8 +214,22 @@ class TTSWindow(Adw.ApplicationWindow):
 
         self._setup_breakpoints()
 
+    def _shortcut_display(self) -> str:
+        """The configured global shortcut in a readable form (e.g. 'Alt+V')."""
+        from services.desktop_integration_service import DesktopIntegrationService
+
+        return DesktopIntegrationService.gtk_accel_to_kde(
+            self.settings.shortcut.keybinding
+        )
+
+    def _idle_status_text(self) -> str:
+        """Instruction shown in the status bar when idle, with the shortcut."""
+        return _("Select text and press {key} to read it aloud").format(
+            key=self._shortcut_display()
+        )
+
     def _build_controls_bar(self) -> Gtk.Box:
-        """Build the dark bottom controls bar (Speak/Stop + state + voice)."""
+        """Build the dark bottom controls bar (Speak/Stop + instructions + voice)."""
         bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         bar.add_css_class("dark-controls-bar")
 
@@ -226,12 +240,17 @@ class TTSWindow(Adw.ApplicationWindow):
         self._speak_btn.set_child(self._speak_content)
         self._speak_btn.add_css_class("suggested-action")
         self._speak_btn.add_css_class("pill")
-        self._speak_btn.set_tooltip_text(_("Speak the text (Alt+V)"))
+        self._speak_btn.set_tooltip_text(
+            _("Speak the text ({key})").format(key=self._shortcut_display())
+        )
         self._speak_btn.connect("clicked", lambda *_: self._main_view.trigger_speak())
         bar.append(self._speak_btn)
 
-        self._state_label = Gtk.Label(label=_("Ready"))
+        # Status area: instructions + configured shortcut (becomes the live
+        # state — "Speaking…"/"Error" — during playback).
+        self._state_label = Gtk.Label(label=self._idle_status_text())
         self._state_label.add_css_class("caption")
+        self._state_label.set_ellipsize(Pango.EllipsizeMode.END)
         bar.append(self._state_label)
 
         spacer = Gtk.Box()
@@ -267,7 +286,7 @@ class TTSWindow(Adw.ApplicationWindow):
                 self._speak_btn.add_css_class("destructive-action")
             else:
                 self._state_label.set_label(
-                    _("Error") if state == TTSState.ERROR else _("Ready")
+                    _("Error") if state == TTSState.ERROR else self._idle_status_text()
                 )
                 self._speak_content.set_icon_name("media-playback-start-symbolic")
                 self._speak_content.set_label(_("Speak"))
@@ -307,20 +326,13 @@ class TTSWindow(Adw.ApplicationWindow):
         self.add_breakpoint(bp_narrow)
 
     def _on_narrow_apply(self, _bp: Adw.Breakpoint) -> None:
-        """Narrow: hide the sidebar; reveal it via the header toggle."""
-        if hasattr(self, "_left_pane"):
-            self._left_pane.set_visible(False)
-        if hasattr(self, "_sidebar_toggle"):
-            self._sidebar_toggle.set_visible(True)
-            self._sidebar_toggle.set_active(False)
+        """Narrow: give the content more room (the split stays draggable)."""
+        if hasattr(self, "_split"):
+            self._split.set_position(220)
         self.add_css_class("narrow-layout")
 
     def _on_narrow_unapply(self, _bp: Adw.Breakpoint) -> None:
-        """Wide: always show the sidebar; hide the reveal toggle."""
-        if hasattr(self, "_left_pane"):
-            self._left_pane.set_visible(True)
-        if hasattr(self, "_sidebar_toggle"):
-            self._sidebar_toggle.set_visible(False)
+        """Wide: restore the sidebar width."""
         if hasattr(self, "_split"):
             self._split.set_position(320)
         self.remove_css_class("narrow-layout")
