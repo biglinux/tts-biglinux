@@ -491,17 +491,8 @@ class MainView(Adw.NavigationPage):
     # ── Text Processing Section ──────────────────────────────────────
 
     def _build_text_processing_section(self) -> Adw.PreferencesGroup:
-        """Build text processing options."""
-        group = create_preferences_group(
-            title=_("Text Processing"),
-            description=_("Configure how text is processed before reading"),
-        )
-
-        expander = create_expander_row(
-            title=_("Processing options"),
-            subtitle=_("Abbreviations, formatting, limits"),
-            icon_name="document-edit-symbolic",
-        )
+        """Build text processing options as a flat list (no title, no expander)."""
+        group = Adw.PreferencesGroup()
 
         # Expand abbreviations
         abbr_row, self._abbr_switch = create_action_row_with_switch(
@@ -511,7 +502,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_abbreviations_toggled,
             accessible_name=_("Expand text abbreviations"),
         )
-        expander.add_row(abbr_row)
+        group.add(abbr_row)
 
         # Process special characters
         chars_row, self._chars_switch = create_action_row_with_switch(
@@ -521,7 +512,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_special_chars_toggled,
             accessible_name=_("Read special characters aloud"),
         )
-        expander.add_row(chars_row)
+        group.add(chars_row)
 
         # Strip formatting
         fmt_row, self._fmt_switch = create_action_row_with_switch(
@@ -531,7 +522,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_strip_formatting_toggled,
             accessible_name=_("Remove text formatting"),
         )
-        expander.add_row(fmt_row)
+        group.add(fmt_row)
 
         # Process URLs
         url_row, self._url_switch = create_action_row_with_switch(
@@ -541,7 +532,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_urls_toggled,
             accessible_name=_("Read URLs aloud"),
         )
-        expander.add_row(url_row)
+        group.add(url_row)
 
         # Max characters — combo with presets
         char_options = [
@@ -569,9 +560,8 @@ class MainView(Adw.NavigationPage):
             on_selected=self._on_max_chars_selected,
             accessible_name=_("Maximum character limit"),
         )
-        expander.add_row(self._max_chars_combo)
+        group.add(self._max_chars_combo)
 
-        group.add(expander)
         return group
 
     # ── Advanced Section ─────────────────────────────────────────────
@@ -653,7 +643,6 @@ class MainView(Adw.NavigationPage):
         playback_row.connect("notify::selected", self._on_playback_mode_changed)
         expander.add_row(playback_row)
 
-        group.add(expander)
         return group
 
     def _on_shortcut_change_clicked(self, button: Gtk.Button) -> None:
