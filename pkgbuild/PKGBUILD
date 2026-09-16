@@ -20,7 +20,7 @@ depends=(
     'onnxruntime'
 )
 makedepends=(
-    'rust'
+    'rust>=1.85'
     'cargo'
 )
 optdepends=(
@@ -46,11 +46,16 @@ build() {
         _basedir="${srcdir}/${pkgname}"
     fi
 
-    # Build native Rust TTS engine
+    # Build native Rust TTS engine.
+    # --locked: honor Cargo.lock so the ONNX Runtime binding (ort) can't be
+    # silently re-resolved to a version incompatible with the system
+    # onnxruntime (this exact drift previously broke the .so at runtime).
+    # ORT_LIB_LOCATION/ORT_PREFER_DYNAMIC_LINK: link against the system
+    # /usr/lib/libonnxruntime.so, never a pip-provided one.
     if [ -d "${_basedir}/tts-engine" ]; then
         cd "${_basedir}/tts-engine"
         ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 \
-            cargo build --release
+            cargo build --release --locked
     fi
 }
 

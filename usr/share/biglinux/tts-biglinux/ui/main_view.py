@@ -49,7 +49,6 @@ from ui.components import (
     create_action_row_with_switch,
     create_button_row,
     create_combo_row,
-    create_expander_row,
     create_icon_button,
     create_preferences_group,
 )
@@ -115,50 +114,129 @@ class MainView(Adw.NavigationPage):
         finally:
             self._updating_ui = prev
 
+    # ── Root resolution ──────────────────────────────────────────────
+    # MainView is not itself in the widget tree (only its sidebar_box/content_box
+    # are reparented into the window), so self._root_window() is None. Resolve the
+    # window/application through a widget that IS in the tree.
+
+    def _root_window(self):
+        for w in (getattr(self, "content_box", None),
+                  getattr(self, "sidebar_box", None),
+                  getattr(self, "_hero", None)):
+            if w is not None:
+                root = w.get_root()
+                if root is not None:
+                    return root
+        return None
+
+    def _root_app(self):
+        win = self._root_window()
+        return win.get_application() if win is not None else None
+
     # ── UI Construction ──────────────────────────────────────────────
 
     def _build_ui(self) -> None:
-        """Build the complete main view."""
-        # Scrollable content
-        scrolled = Gtk.ScrolledWindow()
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled.set_vexpand(True)
+        """Build the view content into two reusable boxes for a split layout.
 
-        # Clamp for responsive width
+        `sidebar_box` holds the settings (placed in the window's left sidebar),
+        `content_box` holds the main hero/text/speak area (right content pane) —
+        mirroring the big-audio-converter two-pane layout. The boxes are left
+        unparented so the window can place them; MainView itself is a logic/state
+        holder and is not displayed directly.
+        """
+        # ── Sidebar: only the essential voice/speech settings + Advanced button.
+        # Text processing moves to the content pane (next to the text area) and
+        # advanced options open in a modal, keeping the sidebar simple.
+        self.sidebar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        self.sidebar_box.set_margin_top(12)
+        self.sidebar_box.set_margin_bottom(24)
+        self.sidebar_box.set_margin_start(12)
+        self.sidebar_box.set_margin_end(12)
+
+        self.sidebar_box.append(self._build_quick_settings())
+        self.sidebar_box.append(self._build_advanced_button())
+
+        # Advanced options live in a modal (built lazily); build the group now so
+        # its widgets exist for restore_defaults / launcher toggle references.
+        self._advanced_group = self._build_advanced_section()
+        self._advanced_dialog: Adw.Window | None = None
+
+        # ── Content pane: hero (status + text + speak) with Text Processing
+        # options directly below it (it's a text/speech area).
+        self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.content_box.set_vexpand(True)
+        self.content_box.set_hexpand(True)
+
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scroll.set_vexpand(True)
+
         clamp = Adw.Clamp()
         clamp.set_maximum_size(600)
         clamp.set_tightening_threshold(400)
 
-        # Main vertical box
-        content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        content.set_margin_top(12)
-        content.set_margin_bottom(24)
-        content.set_margin_start(12)
-        content.set_margin_end(12)
-
-        # 1. Hero section
+        col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        col.set_margin_top(24)
+        col.set_margin_bottom(24)
+        col.set_margin_start(18)
+        col.set_margin_end(18)
         self._hero = self._build_hero_section()
-        content.append(self._hero)
+        col.append(self._hero)
+        col.append(self._build_text_processing_section())
 
-        # 2. Quick settings
-        quick = self._build_quick_settings()
-        content.append(quick)
+        clamp.set_child(col)
+        scroll.set_child(clamp)
+        self.content_box.append(scroll)
 
-        # 3. Text processing expander
-        text_group = self._build_text_processing_section()
-        content.append(text_group)
+        # MainView is not shown directly; keep a harmless empty child.
+        self.set_child(Gtk.Box())
 
-        # 4. Backend expander
-        backend_group = self._build_backend_section()
-        content.append(backend_group)
+    def _build_advanced_button(self) -> Adw.PreferencesGroup:
+        """A single row that opens the Advanced options modal."""
+        group = create_preferences_group(title="", description="")
+        row = Adw.ActionRow()
+        row.set_title(_("Advanced options"))
+        row.set_subtitle(_("Shortcut, performance, behavior"))
+        row.set_icon_name("emblem-system-symbolic")
+        row.set_activatable(True)
+        row.connect("activated", self._open_advanced_dialog)
+        arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
+        arrow.set_valign(Gtk.Align.CENTER)
+        arrow.add_css_class("dim-label")
+        row.add_suffix(arrow)
+        group.add(row)
+        return group
 
-        # 5. Advanced expander
-        advanced_group = self._build_advanced_section()
-        content.append(advanced_group)
+    def _open_advanced_dialog(self, *_args) -> None:
+        """Present the Advanced options in a modal window."""
+        if self._advanced_dialog is None:
+            dlg = Adw.Window()
+            dlg.set_title(_("Advanced options"))
+            dlg.set_default_size(540, 420)
+            dlg.set_modal(True)
+            dlg.set_hide_on_close(True)
 
-        clamp.set_child(content)
-        scrolled.set_child(clamp)
-        self.set_child(scrolled)
+            toolbar = Adw.ToolbarView()
+            toolbar.add_top_bar(Adw.HeaderBar())
+            adv_scroll = Gtk.ScrolledWindow()
+            adv_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+            adv_scroll.set_vexpand(True)
+            adv_clamp = Adw.Clamp()
+            adv_clamp.set_maximum_size(600)
+            adv_clamp.set_margin_top(18)
+            adv_clamp.set_margin_bottom(18)
+            adv_clamp.set_margin_start(12)
+            adv_clamp.set_margin_end(12)
+            adv_clamp.set_child(self._advanced_group)
+            adv_scroll.set_child(adv_clamp)
+            toolbar.set_content(adv_scroll)
+            dlg.set_content(toolbar)
+            self._advanced_dialog = dlg
+
+        win = self._root_window()
+        if win is not None:
+            self._advanced_dialog.set_transient_for(win)
+        self._advanced_dialog.present()
 
     # ── Hero Section ─────────────────────────────────────────────────
 
@@ -317,6 +395,7 @@ class MainView(Adw.NavigationPage):
             title_size_group=title_sg,
         )
         group.add(self._pitch_row)
+        self._update_pitch_row_for_backend(self._settings.speech.backend)
 
         # Volume
         self._volume_row, self._volume_scale = create_action_row_with_scale(
@@ -411,17 +490,8 @@ class MainView(Adw.NavigationPage):
     # ── Text Processing Section ──────────────────────────────────────
 
     def _build_text_processing_section(self) -> Adw.PreferencesGroup:
-        """Build text processing options."""
-        group = create_preferences_group(
-            title=_("Text Processing"),
-            description=_("Configure how text is processed before reading"),
-        )
-
-        expander = create_expander_row(
-            title=_("Processing options"),
-            subtitle=_("Abbreviations, formatting, limits"),
-            icon_name="document-edit-symbolic",
-        )
+        """Build text processing options as a flat list (no title, no expander)."""
+        group = Adw.PreferencesGroup()
 
         # Expand abbreviations
         abbr_row, self._abbr_switch = create_action_row_with_switch(
@@ -431,7 +501,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_abbreviations_toggled,
             accessible_name=_("Expand text abbreviations"),
         )
-        expander.add_row(abbr_row)
+        group.add(abbr_row)
 
         # Process special characters
         chars_row, self._chars_switch = create_action_row_with_switch(
@@ -441,7 +511,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_special_chars_toggled,
             accessible_name=_("Read special characters aloud"),
         )
-        expander.add_row(chars_row)
+        group.add(chars_row)
 
         # Strip formatting
         fmt_row, self._fmt_switch = create_action_row_with_switch(
@@ -451,7 +521,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_strip_formatting_toggled,
             accessible_name=_("Remove text formatting"),
         )
-        expander.add_row(fmt_row)
+        group.add(fmt_row)
 
         # Process URLs
         url_row, self._url_switch = create_action_row_with_switch(
@@ -461,7 +531,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_urls_toggled,
             accessible_name=_("Read URLs aloud"),
         )
-        expander.add_row(url_row)
+        group.add(url_row)
 
         # Max characters — combo with presets
         char_options = [
@@ -489,24 +559,15 @@ class MainView(Adw.NavigationPage):
             on_selected=self._on_max_chars_selected,
             accessible_name=_("Maximum character limit"),
         )
-        expander.add_row(self._max_chars_combo)
+        group.add(self._max_chars_combo)
 
-        group.add(expander)
         return group
 
     # ── Advanced Section ─────────────────────────────────────────────
 
     def _build_advanced_section(self) -> Adw.PreferencesGroup:
-        """Build advanced settings with functional shortcut editor."""
-        group = create_preferences_group(
-            title=_("Advanced"),
-        )
-
-        expander = create_expander_row(
-            title=_("Advanced options"),
-            subtitle=_("Shortcut, behavior settings"),
-            icon_name="preferences-other-symbolic",
-        )
+        """Build advanced settings (shown flat inside the Advanced modal)."""
+        group = Adw.PreferencesGroup()
 
         # ── Shortcut editor ──
         shortcut_row = Adw.ActionRow()
@@ -534,7 +595,7 @@ class MainView(Adw.NavigationPage):
         shortcut_box.append(self._shortcut_button)
         shortcut_row.add_suffix(shortcut_box)
 
-        expander.add_row(shortcut_row)
+        group.add(shortcut_row)
 
         # ── Show speak action in app launcher ──
         launcher_row, self._launcher_switch_widget = create_action_row_with_switch(
@@ -545,7 +606,7 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Show system tray icon"),
         )
         launcher_row.set_icon_name("view-pin-symbolic")
-        expander.add_row(launcher_row)
+        group.add(launcher_row)
 
         # ── History save ──
         history_row, self._history_switch_widget = create_action_row_with_switch(
@@ -556,7 +617,7 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Save speech history"),
         )
         history_row.set_icon_name("document-save-symbolic")
-        expander.add_row(history_row)
+        group.add(history_row)
 
         # ── Playback mode for history player ──
         playback_row = Adw.ComboRow()
@@ -571,14 +632,38 @@ class MainView(Adw.NavigationPage):
         current = self._settings.history.playback_mode
         playback_row.set_selected(mode_map.get(current, 0))
         playback_row.connect("notify::selected", self._on_playback_mode_changed)
-        expander.add_row(playback_row)
+        group.add(playback_row)
 
-        group.add(expander)
+        # ── Media player (MPRIS mini-player while reading) ──
+        media_row, self._media_switch_widget = create_action_row_with_switch(
+            title=_("Media player"),
+            subtitle=_("Show a system mini-player (play/stop, time) while reading"),
+            active=getattr(self._settings, "show_media_player", True),
+            on_toggled=self._on_media_player_toggle,
+            accessible_name=_("Show system media player"),
+        )
+        media_row.set_icon_name("multimedia-player-symbolic")
+        group.add(media_row)
+
         return group
+
+    def _on_media_player_toggle(self, active: bool) -> None:
+        """Enable/disable the MPRIS media player."""
+        if self._updating_ui:
+            return
+        self._settings.show_media_player = active
+        self._settings_service.save(self._settings)
+        app = self._root_app()
+        if app is None:
+            return
+        if active and hasattr(app, "enable_media_player"):
+            app.enable_media_player()
+        elif not active and hasattr(app, "disable_media_player"):
+            app.disable_media_player()
 
     def _on_shortcut_change_clicked(self, button: Gtk.Button) -> None:
         """Open a small key-capture window for shortcut recording."""
-        parent = self.get_root()
+        parent = self._root_window()
 
         # Block global shortcuts so the current binding does not fire
         DesktopIntegrationService.block_global_shortcuts(True)
@@ -696,6 +781,9 @@ class MainView(Adw.NavigationPage):
         # Update UI
         self._shortcut_label.set_accelerator("" if accel == "none" else accel)
         self._update_hero_labels(self._tts.state)
+        win = self._root_window()
+        if win is not None and hasattr(win, "refresh_status"):
+            win.refresh_status()
 
         # Unblock global shortcuts before updating KDE bindings
         DesktopIntegrationService.block_global_shortcuts(False)
@@ -727,7 +815,7 @@ class MainView(Adw.NavigationPage):
         self._settings_service.save()
 
         # Toggle system tray icon
-        app = self.get_root().get_application()
+        app = self._root_app()
         if hasattr(app, "enable_tray") and active:
             app.enable_tray()
             self._on_toast(_("Tray icon enabled"), 2)
@@ -751,7 +839,7 @@ class MainView(Adw.NavigationPage):
             self._on_toast(_("History saving disabled"), 2)
 
         # Notify window to show/hide history tab
-        window = self.get_root()
+        window = self._root_window()
         if hasattr(window, "update_history_tab_visibility"):
             window.update_history_tab_visibility(active)
 
@@ -851,7 +939,7 @@ class MainView(Adw.NavigationPage):
             on_voices_changed=self._on_refresh_voices,
             engine_filter=engine_filter,
         )
-        parent = self.get_root()
+        parent = self._root_window()
         dialog.present(parent)
 
 
@@ -1014,11 +1102,35 @@ class MainView(Adw.NavigationPage):
             self._settings.speech.output_module = voice.output_module
             self._settings_service.save(self._settings)
             logger.debug("Voice selected: %s (%s)", voice.name, voice.voice_id)
+            # Prewarm the newly-selected model (no audio) for a warm first Alt+V.
+            self._tts.prewarm(voice.backend, voice.voice_id)
 
     def _on_rate_changed(self, value: float) -> None:
         """Handle speed change."""
         self._settings.speech.rate = int(value)
         self._settings_service.save(self._settings)
+
+    def _update_pitch_row_for_backend(self, backend: str) -> None:
+        """Relabel the pitch control per backend.
+
+        Piper has no real pitch control — the slider maps to noise_scale
+        (voice expressiveness). Labeling it "Pitch" would mislead the user, so
+        it is shown as "Expressiveness" for Piper. See docs/04.
+        """
+        row = getattr(self, "_pitch_row", None)
+        if row is None:
+            return
+        title_lbl = getattr(row, "_title_label", None)
+        sub_lbl = getattr(row, "_subtitle_label", None)
+        if backend == TTSBackend.PIPER.value:
+            title, subtitle = _("Expressiveness"), _("Voice variation (not pitch)")
+        else:
+            title, subtitle = _("Pitch"), _("Voice tone")
+        if title_lbl is not None:
+            title_lbl.set_label(title)
+        if sub_lbl is not None:
+            sub_lbl.set_label(subtitle)
+            sub_lbl.set_visible(bool(subtitle))
 
     def _on_pitch_changed(self, value: float) -> None:
         """Handle pitch change."""
@@ -1055,6 +1167,9 @@ class MainView(Adw.NavigationPage):
 
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
+        self._update_pitch_row_for_backend(backend)
+        # Prewarm the new backend's model (no audio) so the first Alt+V is warm.
+        self._tts.prewarm(backend, self._settings.speech.voice_id)
 
         # Use existing catalog for immediate update
         if self._catalog:
@@ -1129,7 +1244,7 @@ class MainView(Adw.NavigationPage):
         dialog.set_close_response("cancel")
         dialog.connect("response", self._on_install_piper_response)
 
-        window = self.get_root()
+        window = self._root_window()
         dialog.present(window)
 
     def _on_install_piper_response(
@@ -1173,7 +1288,7 @@ class MainView(Adw.NavigationPage):
         dialog.set_close_response("cancel")
         dialog.connect("response", self._on_install_kokoro_response)
 
-        window = self.get_root()
+        window = self._root_window()
         dialog.present(window)
 
     def _on_install_kokoro_response(
@@ -1204,41 +1319,18 @@ class MainView(Adw.NavigationPage):
         worker: Callable[[], tuple[bool, str]],
         on_done: Callable[[tuple[bool, str]], None],
     ) -> None:
-        """Show a progress dialog and run a package install in background."""
-        progress_dialog = Adw.AlertDialog.new(title, status_text)
-        progress_dialog.set_can_close(False)
-
-        # Add a progress bar as extra child
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        box.set_margin_top(12)
-
-        progress_bar = Gtk.ProgressBar()
-        progress_bar.set_show_text(False)
-        progress_bar.pulse()
-        box.append(progress_bar)
-
-        progress_dialog.set_extra_child(box)
-
-        window = self.get_root()
-        progress_dialog.present(window)
-
-        # Pulse the progress bar while installing
-        def _pulse() -> bool:
-            if not hasattr(progress_dialog, "_install_running"):
-                return False
-            progress_bar.pulse()
-            return True
-
-        progress_dialog._install_running = True
-        GLib.timeout_add(200, _pulse)
+        """Run a package install in the background, showing only the thin OSD
+        progress bar at the top of the window (no modal, no text)."""
+        window = self._root_window()
+        if window is not None and hasattr(window, "start_install_progress"):
+            window.start_install_progress()
 
         def _threaded() -> None:
             result = worker()
 
             def _finish() -> bool:
-                del progress_dialog._install_running
-                progress_dialog.set_can_close(True)
-                progress_dialog.force_close()
+                if window is not None and hasattr(window, "stop_install_progress"):
+                    window.stop_install_progress()
                 on_done(result)
                 return False
 
@@ -1247,43 +1339,29 @@ class MainView(Adw.NavigationPage):
         threading.Thread(target=_threaded, daemon=True).start()
 
     def _install_kokoro_packages(self) -> tuple[bool, str]:
-        """Install Kokoro TTS: system deps via pacman + kokoro via pip."""
+        """Install Kokoro TTS via distro packages (pacman only).
+
+        Uses the Arch/BigLinux packages `python-kokoro` and `python-soundfile`
+        (which pull PyTorch and the rest as dependencies) instead of
+        `pip install --break-system-packages`, which mixes package managers on a
+        pacman-managed system and can corrupt the Python environment.
+        """
         try:
             lock_file = Path("/var/lib/pacman/db.lck")
             if lock_file.exists():
                 return False, _("Database is locked by another process")
 
-            # Step 1: system deps via pacman (uses pkexec for graphical auth)
-            sys_deps = [
-                "python-pytorch", "python-numpy", "python-scipy",
-                "python-transformers", "python-huggingface-hub",
-                "python-loguru", "espeak-ng",
-            ]
+            # Single pacman transaction — distro packages resolve their own deps.
+            pkgs = ["python-kokoro", "python-soundfile", "espeak-ng"]
             result = subprocess.run(
-                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *sys_deps],
+                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *pkgs],
                 capture_output=True,
                 text=True,
-                timeout=600,
+                timeout=900,
             )
             if result.returncode != 0:
                 stderr = result.stderr.strip()
                 error_msg = stderr.splitlines()[-1] if stderr else _("pacman failed")
-                return False, error_msg
-
-            # Step 2: kokoro + soundfile via pip (user-local, no root needed)
-            result = subprocess.run(
-                [
-                    "pip3", "install", "--user",
-                    "--break-system-packages",
-                    "kokoro", "soundfile",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=300,
-            )
-            if result.returncode != 0:
-                stderr = result.stderr.strip()
-                error_msg = stderr.splitlines()[-1] if stderr else _("pip install failed")
                 return False, error_msg
 
             return True, ""
@@ -1461,6 +1539,17 @@ class MainView(Adw.NavigationPage):
 
     # ── Test Voice ───────────────────────────────────────────────────
 
+    def trigger_speak(self) -> None:
+        """Public entry point for the window's bottom controls bar (speak/stop)."""
+        self._on_test_voice()
+
+    def current_voice_label(self) -> str:
+        """Human-readable name of the currently selected voice (for the bar)."""
+        idx = self._voice_combo.get_selected() if hasattr(self, "_voice_combo") else -1
+        if self._voice_list and 0 <= idx < len(self._voice_list):
+            return self._voice_list[idx].name
+        return ""
+
     def _on_test_voice(self) -> None:
         """Test the selected voice / stop if already speaking."""
         # Toggle: if speaking, stop
@@ -1598,7 +1687,7 @@ class MainView(Adw.NavigationPage):
 
         # Explicitly sync tray state since _update_ui_from_settings blocks callbacks
         # via the _updating_ui guard. Default is show_in_launcher=True (tray enabled).
-        app = self.get_root().get_application()
+        app = self._root_app()
         if self._settings.shortcut.show_in_launcher:
             if hasattr(app, "enable_tray"):
                 app.enable_tray()

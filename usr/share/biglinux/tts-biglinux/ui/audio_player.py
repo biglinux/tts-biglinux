@@ -51,16 +51,28 @@ class AudioPlayerWidget(Gtk.Box):
         self._seeking = False
         self._playing = False
 
-        self._pipeline = Gst.ElementFactory.make("playbin", None)
-        if self._pipeline:
-            self._pipeline.set_property("uri", Path(audio_path).as_uri())
-            bus = self._pipeline.get_bus()
-            bus.add_signal_watch()
-            bus.connect("message::eos", self._on_eos)
-            bus.connect("message::error", self._on_error)
-            bus.connect("message::state-changed", self._on_state_changed)
+        # The GStreamer pipeline is created lazily on first play. Building it
+        # eagerly for every history entry created thousands of playbin pipelines
+        # up front and froze the History view with large histories.
+        self._pipeline: Gst.Element | None = None
 
         self._build_ui()
+
+    def _ensure_pipeline(self) -> bool:
+        """Create the playbin pipeline on demand. Returns True if available."""
+        if self._pipeline is not None:
+            return True
+        pipeline = Gst.ElementFactory.make("playbin", None)
+        if not pipeline:
+            return False
+        pipeline.set_property("uri", Path(self._audio_path).as_uri())
+        bus = pipeline.get_bus()
+        bus.add_signal_watch()
+        bus.connect("message::eos", self._on_eos)
+        bus.connect("message::error", self._on_error)
+        bus.connect("message::state-changed", self._on_state_changed)
+        self._pipeline = pipeline
+        return True
 
     def _build_ui(self) -> None:
         """Build player controls."""
@@ -114,7 +126,7 @@ class AudioPlayerWidget(Gtk.Box):
     # ── Playback Controls ────────────────────────────────────────
 
     def _on_play_pause(self, _btn: Gtk.Button) -> None:
-        if not self._pipeline:
+        if not self._ensure_pipeline():
             return
 
         if self._playing:
