@@ -18,6 +18,10 @@ logger = logging.getLogger(__name__)
 APP_ID = "br.com.biglinux.tts"
 APP_NAME = "BigLinux TTS"
 APP_VERSION = "4.0.0"
+
+# Settings schema version — bump when the on-disk shape changes so future
+# releases can migrate deterministically.
+CONFIG_VERSION = 1
 APP_DEVELOPERS = ["Tales A. Mendonça", "Bruno Gonçalves Araujo", "Rafael Ruscher"]
 APP_WEBSITE = "https://www.biglinux.com.br"
 APP_ISSUE_URL = "https://github.com/biglinux/tts-biglinux/issues"
@@ -39,8 +43,8 @@ DEV_LOCALE_DIR = Path(__file__).parent.parent.parent / "usr" / "share" / "locale
 
 # ── Window Defaults ───────────────────────────────────────────────────
 
-WINDOW_WIDTH_DEFAULT = 560
-WINDOW_HEIGHT_DEFAULT = 680
+WINDOW_WIDTH_DEFAULT = 900
+WINDOW_HEIGHT_DEFAULT = 740
 WINDOW_WIDTH_MIN = 360
 WINDOW_HEIGHT_MIN = 480
 
@@ -135,6 +139,10 @@ class HistoryConfig:
     save_audio: bool = True
     save_text: bool = True
     playback_mode: str = "interrupt"  # interrupt | queue | simultaneous
+    # Retention (0 = unlimited). Enforced on save; never deletes silently
+    # outside these limits.
+    max_entries: int = 1000
+    max_age_days: int = 0
 
 
 @dataclass
@@ -158,6 +166,7 @@ class TextConfig:
     process_urls: bool = False
     process_special_chars: bool = True
     strip_formatting: bool = True
+    normalize_numbers: bool = True
     max_chars: int = MAX_CHARS_DEFAULT
 
 
@@ -190,6 +199,9 @@ class AppSettings:
     window: WindowConfig = field(default_factory=WindowConfig)
     history: HistoryConfig = field(default_factory=HistoryConfig)
     show_welcome: bool = True
+    # Expose an MPRIS media player (system taskbar mini-player) while reading.
+    show_media_player: bool = True
+    config_version: int = CONFIG_VERSION
 
 
 # ── Settings Persistence ──────────────────────────────────────────────
@@ -203,10 +215,12 @@ def load_settings() -> AppSettings:
     if SETTINGS_FILE.exists():
         try:
             data = json.loads(SETTINGS_FILE.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                raise TypeError("settings root is not an object")
             settings = _deserialize_settings(data)
             logger.debug("Settings loaded from %s", SETTINGS_FILE)
             return settings
-        except (json.JSONDecodeError, KeyError, TypeError):
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError):
             logger.warning("Corrupt settings file, using defaults")
 
     # Try migrating legacy settings
@@ -229,67 +243,114 @@ def save_settings(settings: AppSettings) -> None:
     logger.debug("Settings saved to %s", SETTINGS_FILE)
 
 
-def _deserialize_settings(data: dict) -> AppSettings:
-    """Deserialize settings dict to AppSettings dataclass."""
-    settings = AppSettings()
+def _safe_int(d: dict, key: str, default: int) -> int:
+    """Coerce d[key] to int, falling back to default on any bad value."""
+    try:
+        return int(d.get(key, default))
+    except (ValueError, TypeError):
+        return default
 
-    if "speech" in data:
+
+def _safe_float(d: dict, key: str, default: float) -> float:
+    try:
+        return float(d.get(key, default))
+    except (ValueError, TypeError):
+        return default
+
+
+def _safe_bool(d: dict, key: str, default: bool) -> bool:
+    v = d.get(key, default)
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str):
+        return v.strip().lower() in ("1", "true", "yes", "on")
+    try:
+        return bool(v)
+    except (ValueError, TypeError):
+        return default
+
+
+def _safe_str(d: dict, key: str, default: str) -> str:
+    v = d.get(key, default)
+    return v if isinstance(v, str) else (str(v) if v is not None else default)
+
+
+def _deserialize_settings(data: dict) -> AppSettings:
+    """Deserialize settings dict to AppSettings dataclass.
+
+    Per-field coercion is fault-tolerant: a single corrupt/wrong-typed key
+    falls back to its default instead of discarding ALL preferences.
+    """
+    settings = AppSettings()
+    settings.config_version = _safe_int(data, "config_version", CONFIG_VERSION)
+
+    def _section(name: str) -> dict:
+        v = data.get(name)
+        return v if isinstance(v, dict) else {}
+
+    if isinstance(data.get("speech"), dict):
         s = data["speech"]
         kokoro_data = s.get("kokoro", {})
+        if not isinstance(kokoro_data, dict):
+            kokoro_data = {}
         kokoro_cfg = KokoroConfig(
-            speed=float(kokoro_data.get("speed", KOKORO_SPEED_DEFAULT)),
-            voice_blend=str(kokoro_data.get("voice_blend", "")),
-            blend_ratio=float(kokoro_data.get("blend_ratio", 0.5)),
-            emotion_preset=str(kokoro_data.get("emotion_preset", "neutral")),
-            lang_code=str(kokoro_data.get("lang_code", "p")),
+            speed=_safe_float(kokoro_data, "speed", KOKORO_SPEED_DEFAULT),
+            voice_blend=_safe_str(kokoro_data, "voice_blend", ""),
+            blend_ratio=_safe_float(kokoro_data, "blend_ratio", 0.5),
+            emotion_preset=_safe_str(kokoro_data, "emotion_preset", "neutral"),
+            lang_code=_safe_str(kokoro_data, "lang_code", "p"),
         )
         settings.speech = SpeechConfig(
-            rate=int(s.get("rate", RATE_DEFAULT)),
-            pitch=int(s.get("pitch", PITCH_DEFAULT)),
-            volume=int(s.get("volume", VOLUME_DEFAULT)),
-            voice_id=str(s.get("voice_id", "")),
-            backend=str(s.get("backend", TTSBackend.RHVOICE.value)),
-            output_module=str(s.get("output_module", "rhvoice")),
+            rate=_safe_int(s, "rate", RATE_DEFAULT),
+            pitch=_safe_int(s, "pitch", PITCH_DEFAULT),
+            volume=_safe_int(s, "volume", VOLUME_DEFAULT),
+            voice_id=_safe_str(s, "voice_id", ""),
+            backend=_safe_str(s, "backend", TTSBackend.RHVOICE.value),
+            output_module=_safe_str(s, "output_module", "rhvoice"),
             kokoro=kokoro_cfg,
         )
 
-    if "text" in data:
-        t = data["text"]
+    if _section("text"):
+        t = _section("text")
         settings.text = TextConfig(
-            expand_abbreviations=bool(t.get("expand_abbreviations", True)),
-            process_urls=bool(t.get("process_urls", False)),
-            process_special_chars=bool(t.get("process_special_chars", True)),
-            strip_formatting=bool(t.get("strip_formatting", True)),
-            max_chars=int(t.get("max_chars", MAX_CHARS_DEFAULT)),
+            expand_abbreviations=_safe_bool(t, "expand_abbreviations", True),
+            process_urls=_safe_bool(t, "process_urls", False),
+            process_special_chars=_safe_bool(t, "process_special_chars", True),
+            strip_formatting=_safe_bool(t, "strip_formatting", True),
+            normalize_numbers=_safe_bool(t, "normalize_numbers", True),
+            max_chars=_safe_int(t, "max_chars", MAX_CHARS_DEFAULT),
         )
 
-    if "shortcut" in data:
-        sc = data["shortcut"]
+    if _section("shortcut"):
+        sc = _section("shortcut")
         settings.shortcut = ShortcutConfig(
-            keybinding=str(sc.get("keybinding", "<Alt>v")),
-            enabled=bool(sc.get("enabled", True)),
-            show_in_launcher=bool(sc.get("show_in_launcher", True)),
+            keybinding=_safe_str(sc, "keybinding", "<Alt>v"),
+            enabled=_safe_bool(sc, "enabled", True),
+            show_in_launcher=_safe_bool(sc, "show_in_launcher", True),
         )
 
-    if "window" in data:
-        w = data["window"]
+    if _section("window"):
+        w = _section("window")
         settings.window = WindowConfig(
-            width=int(w.get("width", WINDOW_WIDTH_DEFAULT)),
-            height=int(w.get("height", WINDOW_HEIGHT_DEFAULT)),
-            maximized=bool(w.get("maximized", False)),
-            tray_warning_shown=bool(w.get("tray_warning_shown", False)),
+            width=_safe_int(w, "width", WINDOW_WIDTH_DEFAULT),
+            height=_safe_int(w, "height", WINDOW_HEIGHT_DEFAULT),
+            maximized=_safe_bool(w, "maximized", False),
+            tray_warning_shown=_safe_bool(w, "tray_warning_shown", False),
         )
 
-    if "history" in data:
-        h = data["history"]
+    if _section("history"):
+        h = _section("history")
         settings.history = HistoryConfig(
-            enabled=bool(h.get("enabled", False)),
-            save_audio=bool(h.get("save_audio", True)),
-            save_text=bool(h.get("save_text", True)),
-            playback_mode=str(h.get("playback_mode", "interrupt")),
+            enabled=_safe_bool(h, "enabled", False),
+            save_audio=_safe_bool(h, "save_audio", True),
+            save_text=_safe_bool(h, "save_text", True),
+            playback_mode=_safe_str(h, "playback_mode", "interrupt"),
+            max_entries=_safe_int(h, "max_entries", 1000),
+            max_age_days=_safe_int(h, "max_age_days", 0),
         )
 
-    settings.show_welcome = bool(data.get("show_welcome", True))
+    settings.show_welcome = _safe_bool(data, "show_welcome", True)
+    settings.show_media_player = _safe_bool(data, "show_media_player", True)
 
     return settings
 

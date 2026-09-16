@@ -6,24 +6,14 @@
 //! Model sessions are cached to avoid reloading the ONNX model on every call.
 
 use std::collections::HashMap;
-use std::ffi::{CStr, CString};
 use std::path::Path;
 use std::sync::Mutex;
 
 use crate::error::{Result, TtsError};
 
-// ── espeak-ng FFI for phonemization ─────────────────────────────────────────
-
-const ESPEAK_CHARS_UTF8: i32 = 1;
-const ESPEAK_PHONEMES_IPA: i32 = 0x02;
-
-unsafe extern "C" {
-    fn espeak_TextToPhonemes(
-        textptr: *mut *const std::ffi::c_void,
-        textmode: i32,
-        phonememode: i32,
-    ) -> *const std::ffi::c_char;
-}
+// Phonemization is delegated to `super::espeak::phonemize`, which owns the
+// (audio-free, synchronous) espeak-ng initialization. Piper never touches
+// espeak playback — see the design note in espeak.rs.
 
 // ── Model config (from .onnx.json) ─────────────────────────────────────────
 
@@ -98,49 +88,6 @@ fn get_or_load_model(model_path: &str) -> Result<std::sync::MutexGuard<'static, 
     }
 
     Ok(cache)
-}
-
-// ── Phonemization ───────────────────────────────────────────────────────────
-
-fn text_to_phonemes(text: &str, voice: &str) -> Result<String> {
-    let voice_c = CString::new(voice).map_err(|_| TtsError::Espeak(-1))?;
-    let err = unsafe { super::espeak::set_voice_raw(voice_c.as_ptr()) };
-    if err != 0 {
-        return Err(TtsError::Espeak(err));
-    }
-
-    let text_c = CString::new(text).map_err(|_| TtsError::Espeak(-1))?;
-    let mut text_ptr: *const std::ffi::c_void = text_c.as_ptr().cast();
-    let mut result = String::new();
-
-    unsafe {
-        loop {
-            let phonemes = espeak_TextToPhonemes(
-                &raw mut text_ptr,
-                ESPEAK_CHARS_UTF8,
-                ESPEAK_PHONEMES_IPA,
-            );
-
-            if phonemes.is_null() {
-                break;
-            }
-
-            let phoneme_str = CStr::from_ptr(phonemes)
-                .to_str()
-                .map_err(|_| TtsError::Espeak(-2))?;
-
-            if !result.is_empty() && !phoneme_str.is_empty() {
-                result.push(' ');
-            }
-            result.push_str(phoneme_str);
-
-            if text_ptr.is_null() {
-                break;
-            }
-        }
-    }
-
-    Ok(result)
 }
 
 // ── Phoneme → ID mapping ───────────────────────────────────────────────────
@@ -307,7 +254,7 @@ pub fn synthesize(
     let mut cache = get_or_load_model(model_path)?;
     let cached = cache.as_mut().ok_or_else(|| TtsError::Onnx("cache empty".into()))?;
 
-    let phonemes = text_to_phonemes(text, &cached.config.espeak.voice)?;
+    let phonemes = super::espeak::phonemize(text, &cached.config.espeak.voice)?;
     if phonemes.is_empty() {
         return Ok(Vec::new());
     }
@@ -332,6 +279,18 @@ pub fn synthesize(
     };
 
     samples_to_wav(&audio, sample_rate)
+}
+
+/// Preload (prewarm) a Piper model into the session cache WITHOUT producing
+/// audio. Call during idle so the first real synthesis is warm (~0.06 s
+/// instead of ~1.0 s cold). Guaranteed audio-free: only loads the ONNX
+/// session and initializes the espeak phonemizer.
+pub fn load(model_path: &str) -> Result<()> {
+    super::espeak::ensure_init_public()?;
+    let cache = get_or_load_model(model_path)?;
+    // Hold nothing; just ensure it is resident.
+    drop(cache);
+    Ok(())
 }
 
 /// Speak text using Piper neural TTS (synthesize + play).

@@ -68,32 +68,36 @@ def create_action_row_with_scale(
     marks: list[tuple[float, str]] | None = None,
     accessible_name: str | None = None,
     title_size_group: Gtk.SizeGroup | None = None,
-) -> tuple[Adw.ActionRow, Gtk.Scale]:
-    """Create an action row with a horizontal scale slider."""
-    row = Adw.ActionRow()
+) -> tuple[Adw.PreferencesRow, Gtk.Scale]:
+    """Create a preferences row with a title/subtitle above a full-width scale.
 
-    if title_size_group:
-        # Custom title area with SizeGroup for alignment
-        title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        title_box.set_valign(Gtk.Align.CENTER)
-        title_box.set_spacing(2)
+    The scale is stacked BELOW the title (vertical layout) so it renders cleanly
+    in a narrow settings sidebar instead of being squeezed beside the title.
+    The returned row exposes `_title_label` / `_subtitle_label` so callers can
+    relabel it later (e.g. Pitch → Expressiveness per backend).
+    """
+    row = Adw.PreferencesRow()
+    row.set_activatable(False)
 
-        title_label = Gtk.Label(label=title, xalign=0)
-        title_label.add_css_class("title")
-        title_box.append(title_label)
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+    box.set_margin_top(10)
+    box.set_margin_bottom(6)
+    box.set_margin_start(12)
+    box.set_margin_end(12)
 
-        if subtitle:
-            sub_label = Gtk.Label(label=subtitle, xalign=0)
-            sub_label.add_css_class("dim-label")
-            sub_label.set_css_classes(["dim-label", "caption"])
-            title_box.append(sub_label)
+    title_label = Gtk.Label(label=title, xalign=0)
+    title_label.add_css_class("heading")
+    title_label.set_halign(Gtk.Align.START)
+    box.append(title_label)
+    row._title_label = title_label  # type: ignore[attr-defined]
 
-        row.add_prefix(title_box)
-        title_size_group.add_widget(title_box)
-    else:
-        row.set_title(title)
-        if subtitle:
-            row.set_subtitle(subtitle)
+    sub_label = Gtk.Label(label=subtitle or "", xalign=0)
+    sub_label.set_css_classes(["dim-label", "caption"])
+    sub_label.set_halign(Gtk.Align.START)
+    sub_label.set_wrap(True)
+    sub_label.set_visible(bool(subtitle))
+    box.append(sub_label)
+    row._subtitle_label = sub_label  # type: ignore[attr-defined]
 
     adjustment = Gtk.Adjustment(
         value=value,
@@ -109,10 +113,9 @@ def create_action_row_with_scale(
     )
     scale.set_digits(digits)
     scale.set_hexpand(True)
-    scale.set_size_request(280, -1)
-    scale.set_valign(Gtk.Align.CENTER)
+    scale.set_draw_value(False)
+    scale.set_margin_top(2)
 
-    # Accessibility
     acc_name = accessible_name or title
     scale.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
@@ -123,7 +126,8 @@ def create_action_row_with_scale(
     if on_changed:
         scale.connect("value-changed", lambda s: on_changed(s.get_value()))
 
-    row.add_suffix(scale)
+    box.append(scale)
+    row.set_child(box)
     return row, scale
 
 
