@@ -256,10 +256,11 @@ class TTSApplication(Adw.Application):
 
         if self._tray is None:
             return
-        # Mini player that pops out of the tray icon while reading.
+        # Mini player that pops out of the tray icon while reading. Its title
+        # shows a "Playing…" status (the spoken text goes to MPRIS metadata).
         self._tray.set_speaking(
             speaking,
-            title if speaking else "",
+            _("Playing…") if speaking else "",
             duration_ms=duration_ms,
             show_player=self.settings.show_media_player,
         )

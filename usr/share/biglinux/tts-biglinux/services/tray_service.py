@@ -55,7 +55,7 @@ def send(data: dict) -> None:
 
 try:
     from PySide6.QtCore import Qt, QTimer
-    from PySide6.QtGui import QIcon, QCursor
+    from PySide6.QtGui import QIcon, QCursor, QAction
     from PySide6.QtWidgets import (
         QApplication, QMenu, QSystemTrayIcon, QWidget, QWidgetAction,
         QVBoxLayout, QHBoxLayout, QLabel, QToolButton, QProgressBar,
@@ -132,7 +132,7 @@ class MiniPlayer(QWidget):
         self._timer.timeout.connect(self._tick)
 
     def start(self, title, dur_ms) -> None:
-        self.title.setText(title or "BigLinux TTS")
+        self.title.setText(title or "Playing\\u2026")
         self._dur = max(0, int(dur_ms))
         self._t0 = time.monotonic()
         self.total.setText(_fmt(self._dur))
@@ -183,20 +183,33 @@ try:
     tray.setContextMenu(menu)
 
     # Mini player embedded at the top of the tray menu (parented to app so
-    # rebuilding the item actions never deletes it).
+    # rebuilding the item actions never deletes it). It is inserted into / removed
+    # from the menu on demand — toggling QWidgetAction.setVisible() leaves a blank
+    # row in the menu on Plasma, so we add/remove the action instead.
     player = MiniPlayer()
     player_action = QWidgetAction(app)
     player_action.setDefaultWidget(player)
-    menu.addAction(player_action)
-    player_sep = menu.addSeparator()
-    player_action.setVisible(False)
-    player_sep.setVisible(False)
+    player_sep = QAction(app)
+    player_sep.setSeparator(True)
 
     item_actions = []
+    first_item = [None]     # action the player is inserted before
+    player_shown = [False]
 
-    def set_player_visible(vis) -> None:
-        player_action.setVisible(vis)
-        player_sep.setVisible(vis)
+    def set_player_shown(shown) -> None:
+        if shown and not player_shown[0]:
+            before = first_item[0]
+            if before is not None:
+                menu.insertAction(before, player_action)
+                menu.insertAction(before, player_sep)
+            else:
+                menu.addAction(player_action)
+                menu.addAction(player_sep)
+            player_shown[0] = True
+        elif not shown and player_shown[0]:
+            menu.removeAction(player_action)
+            menu.removeAction(player_sep)
+            player_shown[0] = False
 
     def on_activated(reason) -> None:
         # Left-click = quick "read selection"; right-click shows the native
@@ -236,6 +249,7 @@ try:
                         a = menu.addAction(item["label"])
                         a.triggered.connect(lambda checked, iid=item_id: on_menu_click(iid))
                     item_actions.append(a)
+                first_item[0] = item_actions[0] if item_actions else None
             elif cmd == "set_tooltip":
                 tray.setToolTip(msg.get("text", ""))
             elif cmd == "set_speaking":
@@ -244,10 +258,10 @@ try:
                 if speaking and msg.get("show_player", True):
                     tray.setToolTip(label or tooltip)
                     player.start(label, msg.get("duration_ms", 0))
-                    set_player_visible(True)
+                    set_player_shown(True)
                 else:
                     player.stop_ui()
-                    set_player_visible(False)
+                    set_player_shown(False)
                     if not speaking:
                         tray.setToolTip(tooltip)
             elif cmd == "update_icon":

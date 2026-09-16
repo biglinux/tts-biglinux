@@ -1085,4 +1085,4 @@ msgstr "Configurações"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 218
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 238
 msgid "Playing…"
-msgstr "Jogando…"
+msgstr "Reproduzindo…"
