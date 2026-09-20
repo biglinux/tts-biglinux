@@ -7,6 +7,8 @@ Layout:
 3. Expanders (backend, text processing, shortcut, advanced)
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging
@@ -1440,7 +1442,7 @@ class MainView(Adw.NavigationPage):
             lock_file = Path("/var/lib/pacman/db.lck")
             if lock_file.exists():
                 logger.warning("Pacman database is locked")
-                return False, "Database is locked by another process"
+                return False, _("Database is locked by another process")
 
             result = subprocess.run(
                 ["pkexec", "pacman", "-Sy", "--noconfirm", "--needed"] + pkgs,
@@ -1458,16 +1460,16 @@ class MainView(Adw.NavigationPage):
                 )
                 if result.returncode == 126 or result.returncode == 1:
                     if "authorization" in stderr.lower() or not stderr:
-                        return False, "Authorization denied"
+                        return False, _("Authorization denied")
                 
                 # Try to extract the most meaningful error from pacman output
-                error_msg = stderr.strip().splitlines()[-1] if stderr.strip() else "Unknown error"
+                error_msg = stderr.strip().splitlines()[-1] if stderr.strip() else _("Unknown error")
                 return False, error_msg
             return True, ""
         except FileNotFoundError:
-            return False, "pkexec not found"
+            return False, _("pkexec not found")
         except subprocess.TimeoutExpired:
-            return False, "Installation timed out"
+            return False, _("Installation timed out")
         except Exception as e:
             return False, str(e)
     def _on_piper_installed(self, result: tuple[bool, str]) -> None:

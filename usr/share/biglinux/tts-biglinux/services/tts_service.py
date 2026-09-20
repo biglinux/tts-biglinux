@@ -131,6 +131,10 @@ class TTSService:
         # stale audio from a previous Alt+V starting after a newer one.
         self._generation: int = 0
         self._dispatch_gen: int = 0
+        # Pause/resume: SIGSTOP/SIGCONT the audio player process. The player
+        # (aplay) keeps poll()==None while stopped, so state stays SPEAKING and
+        # the watch keeps running — playback simply freezes and resumes in place.
+        self._paused: bool = False
 
     def _is_current(self, gen: int) -> bool:
         """True if `gen` is still the active request generation."""
@@ -152,6 +156,49 @@ class TTSService:
                 return False
             return True
         return False
+
+    @property
+    def is_paused(self) -> bool:
+        """Whether playback is currently paused (SIGSTOP'd)."""
+        return self._paused and self.is_speaking
+
+    def _audio_procs(self) -> list[subprocess.Popen]:
+        """Live audio/synthesis subprocesses that can be paused as a group."""
+        procs = []
+        for attr in ("_process", "_rh_proc", "_piper_proc", "_kokoro_proc"):
+            p = getattr(self, attr, None)
+            if p is not None and p.poll() is None:
+                procs.append(p)
+        return procs
+
+    def pause(self) -> bool:
+        """Freeze playback in place (SIGSTOP). Returns True if it paused."""
+        if self._paused or not self.is_speaking:
+            return False
+        procs = self._audio_procs()
+        if not procs:
+            return False
+        for p in procs:
+            try:
+                p.send_signal(signal.SIGSTOP)
+            except (ProcessLookupError, OSError):
+                pass
+        self._paused = True
+        logger.debug("Speech paused")
+        return True
+
+    def resume(self) -> bool:
+        """Resume playback from where it was paused (SIGCONT)."""
+        if not self._paused:
+            return False
+        for p in self._audio_procs():
+            try:
+                p.send_signal(signal.SIGCONT)
+            except (ProcessLookupError, OSError):
+                pass
+        self._paused = False
+        logger.debug("Speech resumed")
+        return True
 
     def set_on_state_changed(self, callback: OnStateChanged | None) -> None:
         """Set callback for state changes."""
@@ -263,6 +310,7 @@ class TTSService:
             return False
 
         if success:
+            self._paused = False
             self._last_spoken_text = processed
             self._last_backend = backend
             self._last_voice_id = voice_id
@@ -280,6 +328,16 @@ class TTSService:
         # Invalidate any in-flight background synthesis so it won't start audio.
         self._generation += 1
         self._stop_watch()
+
+        # If paused, resume the frozen players first so SIGTERM is delivered
+        # promptly (a SIGSTOP'd process ignores SIGTERM until continued).
+        if self._paused:
+            for p in self._audio_procs():
+                try:
+                    p.send_signal(signal.SIGCONT)
+                except (ProcessLookupError, OSError):
+                    pass
+            self._paused = False
 
         # Stop speech-dispatcher via SSIP API
         if self._spd_client:
@@ -818,7 +876,10 @@ class TTSService:
                     proc.terminate()
                     return False
                 time.sleep(0.03)
-            return True
+            # The player may have ended because stop() killed it: only report
+            # success if this request is still current, otherwise the caller
+            # would go on to start the next chunk after the user hit Stop.
+            return self._is_current(gen)
 
         play_proc: subprocess.Popen | None = None
         cur = _synth(chunks[0])  # first synth defines TTFA
@@ -833,6 +894,8 @@ class TTSService:
                     i += 1
                     continue
                 if play_proc is not None and not _wait(play_proc):
+                    break
+                if not self._is_current(gen):  # stop()/newer speak() arrived
                     break
                 temps.append(cur)
                 play_proc = _play(cur)

@@ -2,8 +2,6 @@
 import importlib
 import io
 
-import pytest
-
 kv = importlib.import_module("services.kokoro_voice_service")
 
 

@@ -242,7 +242,7 @@ msgstr "הוסף קולות קוקורו — {count} זמינים"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 402
 #, python-brace-format
 msgid "{langs} languages"
-msgstr "{שפות} שפות"
+msgstr "{langs} שפות"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
 #, python-brace-format

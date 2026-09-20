@@ -4,6 +4,8 @@ Inline audio player widget — GStreamer-based mini player.
 Provides play/pause, stop, seek bar, and time display.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/version-4.0.0-brightgreen.svg" alt="Version">
   <img src="https://img.shields.io/badge/GTK-4-green.svg" alt="GTK4">
   <img src="https://img.shields.io/badge/libadwaita-1.x-purple.svg" alt="libadwaita">
@@ -41,7 +41,7 @@
 
 ## About
 
-**BigLinux TTS** is a native desktop Linux application that converts text to speech. Built with GTK4, libadwaita, and a native Rust audio engine, it is the built-in screen reader for [BigLinux](https://www.biglinux.com.br/) — a Brazilian Linux distribution based on Manjaro/Arch Linux.
+**BigLinux TTS** is a native desktop Linux application that converts text to speech. Built with GTK4, libadwaita, and a native Rust audio engine, it is the built-in text-to-speech tool for [BigLinux](https://www.biglinux.com.br/) — a Brazilian Linux distribution based on Manjaro/Arch Linux.
 
 Select any text on screen, press **Alt+V**, and hear it read aloud. Press again to stop. No complicated setup.
 
@@ -59,7 +59,7 @@ Select any text on screen, press **Alt+V**, and hear it read aloud. Press again 
 2. **Native Rust audio** — espeak-ng via direct FFI and Piper ONNX inference via `ort`, no subprocess overhead
 3. **Automatic voice discovery** — scans all installed engines and voices system-wide
 4. **Smart text processing** — expands abbreviations, pronounces special characters, strips HTML/Markdown
-5. **KDE Plasma integration** — global hotkey, system tray icon, launcher pinning
+5. **Desktop integration** — global hotkey, system tray icon, media controls and launcher pinning
 6. **Modern UI** — GTK4 + libadwaita (GNOME HIG), clean and responsive interface
 7. **29 languages** — gettext-based i18n with `.po` files
 
@@ -87,9 +87,10 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 ### Text Reading
 
 - **Configurable global hotkey** (default Alt+V) — select text anywhere, press to speak, press again to stop (toggle)
-- **System tray icon** — left-click to speak, right-click for menu (Read text, Settings, Quit)
+- **System tray icon** — left-click to speak or stop, right-click for reading controls, Settings and Quit
 - **Built-in voice test** — text field to type and hear with current voice settings
 - **Launcher pinning** — option to pin the speak button to KDE Plasma taskbar
+- **Optional history** — keep and replay previous readings when history is enabled
 
 ### Voice Control
 
@@ -119,7 +120,8 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 
 - PySide6 `QSystemTrayIcon` running in isolated subprocess (avoids GTK/Qt conflicts)
 - Left-click: toggle speak/stop
-- Right-click: context menu (Read text, Settings, Quit)
+- Right-click: reading controls while speaking, plus Read text, Settings and Quit
+- Playback state is also exposed through the desktop media controls when enabled
 - Communicates with main process via JSON lines over stdin/stdout
 
 ---
@@ -301,8 +303,8 @@ cd tts-engine
 ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo build --release
 cd ..
 
-# Symlink the .so
-ln -sf ../../tts-engine/target/release/libtts_engine.so \
+# Symlink the .so from the application directory back to the repository root
+ln -sf ../../../../tts-engine/target/release/libtts_engine.so \
   usr/share/biglinux/tts-biglinux/tts_engine.so
 
 # Run
@@ -620,8 +622,8 @@ TTS engines (speech-dispatcher, espeak-ng, RHVoice, Piper, Kokoro) have their ow
 ## Authors
 
 - **Tales A. Mendonça** — BigLinux project creator
-- **Bruno Gonçalves Araujo** — BigLinux project, initial implementation
-- **Rafael Ruscher** — Architecture, GTK4 rewrite, Rust engine, v3.0–4.0
+- **Bruno Gonçalves Araujo <bigbruno@gmail.com>** — BigLinux project, initial implementation
+- **Rafael Ruscher <rruscher@gmail.com>** — Architecture, GTK4 rewrite, Rust engine, v3.0–4.0
 
 ---
 

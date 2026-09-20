@@ -7,18 +7,19 @@ import logging
 import sys
 
 from config import APP_VERSION
+from utils.i18n import _
 
 
 def main() -> None:
     """Application entry point with CLI argument parsing."""
     parser = argparse.ArgumentParser(
         prog="biglinux-tts",
-        description="BigLinux Text-to-Speech — Read selected text aloud",
+        description=_("BigLinux Text-to-Speech — Read selected text aloud"),
     )
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="Enable debug logging",
+        help=_("Enable debug logging"),
     )
     parser.add_argument(
         "--version",

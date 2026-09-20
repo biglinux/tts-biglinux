@@ -1,8 +1,6 @@
 """SQLite history store: insert, list, search, delete, retention, migration."""
 import importlib
 import json
-import time
-
 import pytest
 
 hs = importlib.import_module("services.history_service")

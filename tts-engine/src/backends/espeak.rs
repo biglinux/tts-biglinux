@@ -45,8 +45,7 @@ const ESPEAK_PHONEMES_IPA: i32 = 0x02;
 
 /// espeak synth callback: `wav` points to `numsamples` i16 samples, or is null
 /// at end-of-stream. Returning non-zero aborts synthesis.
-type SynthCallback =
-    unsafe extern "C" fn(*mut i16, i32, *mut std::ffi::c_void) -> i32;
+type SynthCallback = unsafe extern "C" fn(*mut i16, i32, *mut std::ffi::c_void) -> i32;
 
 unsafe extern "C" {
     fn espeak_Initialize(
@@ -105,9 +104,7 @@ unsafe extern "C" fn synth_callback(
 ) -> i32 {
     if !wav.is_null() && numsamples > 0 {
         // SAFETY: espeak guarantees `wav` holds `numsamples` i16 samples.
-        let slice = unsafe {
-            std::slice::from_raw_parts(wav, numsamples as usize)
-        };
+        let slice = unsafe { std::slice::from_raw_parts(wav, numsamples as usize) };
         if let Ok(mut buf) = SAMPLE_BUFFER.lock() {
             buf.extend_from_slice(slice);
         }
@@ -153,12 +150,16 @@ fn samples_to_wav(samples: &[i16], sample_rate: u32) -> Result<Vec<u8>> {
         bits_per_sample: 16,
         sample_format: hound::SampleFormat::Int,
     };
-    let mut writer = hound::WavWriter::new(&mut cursor, spec)
-        .map_err(|e| TtsError::Audio(e.to_string()))?;
+    let mut writer =
+        hound::WavWriter::new(&mut cursor, spec).map_err(|e| TtsError::Audio(e.to_string()))?;
     for &s in samples {
-        writer.write_sample(s).map_err(|e| TtsError::Audio(e.to_string()))?;
+        writer
+            .write_sample(s)
+            .map_err(|e| TtsError::Audio(e.to_string()))?;
     }
-    writer.finalize().map_err(|e| TtsError::Audio(e.to_string()))?;
+    writer
+        .finalize()
+        .map_err(|e| TtsError::Audio(e.to_string()))?;
     Ok(cursor.into_inner())
 }
 
@@ -167,14 +168,10 @@ fn samples_to_wav(samples: &[i16], sample_rate: u32) -> Result<Vec<u8>> {
 /// Synthesize `text` with espeak-ng into WAV bytes (no playback).
 ///
 /// Returns an empty vector if espeak produced no audio.
-pub fn synthesize(
-    text: &str,
-    voice: &str,
-    rate: i32,
-    pitch: i32,
-    volume: i32,
-) -> Result<Vec<u8>> {
-    let _guard = ESPEAK_LOCK.lock().map_err(|e| TtsError::EspeakInit(e.to_string()))?;
+pub fn synthesize(text: &str, voice: &str, rate: i32, pitch: i32, volume: i32) -> Result<Vec<u8>> {
+    let _guard = ESPEAK_LOCK
+        .lock()
+        .map_err(|e| TtsError::EspeakInit(e.to_string()))?;
     ensure_init()?;
 
     let voice_c = CString::new(voice).map_err(|_| TtsError::Espeak(-1))?;
@@ -216,10 +213,7 @@ pub fn synthesize(
         }
     }
 
-    let samples = SAMPLE_BUFFER
-        .lock()
-        .map(|b| b.clone())
-        .unwrap_or_default();
+    let samples = SAMPLE_BUFFER.lock().map(|b| b.clone()).unwrap_or_default();
     if samples.is_empty() {
         return Ok(Vec::new());
     }
@@ -243,7 +237,9 @@ pub fn speak(text: &str, voice: &str, rate: i32, pitch: i32, volume: i32) -> Res
 
 /// Expose initialization for other backends (e.g. Piper phonemization).
 pub fn ensure_init_public() -> Result<()> {
-    let _guard = ESPEAK_LOCK.lock().map_err(|e| TtsError::EspeakInit(e.to_string()))?;
+    let _guard = ESPEAK_LOCK
+        .lock()
+        .map_err(|e| TtsError::EspeakInit(e.to_string()))?;
     ensure_init()
 }
 
@@ -252,7 +248,9 @@ pub fn ensure_init_public() -> Result<()> {
 /// This never produces audio: espeak is in synchronous mode and only
 /// `espeak_TextToPhonemes` is invoked.
 pub fn phonemize(text: &str, voice: &str) -> Result<String> {
-    let _guard = ESPEAK_LOCK.lock().map_err(|e| TtsError::EspeakInit(e.to_string()))?;
+    let _guard = ESPEAK_LOCK
+        .lock()
+        .map_err(|e| TtsError::EspeakInit(e.to_string()))?;
     ensure_init()?;
 
     let voice_c = CString::new(voice).map_err(|_| TtsError::Espeak(-1))?;
@@ -270,11 +268,8 @@ pub fn phonemize(text: &str, voice: &str) -> Result<String> {
     // that espeak advances through clause by clause until it becomes null.
     unsafe {
         loop {
-            let phonemes = espeak_TextToPhonemes(
-                &raw mut text_ptr,
-                ESPEAK_CHARS_UTF8,
-                ESPEAK_PHONEMES_IPA,
-            );
+            let phonemes =
+                espeak_TextToPhonemes(&raw mut text_ptr, ESPEAK_CHARS_UTF8, ESPEAK_PHONEMES_IPA);
             if phonemes.is_null() {
                 break;
             }
@@ -313,7 +308,9 @@ pub fn cancel() -> Result<()> {
 #[allow(dead_code)]
 pub fn sample_rate() -> Result<i32> {
     ensure_init_public()?;
-    let &rate = INIT_RESULT.get().ok_or_else(|| TtsError::EspeakInit("not initialized".into()))?;
+    let &rate = INIT_RESULT
+        .get()
+        .ok_or_else(|| TtsError::EspeakInit("not initialized".into()))?;
     if rate > 0 {
         Ok(rate)
     } else {

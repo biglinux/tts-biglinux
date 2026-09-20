@@ -4,6 +4,8 @@ Main application window for BigLinux TTS.
 Implements Adw.ApplicationWindow with header, navigation, and main view.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging
@@ -24,7 +26,7 @@ from config import (
 )
 from ui.history_view import HistoryView
 from ui.main_view import MainView
-from ui.welcome_dialog import WelcomeWindow
+from ui.welcome_dialog import WelcomeDialog
 from utils.i18n import _
 
 if TYPE_CHECKING:
@@ -48,6 +50,7 @@ class TTSWindow(Adw.ApplicationWindow):
 
         # Window state tracking
         self._size_change_timer: int = 0
+        self._welcome_dialog: WelcomeDialog | None = None
 
         self._setup_window()
         self._setup_actions()
@@ -55,7 +58,7 @@ class TTSWindow(Adw.ApplicationWindow):
         self._setup_window_tracking()
 
         # Show welcome window on first launch (after window is mapped)
-        if WelcomeWindow.should_show(application.settings_service):
+        if WelcomeDialog.should_show(application.settings_service):
             GLib.idle_add(self._show_welcome)
 
         logger.debug("Window initialized")
@@ -294,15 +297,19 @@ class TTSWindow(Adw.ApplicationWindow):
         logger.debug("Toast: %s", message)
 
     def _show_welcome(self) -> bool:
-        """Present the welcome window (called via GLib.idle_add)."""
-        win = WelcomeWindow(
+        """Present the welcome dialog (called via GLib.idle_add)."""
+        dialog = WelcomeDialog(
             application=self._app,
             settings_service=self._app.settings_service,
         )
-        win.set_transient_for(self)
-        win.set_modal(True)
-        win.present()
+        self._welcome_dialog = dialog
+        dialog.connect("closed", self._on_welcome_closed)
+        dialog.present(self)
         return GLib.SOURCE_REMOVE
+
+    def _on_welcome_closed(self, _dialog: WelcomeDialog) -> None:
+        """Release the welcome dialog after it has been dismissed."""
+        self._welcome_dialog = None
 
     def _setup_breakpoints(self) -> None:
         """Adaptive layout: collapse the sidebar on narrow windows."""

@@ -1137,3 +1137,55 @@ msgstr "Cancelar"
 msgid  "Restore"
 msgstr "Restaurar"
 
+
+msgid  "Database is locked by another process"
+msgstr "O banco de dados está bloqueado por outro processo"
+
+msgid  "Authorization denied"
+msgstr "Autorização negada"
+
+msgid  "pkexec not found"
+msgstr "pkexec não encontrado"
+
+msgid  "Installation timed out"
+msgstr "Tempo de instalação esgotado"
+
+#, python-brace-format
+msgid  "Unknown voice: {voice_id}"
+msgstr "Voz desconhecida: {voice_id}"
+
+#, python-brace-format
+msgid  "Invalid voice id: {voice_id}"
+msgstr "ID de voz inválido: {voice_id}"
+
+#, python-brace-format
+msgid  "Download failed after retries: {error}"
+msgstr "Falha no download após novas tentativas: {error}"
+
+#, python-brace-format
+msgid  "Conversion failed: {error}"
+msgstr "Falha na conversão: {error}"
+
+#, python-brace-format
+msgid  "Cannot create user voices directory: {error}"
+msgstr "Não foi possível criar o diretório de vozes do usuário: {error}"
+
+#, python-brace-format
+msgid  "Failed to add voice: {error}"
+msgstr "Falha ao adicionar a voz: {error}"
+
+msgid  "Cannot remove base voice"
+msgstr "Não é possível remover uma voz base"
+
+msgid  "No user voices installed"
+msgstr "Nenhuma voz de usuário instalada"
+
+#, python-brace-format
+msgid  "Failed to remove voice: {error}"
+msgstr "Falha ao remover a voz: {error}"
+
+msgid  "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Text-to-Speech — Leia em voz alta o texto selecionado"
+
+msgid  "Enable debug logging"
+msgstr "Ativar registro de depuração"

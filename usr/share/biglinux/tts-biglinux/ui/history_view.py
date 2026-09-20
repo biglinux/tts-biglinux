@@ -6,6 +6,8 @@ with text preview, metadata, and an embedded audio player.
 Supports grid/list toggle, multi-select with bulk delete, and open-in-folder.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging

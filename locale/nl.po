@@ -256,7 +256,7 @@ msgstr "{langs} talen"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
 #, python-brace-format
 msgid "{count} voice(s)"
-msgstr "{aantal} stem(men)"
+msgstr "{count} stem(men)"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 399
 #, python-brace-format

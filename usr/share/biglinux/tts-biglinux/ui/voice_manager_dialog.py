@@ -5,6 +5,8 @@ Presents a modern Adwaita interface for browsing, installing, and removing
 voice packages for all TTS engines (RHVoice, Piper, espeak-ng) via pacman.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging
@@ -26,8 +28,6 @@ from services.kokoro_voice_service import (
     get_voice_status as kokoro_get_voice_status,
     download_voice as kokoro_download_voice,
     remove_voice as kokoro_remove_voice,
-    is_kokoro_installed,
-    BASE_VOICE_IDS as KOKORO_BASE_VOICE_IDS,
     get_active_voices_bin,
 )
 from utils.i18n import _
@@ -94,10 +94,7 @@ _LANG_DISPLAY: dict[str, str] = {
     "uk-ua": "🇺🇦  Ukrainian",
     "vi-vn": "🇻🇳  Vietnamese",
     "zh-cn": "🇨🇳  Chinese",
-    # Kokoro language codes
-    "pt-br": "🇧🇷  Portuguese (Brazil)",
-    "en-us": "🇺🇸  English (US)",
-    "en-gb": "🇬🇧  English (UK)",
+    # Kokoro language codes not already covered by Piper
     "es": "🇪🇸  Spanish",
     "fr": "🇫🇷  French",
     "it": "🇮🇹  Italian",

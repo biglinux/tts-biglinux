@@ -3,7 +3,8 @@ import importlib
 import pytest
 
 gi = pytest.importorskip("gi")
-gi.require_version("Gtk", "4.0"); gi.require_version("Adw", "1")
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
 try:
     vm = importlib.import_module("ui.voice_manager_dialog")
 except Exception as e:  # pragma: no cover

@@ -23,6 +23,8 @@ from urllib.error import URLError
 
 import numpy as np
 
+from utils.i18n import _
+
 logger = logging.getLogger(__name__)
 
 # Voice ids are safe identifiers only — never allow path separators / traversal
@@ -238,12 +240,12 @@ def download_voice(
     Returns (success, error_message).
     """
     if voice_id not in _CATALOG_BY_ID:
-        return False, f"Unknown voice: {voice_id}"
+        return False, _("Unknown voice: {voice_id}").format(voice_id=voice_id)
 
     # Defense-in-depth: never interpolate an unsafe id into a URL or ZIP name,
     # even though the catalog whitelist already gates this.
     if not _RE_SAFE_VOICE_ID.match(voice_id):
-        return False, f"Invalid voice id: {voice_id!r}"
+        return False, _("Invalid voice id: {voice_id}").format(voice_id=repr(voice_id))
 
     if voice_id in BASE_VOICE_IDS and not USER_VOICES_BIN.exists():
         return True, ""  # Already in system voices.bin
@@ -289,25 +291,25 @@ def download_voice(
             if attempt < 2:
                 time.sleep(1.5 * (attempt + 1))  # backoff
     if not pt_data:
-        return False, f"Download failed after retries: {last_err}"
+        return False, _("Download failed after retries: {error}").format(error=last_err)
 
     # Convert .pt → .npy
     try:
         npy_data = _pt_to_npy(pt_data, voice_id)
     except (zipfile.BadZipFile, KeyError, ValueError) as e:
-        return False, f"Conversion failed: {e}"
+        return False, _("Conversion failed: {error}").format(error=e)
 
     # Ensure user voices.bin exists (copy from system if needed)
     try:
         _ensure_user_voices_bin()
     except OSError as e:
-        return False, f"Cannot create user voices directory: {e}"
+        return False, _("Cannot create user voices directory: {error}").format(error=e)
 
     # Add to user voices.bin
     try:
         _add_voice_to_zip(voice_id, npy_data)
     except (zipfile.BadZipFile, OSError) as e:
-        return False, f"Failed to add voice: {e}"
+        return False, _("Failed to add voice: {error}").format(error=e)
 
     logger.info("Voice %s installed successfully", voice_id)
     return True, ""
@@ -320,15 +322,15 @@ def remove_voice(voice_id: str) -> tuple[bool, str]:
     Base voices cannot be removed.
     """
     if voice_id in BASE_VOICE_IDS:
-        return False, "Cannot remove base voice"
+        return False, _("Cannot remove base voice")
 
     if not USER_VOICES_BIN.exists():
-        return False, "No user voices installed"
+        return False, _("No user voices installed")
 
     try:
         _remove_voice_from_zip(voice_id)
     except (zipfile.BadZipFile, OSError) as e:
-        return False, f"Failed to remove voice: {e}"
+        return False, _("Failed to remove voice: {error}").format(error=e)
 
     logger.info("Voice %s removed", voice_id)
     return True, ""

@@ -56,10 +56,16 @@ struct CachedModel {
 
 static MODEL_CACHE: Mutex<Option<CachedModel>> = Mutex::new(None);
 
-fn get_or_load_model(model_path: &str) -> Result<std::sync::MutexGuard<'static, Option<CachedModel>>> {
-    let mut cache = MODEL_CACHE.lock().map_err(|e| TtsError::Onnx(e.to_string()))?;
+fn get_or_load_model(
+    model_path: &str,
+) -> Result<std::sync::MutexGuard<'static, Option<CachedModel>>> {
+    let mut cache = MODEL_CACHE
+        .lock()
+        .map_err(|e| TtsError::Onnx(e.to_string()))?;
 
-    let needs_load = (*cache).as_ref().is_none_or(|cached| cached.path != model_path);
+    let needs_load = (*cache)
+        .as_ref()
+        .is_none_or(|cached| cached.path != model_path);
 
     if needs_load {
         let model = Path::new(model_path);
@@ -97,9 +103,18 @@ fn phonemes_to_ids(
     id_map: &HashMap<String, Vec<i64>>,
     phoneme_map: &HashMap<String, Vec<String>>,
 ) -> Vec<i64> {
-    let pad_id = id_map.get("_").and_then(|v| v.first().copied()).unwrap_or(0);
-    let bos_id = id_map.get("^").and_then(|v| v.first().copied()).unwrap_or(1);
-    let eos_id = id_map.get("$").and_then(|v| v.first().copied()).unwrap_or(2);
+    let pad_id = id_map
+        .get("_")
+        .and_then(|v| v.first().copied())
+        .unwrap_or(0);
+    let bos_id = id_map
+        .get("^")
+        .and_then(|v| v.first().copied())
+        .unwrap_or(1);
+    let eos_id = id_map
+        .get("$")
+        .and_then(|v| v.first().copied())
+        .unwrap_or(2);
 
     let mut ids = Vec::with_capacity(phonemes.len() * 3);
     ids.push(bos_id);
@@ -132,30 +147,102 @@ fn unicode_normalization_nfd(s: &str) -> String {
     let mut result = String::with_capacity(s.len() * 2);
     for ch in s.chars() {
         match ch {
-            '\u{00E3}' => { result.push('a'); result.push('\u{0303}'); }
-            '\u{1EBD}' => { result.push('e'); result.push('\u{0303}'); }
-            '\u{0129}' => { result.push('i'); result.push('\u{0303}'); }
-            '\u{00F5}' => { result.push('o'); result.push('\u{0303}'); }
-            '\u{0169}' => { result.push('u'); result.push('\u{0303}'); }
-            '\u{00E1}' => { result.push('a'); result.push('\u{0301}'); }
-            '\u{00E9}' => { result.push('e'); result.push('\u{0301}'); }
-            '\u{00ED}' => { result.push('i'); result.push('\u{0301}'); }
-            '\u{00F3}' => { result.push('o'); result.push('\u{0301}'); }
-            '\u{00FA}' => { result.push('u'); result.push('\u{0301}'); }
-            '\u{00FD}' => { result.push('y'); result.push('\u{0301}'); }
-            '\u{00E0}' => { result.push('a'); result.push('\u{0300}'); }
-            '\u{00E8}' => { result.push('e'); result.push('\u{0300}'); }
-            '\u{00EC}' => { result.push('i'); result.push('\u{0300}'); }
-            '\u{00F2}' => { result.push('o'); result.push('\u{0300}'); }
-            '\u{00F9}' => { result.push('u'); result.push('\u{0300}'); }
-            '\u{00E4}' => { result.push('a'); result.push('\u{0308}'); }
-            '\u{00F6}' => { result.push('o'); result.push('\u{0308}'); }
-            '\u{00FC}' => { result.push('u'); result.push('\u{0308}'); }
-            '\u{00E2}' => { result.push('a'); result.push('\u{0302}'); }
-            '\u{00EA}' => { result.push('e'); result.push('\u{0302}'); }
-            '\u{00EE}' => { result.push('i'); result.push('\u{0302}'); }
-            '\u{00F4}' => { result.push('o'); result.push('\u{0302}'); }
-            '\u{00FB}' => { result.push('u'); result.push('\u{0302}'); }
+            '\u{00E3}' => {
+                result.push('a');
+                result.push('\u{0303}');
+            }
+            '\u{1EBD}' => {
+                result.push('e');
+                result.push('\u{0303}');
+            }
+            '\u{0129}' => {
+                result.push('i');
+                result.push('\u{0303}');
+            }
+            '\u{00F5}' => {
+                result.push('o');
+                result.push('\u{0303}');
+            }
+            '\u{0169}' => {
+                result.push('u');
+                result.push('\u{0303}');
+            }
+            '\u{00E1}' => {
+                result.push('a');
+                result.push('\u{0301}');
+            }
+            '\u{00E9}' => {
+                result.push('e');
+                result.push('\u{0301}');
+            }
+            '\u{00ED}' => {
+                result.push('i');
+                result.push('\u{0301}');
+            }
+            '\u{00F3}' => {
+                result.push('o');
+                result.push('\u{0301}');
+            }
+            '\u{00FA}' => {
+                result.push('u');
+                result.push('\u{0301}');
+            }
+            '\u{00FD}' => {
+                result.push('y');
+                result.push('\u{0301}');
+            }
+            '\u{00E0}' => {
+                result.push('a');
+                result.push('\u{0300}');
+            }
+            '\u{00E8}' => {
+                result.push('e');
+                result.push('\u{0300}');
+            }
+            '\u{00EC}' => {
+                result.push('i');
+                result.push('\u{0300}');
+            }
+            '\u{00F2}' => {
+                result.push('o');
+                result.push('\u{0300}');
+            }
+            '\u{00F9}' => {
+                result.push('u');
+                result.push('\u{0300}');
+            }
+            '\u{00E4}' => {
+                result.push('a');
+                result.push('\u{0308}');
+            }
+            '\u{00F6}' => {
+                result.push('o');
+                result.push('\u{0308}');
+            }
+            '\u{00FC}' => {
+                result.push('u');
+                result.push('\u{0308}');
+            }
+            '\u{00E2}' => {
+                result.push('a');
+                result.push('\u{0302}');
+            }
+            '\u{00EA}' => {
+                result.push('e');
+                result.push('\u{0302}');
+            }
+            '\u{00EE}' => {
+                result.push('i');
+                result.push('\u{0302}');
+            }
+            '\u{00F4}' => {
+                result.push('o');
+                result.push('\u{0302}');
+            }
+            '\u{00FB}' => {
+                result.push('u');
+                result.push('\u{0302}');
+            }
             _ => result.push(ch),
         }
     }
@@ -173,30 +260,23 @@ fn infer(
 ) -> Result<Vec<f32>> {
     let seq_len = phoneme_ids.len();
 
-    let input_tensor = ort::value::Value::from_array(
-        ([1, seq_len], phoneme_ids.to_vec()),
-    )
-    .map_err(|e| TtsError::Onnx(e.to_string()))?;
+    let input_tensor = ort::value::Value::from_array(([1, seq_len], phoneme_ids.to_vec()))
+        .map_err(|e| TtsError::Onnx(e.to_string()))?;
 
     #[allow(clippy::cast_possible_wrap)] // seq_len always < i64::MAX
-    let lengths_tensor = ort::value::Value::from_array(
-        ([1_usize], vec![seq_len as i64]),
-    )
-    .map_err(|e| TtsError::Onnx(e.to_string()))?;
+    let lengths_tensor = ort::value::Value::from_array(([1_usize], vec![seq_len as i64]))
+        .map_err(|e| TtsError::Onnx(e.to_string()))?;
 
-    let scales_tensor = ort::value::Value::from_array(
-        ([3_usize], vec![noise_scale, length_scale, noise_w]),
-    )
-    .map_err(|e| TtsError::Onnx(e.to_string()))?;
+    let scales_tensor =
+        ort::value::Value::from_array(([3_usize], vec![noise_scale, length_scale, noise_w]))
+            .map_err(|e| TtsError::Onnx(e.to_string()))?;
 
     let outputs = session
-        .run(
-            ort::inputs![
-                "input" => input_tensor,
-                "input_lengths" => lengths_tensor,
-                "scales" => scales_tensor,
-            ],
-        )
+        .run(ort::inputs![
+            "input" => input_tensor,
+            "input_lengths" => lengths_tensor,
+            "scales" => scales_tensor,
+        ])
         .map_err(|e| TtsError::Onnx(e.to_string()))?;
 
     let output = outputs
@@ -219,8 +299,8 @@ fn samples_to_wav(samples: &[f32], sample_rate: u32) -> Result<Vec<u8>> {
         sample_format: hound::SampleFormat::Int,
     };
 
-    let mut writer = hound::WavWriter::new(&mut cursor, spec)
-        .map_err(|e| TtsError::Audio(e.to_string()))?;
+    let mut writer =
+        hound::WavWriter::new(&mut cursor, spec).map_err(|e| TtsError::Audio(e.to_string()))?;
 
     for &sample in samples {
         let clamped = sample.clamp(-1.0, 1.0);
@@ -252,14 +332,20 @@ pub fn synthesize(
     super::espeak::ensure_init_public()?;
 
     let mut cache = get_or_load_model(model_path)?;
-    let cached = cache.as_mut().ok_or_else(|| TtsError::Onnx("cache empty".into()))?;
+    let cached = cache
+        .as_mut()
+        .ok_or_else(|| TtsError::Onnx("cache empty".into()))?;
 
     let phonemes = super::espeak::phonemize(text, &cached.config.espeak.voice)?;
     if phonemes.is_empty() {
         return Ok(Vec::new());
     }
 
-    let ids = phonemes_to_ids(&phonemes, &cached.config.phoneme_id_map, &cached.config.phoneme_map);
+    let ids = phonemes_to_ids(
+        &phonemes,
+        &cached.config.phoneme_id_map,
+        &cached.config.phoneme_map,
+    );
 
     let audio = infer(
         &mut cached.session,
@@ -302,7 +388,14 @@ pub fn speak(
     noise_w: f32,
     volume_factor: f32,
 ) -> Result<bool> {
-    let wav = synthesize(text, model_path, length_scale, noise_scale, noise_w, volume_factor)?;
+    let wav = synthesize(
+        text,
+        model_path,
+        length_scale,
+        noise_scale,
+        noise_w,
+        volume_factor,
+    )?;
     if wav.is_empty() {
         return Ok(false);
     }

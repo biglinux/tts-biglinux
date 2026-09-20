@@ -12,13 +12,13 @@ import os
 import re
 import shutil
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from config import TTSBackend
 from services.kokoro_voice_service import get_active_voices_bin
 from services.text_processor import get_system_language
-from utils.i18n import _
 from utils.speechd_utils import try_restart_speechd
 
 logger = logging.getLogger(__name__)
@@ -177,8 +177,6 @@ def _lang_name(code: str) -> str:
 
 # ── Voice Discovery ──────────────────────────────────────────────────
 
-
-from concurrent.futures import ThreadPoolExecutor
 
 def discover_voices() -> VoiceCatalog:
     """
@@ -923,11 +921,6 @@ def get_supported_but_missing_voices() -> list[dict[str, str]]:
     if not lang_dir.exists():
         return []
         
-    # Get names of installed voices (dirs)
-    installed_voices = []
-    if voice_dir.exists():
-        installed_voices = [d.name.lower() for d in voice_dir.iterdir() if d.is_dir()]
-        
     # Map of language support package to expected voice packages
     recommendations = {
         "polish": ("rhvoice-voice-magda", "Magda"),
@@ -955,7 +948,8 @@ def get_supported_but_missing_voices() -> list[dict[str, str]]:
                         if f"language={lang_name}" in content or f"language={lang_name.replace('-', ' ')}" in content:
                             found = True
                             break
-                    except: pass
+                    except (OSError, UnicodeError):
+                        pass
         
         if not found:
             pkg, voice_name_rec = recommendations.get(lang_name, ("rhvoice-voice-*", "Any"))

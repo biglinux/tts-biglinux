@@ -1,5 +1,4 @@
 """Preview must never default to English for non-English/unknown voices."""
-import os
 import sys
 from pathlib import Path
 

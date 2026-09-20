@@ -22,8 +22,13 @@ APP_VERSION = "4.0.0"
 # Settings schema version — bump when the on-disk shape changes so future
 # releases can migrate deterministically.
 CONFIG_VERSION = 1
-APP_DEVELOPERS = ["Tales A. Mendonça", "Bruno Gonçalves Araujo", "Rafael Ruscher"]
-APP_WEBSITE = "https://www.biglinux.com.br"
+APP_DEVELOPERS = [
+    "Tales A. Mendonça",
+    "Bruno Gonçalves Araujo <bigbruno@gmail.com>",
+    "Rafael Ruscher <rruscher@gmail.com>",
+]
+APP_COPYRIGHT = "© 2021–2026 BigLinux contributors"
+APP_WEBSITE = "https://github.com/biglinux/tts-biglinux"
 APP_ISSUE_URL = "https://github.com/biglinux/tts-biglinux/issues"
 
 # ── Paths ─────────────────────────────────────────────────────────────

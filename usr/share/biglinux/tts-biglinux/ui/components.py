@@ -4,6 +4,8 @@ Reusable UI components for BigLinux TTS.
 Factory functions for consistent Adwaita widgets with full accessibility.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 from collections.abc import Callable

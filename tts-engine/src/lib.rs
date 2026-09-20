@@ -44,13 +44,7 @@ fn version() -> &'static str {
 /// * `volume` — volume (0–200, default 100)
 #[pyfunction]
 #[pyo3(signature = (text, voice="pt-BR", rate=175, pitch=50, volume=100))]
-fn speak_espeak(
-    text: &str,
-    voice: &str,
-    rate: i32,
-    pitch: i32,
-    volume: i32,
-) -> PyResult<bool> {
+fn speak_espeak(text: &str, voice: &str, rate: i32, pitch: i32, volume: i32) -> PyResult<bool> {
     backends::espeak::speak(text, voice, rate, pitch, volume)
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
@@ -86,8 +80,7 @@ fn load_piper(model_path: &str) -> PyResult<()> {
 #[pyfunction]
 fn stop() -> PyResult<()> {
     audio::stop_playback();
-    backends::espeak::cancel()
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
+    backends::espeak::cancel().map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
 
 /// Speak text via Piper neural TTS (native ONNX inference).
@@ -127,7 +120,8 @@ fn synthesize_piper<'py>(
     noise_w: f32,
     volume: f32,
 ) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
-    let wav = backends::piper::synthesize(text, model_path, length_scale, noise_scale, noise_w, volume)
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
+    let wav =
+        backends::piper::synthesize(text, model_path, length_scale, noise_scale, noise_w, volume)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
     Ok(pyo3::types::PyBytes::new(py, &wav))
 }

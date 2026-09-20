@@ -1216,3 +1216,49 @@ msgstr  ""
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 239
 msgid   "Playing…"
 msgstr  ""
+
+msgid  "Authorization denied"
+msgstr ""
+
+msgid  "pkexec not found"
+msgstr ""
+
+#, python-brace-format
+msgid  "Unknown voice: {voice_id}"
+msgstr ""
+
+#, python-brace-format
+msgid  "Invalid voice id: {voice_id}"
+msgstr ""
+
+#, python-brace-format
+msgid  "Download failed after retries: {error}"
+msgstr ""
+
+#, python-brace-format
+msgid  "Conversion failed: {error}"
+msgstr ""
+
+#, python-brace-format
+msgid  "Cannot create user voices directory: {error}"
+msgstr ""
+
+#, python-brace-format
+msgid  "Failed to add voice: {error}"
+msgstr ""
+
+msgid  "Cannot remove base voice"
+msgstr ""
+
+msgid  "No user voices installed"
+msgstr ""
+
+#, python-brace-format
+msgid  "Failed to remove voice: {error}"
+msgstr ""
+
+msgid  "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr ""
+
+msgid  "Enable debug logging"
+msgstr ""

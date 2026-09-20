@@ -4,6 +4,8 @@ Main Adw.Application class for BigLinux TTS.
 Handles application lifecycle, services, and global actions.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 import logging
@@ -20,6 +22,7 @@ from gi.repository import Adw, Gio, GLib, Gtk
 
 from config import (
     APP_DEVELOPERS,
+    APP_COPYRIGHT,
     APP_ID,
     APP_ISSUE_URL,
     APP_NAME,
@@ -55,9 +58,12 @@ class TTSApplication(Adw.Application):
 
         # Register --speak option for GApplication command line handling
         self.add_main_option(
-            "speak", 0,
-            GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
-            "Speak selected text", None,
+            "speak",
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            "Speak selected text",
+            None,
         )
 
         # Services (lazy)
@@ -191,7 +197,13 @@ class TTSApplication(Adw.Application):
         icon_light = ""
         icon_fallback = ""
         # Check installed + local share, then dev repo
-        repo_status = Path(__file__).resolve().parent.parent.parent / "icons" / "hicolor" / "scalable" / "status"
+        repo_status = (
+            Path(__file__).resolve().parent.parent.parent
+            / "icons"
+            / "hicolor"
+            / "scalable"
+            / "status"
+        )
         search_dirs = [
             "/usr/share/icons/hicolor/scalable/status",
             str(Path.home() / ".local/share/icons/hicolor/scalable/status"),
@@ -217,12 +229,7 @@ class TTSApplication(Adw.Application):
         )
         self._tray.on_activate = self._on_tray_speak
         self._tray.on_player = self._on_tray_player
-        self._tray.set_menu([
-            MenuItem(1, _("Read text"), self._on_tray_speak),
-            MenuItem(2, _("Settings"), self._on_tray_settings),
-            MenuItem(3, "", separator=True),
-            MenuItem(4, _("Quit"), self._on_tray_quit),
-        ])
+        self._tray.set_menu(self._build_tray_menu())
         self._tray.register()
         # Keep app alive when all windows are closed
         self.hold()
@@ -231,16 +238,30 @@ class TTSApplication(Adw.Application):
     _notif_id: int = 0  # D-Bus notification ID
     _notif_text_len: int = 0  # Length of notified text for proportional delay
     _notif_body: str = ""  # Last notification body for re-use on countdown
+    _tray_revert_id: int = 0  # Debounce timer for reverting the tray to idle
+
+    def _on_tray_revert(self) -> bool:
+        """Debounced revert of the tray to its idle state.
+
+        Runs a short grace period after playback reports IDLE. If a new chunk has
+        since resumed (``is_speaking`` True again), this refresh keeps the controls
+        shown; only a real end clears them.
+        """
+        self._tray_revert_id = 0
+        self._refresh_tray_playback()
+        return False
 
     def _on_tts_state_changed(self, state: "TTSState") -> None:
         """Notify tray icon / MPRIS of TTS state changes and process the queue."""
         from config import TTSState
+
         speaking = state == TTSState.SPEAKING
 
         # Shared title + duration estimate for both players.
         spoken = (
             getattr(self._tts_service, "_last_spoken_text", "")
-            if self._tts_service else ""
+            if self._tts_service
+            else ""
         )
         title = spoken[:120] if spoken else _("Reading text")
         # Rough length estimate (~60 ms/char); both players stop exactly when
@@ -256,14 +277,23 @@ class TTSApplication(Adw.Application):
 
         if self._tray is None:
             return
-        # Mini player that pops out of the tray icon while reading. Its title
-        # shows a "Playing…" status (the spoken text goes to MPRIS metadata).
-        self._tray.set_speaking(
-            speaking,
-            _("Playing…") if speaking else "",
-            duration_ms=duration_ms,
-            show_player=self.settings.show_media_player,
-        )
+        # Pulse the tray icon + update the tooltip and rebuild the context menu
+        # (idle → "Read text"; reading → "Playing…" with the controls).
+        #
+        # Multi-chunk backends (Piper) briefly drop to IDLE between chunks while
+        # the next one synthesizes, which would make the playback controls flicker
+        # out and back. So show "speaking" immediately, but DEBOUNCE the revert to
+        # idle: only clear the controls if playback is still stopped after a short
+        # grace period (a real end), not during an inter-chunk gap.
+        if speaking:
+            if self._tray_revert_id:
+                GLib.source_remove(self._tray_revert_id)
+                self._tray_revert_id = 0
+            self._refresh_tray_playback()
+        else:
+            if self._tray_revert_id:
+                GLib.source_remove(self._tray_revert_id)
+            self._tray_revert_id = GLib.timeout_add(700, self._on_tray_revert)
 
         if speaking:
             # Cancel pending dismiss
@@ -303,11 +333,15 @@ class TTSApplication(Adw.Application):
             if self._notif_dismiss_id:
                 GLib.source_remove(self._notif_dismiss_id)
             self._notif_dismiss_id = GLib.timeout_add(
-                delay_ms, self._dismiss_notification,
+                delay_ms,
+                self._dismiss_notification,
             )
 
     def _show_dbus_notification(
-        self, body: str, *, expire_timeout: int = 0,
+        self,
+        body: str,
+        *,
+        expire_timeout: int = 0,
     ) -> None:
         """Show notification via org.freedesktop.Notifications D-Bus.
 
@@ -318,24 +352,32 @@ class TTSApplication(Adw.Application):
         """
         try:
             proxy = Gio.DBusProxy.new_for_bus_sync(
-                Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
+                Gio.BusType.SESSION,
+                Gio.DBusProxyFlags.NONE,
+                None,
                 "org.freedesktop.Notifications",
                 "/org/freedesktop/Notifications",
-                "org.freedesktop.Notifications", None,
+                "org.freedesktop.Notifications",
+                None,
             )
             result = proxy.call_sync(
                 "Notify",
-                GLib.Variant("(susssasa{sv}i)", (
-                    APP_NAME,           # app_name
-                    self._notif_id,     # replaces_id (0 = new)
-                    "tts-biglinux",     # icon
-                    APP_NAME,           # summary
-                    body,               # body
-                    [],                 # actions
-                    {},                 # hints
-                    expire_timeout,     # expire_timeout (ms, 0 = server decides)
-                )),
-                Gio.DBusCallFlags.NONE, -1, None,
+                GLib.Variant(
+                    "(susssasa{sv}i)",
+                    (
+                        APP_NAME,  # app_name
+                        self._notif_id,  # replaces_id (0 = new)
+                        "tts-biglinux",  # icon
+                        APP_NAME,  # summary
+                        body,  # body
+                        [],  # actions
+                        {},  # hints
+                        expire_timeout,  # expire_timeout (ms, 0 = server decides)
+                    ),
+                ),
+                Gio.DBusCallFlags.NONE,
+                -1,
+                None,
             )
             self._notif_id = result.unpack()[0]
         except Exception:
@@ -347,15 +389,20 @@ class TTSApplication(Adw.Application):
         if self._notif_id:
             try:
                 proxy = Gio.DBusProxy.new_for_bus_sync(
-                    Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
+                    Gio.BusType.SESSION,
+                    Gio.DBusProxyFlags.NONE,
+                    None,
                     "org.freedesktop.Notifications",
                     "/org/freedesktop/Notifications",
-                    "org.freedesktop.Notifications", None,
+                    "org.freedesktop.Notifications",
+                    None,
                 )
                 proxy.call_sync(
                     "CloseNotification",
                     GLib.Variant("(u)", (self._notif_id,)),
-                    Gio.DBusCallFlags.NONE, -1, None,
+                    Gio.DBusCallFlags.NONE,
+                    -1,
+                    None,
                 )
             except Exception:
                 pass
@@ -432,30 +479,90 @@ class TTSApplication(Adw.Application):
 
         threading.Thread(target=_capture_and_speak, daemon=True).start()
 
-    def _on_tray_player(self, action: str) -> None:
-        """Handle play/stop clicks from the tray mini player."""
-        tts = self.tts_service
-        if action == "stop":
-            GLib.idle_add(tts.stop)
-        elif action == "play":
-            GLib.idle_add(self._replay_last)
+    # Tray menu item IDs
+    _TRAY_READ = 1
+    _TRAY_SETTINGS = 2
+    _TRAY_QUIT = 4
+    _TRAY_PAUSE = 12  # Pause / Play (label toggles while paused)
+    _TRAY_STOP = 13  # Stop
 
-    def _replay_last(self) -> bool:
-        """Re-read the last spoken text (tray mini player Play button)."""
+    def _build_tray_menu(self) -> list[MenuItem]:
+        """Build the tray context menu for the current playback state.
+
+        Idle:     Read text / Settings / — / Quit
+        Playing:  Pause / Stop / — / Settings / — / Quit
+        Paused:   Play  / Stop / — / Settings / — / Quit
+
+        Rows are laid out flat (nested submenus of a tray context menu are
+        unreliable on Plasma Wayland) and the full row set is always returned —
+        see the comment below on why only `visible` changes between states.
+        """
+        tts = self._tts_service
+        speaking = bool(tts and tts.is_speaking)
+        paused = bool(tts and tts.is_paused)
+
+        # The FULL row set is always returned, in a fixed order, and playback
+        # state only flips `visible`. The tray helper creates the rows once and
+        # then updates properties — structural rebuilds do not propagate reliably
+        # through Plasma's DBusMenu (the panel would show a stale menu).
+        #
+        # While audio plays only two rows are shown: Pause/Stop. Pausing keeps
+        # them and turns "Pause" into "Play" (resume from where it stopped);
+        # Stop — or the end of the audio — hides them again.
+        return [
+            MenuItem(
+                self._TRAY_READ, _("Read text"), self._on_tray_speak,
+                visible=not speaking,
+            ),
+            MenuItem(
+                self._TRAY_PAUSE,
+                # pt-BR: "Pause" → "Pausar", "Play" → "Reproduzir" (resume).
+                _("Play") if paused else _("Pause"),
+                lambda: self._on_tray_player("resume" if paused else "pause"),
+                visible=speaking,
+            ),
+            MenuItem(
+                self._TRAY_STOP, _("Stop"),
+                lambda: self._on_tray_player("stop"),
+                visible=speaking,
+            ),
+            MenuItem(3, "", separator=True, visible=speaking),
+            MenuItem(self._TRAY_SETTINGS, _("Settings"), self._on_tray_settings),
+            MenuItem(5, "", separator=True),
+            MenuItem(self._TRAY_QUIT, _("Quit"), self._on_tray_quit),
+        ]
+
+    def _refresh_tray_playback(self) -> None:
+        """Sync the tray icon animation, tooltip and menu with playback state."""
+        if self._tray is None:
+            return
+        tts = self._tts_service
+        speaking = bool(tts and tts.is_speaking)
+        paused = bool(tts and tts.is_paused)
+        label = (_("Paused") if paused else _("Playing…")) if speaking else ""
+        self._tray.set_speaking(speaking, label, paused=paused)
+        self._tray.set_menu(self._build_tray_menu())
+
+    def _on_tray_player(self, action: str) -> None:
+        """Handle player actions from the tray menu / left-click.
+
+        stop → stop; pause/resume → freeze and resume playback in place. The
+        tray is refreshed so the icon, tooltip and the Pause/Play label follow
+        the new state.
+        """
         tts = self.tts_service
-        text = getattr(tts, "_last_spoken_text", "")
-        if text:
-            speech = self.settings.speech
-            tts.speak(
-                text,
-                rate=speech.rate,
-                pitch=speech.pitch,
-                volume=speech.volume,
-                backend=speech.backend,
-                output_module=speech.output_module,
-                voice_id=speech.voice_id,
-            )
-        return False
+
+        def _run() -> bool:
+            if action == "stop":
+                tts.stop()
+            elif action == "pause":
+                tts.pause()
+            elif action == "resume":
+                tts.resume()
+            self._refresh_tray_playback()
+            return False
+
+        GLib.idle_add(_run)
 
     def _on_tray_settings(self) -> None:
         """Show settings window from tray menu."""
@@ -496,22 +603,33 @@ class TTSApplication(Adw.Application):
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Control>q"])
 
-    def _on_about(
-        self, action: Gio.SimpleAction, param: GLib.Variant | None
-    ) -> None:
+    def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         """Show about dialog."""
-        about = Adw.AboutWindow(
-            transient_for=self._window,
-            application_name=_(APP_NAME),
-            application_icon="tts-biglinux",
-            version=APP_VERSION,
-            developers=APP_DEVELOPERS,
-            license_type=Gtk.License.GPL_3_0,
-            website=APP_WEBSITE,
-            issue_url=APP_ISSUE_URL,
+        about = Adw.AboutDialog.new()
+        about.set_application_name(_(APP_NAME))
+        about.set_application_icon("tts-biglinux")
+        about.set_developer_name(_("BigLinux Team"))
+        about.set_version(APP_VERSION)
+        about.set_developers(APP_DEVELOPERS)
+        about.set_copyright(APP_COPYRIGHT)
+        about.set_license_type(Gtk.License.GPL_3_0)
+        about.set_website(APP_WEBSITE)
+        about.set_issue_url(APP_ISSUE_URL)
+        about.set_comments(
+            "\n\n".join(
+                (
+                    _(
+                        "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+                    ),
+                    _(
+                        "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+                    ),
+                )
+            )
         )
-        # Populate the built-in "Troubleshooting" section with diagnostics —
-        # it provides copy/save buttons for support (see docs Diagnóstico).
+
+        # The built-in Troubleshooting page provides copy/save controls for
+        # diagnostics that users can attach to an issue report.
         try:
             from services.diagnostics import collect_diagnostics, format_diagnostics
 
@@ -519,11 +637,9 @@ class TTSApplication(Adw.Application):
             about.set_debug_info_filename("biglinux-tts-diagnostic.txt")
         except Exception as e:
             logger.debug("Could not attach diagnostics: %s", e)
-        about.present()
+        about.present(self._window)
 
-    def _on_quit(
-        self, action: Gio.SimpleAction, param: GLib.Variant | None
-    ) -> None:
+    def _on_quit(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         """Quit the application."""
         logger.info("Quit action triggered")
         if self._tray is not None:
@@ -552,10 +668,21 @@ class TTSApplication(Adw.Application):
         # with the new configurable shortcut mechanism)
         self._disable_legacy_khotkeys()
 
-        rc_path = Path.home() / ".config" / "kglobalshortcutsrc"
-
         # Convert GTK accelerator to KDE format
         kde_shortcut = DesktopIntegrationService.gtk_accel_to_kde(shortcut)
+
+        # Drop stale KGlobalAccel components (bigtts.desktop / tts-speak.desktop)
+        # that still claim this key in kglobalacceld's memory. While they linger,
+        # the press cannot be routed to our launcher, so the shortcut fails
+        # whenever the app is not already running. Must run even when the config
+        # file already looks correct — the conflict lives in memory, not on disk.
+        DesktopIntegrationService.purge_stale_kde_components()
+
+        # Make sure the service .desktop that KGlobalAccel launches exists and
+        # carries the current key (fresh installs / relocated profiles).
+        DesktopIntegrationService.ensure_desktop_file(kde_shortcut)
+
+        rc_path = Path.home() / ".config" / "kglobalshortcutsrc"
 
         # Check if already registered correctly in the services group
         already_correct = False
@@ -563,6 +690,7 @@ class TTSApplication(Adw.Application):
             try:
                 content = rc_path.read_text(encoding="utf-8")
                 import re
+
                 match = re.search(
                     r"\[services\]\[biglinux-tts-speak\.desktop\]\s*\n_launch=([^\t\n]+)",
                     content,
@@ -574,6 +702,9 @@ class TTSApplication(Adw.Application):
 
         if already_correct:
             logger.debug("Shortcut already registered correctly: %s", kde_shortcut)
+            # Config is fine, but we may have just purged zombie components from
+            # memory — reparse so kglobalacceld re-activates our key cleanly.
+            DesktopIntegrationService.reload_kglobalaccel()
             return
 
         logger.info("Registering KDE global shortcut: %s", kde_shortcut)
@@ -583,9 +714,12 @@ class TTSApplication(Adw.Application):
             subprocess.run(
                 [
                     "kwriteconfig6",
-                    "--file", "kglobalshortcutsrc",
-                    "--group", "biglinux-tts-speak.desktop",
-                    "--key", "_launch",
+                    "--file",
+                    "kglobalshortcutsrc",
+                    "--group",
+                    "biglinux-tts-speak.desktop",
+                    "--key",
+                    "_launch",
                     "--delete",
                 ],
                 timeout=5,
@@ -599,10 +733,14 @@ class TTSApplication(Adw.Application):
             subprocess.run(
                 [
                     "kwriteconfig6",
-                    "--file", "kglobalshortcutsrc",
-                    "--group", "services",
-                    "--group", "biglinux-tts-speak.desktop",
-                    "--key", "_launch",
+                    "--file",
+                    "kglobalshortcutsrc",
+                    "--group",
+                    "services",
+                    "--group",
+                    "biglinux-tts-speak.desktop",
+                    "--key",
+                    "_launch",
                     f"{kde_shortcut}\t{kde_shortcut}\tSpeech or stop selected text",
                 ],
                 timeout=5,
@@ -612,17 +750,9 @@ class TTSApplication(Adw.Application):
         except (OSError, subprocess.TimeoutExpired) as e:
             logger.warning("Could not register shortcut: %s", e)
 
-        # Notify KGlobalAccel to reload
-        try:
-            subprocess.run(
-                ["dbus-send", "--type=signal", "--session",
-                 "/KGlobalSettings", "org.kde.KGlobalSettings.notifyChange",
-                 "int32:3", "int32:0"],
-                timeout=5,
-                check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
+        # Force KGlobalAccel to re-read the config so the new binding activates
+        # immediately (block/unblock cycle + reparseConfiguration).
+        DesktopIntegrationService.reload_kglobalaccel()
 
     @staticmethod
     def _disable_legacy_khotkeys() -> None:
@@ -639,10 +769,14 @@ class TTSApplication(Adw.Application):
         try:
             result = subprocess.run(
                 [
-                    "qdbus6", "org.kde.kded6", "/kded",
+                    "qdbus6",
+                    "org.kde.kded6",
+                    "/kded",
                     "org.kde.kded6.loadedModules",
                 ],
-                capture_output=True, text=True, timeout=3,
+                capture_output=True,
+                text=True,
+                timeout=3,
             )
             if "khotkeys" not in result.stdout:
                 return  # module not loaded, nothing to do
@@ -655,13 +789,17 @@ class TTSApplication(Adw.Application):
         try:
             subprocess.run(
                 [
-                    "dbus-send", "--session", "--type=method_call",
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
                     "--dest=org.kde.kded6",
                     "/modules/khotkeys",
                     "org.kde.khotkeys.reread_configuration",
                 ],
-                timeout=3, check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
         except (OSError, subprocess.TimeoutExpired):
             pass
