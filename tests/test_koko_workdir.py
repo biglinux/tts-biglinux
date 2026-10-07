@@ -8,7 +8,7 @@ import importlib
 import os
 import stat
 
-ts = importlib.import_module("services.tts_service")
+ts = importlib.import_module("services.kokoro_voice_service")
 
 
 def _reset(monkeypatch):
@@ -18,7 +18,7 @@ def _reset(monkeypatch):
 def test_workdir_is_private_and_writable_in_runtime_dir(tmp_path, monkeypatch):
     _reset(monkeypatch)
     monkeypatch.setenv("XDG_RUNTIME_DIR", str(tmp_path))
-    path = ts._koko_workdir()
+    path = ts.koko_workdir()
     assert path == str(tmp_path / "biglinux-tts" / "koko")
     assert os.access(path, os.W_OK)
     assert stat.S_IMODE(os.stat(path).st_mode) == 0o700
@@ -31,7 +31,7 @@ def test_workdir_falls_back_when_runtime_dir_is_unusable(tmp_path, monkeypatch):
     import tempfile
 
     monkeypatch.setattr(tempfile, "tempdir", None)
-    path = ts._koko_workdir()
+    path = ts.koko_workdir()
     assert os.path.dirname(path) == str(tmp_path)
     assert os.access(path, os.W_OK)
 
@@ -39,24 +39,25 @@ def test_workdir_falls_back_when_runtime_dir_is_unusable(tmp_path, monkeypatch):
 def test_koko_is_started_in_the_writable_workdir(tmp_path, monkeypatch):
     _reset(monkeypatch)
     monkeypatch.setenv("XDG_RUNTIME_DIR", str(tmp_path))
-    voices = tmp_path / "voices.bin"
-    voices.write_bytes(b"x")
+    tts = importlib.import_module("services.tts_service")
+    monkeypatch.setattr(ts, "koko_problem", lambda voice_id, blend="": "")
     monkeypatch.setattr(ts.shutil, "which", lambda name: "/usr/bin/koko")
-    kvs = importlib.import_module("services.kokoro_voice_service")
-    monkeypatch.setattr(kvs, "get_active_voices_bin", lambda: voices)
 
     seen = {}
 
     class FakeProc:
         stdin = None
+        stderr = None
 
     def fake_popen(cmd, **kwargs):
         seen.update(kwargs, cmd=cmd)
         return FakeProc()
 
-    monkeypatch.setattr(ts.subprocess, "Popen", fake_popen)
-    svc = ts.TTSService.__new__(ts.TTSService)
+    monkeypatch.setattr(tts.subprocess, "Popen", fake_popen)
+    svc = tts.TTSService()
     assert svc._speak_kokoro_koko("Olá", "kokoro:pm_alex", 0, 0, 50)
+    workdir = str(tmp_path / "biglinux-tts" / "koko")
     assert seen["cmd"][0] == "/usr/bin/koko"
-    assert seen["cwd"] == str(tmp_path / "biglinux-tts" / "koko")
-    assert os.access(seen["cwd"], os.W_OK)
+    assert seen["cwd"] == workdir
+    # The scratch WAV is written there too, never relative to the app dir.
+    assert seen["cmd"][-2:] == ["-o", workdir + "/pipe_output.wav"]

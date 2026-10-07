@@ -36,13 +36,7 @@ class FakePopen:
 
 
 def _svc():
-    s = ts.TTSService.__new__(ts.TTSService)
-    s._generation = 0
-    s._dispatch_gen = 0
-    s._process = None
-    s._piper_proc = None
-    s._settings = None  # _maybe_save_history returns early
-    return s
+    return ts.TTSService(settings=None)  # _maybe_save_history returns early
 
 
 def _tmp_wavs():

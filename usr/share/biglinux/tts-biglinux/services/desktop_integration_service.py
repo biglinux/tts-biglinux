@@ -368,7 +368,14 @@ Exec=IntegratedRender {exec_path}
                         continue
 
                     if kde_shortcut.lower() != "none":
-                        val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
+                        # [services] entries hold only the key(s), separated by
+                        # TAB. The "active,default,name" triple belongs to
+                        # component groups — written here it would be parsed as
+                        # a multi-chord sequence (press Alt+V, then Alt+V).
+                        if group_prefix == "services":
+                            val = kde_shortcut
+                        else:
+                            val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
                         subprocess.run(cmd + [val], timeout=2, check=False)
                     else:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)

@@ -13,12 +13,14 @@ import shutil
 import signal
 import subprocess
 import threading
+from collections import deque
 from collections.abc import Callable
 from typing import Any
 
 from config import TTSBackend, TTSState
 from services.text_processor import process_text
 from services.voice_manager import VoiceInfo
+from utils.i18n import _
 from utils.speechd_utils import try_restart_speechd
 
 logger = logging.getLogger(__name__)
@@ -47,35 +49,34 @@ OnProgress = Callable[[str], None]
 # Watch interval in ms for process completion
 _WATCH_INTERVAL_MS = 300
 
-_koko_workdir_cache: str | None = None
+# Backends that synthesize before any sound is heard: their requests start in
+# LOADING and switch to SPEAKING when playback really begins.
+_SYNTHESIZE_FIRST = frozenset({
+    TTSBackend.ESPEAK_NG.value,
+    TTSBackend.PIPER.value,
+    TTSBackend.KOKORO.value,
+})
+
+# Product names shown in messages (not translated).
+ENGINE_NAMES = {
+    TTSBackend.SPEECH_DISPATCHER.value: "Speech Dispatcher",
+    TTSBackend.RHVOICE.value: "RHVoice",
+    TTSBackend.ESPEAK_NG.value: "espeak-ng",
+    TTSBackend.PIPER.value: "Piper",
+    TTSBackend.KOKORO.value: "Kokoro",
+}
 
 
-def _koko_workdir() -> str:
-    """A private, writable working directory for the koko binary.
+def engine_name(backend: str) -> str:
+    return ENGINE_NAMES.get(backend, backend)
 
-    koko always writes ``tmp/pipe_output.wav`` relative to its current
-    directory. Inheriting the app's cwd (the root-owned install dir under
-    /usr/share) makes it exit with "Permission denied" and nothing is heard.
-    """
-    global _koko_workdir_cache
-    if _koko_workdir_cache and os.access(_koko_workdir_cache, os.W_OK):
-        return _koko_workdir_cache
-    runtime = os.environ.get("XDG_RUNTIME_DIR")
-    path = ""
-    if runtime and os.path.isdir(runtime):
-        candidate = os.path.join(runtime, "biglinux-tts", "koko")
-        try:
-            os.makedirs(candidate, mode=0o700, exist_ok=True)
-            if os.access(candidate, os.W_OK):
-                path = candidate
-        except OSError:
-            pass
-    if not path:
-        import tempfile
 
-        path = tempfile.mkdtemp(prefix="biglinux-tts-koko-")
-    _koko_workdir_cache = path
-    return path
+def _in_main_thread() -> bool:
+    return threading.current_thread() is threading.main_thread()
+
+
+def _player_missing() -> str:
+    return _("Could not play audio. Check that alsa-utils (aplay) is installed.")
 
 
 # ── Parameter mapping (pure functions — unit-tested) ─────────────────
@@ -165,6 +166,25 @@ class TTSService:
         # (aplay) keeps poll()==None while stopped, so state stays SPEAKING and
         # the watch keeps running — playback simply freezes and resumes in place.
         self._paused: bool = False
+        # Why the last request failed: a translated sentence that says how to
+        # fix it, plus optional technical detail (engine stderr). Kept until
+        # the next speak()/stop() so the UI can show it.
+        self._error_message: str = ""
+        self._error_detail: str = ""
+        # What the UI can offer to fix it: "voice-manager", "retry" or "".
+        self._error_action: str = ""
+        # Backend of the request being handled (for error messages).
+        self._active_backend: str = ""
+        # Set when audio for the current request has actually started.
+        self._audio_started: bool = False
+        # True once text went through speech-dispatcher in this session. Only
+        # then does stop() talk to the daemon: any SSIP/spd-say call starts
+        # speech-dispatcher, and starting it can run every installed module.
+        self._spd_used: bool = False
+        # The last transition to IDLE came from stop() during speech.
+        self._stopped_by_user: bool = False
+        # Last lines a streaming engine wrote to stderr (error detail).
+        self._stderr_tail: deque[str] = deque(maxlen=12)
 
     def _is_current(self, gen: int) -> bool:
         """True if `gen` is still the active request generation."""
@@ -177,15 +197,32 @@ class TTSService:
 
     @property
     def is_speaking(self) -> bool:
-        """Whether TTS is currently speaking."""
-        if self._state == TTSState.SPEAKING:
-            # Verify process is still running
-            if self._process and self._process.poll() is not None:
-                self._set_state(TTSState.IDLE)
-                self._process = None
-                return False
-            return True
-        return False
+        """Whether a request is in progress (loading the voice or speaking).
+
+        This is what the shortcut toggles on: pressing it again while the voice
+        loads cancels the request just like it stops speech.
+        """
+        return self._state in (TTSState.LOADING, TTSState.SPEAKING)
+
+    @property
+    def last_error(self) -> str:
+        """Translated reason of the last failure ("" if none)."""
+        return self._error_message
+
+    @property
+    def last_error_action(self) -> str:
+        """Suggested recovery: "voice-manager", "retry" or ""."""
+        return self._error_action
+
+    @property
+    def last_error_detail(self) -> str:
+        """Technical detail of the last failure (engine output), may be ""."""
+        return self._error_detail
+
+    @property
+    def stopped_by_user(self) -> bool:
+        """True if the current IDLE state was reached through stop()."""
+        return self._stopped_by_user and self._state == TTSState.IDLE
 
     @property
     def is_paused(self) -> bool:
@@ -285,6 +322,10 @@ class TTSService:
             logger.debug("No text to speak")
             return False
 
+        self._error_message = ""
+        self._error_detail = ""
+        self._error_action = ""
+
         if stop_previous:
             # Always stop any previous speech (even if state tracking says idle,
             # a background thread might still be alive between chunks).
@@ -321,6 +362,9 @@ class TTSService:
         # the generation is unchanged, so concurrent speeches coexist and only
         # an explicit stop() invalidates them.
         self._dispatch_gen = self._generation
+        self._active_backend = backend
+        self._audio_started = False
+        self._stderr_tail.clear()
 
         # Speak via appropriate backend
         if backend == TTSBackend.SPEECH_DISPATCHER.value:
@@ -337,27 +381,40 @@ class TTSService:
             success = self._speak_kokoro(processed, voice_id, rate, pitch, volume)
         else:
             logger.error("Unknown backend: %s", backend)
-            return False
+            success = False
 
         if success:
             self._paused = False
+            self._stopped_by_user = False
             self._last_spoken_text = processed
             self._last_backend = backend
             self._last_voice_id = voice_id
-            self._set_state(TTSState.SPEAKING)
+            if self._audio_started or backend not in _SYNTHESIZE_FIRST:
+                self._set_state(TTSState.SPEAKING)
+            else:
+                self._set_state(TTSState.LOADING)
             self._start_watch()
             if self._on_progress:
                 self._on_progress(processed[:100])
         else:
+            if not self._error_message:
+                self._error_message = _("{engine} could not start. Check that it is installed.").format(
+                    engine=engine_name(backend)
+                )
+            if not self._error_action:
+                self._error_action = "retry"
             self._set_state(TTSState.ERROR)
 
         return success
 
     def stop(self) -> None:
         """Stop current speech immediately."""
+        was_busy = self._state in (TTSState.LOADING, TTSState.SPEAKING)
         # Invalidate any in-flight background synthesis so it won't start audio.
         self._generation += 1
         self._stop_watch()
+        self._error_message = ""
+        self._error_detail = ""
 
         # If paused, resume the frozen players first so SIGTERM is delivered
         # promptly (a SIGSTOP'd process ignores SIGTERM until continued).
@@ -377,15 +434,19 @@ class TTSService:
                 pass
             self._close_spd_client()
 
-        # Cancel speech-dispatcher queue via CLI (fallback)
-        try:
-            subprocess.run(
-                ["spd-say", "-C"],
-                capture_output=True,
-                timeout=2,
-            )
-        except (FileNotFoundError, subprocess.TimeoutExpired):
-            pass
+        # Cancel speech-dispatcher queue via CLI (fallback) — only if this app
+        # actually used speech-dispatcher. Otherwise spd-say would start the
+        # daemon (socket activation) on every stop, which can make other
+        # modules speak and blocks the UI for up to 2 s.
+        if self._spd_used:
+            try:
+                subprocess.run(
+                    ["spd-say", "-C"],
+                    capture_output=True,
+                    timeout=2,
+                )
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                pass
 
         # Kill running process. stop() may run on the GTK main thread, so keep
         # the reap bounded and short — aplay/spd-say die immediately on SIGTERM.
@@ -449,6 +510,7 @@ class TTSService:
             bt.join(timeout=2)
         self._bg_thread = None
 
+        self._stopped_by_user = was_busy
         self._set_state(TTSState.IDLE)
         logger.debug("Speech stopped")
 
@@ -493,6 +555,7 @@ class TTSService:
         if volume <= 0:
             return True  # true mute — nothing audible
 
+        self._spd_used = True
         try:
             import speechd
         except ImportError:
@@ -529,7 +592,12 @@ class TTSService:
                 except Exception:
                     self._on_spd_finished()
 
-            client.speak(text, callback=on_end)
+            client.speak(
+                text, callback=on_end,
+                # Default event types include BEGIN, which would end the
+                # request as soon as speech starts.
+                event_types=(speechd.CallbackType.END, speechd.CallbackType.CANCEL),
+            )
 
             logger.debug(
                 "speechd: module=%s, voice=%s, rate=%d, pitch=%d, vol=%d, text=%r",
@@ -567,7 +635,10 @@ class TTSService:
                         except Exception:
                             self._on_spd_finished()
 
-                    client.speak(text, callback=on_end2)
+                    client.speak(
+                        text, callback=on_end2,
+                        event_types=(speechd.CallbackType.END, speechd.CallbackType.CANCEL),
+                    )
                     logger.info("speechd retry succeeded after restart")
                     return True
                 except Exception as e2:
@@ -610,6 +681,7 @@ class TTSService:
         volume: int,
     ) -> bool:
         """Fallback: speak via spd-say CLI when speechd module is unavailable."""
+        self._spd_used = True
         cmd = ["spd-say", "--wait"]
 
         if output_module:
@@ -682,6 +754,10 @@ class TTSService:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
+            # aplay owns the read end now; keeping our copy open leaks the fd
+            # and would keep RHVoice-test from seeing a closed pipe.
+            if rh_proc.stdout:
+                rh_proc.stdout.close()
 
             # Send text to RHVoice-test stdin
             if rh_proc.stdin:
@@ -693,7 +769,10 @@ class TTSService:
             self._rh_proc = rh_proc # Keep ref to kill if needed
             return True
 
-        except (FileNotFoundError, OSError) as e:
+        except FileNotFoundError:
+            self._error_message = _("RHVoice is not installed. Install the rhvoice package.")
+            return False
+        except OSError as e:
             logger.error("Failed to start RHVoice native: %s", e)
             return False
 
@@ -789,16 +868,19 @@ class TTSService:
                         ["aplay", "-q", tmp_path],
                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                     )
-                    self._process = play_proc
                     self._piper_tmp_path = tmp_path
+                    self._begin_playback(play_proc)
                     return
+                detail = proc.stderr.decode(errors="replace").strip()
             except (FileNotFoundError, OSError, subprocess.TimeoutExpired) as e:
                 logger.error("espeak-ng subprocess failed: %s", e)
+                detail = str(e)
             try:
                 os.unlink(tmp_path)
             except OSError:
                 pass
-            self._set_state(TTSState.ERROR)
+            if self._is_current(gen):
+                self._fail(_("espeak-ng could not read this text. Check that espeak-ng is installed."), detail)
 
         thread = threading.Thread(target=_generate_and_play, daemon=True)
         self._bg_thread = thread
@@ -818,15 +900,15 @@ class TTSService:
                 ["aplay", "-q", tmp_path],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
-            self._process = play_proc
             self._piper_tmp_path = tmp_path
+            self._begin_playback(play_proc)
         except (FileNotFoundError, OSError) as e:
             logger.error("aplay failed: %s", e)
             try:
                 os.unlink(tmp_path)
             except OSError:
                 pass
-            self._set_state(TTSState.ERROR)
+            self._fail(_player_missing(), str(e))
 
     def _stream_piper(
         self, chunks: list[str], model_path: str, length_scale: float,
@@ -930,7 +1012,7 @@ class TTSService:
                 temps.append(cur)
                 play_proc = _play(cur)
                 if play_proc is not None:
-                    self._process = play_proc
+                    self._begin_playback(play_proc)
                 # Prefetch the next chunk while the current one plays.
                 nxt = _synth(chunks[i + 1]) if i + 1 < len(chunks) else None
                 i += 1
@@ -949,7 +1031,10 @@ class TTSService:
                 except OSError:
                     pass
             if self._is_current(gen):
-                self._maybe_save_history(None)  # text-only history for streams
+                if not temps:
+                    self._fail(_("Piper could not read this text. Try another voice."))
+                else:
+                    self._maybe_save_history(None)  # text-only history for streams
 
     def _speak_piper(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
@@ -978,6 +1063,8 @@ class TTSService:
 
         if not os.path.isfile(model_path):
             logger.error("Piper model not found: %s", model_path)
+            self._error_message = _("The selected Piper voice is not installed. Choose another voice in the Voice Manager.")
+            self._error_action = "voice-manager"
             return False
 
         length_scale = piper_length_scale(rate)
@@ -1102,7 +1189,8 @@ class TTSService:
                         os.unlink(tmp_path)
                     except OSError:
                         pass
-                    self._set_state(TTSState.ERROR)
+                    if self._is_current(gen):
+                        self._fail(_("Piper could not read this text. Try another voice."))
                     return
 
                 # Race guard: a newer speak()/stop() arrived while we were
@@ -1142,8 +1230,8 @@ class TTSService:
                     stderr=subprocess.DEVNULL,
                 )
                 self._piper_proc = None
-                self._process = play_proc
                 self._piper_tmp_path = tmp_path
+                self._begin_playback(play_proc)
 
             except (FileNotFoundError, OSError) as e:
                 logger.error("Failed to start Piper: %s", e)
@@ -1151,7 +1239,7 @@ class TTSService:
                     os.unlink(tmp_path)
                 except OSError:
                     pass
-                self._set_state(TTSState.ERROR)
+                self._fail(_player_missing(), str(e))
 
         thread = threading.Thread(target=_generate_and_play, daemon=True)
         self._bg_thread = thread
@@ -1193,22 +1281,10 @@ class TTSService:
         if kokoro_cfg and kokoro_cfg.lang_code:
             lang_code = kokoro_cfg.lang_code
 
-        # ── Speed calculation ──
-        # Base speed from rate slider: (-100..100) → (0.5..2.0)
-        base_speed = 1.0 + (rate / 100.0)
-        base_speed = max(0.5, min(2.0, base_speed))
+        from services.kokoro_voice_service import kokoro_speed
 
-        # Apply emotion preset speed modifier
-        _EMOTION_SPEED = {
-            "neutral": 1.0,
-            "happy": 1.1,
-            "calm": 0.8,
-            "urgent": 1.4,
-            "narrative": 0.9,
-        }
         emotion = kokoro_cfg.emotion_preset if kokoro_cfg else "neutral"
-        emotion_factor = _EMOTION_SPEED.get(emotion, 1.0)
-        speed = max(0.5, min(2.0, base_speed * emotion_factor))
+        speed = kokoro_speed(rate, emotion)
 
         # Volume factor — 0 == true mute (0.0)
         vol_factor = volume_factor(volume)
@@ -1220,17 +1296,14 @@ class TTSService:
             emotion, vol_factor, text[:60],
         )
 
-        # Create or reuse cached pipeline
-        cached_lang = getattr(self, "_kokoro_cached_lang", None)
-        if cached_lang != lang_code or not hasattr(self, "_kokoro_api_pipeline"):
-            try:
+        def _pipeline():
+            # Built in the worker thread: creating a KPipeline loads PyTorch
+            # and the model (seconds) and must never block the GTK main loop.
+            cached_lang = getattr(self, "_kokoro_cached_lang", None)
+            if cached_lang != lang_code or not hasattr(self, "_kokoro_api_pipeline"):
                 self._kokoro_api_pipeline = KPipeline(lang_code=lang_code)
                 self._kokoro_cached_lang = lang_code
-            except Exception as e:
-                logger.error("Failed to create KPipeline: %s", e)
-                return False
-
-        pipeline = self._kokoro_api_pipeline
+            return self._kokoro_api_pipeline
 
         # Check sox availability for volume control
         sox_available = shutil.which("sox") is not None
@@ -1249,7 +1322,7 @@ class TTSService:
 
             gen = self._dispatch_gen
             try:
-                generator = pipeline(text, voice=kokoro_voice, speed=speed)
+                generator = _pipeline()(text, voice=kokoro_voice, speed=speed)
 
                 for _gs, _ps, audio in generator:
                     if self._kokoro_stop_event.is_set() or not self._is_current(gen):
@@ -1284,7 +1357,7 @@ class TTSService:
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
-                    self._process = play_proc
+                    self._begin_playback(play_proc)
 
                 # Wait for last chunk
                 if play_proc:
@@ -1298,7 +1371,8 @@ class TTSService:
                 logger.error("Kokoro generation failed: %s", e)
                 if play_proc and play_proc.poll() is None:
                     play_proc.terminate()
-                self._set_state(TTSState.ERROR)
+                if self._is_current(gen):
+                    self._fail(_("Kokoro could not read this text. Try another voice."), str(e))
             finally:
                 for p in tmp_paths:
                     try:
@@ -1316,79 +1390,82 @@ class TTSService:
     def _speak_kokoro_koko(
         self, text: str, voice_id: str, rate: int, pitch: int, volume: int
     ) -> bool:
-        """Speak via koko binary (biglinux-kokoro-tts package).
+        """Speak via the koko binary (biglinux-kokoro-tts package).
 
-        Fallback when Python kokoro library is not installed.
-        Uses /usr/bin/koko subprocess with voices.bin.
+        Fallback when the Python kokoro library is not installed — the normal
+        case on BigLinux. ``koko pipe`` reads the text from stdin, splits it
+        into sentences and streams each one to the speaker as soon as it is
+        synthesized. The command is built by kokoro_voice_service, the same
+        code the Voice Manager preview uses.
         """
         if volume <= 0:
             return True  # true mute — nothing audible
-        koko_path = shutil.which("koko")
-        if not koko_path:
-            logger.error("Neither kokoro Python library nor koko binary available")
+
+        from services.kokoro_voice_service import (
+            KOKO_AUDIO_STARTED_MARKER,
+            build_koko_command,
+            koko_problem,
+            koko_workdir,
+            kokoro_speed,
+        )
+
+        kokoro_cfg = self._settings.speech.kokoro if self._settings else None
+        blend = kokoro_cfg.voice_blend if kokoro_cfg else ""
+        problem = koko_problem(voice_id, blend)
+        if problem:
+            logger.error("Kokoro unavailable: %s", problem)
+            self._error_message = problem
+            self._error_action = "voice-manager"
             return False
 
-        from services.kokoro_voice_service import get_active_voices_bin
-
-        voices_bin = get_active_voices_bin()
-        if not voices_bin.exists():
-            logger.error("Kokoro voices.bin not found: %s", voices_bin)
-            return False
-
-        # Extract voice name from voice_id
-        kokoro_voice = (
-            voice_id.removeprefix("kokoro:")
-            if voice_id.startswith("kokoro:")
-            else voice_id
+        speed = kokoro_speed(rate, kokoro_cfg.emotion_preset if kokoro_cfg else "neutral")
+        cmd = build_koko_command(
+            voice_id, speed=speed, blend=blend,
+            blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
         )
-        if not kokoro_voice:
-            kokoro_voice = "pf_dora"
-
-        # Speed: rate (-100..100) → (0.5..2.0)
-        speed = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
-
-        # koko infers language from an espeak id; derive it from the voice
-        # prefix (pf_/pm_ = Portuguese, af_/am_ = US English, etc.).
-        _koko_lang = {
-            "a": "en-us", "b": "en-gb", "p": "pt-br", "e": "es", "f": "fr",
-            "i": "it", "h": "hi", "j": "ja", "z": "zh",
-        }
-        lang = _koko_lang.get(kokoro_voice[:1], "en-us")
-
-        # koko requires a subcommand. `pipe` reads text from stdin, splits into
-        # sentences and streams the audio to the speaker. `--force-style true`
-        # makes it use the chosen voice instead of auto-selecting.
-        cmd = [
-            koko_path,
-            "-s", kokoro_voice,
-            "-d", str(voices_bin),
-            "-l", lang,
-            "--force-style", "true",
-            "-p", f"{speed:.2f}",
-            "pipe",
-        ]
-
-        logger.info(
-            "Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f",
-            kokoro_voice, lang, speed,
+        logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
+        return self._start_process(
+            cmd, text, cwd=koko_workdir(), audio_marker=KOKO_AUDIO_STARTED_MARKER,
         )
-        return self._start_process(cmd, text, cwd=_koko_workdir())
 
-    def _start_process(self, cmd: list[str], text: str, cwd: str | None = None) -> bool:
-        """Start a TTS process with text piped to stdin."""
+    def _start_process(
+        self,
+        cmd: list[str],
+        text: str,
+        cwd: str | None = None,
+        audio_marker: str | None = None,
+    ) -> bool:
+        """Start a TTS process with text piped to stdin.
+
+        With ``audio_marker``, the process both synthesizes and plays: its
+        stderr is read in a thread, the request moves from LOADING to SPEAKING
+        when the marker appears, and the last lines are kept as error detail.
+        """
         try:
             proc = subprocess.Popen(
                 cmd,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stderr=subprocess.PIPE if audio_marker else subprocess.DEVNULL,
                 cwd=cwd,
             )
             if proc.stdin:
-                proc.stdin.write(text.encode("utf-8"))
-                proc.stdin.close()
+                try:
+                    proc.stdin.write(text.encode("utf-8"))
+                    proc.stdin.close()
+                except BrokenPipeError:
+                    pass  # exited early; its exit status reports why
 
             self._process = proc
+            if audio_marker and proc.stderr is not None:
+                gen = self._dispatch_gen
+                threading.Thread(
+                    target=self._read_engine_stderr,
+                    args=(proc, audio_marker, gen),
+                    daemon=True,
+                ).start()
+            else:
+                self._audio_started = True
             return True
 
         except FileNotFoundError:
@@ -1397,6 +1474,47 @@ class TTSService:
         except OSError as e:
             logger.error("Failed to start TTS: %s", e)
             return False
+
+    def _read_engine_stderr(self, proc: subprocess.Popen, marker: str, gen: int) -> None:
+        """Follow a streaming engine's stderr (worker thread)."""
+        stream = proc.stderr
+        if stream is None:
+            return
+        try:
+            for raw in iter(stream.readline, b""):
+                line = raw.decode("utf-8", errors="replace").strip()
+                if not line:
+                    continue
+                if marker in line:
+                    if self._is_current(gen) and proc is self._process:
+                        self._mark_audio_started()
+                else:
+                    self._stderr_tail.append(line)
+        except (OSError, ValueError):
+            pass
+        finally:
+            try:
+                stream.close()
+            except OSError:
+                pass
+
+    def _begin_playback(self, proc: subprocess.Popen) -> None:
+        """Track ``proc`` as the audio player: sound is now being produced."""
+        self._process = proc
+        self._mark_audio_started()
+
+    def _mark_audio_started(self) -> None:
+        self._audio_started = True
+        if self._state == TTSState.LOADING:
+            self._set_state(TTSState.SPEAKING)
+
+    def _fail(self, message: str, detail: str = "", action: str = "retry") -> None:
+        """Report a failure the person can act on (any thread)."""
+        self._error_action = action
+        self._error_message = message
+        self._error_detail = (detail or "").strip()[-600:]
+        logger.warning("TTS error: %s %s", message, self._error_detail)
+        self._set_state(TTSState.ERROR)
 
     def _start_process_no_stdin(self, cmd: list[str]) -> bool:
         """Start a TTS process without stdin (text passed as argument)."""
@@ -1466,7 +1584,28 @@ class TTSService:
                     pass
             if rc != 0:
                 logger.warning("TTS process exited with code %d", rc)
+            # RHVoice-test | aplay: aplay ends cleanly on EOF even when the
+            # synthesizer failed, so check the synthesizer too.
+            rh = getattr(self, "_rh_proc", None)
+            if rc == 0 and rh is not None:
+                try:
+                    rh.wait(timeout=0.2)
+                    rc = rh.returncode or 0
+                except subprocess.TimeoutExpired:
+                    pass
+                self._rh_proc = None
             self._process = None
+            # A positive status is the engine reporting a failure; a negative
+            # one means it was killed by a signal (stop/supersede), not an error.
+            if rc > 0 and self._state != TTSState.ERROR:
+                self._watch_id = 0
+                self._fail(
+                    _("{engine} stopped with an error and could not read the text.").format(
+                        engine=engine_name(self._active_backend)
+                    ),
+                    "\n".join(self._stderr_tail),
+                )
+                return False
 
             # Background thread (Kokoro multi-chunk, Piper generation) may
             # still be alive — don't set IDLE yet, keep polling
@@ -1483,31 +1622,62 @@ class TTSService:
                 except OSError:
                     pass
                 self._piper_tmp_path = None
-            self._set_state(TTSState.IDLE)
-            self._watch_id = 0
+            self._finish_request()
             return False  # Stop the timer
         if self._process is None:
             # Background thread may still be generating audio (no process yet)
             if self._has_active_bg_thread():
                 return True  # Keep polling — generation in progress
-            self._set_state(TTSState.IDLE)
-            self._watch_id = 0
+            self._finish_request()
             return False
         return True  # Keep polling
 
+    def _finish_request(self) -> None:
+        """Playback ended: back to IDLE unless a failure is being shown."""
+        self._watch_id = 0
+        if self._state != TTSState.ERROR:
+            self._set_state(TTSState.IDLE)
+
     def _set_state(self, state: TTSState) -> None:
-        """Update state and notify listeners."""
-        if state != self._state:
-            old = self._state
-            self._state = state
-            logger.debug("TTS state: %s → %s", old, state)
-            if self._on_state_changed:
+        """Update state and notify listeners.
+
+        The state itself changes immediately (from any thread). Listeners are
+        always called on the GTK main thread: worker threads finish synthesis
+        and must not touch widgets, the tray or D-Bus directly.
+        """
+        if state == self._state:
+            return
+        old = self._state
+        self._state = state
+        logger.debug("TTS state: %s → %s", old, state)
+        if _in_main_thread():
+            self._notify_state(state)
+            return
+        try:
+            from gi.repository import GLib
+
+            def _deliver() -> bool:
+                # Drop it if the state moved on meanwhile (e.g. a late SPEAKING
+                # from a worker after the main thread already reported IDLE).
+                if self._state == state:
+                    self._notify_state(state)
+                return False
+
+            GLib.idle_add(_deliver)
+        except ImportError:
+            self._notify_state(state)
+
+    def _notify_state(self, state: TTSState) -> None:
+        if self._on_state_changed:
+            try:
                 self._on_state_changed(state)
-            for cb in self._on_state_changed_extra:
-                try:
-                    cb(state)
-                except Exception as e:
-                    logger.warning("State change listener error: %s", e)
+            except Exception as e:
+                logger.warning("State change listener error: %s", e)
+        for cb in self._on_state_changed_extra:
+            try:
+                cb(state)
+            except Exception as e:
+                logger.warning("State change listener error: %s", e)
 
     def _maybe_save_history(self, audio_path: str | None = None) -> None:
         """Save history entry if history is enabled in settings."""

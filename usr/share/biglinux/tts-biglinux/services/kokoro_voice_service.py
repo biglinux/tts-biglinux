@@ -134,13 +134,24 @@ _CATALOG_BY_ID: dict[str, KokoroVoiceEntry] = {v.voice_id: v for v in KOKORO_CAT
 
 # ── Public API ───────────────────────────────────────────────────────
 
+def _python_kokoro_available() -> bool:
+    """True if the Python ``kokoro`` package is importable.
+
+    Uses find_spec instead of importing: ``import kokoro`` pulls in PyTorch,
+    which takes seconds and must never run just to answer "is it installed?".
+    """
+    import importlib.util
+
+    try:
+        return importlib.util.find_spec("kokoro") is not None
+    except (ImportError, ValueError):
+        return False
+
+
 def is_kokoro_installed() -> bool:
     """Check if Kokoro TTS is available (Python library OR koko binary)."""
-    try:
-        import kokoro  # noqa: F401
+    if _python_kokoro_available():
         return True
-    except ImportError:
-        pass
     # Fallback: check for koko binary (biglinux-kokoro-tts package)
     return shutil.which("koko") is not None
 
@@ -153,14 +164,165 @@ def kokoro_backend_type() -> str:
         'koko' if koko binary is available,
         'none' if neither.
     """
-    try:
-        import kokoro  # noqa: F401
+    if _python_kokoro_available():
         return "python"
-    except ImportError:
-        pass
     if shutil.which("koko") is not None:
         return "koko"
     return "none"
+
+
+# ── koko command line (shared by playback and the Voice Manager preview) ──
+#
+# Both paths MUST build the koko invocation here so that what the preview
+# plays is exactly what the shortcut plays: same model, same voices.bin, same
+# language, and a writable output location.
+
+SYSTEM_MODEL = Path("/usr/share/biglinux-kokoro-tts/model/model.onnx")
+
+# koko takes an espeak language id; Kokoro voice ids start with a language
+# letter (pf_/pm_ = Brazilian Portuguese, af_/am_ = US English, ...).
+_KOKO_LANG_BY_PREFIX = {
+    "a": "en-us", "b": "en-gb", "p": "pt-br", "e": "es", "f": "fr",
+    "i": "it", "h": "hi", "j": "ja", "z": "zh",
+}
+DEFAULT_KOKORO_VOICE = "pf_dora"
+
+_koko_workdir_cache: str | None = None
+
+
+def kokoro_model_path() -> Path:
+    """The Kokoro ONNX model koko should load (explicit, never koko's default).
+
+    Without ``-m`` koko falls back to a model path relative to its cwd and
+    tries to download it there.
+    """
+    env = os.environ.get("KOKO_MODEL_PATH", "")
+    if env and os.path.isfile(env):
+        return Path(env)
+    return SYSTEM_MODEL
+
+
+def koko_voice_name(voice_id: str) -> str:
+    """``kokoro:pm_alex`` → ``pm_alex`` (default voice when empty)."""
+    name = voice_id.removeprefix("kokoro:") if voice_id else ""
+    return name or DEFAULT_KOKORO_VOICE
+
+
+def koko_language(voice_id: str) -> str:
+    """espeak language id koko should phonemize with, from the voice prefix."""
+    return _KOKO_LANG_BY_PREFIX.get(koko_voice_name(voice_id)[:1], "en-us")
+
+
+def koko_workdir() -> str:
+    """A private, writable working directory for the koko binary.
+
+    koko writes its output WAV (``tmp/pipe_output.wav`` by default) relative to
+    its current directory. Inheriting the app's cwd — the root-owned install
+    dir under /usr/share — makes it exit with "Permission denied" and nothing
+    is heard.
+    """
+    global _koko_workdir_cache
+    if _koko_workdir_cache and os.access(_koko_workdir_cache, os.W_OK):
+        return _koko_workdir_cache
+    runtime = os.environ.get("XDG_RUNTIME_DIR")
+    path = ""
+    if runtime and os.path.isdir(runtime):
+        candidate = os.path.join(runtime, "biglinux-tts", "koko")
+        try:
+            os.makedirs(candidate, mode=0o700, exist_ok=True)
+            if os.access(candidate, os.W_OK):
+                path = candidate
+        except OSError:
+            pass
+    if not path:
+        path = tempfile.mkdtemp(prefix="biglinux-tts-koko-")
+    _koko_workdir_cache = path
+    return path
+
+
+# Expression presets change the speaking speed (both Kokoro backends).
+KOKORO_EMOTION_SPEED = {
+    "neutral": 1.0,
+    "happy": 1.1,
+    "calm": 0.8,
+    "urgent": 1.4,
+    "narrative": 0.9,
+}
+
+
+def kokoro_speed(rate: int, emotion: str = "neutral") -> float:
+    """UI rate (-100..100) and expression preset → Kokoro speed (0.5..2.0)."""
+    base = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
+    return max(0.5, min(2.0, base * KOKORO_EMOTION_SPEED.get(emotion, 1.0)))
+
+
+def koko_style(voice_id: str, blend: str = "", blend_ratio: float = 0.5) -> str:
+    """koko ``-s`` value: one voice, or ``a.W+b.W`` (weights 1..9 of 10)."""
+    voice = koko_voice_name(voice_id)
+    other = blend.removeprefix("kokoro:") if blend else ""
+    if not other or other == voice or not _RE_SAFE_VOICE_ID.match(other):
+        return voice
+    second = max(1, min(9, round(blend_ratio * 10)))
+    return f"{voice}.{10 - second}+{other}.{second}"
+
+
+def koko_problem(voice_id: str, blend: str = "") -> str:
+    """Why koko cannot speak with ``voice_id`` right now ("" when it can).
+
+    Returned text is translated and tells the person how to fix it. koko
+    itself silently substitutes another voice for an unknown one, so the voice
+    is checked against voices.bin here.
+    """
+    if shutil.which("koko") is None:
+        return _("Kokoro is not installed. Install the biglinux-kokoro-tts package.")
+    if not kokoro_model_path().is_file():
+        return _("The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package.")
+    if not get_active_voices_bin().is_file():
+        return _("No Kokoro voices were found. Open the Voice Manager to download a voice.")
+    installed = get_installed_voice_ids()
+    wanted = [koko_voice_name(voice_id)] + ([blend.removeprefix("kokoro:")] if blend else [])
+    if installed and any(v not in installed for v in wanted):
+        return _("This Kokoro voice is not installed. Open the Voice Manager to download it.")
+    return ""
+
+
+def build_koko_command(
+    voice_id: str,
+    *,
+    speed: float = 1.0,
+    text: str | None = None,
+    output: str | None = None,
+    koko_path: str | None = None,
+    blend: str = "",
+    blend_ratio: float = 0.5,
+) -> list[str]:
+    """argv for koko.
+
+    With ``text`` it renders that text to ``output`` (``koko text``). Without
+    it, koko streams sentences read from stdin straight to the speaker
+    (``koko pipe``), writing its scratch WAV inside :func:`koko_workdir`.
+    """
+    voice = koko_voice_name(voice_id)
+    cmd = [
+        koko_path or shutil.which("koko") or "koko",
+        "-m", str(kokoro_model_path()),
+        "-d", str(get_active_voices_bin()),
+        "-l", koko_language(voice),
+        "-s", koko_style(voice, blend, blend_ratio),
+        "--force-style", "true",
+        "-p", f"{max(0.5, min(2.0, speed)):.2f}",
+    ]
+    if text is None:
+        cmd += ["pipe", "-o", output or os.path.join(koko_workdir(), "pipe_output.wav")]
+    else:
+        if not output:
+            raise ValueError("koko text needs an output path")
+        cmd += ["text", "-o", output, "--", text]
+    return cmd
+
+
+# koko pipe prints this to stderr when a sentence's audio starts playing.
+KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
 
 
 def get_installed_voice_ids() -> set[str]:
