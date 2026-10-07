@@ -145,17 +145,18 @@ class TTSWindow(Adw.ApplicationWindow):
         # buttons (minimize/maximize/close).
         right_header.set_show_start_title_buttons(False)
 
-        # History toggle lives on the RIGHT of the header (next to the menu).
-        self._history_toggle = Gtk.ToggleButton()
-        self._history_toggle.set_icon_name("document-open-recent-symbolic")
-        self._history_toggle.set_tooltip_text(_("History"))
-        self._history_toggle.add_css_class("flat")
-        self._history_toggle.connect("toggled", self._on_history_toggled)
-        right_header.pack_end(self._create_menu_button())
-        right_header.pack_end(self._history_toggle)
-        right_header.set_title_widget(
-            Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
-        )
+        # History opens from the main menu; while it is shown, a Back button
+        # returns to the reading area (Escape / Alt+Left do the same).
+        self._back_button = Gtk.Button(icon_name="go-previous-symbolic")
+        self._back_button.set_tooltip_text(_("Back"))
+        self._back_button.update_property([Gtk.AccessibleProperty.LABEL], [_("Back")])
+        self._back_button.set_action_name("win.show-main")
+        self._back_button.set_visible(False)
+        right_header.pack_start(self._back_button)
+        self._menu_button = self._create_menu_button()
+        right_header.pack_end(self._menu_button)
+        self._window_title = Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
+        right_header.set_title_widget(self._window_title)
         right.add_top_bar(right_header)
 
         self._content_stack = Gtk.Stack()
@@ -191,6 +192,13 @@ class TTSWindow(Adw.ApplicationWindow):
         self._toast_overlay.set_child(overlay)
         self.set_content(self._toast_overlay)
 
+        # Keep the bottom bar and the card in sync with TTS and shortcut state.
+        self._app.tts_service.add_on_state_changed(self._on_bar_state_changed)
+        self._app.add_shortcut_listener(self._main_view.on_shortcut_status)
+        self._main_view.on_shortcut_status(self._app.shortcut_status)
+
+        self._setup_breakpoints()
+
     def start_install_progress(self) -> None:
         """Reveal the top OSD progress bar (pulsing) during an install."""
         self._install_progress.set_show_text(False)
@@ -209,26 +217,16 @@ class TTSWindow(Adw.ApplicationWindow):
             self._install_pulse_id = 0
         self._install_progress.set_visible(False)
 
-        # History toggle only when history is enabled.
-        self._history_toggle.set_visible(self.settings.history.enabled)
-
-        # Keep the bottom bar in sync with TTS state.
-        self._app.tts_service.add_on_state_changed(self._on_bar_state_changed)
-
-        self._setup_breakpoints()
-
-    def _shortcut_display(self) -> str:
-        """The configured global shortcut in a readable form (e.g. 'Alt+V')."""
-        from services.desktop_integration_service import DesktopIntegrationService
-
-        return DesktopIntegrationService.gtk_accel_to_kde(
-            self.settings.shortcut.keybinding
-        )
-
     def _idle_status_text(self) -> str:
         """Instruction shown in the status bar when idle, with the shortcut."""
+        from services.shortcut_service import display_text
+
+        status = self._app.shortcut_status
+        accel = self.settings.shortcut.keybinding
+        if status.accel == accel and status.registered is False:
+            return _("The shortcut is not active — open Advanced options to fix it")
         return _("Select text and press {key} to read it aloud").format(
-            key=self._shortcut_display()
+            key=display_text(accel)
         )
 
     def _build_controls_bar(self) -> Gtk.Box:
@@ -259,35 +257,42 @@ class TTSWindow(Adw.ApplicationWindow):
         """Refresh the status-bar instruction (e.g. after the shortcut changes)."""
         if not hasattr(self, "_state_label"):
             return
-        from config import TTSState
+        self._on_bar_state_changed(self._app.tts_service.state)
 
-        if self._app.tts_service.state != TTSState.SPEAKING:
-            self._state_label.set_label(self._idle_status_text())
+    def show_history(self, *_args) -> None:
+        """Show the history list in the content pane (same single instance)."""
+        if not self.settings.history.enabled:
+            return
+        self._history_view.reload()
+        self._content_stack.set_visible_child_name("history")
+        self._window_title.set_title(_("History"))
+        self._window_title.set_subtitle("")
+        self._back_button.set_visible(True)
+        self._back_button.grab_focus()
 
-    def _on_history_toggled(self, btn: Gtk.ToggleButton) -> None:
-        """Switch the content pane between the TTS area and History."""
-        if btn.get_active():
-            self._history_view.reload()
-            self._content_stack.set_visible_child_name("history")
-        else:
-            self._content_stack.set_visible_child_name("tts")
+    def show_main(self, *_args) -> None:
+        """Back to the reading area (playback is not affected)."""
+        self._content_stack.set_visible_child_name("tts")
+        self._window_title.set_title(_(APP_NAME))
+        self._window_title.set_subtitle(_("Text narrator"))
+        self._back_button.set_visible(False)
 
     def _on_bar_state_changed(self, state: TTSState) -> None:
-        """Reflect TTS state on the bottom controls bar."""
+        """Reflect TTS state on the bottom controls bar (main thread)."""
         from config import TTSState
 
-        def _update() -> bool:
-            if state == TTSState.SPEAKING:
-                self._state_label.set_label(_("Speaking…"))
-            else:
-                self._state_label.set_label(
-                    _("Error") if state == TTSState.ERROR else self._idle_status_text()
-                )
-            if hasattr(self, "_main_view"):
-                self._bar_voice.set_label(self._main_view.current_voice_label())
-            return False
-
-        GLib.idle_add(_update)
+        tts = self._app.tts_service
+        if state == TTSState.LOADING:
+            text = _("Loading voice…")
+        elif state == TTSState.SPEAKING:
+            text = _("Speaking…")
+        elif state == TTSState.ERROR:
+            text = tts.last_error or _("Could not read the text")
+        else:
+            text = self._idle_status_text()
+        self._state_label.set_label(text)
+        if hasattr(self, "_main_view"):
+            self._bar_voice.set_label(self._main_view.current_voice_label())
 
     def show_toast(self, message: str, timeout: int = 3) -> None:
         """Show an inline toast notification."""
@@ -333,37 +338,46 @@ class TTSWindow(Adw.ApplicationWindow):
         self.remove_css_class("narrow-layout")
 
     def update_history_tab_visibility(self, enabled: bool) -> None:
-        """Show or hide the History toggle button."""
-        if hasattr(self, "_history_toggle"):
-            self._history_toggle.set_visible(enabled)
-            if not enabled:
-                self._history_toggle.set_active(False)
-                if hasattr(self, "_content_stack"):
-                    self._content_stack.set_visible_child_name("tts")
+        """History follows the "Save history" setting (menu entry + view)."""
+        action = self.lookup_action("show-history")
+        if action is not None:
+            action.set_enabled(enabled)
+        if hasattr(self, "_menu_button"):
+            self._menu_button.set_menu_model(self._build_menu_model())
+        if not enabled and hasattr(self, "_content_stack"):
+            self.show_main()
+
+    def _build_menu_model(self) -> Gio.Menu:
+        menu = Gio.Menu.new()
+
+        # Views
+        views = Gio.Menu.new()
+        if self.settings.history.enabled:
+            views.append(_("History"), "win.show-history")
+        menu.append_section(None, views)
+
+        # Preferences
+        prefs = Gio.Menu.new()
+        prefs.append(_("Show tray icon"), "win.toggle-tray")
+        prefs.append(_("Restore Defaults…"), "win.restore-defaults")
+        menu.append_section(None, prefs)
+
+        # Help / Quit
+        section = Gio.Menu.new()
+        section.append(_("Welcome"), "win.show-welcome")
+        section.append(_("About BigLinux TTS"), "app.about")
+        section.append(_("Quit"), "app.quit")
+        menu.append_section(None, section)
+        return menu
 
     def _create_menu_button(self) -> Gtk.MenuButton:
         """Create application menu button."""
-        menu = Gio.Menu.new()
-
-        # Tray Icon toggle
-        menu.append(_("Tray icon"), "win.toggle-tray")
-
-        # Restore defaults
-        menu.append(_("Restore Defaults"), "win.restore-defaults")
-
-        # About / Quit section
-        section = Gio.Menu.new()
-        section.append(_("Welcome"), "win.show-welcome")
-        section.append(_("About"), "app.about")
-        section.append(_("Quit"), "app.quit")
-        menu.append_section(None, section)
-
         menu_button = Gtk.MenuButton()
         menu_button.set_icon_name("open-menu-symbolic")
-        menu_button.set_menu_model(menu)
+        menu_button.set_menu_model(self._build_menu_model())
+        menu_button.set_primary(True)  # F10 opens it
         menu_button.set_tooltip_text(_("Main menu"))
         menu_button.update_property([Gtk.AccessibleProperty.LABEL], [_("Main menu")])
-
         return menu_button
 
     def _setup_actions(self) -> None:
@@ -372,7 +386,11 @@ class TTSWindow(Adw.ApplicationWindow):
         action.connect("activate", self._on_restore_defaults)
         self.add_action(action)
 
-        tray_action = Gio.SimpleAction.new("toggle-tray", None)
+        # Stateful: the menu shows a check mark that matches the setting.
+        tray_action = Gio.SimpleAction.new_stateful(
+            "toggle-tray", None,
+            GLib.Variant.new_boolean(self.settings.shortcut.show_in_launcher),
+        )
         tray_action.connect("activate", self._on_toggle_tray)
         self.add_action(tray_action)
 
@@ -380,16 +398,48 @@ class TTSWindow(Adw.ApplicationWindow):
         welcome_action.connect("activate", lambda *_: self._show_welcome())
         self.add_action(welcome_action)
 
+        history_action = Gio.SimpleAction.new("show-history", None)
+        history_action.connect("activate", self.show_history)
+        history_action.set_enabled(self.settings.history.enabled)
+        self.add_action(history_action)
+
+        main_action = Gio.SimpleAction.new("show-main", None)
+        main_action.connect("activate", self.show_main)
+        self.add_action(main_action)
+
+        app = self.get_application()
+        if app is not None:
+            app.set_accels_for_action("win.show-history", ["<Control>h"])
+            app.set_accels_for_action("win.show-main", ["<Alt>Left"])
+
+        # Escape leaves History.
+        keys = Gtk.EventControllerKey()
+
+        def _on_key(_c, keyval, _code, state) -> bool:
+            from gi.repository import Gdk
+
+            if keyval == Gdk.KEY_Escape and self._content_stack.get_visible_child_name() == "history":
+                self.show_main()
+                return True
+            return False
+
+        keys.connect("key-pressed", _on_key)
+        self.add_controller(keys)
+
+    def sync_tray_action(self, enabled: bool) -> None:
+        action = self.lookup_action("toggle-tray")
+        if action is not None:
+            action.set_state(GLib.Variant.new_boolean(enabled))
+
     def _on_restore_defaults(
         self,
         action: Gio.SimpleAction | None = None,
         param: GLib.Variant | None = None,
     ) -> None:
         """Show confirmation dialog for restoring defaults."""
-        dialog = Adw.MessageDialog(
-            transient_for=self,
-            heading=_("Restore settings?"),
-            body=_("This will return all adjustments to their original defaults."),
+        dialog = Adw.AlertDialog.new(
+            _("Restore settings?"),
+            _("This will return all adjustments to their original defaults."),
         )
         dialog.add_response("cancel", _("Cancel"))
         dialog.add_response("restore", _("Restore"))
@@ -397,9 +447,9 @@ class TTSWindow(Adw.ApplicationWindow):
         dialog.set_default_response("cancel")
         dialog.set_close_response("cancel")
         dialog.connect("response", self._on_restore_confirmed)
-        dialog.present()
+        dialog.present(self)
 
-    def _on_restore_confirmed(self, dialog: Adw.MessageDialog, response: str) -> None:
+    def _on_restore_confirmed(self, dialog: Adw.AlertDialog, response: str) -> None:
         """Handle restore confirmation response."""
         if response == "restore" and hasattr(self, "_main_view"):
             self._main_view.restore_defaults()

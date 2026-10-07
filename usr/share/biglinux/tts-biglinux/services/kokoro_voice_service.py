@@ -444,22 +444,40 @@ def download_voice(
                             pass
                 if cancelled:
                     return False, "cancelled"
+                if total and len(buf) != total:
+                    # Connection dropped mid-file: never convert a partial file.
+                    last_err = f"incomplete download ({len(buf)} of {total} bytes)"
+                    buf = bytearray()
                 pt_data = bytes(buf)
             if pt_data:
                 break
-            last_err = "empty response"
+            last_err = last_err or "empty response"
         except (URLError, OSError, TimeoutError) as e:
             last_err = str(e)
             if attempt < 2:
                 time.sleep(1.5 * (attempt + 1))  # backoff
     if not pt_data:
-        return False, _("Download failed after retries: {error}").format(error=last_err)
+        return False, _("Could not download the voice. Check your internet connection and try again. ({error})").format(error=last_err)
 
-    # Convert .pt → .npy
+    # Convert .pt → .npy (validates shape and values: a corrupted download
+    # never reaches voices.bin)
     try:
         npy_data = _pt_to_npy(pt_data, voice_id)
     except (zipfile.BadZipFile, KeyError, ValueError) as e:
-        return False, _("Conversion failed: {error}").format(error=e)
+        return False, _("The downloaded voice file is damaged. Try again. ({error})").format(error=e)
+
+    # voices.bin is rewritten atomically: room for a full copy is needed.
+    current = _active_voices_bin()
+    needed = (current.stat().st_size if current.exists() else 0) + len(npy_data) + 1_048_576
+    try:
+        USER_VOICES_DIR.mkdir(parents=True, exist_ok=True)
+        free = shutil.disk_usage(USER_VOICES_DIR).free
+    except OSError:
+        free = needed
+    if free < needed:
+        return False, _("Not enough disk space to install the voice ({size} MB needed).").format(
+            size=max(1, needed // 1_048_576)
+        )
 
     # Ensure user voices.bin exists (copy from system if needed)
     try:
@@ -543,6 +561,8 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
         )
 
     arr = np.frombuffer(raw, dtype=_VOICE_DTYPE).reshape(_VOICE_SHAPE)
+    if not np.isfinite(arr).all():
+        raise ValueError(f"{voice_id} contains invalid values")
     buf = io.BytesIO()
     np.save(buf, arr)
     return buf.getvalue()
