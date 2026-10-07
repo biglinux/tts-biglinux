@@ -47,6 +47,36 @@ OnProgress = Callable[[str], None]
 # Watch interval in ms for process completion
 _WATCH_INTERVAL_MS = 300
 
+_koko_workdir_cache: str | None = None
+
+
+def _koko_workdir() -> str:
+    """A private, writable working directory for the koko binary.
+
+    koko always writes ``tmp/pipe_output.wav`` relative to its current
+    directory. Inheriting the app's cwd (the root-owned install dir under
+    /usr/share) makes it exit with "Permission denied" and nothing is heard.
+    """
+    global _koko_workdir_cache
+    if _koko_workdir_cache and os.access(_koko_workdir_cache, os.W_OK):
+        return _koko_workdir_cache
+    runtime = os.environ.get("XDG_RUNTIME_DIR")
+    path = ""
+    if runtime and os.path.isdir(runtime):
+        candidate = os.path.join(runtime, "biglinux-tts", "koko")
+        try:
+            os.makedirs(candidate, mode=0o700, exist_ok=True)
+            if os.access(candidate, os.W_OK):
+                path = candidate
+        except OSError:
+            pass
+    if not path:
+        import tempfile
+
+        path = tempfile.mkdtemp(prefix="biglinux-tts-koko-")
+    _koko_workdir_cache = path
+    return path
+
 
 # ── Parameter mapping (pure functions — unit-tested) ─────────────────
 #
@@ -1342,9 +1372,9 @@ class TTSService:
             "Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f",
             kokoro_voice, lang, speed,
         )
-        return self._start_process(cmd, text)
+        return self._start_process(cmd, text, cwd=_koko_workdir())
 
-    def _start_process(self, cmd: list[str], text: str) -> bool:
+    def _start_process(self, cmd: list[str], text: str, cwd: str | None = None) -> bool:
         """Start a TTS process with text piped to stdin."""
         try:
             proc = subprocess.Popen(
@@ -1352,6 +1382,7 @@ class TTSService:
                 stdin=subprocess.PIPE,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
+                cwd=cwd,
             )
             if proc.stdin:
                 proc.stdin.write(text.encode("utf-8"))
