@@ -4,7 +4,8 @@ System tray icon via Qt6 subprocess.
 Runs a minimal PySide6 QSystemTrayIcon in a separate process to avoid
 GTK3/GTK4 conflicts. Communicates via stdin/stdout lines.
 
-While reading, the tray icon pulses (fade in/out) and the tooltip shows the
+While reading, the tray icon breathes (opacity only, constant size — see
+tray_icon_frames.py) and the tooltip shows the
 playing label; a left-click stops playback (and otherwise reads the selection).
 The right-click context menu is STATIC: the parent always sends the full,
 fixed-order list of rows (idle "Read text" plus the playback controls) and the
@@ -45,7 +46,6 @@ logger = logging.getLogger(__name__)
 
 _HELPER_SCRIPT = textwrap.dedent("""
 import json
-import math
 import os
 import signal
 import sys
@@ -59,7 +59,7 @@ def send(data: dict) -> None:
 
 try:
     from PySide6.QtCore import Qt, QTimer, QSize
-    from PySide6.QtGui import QIcon, QCursor, QPixmap, QPainter
+    from PySide6.QtGui import QIcon, QCursor
     from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 except ImportError:
     send({"event": "error", "message": "PySide6 not installed (python-pyside6). Tray icon is disabled."})
@@ -71,6 +71,14 @@ try:
     tooltip     = sys.argv[2] if len(sys.argv) > 2 else title
     icon_dark   = sys.argv[3] if len(sys.argv) > 3 else ""
     icon_light  = sys.argv[4] if len(sys.argv) > 4 else ""
+    frames_py   = sys.argv[5] if len(sys.argv) > 5 else ""
+
+    # Breathing frames live in services/tray_icon_frames.py (loaded by path:
+    # this helper runs outside the app's import path).
+    import importlib.util
+    _spec = importlib.util.spec_from_file_location("tray_icon_frames", frames_py)
+    tif = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(tif)
 
     sys.argv[0] = title
     app = QApplication(sys.argv)
@@ -89,61 +97,60 @@ try:
             return QIcon(path)
         return QIcon.fromTheme("tts-biglinux-symbolic")
 
-    # Base icon + a 64px pixmap we repaint at varying opacity to pulse the tray
-    # icon while reading. Both refresh on palette (theme) changes.
-    base = {"icon": get_icon_for_theme()}
-    base["pixmap"] = base["icon"].pixmap(QSize(64, 64))
+    # Breathing while reading: opacity only, never size (see tray_icon_frames:
+    # every frame keeps the original pixel size AND devicePixelRatio; the old
+    # code dropped the ratio and the icon shrank on scaled screens).
+    def screen_dprs():
+        return [1.0, app.devicePixelRatio()] + [s.devicePixelRatio() for s in app.screens()]
 
-    tray = QSystemTrayIcon(base["icon"], app)
+    frames = {"set": tif.FrameSet(get_icon_for_theme(), screen_dprs()), "level": None}
+    breather = tif.Breather()
+
+    tray = QSystemTrayIcon(frames["set"].full(), app)
     tray.setToolTip(tooltip)
 
-    def apply_opacity(op) -> None:
-        pm = base["pixmap"]
-        if pm is None or pm.isNull():
-            tray.setIcon(base["icon"])
-            return
-        out = QPixmap(pm.size())
-        out.fill(Qt.transparent)
-        p = QPainter(out)
-        p.setOpacity(max(0.0, min(1.0, op)))
-        p.drawPixmap(0, 0, pm)
-        p.end()
-        tray.setIcon(QIcon(out))
+    def show_level(level) -> None:
+        if level != frames["level"]:  # unchanged frame: nothing sent to the panel
+            frames["level"] = level
+            tray.setIcon(frames["set"].frame(level))
 
-    def refresh_base() -> None:
-        base["icon"] = get_icon_for_theme()
-        base["pixmap"] = base["icon"].pixmap(QSize(64, 64))
+    def anim_tick() -> None:
+        opacity, running = breather.tick(tif.TICK_MS)
+        show_level(tif.level_for(opacity))
+        if not running:
+            anim_timer.stop()
 
-    # Fade in/out pulse while reading (not while paused).
-    pulse = {"phase": 0.0}
-
-    def pulse_tick() -> None:
-        pulse["phase"] += 0.30
-        op = 0.35 + 0.65 * (0.5 + 0.5 * math.sin(pulse["phase"]))
-        apply_opacity(op)
-
-    pulse_timer = QTimer()
-    pulse_timer.setInterval(80)
-    pulse_timer.timeout.connect(pulse_tick)
+    anim_timer = QTimer()
+    anim_timer.setInterval(tif.TICK_MS)
+    anim_timer.timeout.connect(anim_tick)
 
     def render_icon() -> None:
-        # Repaint the tray icon for the current speaking/paused state.
+        # Drive the breathing from the speaking/paused state.
         if state["speaking"] and not state["paused"]:
-            if not pulse_timer.isActive():
-                pulse["phase"] = 0.0
-                pulse_timer.start()
+            if breather.mode != "breathing":
+                breather.start()
         elif state["speaking"] and state["paused"]:
-            pulse_timer.stop()
-            apply_opacity(0.45)   # steady dim = paused
+            breather.pause()
         else:
-            pulse_timer.stop()
-            tray.setIcon(base["icon"])
+            breather.stop()
+        if breather.running and not anim_timer.isActive():
+            anim_timer.start()
+        elif not breather.running:
+            anim_timer.stop()
+            show_level(tif.level_for(breather.opacity))
+
+    def refresh_base() -> None:
+        frames["set"] = tif.FrameSet(get_icon_for_theme(), screen_dprs())
+        frames["level"] = None
+        show_level(tif.level_for(breather.opacity))
+
+    app.screenAdded.connect(lambda *_: refresh_base())
+    app.screenRemoved.connect(lambda *_: refresh_base())
 
     theme = {"dark": is_dark_theme()}
 
     def on_theme_changed(*_) -> None:
         refresh_base()
-        render_icon()
 
     def check_theme() -> None:
         # Polled: only repaint when light/dark actually flipped. Re-setting the
@@ -368,6 +375,7 @@ class TrayIcon:
             self._tooltip,
             self._icon_dark_path,
             self._icon_light_path,
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), "tray_icon_frames.py"),
         ]
         self._proc = subprocess.Popen(
             cmd,
@@ -462,7 +470,7 @@ class TrayIcon:
     ) -> None:
         """Drive the tray icon animation and tooltip for the playback state.
 
-        While ``speaking`` and not ``paused`` the icon pulses (fade in/out) and
+        While ``speaking`` and not ``paused`` the icon breathes (opacity only) and
         the tooltip shows ``label``; while ``paused`` the icon holds a steady dim.
         """
         msg: dict = {"cmd": "set_speaking", "speaking": speaking, "paused": paused}
