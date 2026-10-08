@@ -1407,6 +1407,7 @@ class TTSService:
             koko_problem,
             koko_workdir,
             kokoro_speed,
+            prepare_koko_text,
         )
 
         kokoro_cfg = self._settings.speech.kokoro if self._settings else None
@@ -1424,6 +1425,9 @@ class TTSService:
             blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
         )
         logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
+        text = prepare_koko_text(text)
+        if not text:
+            return True  # only punctuation: nothing to say
         return self._start_process(
             cmd, text, cwd=koko_workdir(), audio_marker=KOKO_AUDIO_STARTED_MARKER,
         )
