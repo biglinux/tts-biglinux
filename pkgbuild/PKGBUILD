@@ -6,20 +6,35 @@ pkgrel=$(date +%H%M)
 arch=('x86_64')
 license=('GPL')
 url="https://github.com/biglinux/tts-biglinux"
-pkgdesc="Text to speech with graphical configuration and very easy to use"
+pkgdesc="Read selected text aloud with a global shortcut — RHVoice, espeak-ng, Piper and Kokoro voices"
 depends=(
+    # Application runtime
     'python'
     'python-gobject'
-    'python-numpy'      # Kokoro voice downloads (.pt → .npy conversion)
     'gtk4'
-    'libadwaita'
-    'speech-dispatcher' # legacy speech-dispatcher voices (settings migration)
-    'espeak-ng'         # linked by tts_engine.so; also Piper phonemization
-    'xsel'
-    'wl-clipboard-rs'
-    'alsa-utils'        # aplay: every engine plays through it
-    'onnxruntime'
-    'polkit'            # pkexec: install/remove voice packages
+    'libadwaita>=1:1.5'         # Adw.AlertDialog, Adw.OverlaySplitView, Adw.Breakpoint
+    'python-numpy'              # Kokoro voice downloads (.pt → .npy conversion)
+    'polkit'                    # pkexec: install/remove voice packages
+    # Native engine (tts_engine.so, built here)
+    'onnxruntime'               # Piper ONNX inference (system library, dynamic link)
+    'espeak-ng'                 # espeak voices + Piper phonemizer (linked by tts_engine.so)
+    # Audio
+    'alsa-utils'                # aplay: every engine plays through it
+    'sox'                       # volume control on the subprocess fallback paths
+    'gstreamer'                 # History player (playbin)
+    'gst-plugins-base'
+    'gst-plugins-good'          # wavparse + audio sinks for the History player
+    # Default voice engine, ready out of the box (Brazilian Portuguese)
+    'rhvoice'
+    'rhvoice-voice-leticia-f123'
+    'rhvoice-brazilian-portuguese-complementary-dict-biglinux'
+    'speech-dispatcher'         # python speechd module; legacy speech-dispatcher voices
+    # Selected-text capture
+    'wl-clipboard-rs'           # Wayland (wl-paste)
+    'xsel'                      # X11
+    # System tray icon (enabled by default) and media controls
+    'pyside6'
+    'qt6-svg'                   # the tray icons are SVG
 )
 makedepends=(
     'git'
@@ -30,19 +45,14 @@ checkdepends=(
     'python-pytest'
 )
 optdepends=(
-    'pyside6: system tray icon support (enabled by default)'
     'biglinux-kokoro-tts: Kokoro neural voices (koko engine, model and base voices)'
-    'rhvoice: high-quality multilingual TTS engine'
-    'rhvoice-voice-leticia-f123: Brazilian Portuguese female voice'
-    'rhvoice-voice-evgeniy-eng: English male voice'
-    'rhvoice-brazilian-portuguese-complementary-dict-biglinux: dictionary complement'
-    'piper-tts-bin: neural TTS engine (high quality, offline)'
+    'piper-tts-bin: Piper command-line fallback (the native engine needs only voices)'
     'piper-voices-pt-BR: Brazilian Portuguese neural voices for Piper'
-    'sox: volume control for Piper/Kokoro audio output'
+    'rhvoice-voice-evgeniy-eng: RHVoice English male voice'
+    'xclip: selection capture on X11 when xsel is not available'
     'python-kokoro: alternative Kokoro engine (PyTorch based)'
     'python-pytorch: PyTorch runtime for python-kokoro'
     'python-soundfile: audio file I/O for python-kokoro'
-    'xclip: selection capture on X11 when xsel is not available'
 )
 source=("git+https://github.com/biglinux/tts-biglinux.git")
 md5sums=(SKIP)
@@ -76,8 +86,10 @@ check() {
     cd "${_basedir}/tts-engine"
     ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo test --release --locked
     # Offline, headless tests (GTK widget tests skip without a display).
+    # No bytecode: package() copies usr/ afterwards and must not ship
+    # __pycache__ files that embed $srcdir paths.
     cd "${_basedir}"
-    python -m pytest -q -p no:cacheprovider tests
+    PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests
 }
 
 package() {
@@ -92,6 +104,9 @@ package() {
     if [ -d "${InternalDir}/usr" ]; then
         cp -r "${InternalDir}/usr" "${pkgdir}/usr"
     fi
+
+    # Never ship bytecode caches (from check() or a dirty tree).
+    find "${pkgdir}/usr" -type d -name __pycache__ -prune -exec rm -rf {} +
 
     # Install native Rust TTS engine
     local _so="${InternalDir}/tts-engine/target/release/libtts_engine.so"
