@@ -9,9 +9,11 @@ import pytest
 gi = pytest.importorskip("gi")
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gtk  # noqa: E402
+from gi.repository import Adw, Gdk, Gtk  # noqa: E402
 
-if not Gtk.init_check():
+# GTK 4.22's init_check() returns True even when no display could be opened,
+# and building widgets then segfaults (package builder): check the display.
+if not Gtk.init_check() or Gdk.Display.get_default() is None:
     pytest.skip("no display for GTK", allow_module_level=True)
 Adw.init()
 
