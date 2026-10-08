@@ -216,3 +216,50 @@ def test_koko_receives_prepared_text(tmp_path, monkeypatch):
     _run_watch(svc)
     assert svc.state is TTSState.IDLE
     assert copy.read_text() == "Espere…\nsério?\nSim."
+
+
+FAKE_ABORT = """#!/bin/sh
+cat >/dev/null
+echo "Application panic: panicked at kokorox/src/tts/koko.rs:1160:40:" >&2
+echo "index out of bounds: the len is 511 but the index is 550" >&2
+kill -ABRT $$
+"""
+
+
+def test_engine_crash_is_an_error_not_a_silent_stop(tmp_path, monkeypatch):
+    # A Rust panic aborts koko with SIGABRT (exit -6). That used to be taken
+    # for a stop and the request ended silently.
+    _fake_koko(tmp_path, monkeypatch, FAKE_ABORT)
+    svc = ts.TTSService()
+    assert _speak(svc)
+    _run_watch(svc)
+    assert svc.state is TTSState.ERROR
+    assert "Kokoro" in svc.last_error
+    assert "panicked" in svc.last_error_detail
+
+
+FAKE_SLOW_READER = """#!/bin/sh
+sleep 1
+cat > "$KOKO_STDIN_COPY"
+echo "Streaming audio for this segment..." >&2
+exit 0
+"""
+
+
+def test_large_text_does_not_block_the_caller(tmp_path, monkeypatch):
+    # koko reads stdin one line at a time while it synthesizes; a text larger
+    # than the pipe buffer must not block speak() (the GTK thread).
+    _fake_koko(tmp_path, monkeypatch, FAKE_SLOW_READER)
+    copy = tmp_path / "stdin.txt"
+    monkeypatch.setenv("KOKO_STDIN_COPY", str(copy))
+    sentence = "Esta é uma frase de teste para um texto muito grande. "
+    text = sentence * 6000  # ~330 KB, far above the 64 KB pipe buffer
+    svc = ts.TTSService()
+    start = time.monotonic()
+    assert svc.speak(text, backend="kokoro", voice_id="kokoro:pm_alex", volume=50,
+                     expand_abbreviations=False, normalize_numbers=False)
+    assert time.monotonic() - start < 0.8  # returned before koko read anything
+    _run_watch(svc, timeout=30)
+    assert svc.state is TTSState.IDLE
+    received = copy.read_text()
+    assert received.count("Esta é uma frase de teste") == 6000  # nothing lost
