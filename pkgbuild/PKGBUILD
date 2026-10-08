@@ -60,7 +60,9 @@ optdepends=(
     'piper-tts-bin: Piper command-line fallback (BigLinux repository; the native engine needs only voices)'
     'rhvoice-brazilian-portuguese-complementary-dict-biglinux: extra pronunciation dictionary for RHVoice (BigLinux repository)'
 )
-source=("git+https://github.com/biglinux/tts-biglinux.git")
+# TTS_BIGLINUX_SOURCE builds another repository or branch, e.g. a checkout
+# not published yet:  TTS_BIGLINUX_SOURCE="file://$PWD/..#branch=my-branch" makepkg -si
+source=("${pkgname}::git+${TTS_BIGLINUX_SOURCE:-https://github.com/biglinux/tts-biglinux.git}")
 sha256sums=('SKIP')
 
 _srcroot() {
