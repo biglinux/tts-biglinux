@@ -39,6 +39,7 @@ from config import (
     VOLUME_STEP,
 )
 from services.desktop_integration_service import DesktopIntegrationService
+from services.tts_service import engine_name
 from services.kokoro_voice_service import is_kokoro_installed
 from services.text_processor import get_system_language
 from services.voice_manager import (
@@ -46,16 +47,21 @@ from services.voice_manager import (
     VoiceInfo,
     discover_voices,
 )
+from services import shortcut_service
+from services.voice_manager import EngineAvailability
 from ui.components import (
+    ShortcutKeys,
     create_action_row_with_scale,
     create_action_row_with_switch,
     create_button_row,
     create_combo_row,
     create_icon_button,
     create_preferences_group,
+    create_state_pill,
+    set_state_pill,
 )
 from utils.async_utils import run_in_thread
-from utils.i18n import _
+from utils.i18n import N_, _
 
 if TYPE_CHECKING:
     from config import AppSettings
@@ -88,6 +94,14 @@ class MainView(Adw.NavigationPage):
         self._catalog: VoiceCatalog | None = None
         self._voice_list: list[VoiceInfo] = []
         self._updating_ui = False  # Prevent feedback loops
+        # Shortcut being registered: (new, previous) until the desktop answers.
+        self._pending_shortcut: tuple[str, str] | None = None
+        self._shortcut_status = shortcut_service.ShortcutStatus(
+            accel=settings_service.get().shortcut.keybinding
+        )
+        # "Stopped" is shown briefly after the person stops speech.
+        self._stopped_until_id = 0
+        self._shown_state: TTSState = TTSState.IDLE
 
         # Connect TTS state changes
         self._tts.set_on_state_changed(self._on_tts_state_changed)
@@ -243,49 +257,104 @@ class MainView(Adw.NavigationPage):
     # ── Hero Section ─────────────────────────────────────────────────
 
     def _build_hero_section(self) -> Gtk.Box:
-        """Build the hero status section with indicator and test button."""
-        hero = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        hero.add_css_class("hero-section")
-        hero.set_halign(Gtk.Align.FILL)
+        """The "Ready to speak" card and the voice test area below it.
 
-        # Status icon
+        The card shows the real request state (ready, loading the voice,
+        speaking, stopped, error) and the shortcut as keyboard keys — the
+        element with the most weight after the title.
+        """
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        card.add_css_class("card")
+        card.add_css_class("hero-card")
+        self._hero_card = card
+
+        # Status badge: icon, or a spinner while the voice loads.
+        self._hero_badge = Gtk.Stack()
+        self._hero_badge.add_css_class("hero-badge")
+        self._hero_badge.set_halign(Gtk.Align.CENTER)
+        self._hero_badge.set_valign(Gtk.Align.CENTER)
         self._hero_icon = Gtk.Image.new_from_icon_name("audio-speakers-symbolic")
-        self._hero_icon.set_pixel_size(48)
-        self._hero_icon.add_css_class("hero-status-icon")
-        self._hero_icon.set_halign(Gtk.Align.CENTER)
-        hero.append(self._hero_icon)
+        self._hero_icon.set_pixel_size(32)
+        self._hero_badge.add_named(self._hero_icon, "icon")
+        spinner = Adw.Spinner() if hasattr(Adw, "Spinner") else Gtk.Spinner(spinning=True)
+        spinner.set_size_request(32, 32)
+        spinner.set_halign(Gtk.Align.CENTER)
+        spinner.set_valign(Gtk.Align.CENTER)
+        self._hero_badge.add_named(spinner, "spinner")
+        card.append(self._hero_badge)
 
-        # Status title
         self._hero_title = Gtk.Label()
-        self._hero_title.set_markup(f"<b>{_('Ready to speak')}</b>")
+        self._hero_title.add_css_class("title-1")
         self._hero_title.add_css_class("hero-title")
-        self._hero_title.add_css_class("title-2")
-        self._hero_title.set_halign(Gtk.Align.CENTER)
-        hero.append(self._hero_title)
+        self._hero_title.set_wrap(True)
+        self._hero_title.set_justify(Gtk.Justification.CENTER)
+        card.append(self._hero_title)
 
-        # Status subtitle (instructions)
         self._hero_subtitle = Gtk.Label()
-        self._hero_subtitle.add_css_class("hero-subtitle")
         self._hero_subtitle.add_css_class("dim-label")
-        self._hero_subtitle.set_halign(Gtk.Align.CENTER)
         self._hero_subtitle.set_wrap(True)
         self._hero_subtitle.set_justify(Gtk.Justification.CENTER)
-        self._update_hero_labels(TTSState.IDLE)
-        hero.append(self._hero_subtitle)
+        self._hero_subtitle.set_max_width_chars(48)
+        card.append(self._hero_subtitle)
 
-        # Test text entry
+        # The shortcut, as keys.
+        self._hero_keys = ShortcutKeys(large=True)
+        self._hero_keys.set_margin_top(10)
+        card.append(self._hero_keys)
+
+        # Shortcut problems (not registered / conflict) and the way out.
+        self._hero_shortcut_note = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self._hero_shortcut_note.set_halign(Gtk.Align.CENTER)
+        self._hero_shortcut_icon = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
+        self._hero_shortcut_icon.add_css_class("warning")
+        self._hero_shortcut_note.append(self._hero_shortcut_icon)
+        self._hero_shortcut_label = Gtk.Label()
+        self._hero_shortcut_label.set_wrap(True)
+        self._hero_shortcut_label.set_max_width_chars(40)
+        self._hero_shortcut_label.add_css_class("caption")
+        self._hero_shortcut_note.append(self._hero_shortcut_label)
+        self._hero_shortcut_fix = Gtk.Button(label=_("Change shortcut"))
+        self._hero_shortcut_fix.add_css_class("flat")
+        self._hero_shortcut_fix.set_valign(Gtk.Align.CENTER)
+        self._hero_shortcut_fix.connect("clicked", self._on_shortcut_change_clicked)
+        self._hero_shortcut_note.append(self._hero_shortcut_fix)
+        self._hero_shortcut_note.set_visible(False)
+        card.append(self._hero_shortcut_note)
+
+        # Error recovery actions (only in the error state).
+        self._hero_actions = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self._hero_actions.set_halign(Gtk.Align.CENTER)
+        self._hero_actions.set_margin_top(6)
+        self._hero_retry = Gtk.Button(label=_("Try again"))
+        self._hero_retry.add_css_class("pill")
+        self._hero_retry.connect("clicked", lambda _b: self._on_test_voice())
+        self._hero_actions.append(self._hero_retry)
+        self._hero_manage = Gtk.Button(label=_("Open Voice Manager"))
+        self._hero_manage.add_css_class("pill")
+        self._hero_manage.connect("clicked", lambda _b: self._on_manage_current_engine())
+        self._hero_actions.append(self._hero_manage)
+        self._hero_details = Gtk.Button(label=_("Details"))
+        self._hero_details.add_css_class("flat")
+        self._hero_details.connect("clicked", self._on_error_details)
+        self._hero_actions.append(self._hero_details)
+        self._hero_actions.set_visible(False)
+        card.append(self._hero_actions)
+
+        outer.append(card)
+
+        # ── Voice test: type something and hear the selected voice.
+        test_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self._test_entry = Gtk.Entry()
         self._test_entry.set_text(_("This is a test, welcome to BigLinux!"))
         self._test_entry.set_placeholder_text(_("Type text to test…"))
-        self._test_entry.set_halign(Gtk.Align.FILL)
         self._test_entry.set_hexpand(True)
-        self._test_entry.set_margin_start(24)
-        self._test_entry.set_margin_end(24)
-        self._test_entry.set_margin_top(8)
         self._test_entry.set_max_length(500)
-        hero.append(self._test_entry)
+        self._test_entry.update_property([Gtk.AccessibleProperty.LABEL], [_("Text to test the voice")])
+        self._test_entry.connect("activate", lambda _e: self._on_test_voice())
+        test_box.append(self._test_entry)
 
-        # Test button
         self._test_button = create_button_row(
             label=_("Test voice"),
             style_class="suggested-action",
@@ -293,11 +362,12 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Test the selected voice"),
         )
         self._test_button.add_css_class("test-button")
-        self._test_button.set_halign(Gtk.Align.CENTER)
-        self._test_button.set_margin_top(6)
-        hero.append(self._test_button)
+        self._test_button.set_valign(Gtk.Align.CENTER)
+        test_box.append(self._test_button)
+        outer.append(test_box)
 
-        return hero
+        self._render_hero(TTSState.IDLE)
+        return outer
 
     # ── Quick Settings ───────────────────────────────────────────────
 
@@ -337,6 +407,28 @@ class MainView(Adw.NavigationPage):
             accessible_name=_("Select TTS engine"),
         )
         group.add(self._backend_combo)
+
+        # Engine status: is each engine installed, does it have voices, and
+        # what is the selected one doing right now (never simulated).
+        self._engine_expander = Adw.ExpanderRow()
+        self._engine_expander.set_title(_("Engine status"))
+        self._engine_expander.set_subtitle(_("Checking installed engines…"))
+        self._engine_summary_pill = create_state_pill(_("Checking…"))
+        self._engine_expander.add_suffix(self._engine_summary_pill)
+        self._engine_rows: dict[str, tuple[Adw.ActionRow, Gtk.Label]] = {}
+        for backend in (
+            TTSBackend.RHVOICE.value,
+            TTSBackend.ESPEAK_NG.value,
+            TTSBackend.PIPER.value,
+            TTSBackend.KOKORO.value,
+        ):
+            row = Adw.ActionRow()
+            row.set_title(engine_name(backend))
+            pill = create_state_pill(_("Checking…"))
+            row.add_suffix(pill)
+            self._engine_expander.add_row(row)
+            self._engine_rows[backend] = (row, pill)
+        group.add(self._engine_expander)
 
         # Voice selection combo
         self._voice_combo = create_combo_row(
@@ -580,20 +672,23 @@ class MainView(Adw.NavigationPage):
             )
         )
         shortcut_row.set_icon_name("preferences-desktop-keyboard-shortcuts-symbolic")
+        self._shortcut_row = shortcut_row
 
-        # Shortcut label showing current keybinding
-        self._shortcut_label = Gtk.ShortcutLabel()
-        self._shortcut_label.set_accelerator(self._settings.shortcut.keybinding)
-        self._shortcut_label.set_valign(Gtk.Align.CENTER)
+        # Current keys + whether the desktop confirmed them.
+        self._shortcut_keys = ShortcutKeys()
+        self._shortcut_keys.set_accelerator(self._settings.shortcut.keybinding)
+        self._shortcut_pill = create_state_pill(_("Checking…"))
 
         # "Change" button to start recording
         self._shortcut_button = Gtk.Button(label=_("Change"))
         self._shortcut_button.set_valign(Gtk.Align.CENTER)
         self._shortcut_button.add_css_class("flat")
+        self._shortcut_button.update_property([Gtk.AccessibleProperty.LABEL], [_("Change keyboard shortcut")])
         self._shortcut_button.connect("clicked", self._on_shortcut_change_clicked)
 
         shortcut_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        shortcut_box.append(self._shortcut_label)
+        shortcut_box.append(self._shortcut_keys)
+        shortcut_box.append(self._shortcut_pill)
         shortcut_box.append(self._shortcut_button)
         shortcut_row.add_suffix(shortcut_box)
 
@@ -695,7 +790,17 @@ class MainView(Adw.NavigationPage):
         )
         desc_label.set_justify(Gtk.Justification.CENTER)
         desc_label.set_margin_top(16)
-        desc_label.set_margin_bottom(16)
+        desc_label.set_margin_bottom(8)
+
+        # Why a combination was refused (shown in place, window stays open).
+        error_label = Gtk.Label()
+        error_label.add_css_class("error")
+        error_label.set_wrap(True)
+        error_label.set_max_width_chars(44)
+        error_label.set_justify(Gtk.Justification.CENTER)
+        error_label.set_margin_bottom(16)
+        error_label.set_visible(False)
+        win._error_label = error_label  # type: ignore[attr-defined]
 
         title_label = Gtk.Label(label=_("Press the new shortcut"))
         title_label.add_css_class("title-3")
@@ -707,6 +812,7 @@ class MainView(Adw.NavigationPage):
         content_box.append(icon)
         content_box.append(title_label)
         content_box.append(desc_label)
+        content_box.append(error_label)
 
         win.set_content(content_box)
 
@@ -732,7 +838,6 @@ class MainView(Adw.NavigationPage):
         win: Adw.Window,
     ) -> bool:
         """Handle key press in the capture window."""
-        import threading
 
         from gi.repository import Gdk
 
@@ -776,34 +881,30 @@ class MainView(Adw.NavigationPage):
         if not accel:
             return False
 
-        # Save the new shortcut
+        problem = shortcut_service.validate(accel)
+        if problem:
+            win._error_label.set_label(problem)  # type: ignore[attr-defined]
+            win._error_label.set_visible(True)  # type: ignore[attr-defined]
+            return True
+
+        previous = self._settings.shortcut.keybinding
+        DesktopIntegrationService.block_global_shortcuts(False)
+        win.close()  # the capture window (not the main window)
+
+        if accel == previous:
+            return True
+
         self._settings.shortcut.keybinding = accel
         self._settings_service.save_now()
+        logger.info("Shortcut change requested: %s", accel)
 
-        # Update UI
-        self._shortcut_label.set_accelerator("" if accel == "none" else accel)
-        self._update_hero_labels(self._tts.state)
-        win = self._root_window()
-        if win is not None and hasattr(win, "refresh_status"):
-            win.refresh_status()
-
-        # Unblock global shortcuts before updating KDE bindings
-        DesktopIntegrationService.block_global_shortcuts(False)
-
-        # Close the capture window immediately
-        win.close()
-
-        display_name = Gtk.accelerator_get_label(keyval, mods)
-        self._on_toast(_("Shortcut changed to {keys}").format(keys=display_name), 3)
-        logger.info("Shortcut changed to: %s (%s)", accel, display_name)
-
-        # Update shortcut for the current desktop environment in background
-        threading.Thread(
-            target=DesktopIntegrationService.register_shortcut_for_current_de,
-            args=(accel,),
-            daemon=True,
-        ).start()
-
+        # Registration answers later (on_shortcut_status); no success message
+        # until the desktop confirms the new keys.
+        self._pending_shortcut = (accel, previous)
+        app = self._root_app()
+        if app is not None and hasattr(app, "apply_shortcut"):
+            app.apply_shortcut(accel)
+        self._render_shortcut()
         return True
 
     # ── Launcher toggle ────────────────────────────────────────────
@@ -815,6 +916,10 @@ class MainView(Adw.NavigationPage):
 
         self._settings.shortcut.show_in_launcher = active
         self._settings_service.save()
+
+        win = self._root_window()
+        if win is not None and hasattr(win, "sync_tray_action"):
+            win.sync_tray_action(active)
 
         # Toggle system tray icon
         app = self._root_app()
@@ -1014,9 +1119,10 @@ class MainView(Adw.NavigationPage):
                     Gtk.StringList.new([_("No voices available for this engine")])
                 )
                 self._voice_combo.set_subtitle(
-                    _("Install {engine} voices first").format(engine=current_backend)
+                    _("Install {engine} voices first").format(engine=engine_name(current_backend))
                 )
                 self._test_button.set_sensitive(False)
+            self._refresh_engine_status()
             return
 
         self._voice_list = filtered
@@ -1031,9 +1137,9 @@ class MainView(Adw.NavigationPage):
         for v in self._voice_list:
             quality_tag = ""
             if v.quality == "neural":
-                quality_tag = " [Neural]"
+                quality_tag = " · " + _("Neural")
             elif v.quality == "high":
-                quality_tag = " [HQ]"
+                quality_tag = " · " + _("High quality")
 
             display_names.append(f"{v.name} — {v.language_name}{quality_tag}")
 
@@ -1043,12 +1149,11 @@ class MainView(Adw.NavigationPage):
             self._voice_combo.set_model(model)
             status_msg = _("{count} voices available").format(count=len(display_names))
             self._voice_combo.set_subtitle(status_msg)
-            # Show a toast for the refresh result
-            self._on_toast(status_msg, 2)
 
             # Select current voice (accent-insensitive match)
             current_voice_id = self._settings.speech.voice_id
             selected_idx = 0
+            found = False
 
             if current_voice_id:
                 import unicodedata
@@ -1061,10 +1166,12 @@ class MainView(Adw.NavigationPage):
                 for i, v in enumerate(self._voice_list):
                     if _norm(v.voice_id) == norm_current:
                         selected_idx = i
+                        found = True
                         break
 
-            # If current voice not in filtered list, auto-select best
-            if selected_idx == 0 and current_voice_id:
+            # If current voice not in filtered list, auto-select best (a saved
+            # voice that happens to be first in the list is kept as is).
+            if not found and current_voice_id:
                 # Voice not found in current backend — pick best for language
                 sys_lang = get_system_language()
                 for i, v in enumerate(self._voice_list):
@@ -1090,6 +1197,7 @@ class MainView(Adw.NavigationPage):
         # Refresh Kokoro blend combo if Kokoro is active
         if current_backend == TTSBackend.KOKORO.value:
             self._populate_kokoro_blend_combo()
+        self._refresh_engine_status()
 
     # ── Event Handlers ───────────────────────────────────────────────
 
@@ -1220,7 +1328,7 @@ class MainView(Adw.NavigationPage):
             else:
                 self._on_toast(
                     _("No voices found for {engine} — install it first").format(
-                        engine=backend,
+                        engine=engine_name(backend),
                     ),
                     4,
                 )
@@ -1547,10 +1655,7 @@ class MainView(Adw.NavigationPage):
 
     def current_voice_label(self) -> str:
         """Human-readable name of the currently selected voice (for the bar)."""
-        idx = self._voice_combo.get_selected() if hasattr(self, "_voice_combo") else -1
-        if self._voice_list and 0 <= idx < len(self._voice_list):
-            return self._voice_list[idx].name
-        return ""
+        return self._voice_display_name()
 
     def _on_test_voice(self) -> None:
         """Test the selected voice / stop if already speaking."""
@@ -1600,85 +1705,222 @@ class MainView(Adw.NavigationPage):
             process_special_chars=self._settings.text.process_special_chars,
             process_urls=self._settings.text.process_urls,
             strip_formatting=self._settings.text.strip_formatting,
+            normalize_numbers=self._settings.text.normalize_numbers,
         )
-
+        # A failure is shown on the card (with its reason and a way out).
         if not success:
-            self._on_toast(
-                _("Could not play test — check if a TTS engine is installed"), 4
-            )
+            logger.info("Test voice failed: %s", self._tts.last_error)
 
     # ── TTS State Callback ───────────────────────────────────────────
 
     def _on_tts_state_changed(self, state: TTSState) -> None:
-        """Update hero section when TTS state changes."""
-        GLib.idle_add(self._update_hero_state, state)
-
-    def _get_shortcut_display(self) -> str:
-        accel = self._settings.shortcut.keybinding
-        return DesktopIntegrationService.gtk_accel_to_kde(accel)
-
-    def _update_hero_labels(self, state: TTSState) -> None:
-        """Update hero subtitle texts dynamically."""
-        sc = self._get_shortcut_display()
-        if state == TTSState.SPEAKING:
-            lbl = _("Press Alt+V to stop")
-            self._hero_subtitle.set_label(lbl.replace("Alt+V", sc))
-        elif state == TTSState.ERROR:
-            self._hero_subtitle.set_label(_("Could not play speech — check TTS engine"))
+        """TTS state changed (always delivered on the GTK main thread)."""
+        if state == TTSState.IDLE and self._tts.stopped_by_user and self._shown_state in (
+            TTSState.LOADING, TTSState.SPEAKING,
+        ):
+            self._show_stopped()
         else:
-            lbl = _("Select text and press Alt+V to read aloud")
-            self._hero_subtitle.set_label(lbl.replace("Alt+V", sc))
+            self._render_hero(state)
+        self._refresh_engine_status()
 
-    def _update_hero_state(self, state: TTSState) -> bool:
-        """Update hero UI for current TTS state (main thread)."""
-        # Neural engine indicator
-        is_neural = self._settings.speech.backend in (
-            TTSBackend.PIPER.value, TTSBackend.KOKORO.value,
+    def _show_stopped(self) -> None:
+        """Say "Stopped" for a moment after the person stops speech."""
+        if self._stopped_until_id:
+            GLib.source_remove(self._stopped_until_id)
+
+        def _back() -> bool:
+            self._stopped_until_id = 0
+            self._render_hero(self._tts.state)
+            return False
+
+        self._render_hero(TTSState.IDLE, stopped=True)
+        self._stopped_until_id = GLib.timeout_add(2500, _back)
+
+    def _voice_display_name(self) -> str:
+        idx = self._voice_combo.get_selected() if hasattr(self, "_voice_combo") else -1
+        if self._voice_list and 0 <= idx < len(self._voice_list):
+            return self._voice_list[idx].name
+        return ""
+
+    def _render_hero(self, state: TTSState, *, stopped: bool = False) -> None:
+        """Show ``state`` on the card, the test button and the shortcut line."""
+        if not hasattr(self, "_hero_title"):
+            return
+        if state != TTSState.IDLE and self._stopped_until_id:
+            GLib.source_remove(self._stopped_until_id)
+            self._stopped_until_id = 0
+        self._shown_state = state
+        badge = self._hero_badge
+        for cls in ("speaking", "error", "stopped"):
+            badge.remove_css_class(cls)
+        busy = state in (TTSState.LOADING, TTSState.SPEAKING)
+        shortcut = shortcut_service.display_text(self._settings.shortcut.keybinding)
+
+        if state == TTSState.LOADING:
+            badge.set_visible_child_name("spinner")
+            title = _("Loading voice…")
+            voice = self._voice_display_name()
+            subtitle = (
+                _("Preparing {voice}. Speech starts in a moment.").format(voice=voice)
+                if voice else _("Preparing the voice. Speech starts in a moment.")
+            )
+        elif state == TTSState.SPEAKING:
+            badge.set_visible_child_name("icon")
+            badge.add_css_class("speaking")
+            self._hero_icon.set_from_icon_name("audio-volume-high-symbolic")
+            title = _("Speaking…")
+            subtitle = (
+                _("Press {shortcut} again to stop.").format(shortcut=shortcut)
+                if shortcut else _("Use Stop to end the reading.")
+            )
+        elif state == TTSState.ERROR:
+            badge.set_visible_child_name("icon")
+            badge.add_css_class("error")
+            self._hero_icon.set_from_icon_name("dialog-warning-symbolic")
+            title = _("Could not read the text")
+            subtitle = self._tts.last_error or _("The speech engine reported a problem.")
+        elif stopped:
+            badge.set_visible_child_name("icon")
+            badge.add_css_class("stopped")
+            self._hero_icon.set_from_icon_name("media-playback-stop-symbolic")
+            title = _("Stopped")
+            subtitle = _("Reading was stopped.")
+        else:
+            badge.set_visible_child_name("icon")
+            self._hero_icon.set_from_icon_name("audio-speakers-symbolic")
+            title = _("Ready to speak")
+            subtitle = _("Select any text and use the shortcut to hear it.")
+
+        self._hero_title.set_label(title)
+        self._hero_subtitle.set_label(subtitle)
+        self._hero_subtitle.set_selectable(state == TTSState.ERROR)
+        self._hero_card.update_property(
+            [Gtk.AccessibleProperty.LABEL], [f"{title}. {subtitle}"]
         )
 
-        if state == TTSState.SPEAKING:
-            self._hero_icon.set_from_icon_name("audio-volume-high-symbolic")
-            self._hero_icon.add_css_class("speaking-indicator")
-            self._hero_title.set_markup(f"<b>{_('Speaking...')}</b>")
-            self._update_hero_labels(state)
-            self._test_button.set_label(_("Stop"))
-            self._test_button.update_property(
-                [Gtk.AccessibleProperty.LABEL], [_("Stop")]
-            )
-            self._test_button.remove_css_class("suggested-action")
-            self._test_button.add_css_class("destructive-action")
-            if is_neural:
-                self.add_css_class("status-neural")
+        # Error recovery
+        is_error = state == TTSState.ERROR
+        action = self._tts.last_error_action if is_error else ""
+        self._hero_actions.set_visible(is_error)
+        self._hero_manage.set_visible(action == "voice-manager")
+        self._hero_retry.set_visible(is_error and action != "voice-manager")
+        self._hero_details.set_visible(is_error and bool(self._tts.last_error_detail))
+
+        # Test button mirrors the request: Stop while busy.
+        label = _("Stop") if busy else _("Test voice")
+        self._test_button.set_label(label)
+        self._test_button.update_property([Gtk.AccessibleProperty.LABEL], [label if busy else _("Test the selected voice")])
+        self._test_button.remove_css_class("destructive-action" if not busy else "suggested-action")
+        self._test_button.add_css_class("destructive-action" if busy else "suggested-action")
+
+        self._render_shortcut()
+
+    def _render_shortcut(self) -> None:
+        """Keys + what the desktop said about them."""
+        accel = self._settings.shortcut.keybinding
+        self._hero_keys.set_accelerator(accel)
+        if hasattr(self, "_shortcut_keys"):
+            self._shortcut_keys.set_accelerator(accel)
+        status = self._shortcut_status
+        failed = status.registered is False and status.accel == accel
+        self._hero_shortcut_note.set_visible(failed)
+        if failed:
+            self._hero_shortcut_label.set_label(status.message or _("The shortcut is not active."))
+        row = getattr(self, "_shortcut_row", None)
+        if row is not None:
+            if status.accel == accel and status.registered is None:
+                sub = _("Checking the shortcut with the desktop…")
+            elif failed:
+                sub = status.message or _("The shortcut is not active.")
             else:
-                self.remove_css_class("status-neural")
-
-        elif state == TTSState.ERROR:
-            self._hero_icon.set_from_icon_name("dialog-warning-symbolic")
-            self._hero_icon.remove_css_class("speaking-indicator")
-            self._hero_title.set_markup(f"<b>{_('Error')}</b>")
-            self._update_hero_labels(state)
-            self._test_button.set_label(_("Test voice"))
-            self._test_button.update_property(
-                [Gtk.AccessibleProperty.LABEL], [_("Test voice")]
+                sub = _("Select text anywhere and press the shortcut to read aloud. Press again to stop.")
+            row.set_subtitle(sub)
+            set_state_pill(
+                self._shortcut_pill,
+                _("Not active") if failed else (_("Checking…") if status.registered is None else _("Active")),
+                "error" if failed else ("" if status.registered is None else "ready"),
             )
-            self._test_button.remove_css_class("destructive-action")
-            self._test_button.add_css_class("suggested-action")
-            self.remove_css_class("status-neural")
 
-        else:  # IDLE
-            self._hero_icon.set_from_icon_name("audio-speakers-symbolic")
-            self._hero_icon.remove_css_class("speaking-indicator")
-            self._hero_title.set_markup(f"<b>{_('Ready to speak')}</b>")
-            self._update_hero_labels(state)
-            self._test_button.set_label(_("Test voice"))
-            self._test_button.update_property(
-                [Gtk.AccessibleProperty.LABEL], [_("Test voice")]
+    def on_shortcut_status(self, status) -> None:
+        """Registration result from the application (main thread)."""
+        self._shortcut_status = status
+        pending = self._pending_shortcut
+        if pending and status.accel == pending[0] and status.registered is not None:
+            new, previous = pending
+            self._pending_shortcut = None
+            if status.registered:
+                self._on_toast(
+                    _("Shortcut changed to {keys}").format(keys=shortcut_service.display_text(new)), 3
+                )
+            elif status.conflicts and previous and previous != new:
+                # Keep a working shortcut instead of leaving a conflicting one.
+                self._settings.shortcut.keybinding = previous
+                self._settings_service.save_now()
+                self._on_toast(status.message, 6)
+                app = self._root_app()
+                if app is not None and hasattr(app, "apply_shortcut"):
+                    app.apply_shortcut(previous)
+            else:
+                self._on_toast(status.message or _("The shortcut is not active."), 6)
+        self._render_shortcut()
+        win = self._root_window()
+        if win is not None and hasattr(win, "refresh_status"):
+            win.refresh_status()
+
+    _ENGINE_INSTALL_HINTS = {
+        TTSBackend.RHVOICE.value: N_("Not installed. Install the rhvoice package and a voice."),
+        TTSBackend.ESPEAK_NG.value: N_("Not installed. Install the espeak-ng package."),
+        TTSBackend.PIPER.value: N_("Not installed. Install Piper from the TTS Backend list."),
+        TTSBackend.KOKORO.value: N_("Not installed. Install the biglinux-kokoro-tts package."),
+    }
+
+    def _refresh_engine_status(self) -> None:
+        """Engine rows: installed / voices, plus the selected engine's activity."""
+        if not hasattr(self, "_engine_rows"):
+            return
+        catalog = self._catalog
+        engines = catalog.engines if catalog else {}
+        active = self._settings.speech.backend
+        state = self._tts.state
+        summary = None
+        for backend, (row, pill) in self._engine_rows.items():
+            avail = engines.get(backend)
+            if avail is None:
+                text, kind, sub = _("Checking…"), "", ""
+            elif avail == EngineAvailability.NOT_INSTALLED:
+                text, kind = _("Not installed"), "warning"
+                sub = _(self._ENGINE_INSTALL_HINTS[backend])
+            elif avail == EngineAvailability.NO_VOICES:
+                text, kind = _("No voices"), "warning"
+                sub = _("Installed, but no voice is available. Open the Voice Manager.")
+            else:
+                count = len(catalog.get_by_backend(backend)) if catalog else 0
+                text, kind = _("Ready"), "ready"
+                sub = _("{count} voices installed").format(count=count)
+            if backend == active and avail == EngineAvailability.READY:
+                if state == TTSState.LOADING:
+                    text, kind = _("Loading"), "busy"
+                elif state == TTSState.SPEAKING:
+                    text, kind = _("Speaking"), "busy"
+                elif state == TTSState.ERROR:
+                    text, kind = _("Error"), "error"
+                    sub = self._tts.last_error or sub
+            row.set_subtitle(sub)
+            set_state_pill(pill, text, kind)
+            row.update_property([Gtk.AccessibleProperty.DESCRIPTION], [f"{text}. {sub}"])
+            if backend == active:
+                summary = (text, kind)
+        if summary:
+            self._engine_expander.set_subtitle(
+                _("{engine}: {state}").format(engine=engine_name(active), state=summary[0])
             )
-            self._test_button.remove_css_class("destructive-action")
-            self._test_button.add_css_class("suggested-action")
-            self.remove_css_class("status-neural")
+            set_state_pill(self._engine_summary_pill, summary[0], summary[1])
 
-        return GLib.SOURCE_REMOVE
+    def _on_error_details(self, _button: Gtk.Button) -> None:
+        dialog = Adw.AlertDialog.new(_("Technical details"), None)
+        dialog.set_body(self._tts.last_error_detail or "")
+        dialog.add_response("close", _("Close"))
+        dialog.present(self._root_window())
 
     # ── Restore Defaults ─────────────────────────────────────────────
 
@@ -1739,7 +1981,6 @@ class MainView(Adw.NavigationPage):
 
             # Keyboard shortcut
             accel = self._settings.shortcut.keybinding
-            self._shortcut_label.set_accelerator("" if accel == "none" else accel)
 
             # Launcher toggle
             self._launcher_switch_widget.set_active(
@@ -1761,11 +2002,12 @@ class MainView(Adw.NavigationPage):
             if is_kokoro:
                 self._populate_kokoro_blend_combo(kokoro.voice_blend)
 
-            # Update KDE shortcut to default
-            DesktopIntegrationService.update_khotkeys(accel)
-
-            # Update hero labels
-            self._update_hero_labels(self._tts.state)
+        # Register the default shortcut in the background (result arrives via
+        # on_shortcut_status).
+        app = self._root_app()
+        if app is not None and hasattr(app, "apply_shortcut"):
+            app.apply_shortcut(accel)
+        self._render_hero(self._tts.state)
 
     def set_launcher_enabled(self, enabled: bool) -> None:
         """Expose launcher toggle state change to other components."""

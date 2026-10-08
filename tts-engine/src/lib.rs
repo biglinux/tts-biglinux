@@ -44,8 +44,18 @@ fn version() -> &'static str {
 /// * `volume` — volume (0–200, default 100)
 #[pyfunction]
 #[pyo3(signature = (text, voice="pt-BR", rate=175, pitch=50, volume=100))]
-fn speak_espeak(text: &str, voice: &str, rate: i32, pitch: i32, volume: i32) -> PyResult<bool> {
-    backends::espeak::speak(text, voice, rate, pitch, volume)
+fn speak_espeak(
+    py: Python<'_>,
+    text: &str,
+    voice: &str,
+    rate: i32,
+    pitch: i32,
+    volume: i32,
+) -> PyResult<bool> {
+    let (text, voice) = (text.to_owned(), voice.to_owned());
+    // Release the GIL while speaking: other Python threads (the GTK main
+    // loop, D-Bus handlers) keep running.
+    py.allow_threads(move || backends::espeak::speak(&text, &voice, rate, pitch, volume))
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
 
@@ -62,7 +72,9 @@ fn synthesize_espeak<'py>(
     pitch: i32,
     volume: i32,
 ) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
-    let wav = backends::espeak::synthesize(text, voice, rate, pitch, volume)
+    let (text, voice) = (text.to_owned(), voice.to_owned());
+    let wav = py
+        .allow_threads(move || backends::espeak::synthesize(&text, &voice, rate, pitch, volume))
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
     Ok(pyo3::types::PyBytes::new(py, &wav))
 }
@@ -71,8 +83,9 @@ fn synthesize_espeak<'py>(
 ///
 /// Run during idle to make the first real synthesis warm. Never plays sound.
 #[pyfunction]
-fn load_piper(model_path: &str) -> PyResult<()> {
-    backends::piper::load(model_path)
+fn load_piper(py: Python<'_>, model_path: &str) -> PyResult<()> {
+    let model_path = model_path.to_owned();
+    py.allow_threads(move || backends::piper::load(&model_path))
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
 
@@ -95,6 +108,7 @@ fn stop() -> PyResult<()> {
 #[pyfunction]
 #[pyo3(signature = (text, model_path, length_scale=1.0, noise_scale=0.667, noise_w=0.8, volume=1.0))]
 fn speak_piper(
+    py: Python<'_>,
     text: &str,
     model_path: &str,
     length_scale: f32,
@@ -102,8 +116,11 @@ fn speak_piper(
     noise_w: f32,
     volume: f32,
 ) -> PyResult<bool> {
-    backends::piper::speak(text, model_path, length_scale, noise_scale, noise_w, volume)
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
+    let (text, model_path) = (text.to_owned(), model_path.to_owned());
+    py.allow_threads(move || {
+        backends::piper::speak(&text, &model_path, length_scale, noise_scale, noise_w, volume)
+    })
+    .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
 
 /// Synthesize text to WAV bytes via Piper (no playback).
@@ -120,8 +137,12 @@ fn synthesize_piper<'py>(
     noise_w: f32,
     volume: f32,
 ) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
-    let wav =
-        backends::piper::synthesize(text, model_path, length_scale, noise_scale, noise_w, volume)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
+    // ONNX inference can take hundreds of ms: never hold the GIL meanwhile.
+    let (text, model_path) = (text.to_owned(), model_path.to_owned());
+    let wav = py
+        .allow_threads(move || {
+            backends::piper::synthesize(&text, &model_path, length_scale, noise_scale, noise_w, volume)
+        })
+        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
     Ok(pyo3::types::PyBytes::new(py, &wav))
 }

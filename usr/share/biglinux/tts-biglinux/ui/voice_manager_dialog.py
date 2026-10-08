@@ -12,7 +12,6 @@ from __future__ import annotations
 import logging
 import os
 import re
-import shutil
 import subprocess
 import tempfile
 import threading
@@ -25,10 +24,12 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk
 
 from services.kokoro_voice_service import (
+    build_koko_command,
     get_voice_status as kokoro_get_voice_status,
     download_voice as kokoro_download_voice,
+    koko_problem,
+    koko_workdir,
     remove_voice as kokoro_remove_voice,
-    get_active_voices_bin,
 )
 from utils.i18n import _
 
@@ -352,6 +353,14 @@ def _guess_gender(name: str) -> str:
     return "male"
 
 
+def _reap(proc: subprocess.Popen) -> None:
+    try:
+        proc.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        proc.wait()
+
+
 # ── Dialog ───────────────────────────────────────────────────────────
 
 
@@ -371,6 +380,9 @@ class VoiceManagerDialog(Adw.Dialog):
         self._busy = False
         self._preview_proc: subprocess.Popen | None = None
         self._preview_tmp: str | None = None
+        # Preview requests: a newer one (or Stop) invalidates older workers.
+        self._preview_gen = 0
+        self._preview_button: Gtk.Button | None = None
         self._cancel_download = threading.Event()
 
         self.set_title(_("Voice Manager"))
@@ -449,7 +461,22 @@ class VoiceManagerDialog(Adw.Dialog):
         self._progress.set_halign(Gtk.Align.FILL)
         self._progress.set_visible(False)
         overlay.add_overlay(self._progress)
-        self.set_child(overlay)
+
+        # Download status bar: what is happening + Cancel (Kokoro downloads).
+        self._status_bar = Gtk.ActionBar()
+        self._status_bar.set_revealed(False)
+        self._status_label = Gtk.Label(xalign=0)
+        self._status_label.set_ellipsize(3)  # Pango.EllipsizeMode.END
+        self._status_label.set_hexpand(True)
+        self._status_bar.pack_start(self._status_label)
+        self._cancel_button = Gtk.Button(label=_("Cancel"))
+        self._cancel_button.connect("clicked", lambda _b: self._cancel_download.set())
+        self._status_bar.pack_end(self._cancel_button)
+        toolbarview.add_bottom_bar(self._status_bar)
+
+        self._toasts = Adw.ToastOverlay()
+        self._toasts.set_child(overlay)
+        self.set_child(self._toasts)
 
         # Start loading
         self._stack.set_visible_child_name("loading")
@@ -631,8 +658,8 @@ class VoiceManagerDialog(Adw.Dialog):
             preview_btn.add_css_class("flat")
             preview_btn.add_css_class("circular")
             preview_btn.set_valign(Gtk.Align.CENTER)
-            preview_btn.set_tooltip_text(_("Preview voice"))
-            preview_btn.connect("clicked", lambda b, p=pkg: self._on_preview(b, p))
+            self._set_preview_button_idle(preview_btn, display)
+            preview_btn.connect("clicked", lambda b, p=pkg, n=display: self._on_preview(b, p, n))
             row.add_suffix(preview_btn)
 
         # Single action icon that alternates install ⇄ uninstall — no text tag.
@@ -642,6 +669,7 @@ class VoiceManagerDialog(Adw.Dialog):
             btn.add_css_class("suggested-action")
             btn.set_valign(Gtk.Align.CENTER)
             btn.set_tooltip_text(_("Install {name}").format(name=display))
+            btn.update_property([Gtk.AccessibleProperty.LABEL], [_("Install {name}").format(name=display)])
             btn.connect("clicked", lambda b, p=pkg: self._on_install(b, p))
             row.add_suffix(btn)
         elif removable:
@@ -650,6 +678,7 @@ class VoiceManagerDialog(Adw.Dialog):
             btn.add_css_class("destructive-action")
             btn.set_valign(Gtk.Align.CENTER)
             btn.set_tooltip_text(_("Remove {name}").format(name=display))
+            btn.update_property([Gtk.AccessibleProperty.LABEL], [_("Remove {name}").format(name=display)])
             btn.connect("clicked", lambda b, p=pkg: self._on_remove(b, p))
             row.add_suffix(btn)
         else:
@@ -672,10 +701,22 @@ class VoiceManagerDialog(Adw.Dialog):
         self._run_action("install", pkg, button)
 
     def _on_remove(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
-        """Remove a package directly (no confirmation)."""
+        """Remove a voice after confirmation."""
         if self._busy:
             return
-        self._run_action("remove", pkg, button)
+        name = GLib.markup_escape_text(pkg.get("display_name", pkg["pkg"]))
+        self._confirm(
+            _("Remove {name}?").format(name=name),
+            _("The voice will no longer be available for reading. You can install it again later."),
+            _("Remove"),
+            Adw.ResponseAppearance.DESTRUCTIVE,
+            lambda: self._run_action("remove", pkg, button),
+        )
+
+    def _toast(self, message: str, timeout: int = 4) -> None:
+        toast = Adw.Toast.new(message)
+        toast.set_timeout(timeout)
+        self._toasts.add_toast(toast)
 
     def _confirm(
         self,
@@ -730,13 +771,22 @@ class VoiceManagerDialog(Adw.Dialog):
         state = {"pulse_id": 0}
 
         progress_cb = None
+        display = pkg.get("display_name", pkg_name)
         if is_download:
             self._cancel_download.clear()
+            self._status_label.set_label(_("Downloading {name}…").format(name=display))
+            self._cancel_button.set_visible(True)
+            self._status_bar.set_revealed(True)
 
             def progress_cb(downloaded: int, total: int) -> None:
                 def _update() -> bool:
                     if total > 0:
                         self._progress.set_fraction(min(1.0, downloaded / total))
+                        self._status_label.set_label(
+                            _("Downloading {name}… {done} of {total} KB").format(
+                                name=display, done=downloaded // 1024, total=total // 1024,
+                            )
+                        )
                     else:
                         self._progress.pulse()
                     return False
@@ -794,6 +844,7 @@ class VoiceManagerDialog(Adw.Dialog):
         def _on_done(result: tuple[bool, str]) -> bool:
             success, error = result
             self._busy = False
+            self._status_bar.set_revealed(False)
             if state["pulse_id"]:
                 GLib.source_remove(state["pulse_id"])
                 state["pulse_id"] = 0
@@ -810,8 +861,8 @@ class VoiceManagerDialog(Adw.Dialog):
                 if self._on_voices_changed:
                     self._on_voices_changed()
             elif error == "cancelled":
-                # User cancelled (e.g. closed the dialog) — no error popup.
-                pass
+                # Cancelled: nothing was written (voices.bin is replaced atomically).
+                self._toast(_("Download cancelled"), 2)
             else:
                 err_dialog = Adw.AlertDialog()
                 err_dialog.set_heading(
@@ -833,21 +884,29 @@ class VoiceManagerDialog(Adw.Dialog):
 
     # ── Voice preview ────────────────────────────────────────────────
 
+    def _set_preview_button_idle(self, button: Gtk.Button, name: str) -> None:
+        button.set_icon_name("media-playback-start-symbolic")
+        label = _("Play a sample of {name}").format(name=name)
+        button.set_tooltip_text(label)
+        button.update_property([Gtk.AccessibleProperty.LABEL], [label])
+
     def _stop_preview(self) -> None:
-        """Kill any running preview subprocess and cleanup temp files."""
-        if self._preview_proc and self._preview_proc.poll() is None:
-            self._preview_proc.terminate()
-            try:
-                self._preview_proc.wait(timeout=2)
-            except subprocess.TimeoutExpired:
-                self._preview_proc.kill()
-        self._preview_proc = None
+        """Stop the running preview (never blocks the UI) and clean up."""
+        self._preview_gen += 1
+        proc, self._preview_proc = self._preview_proc, None
+        if proc is not None and proc.poll() is None:
+            proc.terminate()
+            # Reap in the background: waiting here would freeze the dialog.
+            threading.Thread(target=_reap, args=(proc,), daemon=True).start()
         if self._preview_tmp:
             try:
                 os.unlink(self._preview_tmp)
             except OSError:
                 pass
             self._preview_tmp = None
+        button, self._preview_button = self._preview_button, None
+        if button is not None:
+            self._set_preview_button_idle(button, getattr(button, "_voice_name", ""))
 
     def _get_sample_text(self, lang: str) -> str:
         """Get sample text for a language code.
@@ -882,146 +941,126 @@ class VoiceManagerDialog(Adw.Dialog):
             return "pt-br" if "br" in loc else "pt"
         return loc
 
-    def _on_preview(self, button: Gtk.Button, pkg: dict[str, str]) -> None:
-        """Preview an installed voice."""
+    def _on_preview(self, button: Gtk.Button, pkg: dict[str, str], name: str = "") -> None:
+        """Play a sample of an installed voice; the same button stops it."""
+        was_playing = button is self._preview_button
         self._stop_preview()
+        if was_playing:
+            return
 
         engine = pkg.get("engine", "")
         lang = pkg.get("language", "")
         sample = self._get_sample_text(lang)
 
-        # Show spinner feedback on button
+        button._voice_name = name  # type: ignore[attr-defined]
+        self._preview_button = button
         button.set_icon_name("media-playback-stop-symbolic")
+        stop_label = _("Stop the sample")
+        button.set_tooltip_text(stop_label)
+        button.update_property([Gtk.AccessibleProperty.LABEL], [stop_label])
+        gen = self._preview_gen
 
-        def _restore_button() -> bool:
-            button.set_icon_name("media-playback-start-symbolic")
+        def _finished(error: str = "") -> bool:
+            if gen != self._preview_gen:
+                return False  # stopped or superseded meanwhile
+            self._preview_button = None
+            self._preview_proc = None
+            self._set_preview_button_idle(button, name)
+            if error:
+                self._toast(error, 6)
             return False
 
         if engine == "espeak-ng":
-            self._preview_espeak(sample, _restore_button, lang)
+            self._preview_espeak(sample, _finished, lang, gen)
         elif engine == "RHVoice":
-            voice_name = pkg.get("voice_name", "")
-            self._preview_rhvoice(voice_name, sample, _restore_button)
+            self._preview_rhvoice(pkg.get("voice_name", ""), sample, _finished, gen)
         elif engine == "Kokoro":
-            voice_id = pkg.get("voice_id", "")
-            self._preview_kokoro(voice_id, lang, sample, _restore_button)
+            self._preview_kokoro(pkg.get("voice_id", ""), sample, _finished, gen)
         else:
-            _restore_button()
+            _finished()
 
-    def _preview_espeak(
-        self, text: str, on_done: Callable[[], bool], lang: str = ""
-    ) -> None:
-        """Preview using espeak-ng (speaks directly, no temp file).
+    def _run_preview(self, steps: list[list[str]], gen: int, on_done, *, stdin_text: str | None = None, cwd: str | None = None, pipe_to: list[str] | None = None) -> None:
+        """Run preview commands one after another in a worker thread.
 
-        Always passes an explicit voice so the preview never uses espeak's
-        default English voice for a non-English sample.
+        Each step must succeed; the first failure is reported. ``pipe_to``
+        plays the first step's stdout (RHVoice-test | aplay).
         """
+        def _worker() -> None:
+            error = ""
+            try:
+                for i, cmd in enumerate(steps):
+                    if gen != self._preview_gen:
+                        return
+                    stdout = subprocess.PIPE if (pipe_to and i == 0) else subprocess.DEVNULL
+                    proc = subprocess.Popen(
+                        cmd,
+                        stdin=subprocess.PIPE if stdin_text is not None and i == 0 else subprocess.DEVNULL,
+                        stdout=stdout,
+                        stderr=subprocess.PIPE,
+                        cwd=cwd,
+                    )
+                    player = None
+                    if pipe_to and i == 0:
+                        player = subprocess.Popen(pipe_to, stdin=proc.stdout, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        proc.stdout.close()
+                    self._preview_proc = player or proc
+                    if stdin_text is not None and i == 0 and proc.stdin:
+                        try:
+                            proc.stdin.write(stdin_text.encode("utf-8"))
+                            proc.stdin.close()
+                        except BrokenPipeError:
+                            pass
+                    err = proc.stderr.read() if proc.stderr else b""
+                    proc.wait()
+                    if player is not None:
+                        player.wait()
+                    if gen != self._preview_gen:
+                        return  # stopped by the person: not an error
+                    if proc.returncode != 0:
+                        detail = (err or b"").decode("utf-8", "replace").strip().splitlines()
+                        error = _("The sample could not be played.") + (f" ({detail[-1]})" if detail else "")
+                        break
+            except FileNotFoundError as e:
+                error = _("The sample could not be played: {program} is not installed.").format(program=os.path.basename(e.filename or ""))
+            except OSError as e:
+                error = _("The sample could not be played.") + f" ({e})"
+            GLib.idle_add(on_done, error)
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _preview_espeak(self, text: str, on_done, lang: str, gen: int) -> None:
+        """espeak-ng plays directly; an explicit voice avoids English defaults."""
         voice = self._espeak_voice_for_lang(lang)
+        self._run_preview([["espeak-ng", "-v", voice, "--", text]], gen, on_done)
 
-        def _worker() -> None:
-            try:
-                cmd = ["espeak-ng"]
-                if voice:
-                    cmd += ["-v", voice]
-                cmd.append(text)
-                proc = subprocess.Popen(
-                    cmd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-                self._preview_proc = proc
-                proc.wait()
-            except (FileNotFoundError, OSError) as e:
-                logger.warning("espeak-ng preview failed: %s", e)
-            GLib.idle_add(on_done)
+    def _preview_rhvoice(self, voice_name: str, text: str, on_done, gen: int) -> None:
+        """RHVoice-test | aplay — the same path the shortcut uses.
 
-        threading.Thread(target=_worker, daemon=True).start()
+        Not through speech-dispatcher: starting the daemon runs every installed
+        output module, and some of them speak when started.
+        """
+        cmd = ["RHVoice-test", "-o", "/dev/stdout"]
+        if voice_name:
+            cmd[1:1] = ["-p", voice_name]
+        self._run_preview([cmd], gen, on_done, stdin_text=text, pipe_to=["aplay", "-q"])
 
-    def _preview_rhvoice(
-        self, voice_name: str, text: str, on_done: Callable[[], bool]
-    ) -> None:
-        """Preview via speech-dispatcher with RHVoice output module."""
-        def _worker() -> None:
-            try:
-                cmd = ["spd-say", "-o", "rhvoice", "-y", voice_name, "-w", text]
-                proc = subprocess.Popen(
-                    cmd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-                self._preview_proc = proc
-                proc.wait()
-            except (FileNotFoundError, OSError) as e:
-                logger.warning("RHVoice preview failed: %s", e)
-            GLib.idle_add(on_done)
+    def _preview_kokoro(self, voice_id: str, text: str, on_done, gen: int) -> None:
+        """koko renders the sample to a WAV, then aplay plays it.
 
-        threading.Thread(target=_worker, daemon=True).start()
-
-    def _preview_kokoro(
-        self, voice_id: str, lang: str, text: str,
-        on_done: Callable[[], bool],
-    ) -> None:
-        """Preview via koko CLI binary."""
-        koko_bin = shutil.which("koko")
-        if not koko_bin:
-            logger.warning("koko binary not found for preview")
-            GLib.idle_add(on_done)
+        The koko argv comes from kokoro_voice_service.build_koko_command, the
+        same function used for reading selected text.
+        """
+        problem = koko_problem(voice_id)
+        if problem:
+            on_done(problem)
             return
+        workdir = koko_workdir()
+        fd, wav = tempfile.mkstemp(suffix=".wav", dir=workdir)
+        os.close(fd)
+        self._preview_tmp = wav
+        steps = [
+            build_koko_command(voice_id, text=text, output=wav),
+            ["aplay", "-q", wav],
+        ]
+        self._run_preview(steps, gen, on_done, cwd=workdir)
 
-        # Map language to koko lang code
-        lang_lower = lang.lower().replace("_", "-")
-        lang_code = lang_lower if lang_lower else "pt-br"
-
-        def _worker() -> None:
-            tmp_path = None
-            try:
-                tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-                tmp_path = tmp.name
-                tmp.close()
-                self._preview_tmp = tmp_path
-
-                koko_env = {
-                    **os.environ,
-                    "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
-                    "KOKO_DATA_PATH": str(get_active_voices_bin()),
-                }
-
-                gen_cmd = [
-                    koko_bin, "-s", voice_id, "-l", lang_code,
-                    "--force-style", "true",
-                    "text", "-o", tmp_path, text,
-                ]
-                gen_proc = subprocess.Popen(
-                    gen_cmd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    env=koko_env,
-                )
-                self._preview_proc = gen_proc
-                gen_proc.wait()
-
-                if gen_proc.returncode != 0:
-                    logger.warning("Kokoro preview gen failed (code %d)", gen_proc.returncode)
-                    GLib.idle_add(on_done)
-                    return
-
-                # Play generated audio
-                play_proc = subprocess.Popen(
-                    ["aplay", "-q", tmp_path],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-                self._preview_proc = play_proc
-                play_proc.wait()
-            except (FileNotFoundError, OSError) as e:
-                logger.warning("Kokoro preview failed: %s", e)
-            finally:
-                if tmp_path:
-                    try:
-                        os.unlink(tmp_path)
-                    except OSError:
-                        pass
-                    self._preview_tmp = None
-            GLib.idle_add(on_done)
-
-        threading.Thread(target=_worker, daemon=True).start()

@@ -86,11 +86,14 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 
 ### Text Reading
 
-- **Configurable global hotkey** (default Alt+V) — select text anywhere, press to speak, press again to stop (toggle)
-- **System tray icon** — left-click to speak or stop, right-click for reading controls, Settings and Quit
+- **Configurable global hotkey** (default Alt+V) — select text anywhere, press to speak, press again to stop (toggle, also while the voice is still loading)
+- **"Ready to speak" card** — shows the real state (ready, loading voice, speaking, stopped, error with the reason and a fix such as *Open Voice Manager*) and the shortcut as keyboard keys, with the desktop's confirmation that it is active
+- **Engine status** — RHVoice, espeak-ng, Piper and Kokoro each show *Not installed*, *No voices*, *Ready*, and for the selected engine *Loading*, *Speaking* or *Error*
+- **System tray icon** — left-click to speak or stop, right-click for reading controls, Settings and Quit; the tooltip shows the current shortcut
 - **Built-in voice test** — text field to type and hear with current voice settings
 - **Launcher pinning** — option to pin the speak button to KDE Plasma taskbar
-- **Optional history** — keep and replay previous readings when history is enabled
+- **Optional history** — keep and replay previous readings when history is enabled (main menu → History)
+- **Silent start** — opening the app never speaks and never starts speech-dispatcher
 
 ### Voice Control
 
@@ -114,7 +117,12 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 | Shortcut | Action |
 |----------|--------|
 | Alt+V (default) | Speak/stop selected text (toggle) |
+| Ctrl+H | Open History |
+| Escape / Alt+Left | Back from History |
+| F10 | Open the main menu |
 | Ctrl+Q | Quit application |
+
+Changing the shortcut (Advanced options → Keyboard shortcut) registers it with the desktop and only reports success once the desktop confirms it. On KDE Plasma this uses KGlobalAccel over D-Bus: a key already used by another action is reported by name and the previous shortcut is kept. A shortcut needs Ctrl, Alt or Super (or a function key) so normal typing is never captured.
 
 ### System Tray
 
@@ -128,9 +136,9 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 
 ## TTS Engines
 
-### 1. RHVoice (via speech-dispatcher)
+### 1. RHVoice
 
-High-quality multilingual TTS through the speech-dispatcher daemon.
+High-quality multilingual TTS. Played as `RHVoice-test | aplay` (no speech-dispatcher), both for reading and for the Voice Manager preview.
 
 | Voice | Language | Quality |
 |-------|----------|---------|
@@ -138,13 +146,13 @@ High-quality multilingual TTS through the speech-dispatcher daemon.
 | Evgeniy | English | ★★★★ |
 | + others | Multiple | ★★★–★★★★ |
 
-Communication via `speechd.SSIPClient` (SSIP protocol) with automatic daemon restart fallback.
+A legacy speech-dispatcher backend (SSIP) remains only for migrated old settings; the app talks to speech-dispatcher only when that backend is actually used.
 
 ### 2. espeak-ng (Native FFI) ⚡
 
 Direct C FFI to `libespeak-ng.so` — zero subprocess overhead. The Rust engine calls espeak-ng API functions directly via `unsafe extern "C"` bindings, compiled through PyO3.
 
-- `AUDIO_OUTPUT_PLAYBACK` mode: espeak-ng handles audio output internally
+- `AUDIO_OUTPUT_SYNCHRONOUS` mode: espeak-ng renders PCM and never opens the audio device itself (it is also Piper's phonemizer)
 - One-time initialization via `OnceLock` (thread-safe, no `static mut`)
 - Supports 100+ languages with basic quality
 
@@ -164,20 +172,23 @@ Neural TTS with near-human speech quality. Runs ONNX models locally via the `ort
 
 ### 4. Kokoro (Neural TTS) ★★★★★
 
-Advanced neural TTS with voice blending and emotion presets. Runs via Python `kokoro` package with PyTorch backend.
+Advanced neural TTS with voice blending and emotion presets. On BigLinux it runs through the `koko` binary from `biglinux-kokoro-tts` (model + base voices); the Python `kokoro` package (PyTorch) is used instead when installed.
 
-- Voice blending: mix two voices with configurable ratio
-- Emotion presets: neutral, happy, calm, urgent, narrative
-- Per-language code selection: Portuguese, English, Spanish, and more
+- One command builder (`kokoro_voice_service.build_koko_command`) serves both reading and the Voice Manager preview: explicit model, voices file, language from the voice prefix, and a private writable work directory (`$XDG_RUNTIME_DIR/biglinux-tts/koko`)
+- `koko pipe` streams sentence by sentence; the card shows *Loading voice* until koko reports that audio started
+- The selected voice is checked against `voices.bin` before speaking (koko would silently use another voice)
+- Voice blending: mix two voices (`voice.W+voice.W`)
+- Emotion presets: neutral, happy, calm, urgent, narrative (speed)
+- More voices can be downloaded in the Voice Manager (verified, cancellable, atomic `voices.bin` update)
 
 ### Automatic Voice Discovery
 
 The system discovers voices from all engines simultaneously in background threads:
 
-1. **RHVoice**: `spd-say -o rhvoice -L` → parses SSIP names with hardcoded metadata (language, gender). Fallback: scan `/usr/share/RHVoice/voices/` and pacman packages
+1. **RHVoice**: scans `/usr/share/RHVoice/voices/` (speech-dispatcher is not queried: starting it can make other installed modules speak)
 2. **espeak-ng**: `espeak-ng --voices` → parses tabular output (language code, gender)
 3. **Piper**: scans `/usr/share/piper-voices/`, `~/.local/share/piper-voices/` → detects `.onnx` files with `.onnx.json` config
-4. **Kokoro**: scans installed voice packs and user-downloaded `.npy` voice files
+4. **Kokoro**: `koko voices` on the active `voices.bin` (system base voices + user downloads)
 
 Result: `VoiceCatalog` with all available voices, filterable by language, engine, and quality.
 
@@ -322,17 +333,20 @@ python main.py --debug
 | `python-gobject` | GTK bindings for Python (PyGObject) |
 | `gtk4` | GTK 4 toolkit |
 | `libadwaita` | Adwaita widget library (GNOME HIG) |
-| `speech-dispatcher` | Speech synthesis daemon |
+| `python-numpy` | Kokoro voice download conversion |
+| `polkit` | `pkexec` for installing voice packages |
+| `speech-dispatcher` | Legacy speech-dispatcher backend (migrated settings) |
 | `espeak-ng` | Open-source TTS engine + libespeak-ng.so |
 | `xsel` | X11 clipboard access (primary selection) |
 | `wl-clipboard-rs` | Wayland clipboard access (wl-paste) |
-| `alsa-utils` | ALSA audio utilities |
+| `alsa-utils` | `aplay`: audio playback for every engine |
 | `onnxruntime` | ONNX Runtime library (for Piper native inference) |
 
 #### Build Dependencies
 
 | Package | Description |
 |---------|-------------|
+| `git` | Fetch the sources |
 | `rust` (1.85+) | Rust toolchain |
 | `cargo` | Rust package manager |
 
@@ -345,8 +359,9 @@ python main.py --debug
 | `rhvoice-voice-leticia-f123` | Brazilian Portuguese female voice |
 | `piper-tts-bin` | Piper TTS binary (subprocess fallback) |
 | `piper-voices-pt-BR` | Brazilian Portuguese neural voices |
-| `python-kokoro` | Kokoro neural TTS engine |
-| `python-pytorch` | PyTorch runtime for Kokoro |
+| `biglinux-kokoro-tts` | Kokoro neural voices (`koko`, model, base voices) |
+| `python-kokoro` | Alternative Kokoro engine (PyTorch) |
+| `python-pytorch` | PyTorch runtime for python-kokoro |
 
 ---
 

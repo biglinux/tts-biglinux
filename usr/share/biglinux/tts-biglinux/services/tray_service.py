@@ -139,9 +139,19 @@ try:
             pulse_timer.stop()
             tray.setIcon(base["icon"])
 
+    theme = {"dark": is_dark_theme()}
+
     def on_theme_changed(*_) -> None:
         refresh_base()
         render_icon()
+
+    def check_theme() -> None:
+        # Polled: only repaint when light/dark actually flipped. Re-setting the
+        # icon every poll would spam the panel with NewIcon over D-Bus.
+        dark = is_dark_theme()
+        if dark != theme["dark"]:
+            theme["dark"] = dark
+            on_theme_changed()
 
     app.paletteChanged.connect(on_theme_changed)
 
@@ -245,12 +255,16 @@ try:
             elif cmd == "set_menu":
                 set_menu(msg.get("items", []))
             elif cmd == "set_tooltip":
-                tray.setToolTip(msg.get("text", ""))
+                # New idle tooltip (e.g. the shortcut changed).
+                state["tooltip"] = msg.get("text", "") or tooltip
+                if not state["speaking"]:
+                    tray.setToolTip(state["tooltip"])
             elif cmd == "set_speaking":
                 state["speaking"] = bool(msg.get("speaking", False))
                 state["paused"] = bool(msg.get("paused", False))
                 label = msg.get("label", "")
-                tray.setToolTip(label or tooltip if state["speaking"] else tooltip)
+                idle_tip = state.get("tooltip") or tooltip
+                tray.setToolTip(label or idle_tip if state["speaking"] else idle_tip)
                 render_icon()
             elif cmd == "update_icon":
                 on_theme_changed()
@@ -264,7 +278,7 @@ try:
     timer.start(100)
 
     theme_timer = QTimer()
-    theme_timer.timeout.connect(on_theme_changed)
+    theme_timer.timeout.connect(check_theme)
     theme_timer.start(2000)
 
     def _cleanup(*_):
@@ -433,6 +447,11 @@ class TrayIcon:
                 if c.item_id == item_id and c.callback:
                     return c.callback
         return None
+
+    def set_tooltip(self, text: str) -> None:
+        """Tooltip shown while idle (playback labels take over while reading)."""
+        self._tooltip = text
+        self._send({"cmd": "set_tooltip", "text": text})
 
     def set_speaking(
         self,

@@ -1,111 +1,119 @@
-/* BigLinux TTS — Custom Adwaita Styles */
+/* BigLinux TTS — custom styles on top of libadwaita.
+ *
+ * Colors come from the theme (accent/success/warning/error and currentColor),
+ * so every rule works in light, dark and high-contrast modes. State is never
+ * conveyed by color alone: each colored element also carries text.
+ */
 
-/* ── Hero Section ────────────────────────────────────────────────── */
+/* ── "Ready to speak" card ───────────────────────────────────────── */
 
-.hero-section {
-    padding: 24px;
-    border-radius: 12px;
-    background: linear-gradient(
-        135deg,
-        alpha(@accent_bg_color, 0.15),
-        alpha(@accent_bg_color, 0.05)
-    );
-    margin-bottom: 6px;
-}
-
-.hero-status-icon {
-    font-size: 48px;
-    min-width: 64px;
-    min-height: 64px;
+.hero-card {
+    padding: 28px 24px 24px 24px;
 }
 
 .hero-title {
-    font-size: 18px;
-    font-weight: bold;
+    font-weight: 800;
 }
 
-.hero-subtitle {
-    font-size: 13px;
-    opacity: 0.7;
+.hero-badge {
+    min-width: 64px;
+    min-height: 64px;
+    border-radius: 999px;
+    background: alpha(@accent_bg_color, 0.14);
+    color: @accent_color;
 }
 
-/* ── Speaking Animation ──────────────────────────────────────────── */
+.hero-badge.speaking {
+    background: alpha(@accent_bg_color, 0.24);
+    animation: hero-breathe 1.6s ease-in-out infinite;
+}
 
-@keyframes pulse-speaking {
+.hero-badge.error {
+    background: alpha(@error_bg_color, 0.16);
+    color: @error_color;
+}
+
+.hero-badge.stopped {
+    background: alpha(currentColor, 0.08);
+    color: alpha(currentColor, 0.75);
+}
+
+/* Discreet "breathing" while audio plays (disabled with system animations). */
+@keyframes hero-breathe {
     0%   { opacity: 1.0; }
-    50%  { opacity: 0.5; }
+    50%  { opacity: 0.62; }
     100% { opacity: 1.0; }
 }
 
-.speaking-indicator {
-    animation: pulse-speaking 1.2s ease-in-out infinite;
+.hero-detail {
+    font-size: 0.9em;
 }
 
-.status-idle .hero-section {
-    background: linear-gradient(
-        135deg,
-        alpha(@accent_bg_color, 0.12),
-        alpha(@accent_bg_color, 0.04)
-    );
+.narrow-layout .hero-card {
+    padding: 20px 16px 16px 16px;
 }
 
-.status-speaking .hero-section {
-    background: linear-gradient(
-        135deg,
-        alpha(@success_bg_color, 0.20),
-        alpha(@success_bg_color, 0.08)
-    );
+/* ── Keyboard keys (the global shortcut) ─────────────────────────── */
+
+.keycap {
+    font-weight: 700;
+    padding: 3px 10px;
+    min-width: 18px;
+    border-radius: 7px;
+    background: alpha(currentColor, 0.06);
+    border: 1px solid alpha(currentColor, 0.2);
+    box-shadow: inset 0 -2px alpha(currentColor, 0.16);
 }
 
-.status-neural.status-speaking .hero-section {
-    background: linear-gradient(135deg,
-            alpha(@accent_bg_color, 0.22),
-            alpha(@purple_3, 0.10));
-}
-.status-error .hero-section {
-    background: linear-gradient(
-        135deg,
-        alpha(@error_bg_color, 0.15),
-        alpha(@error_bg_color, 0.05)
-    );
+.keycap-large .keycap {
+    font-size: 1.4em;
+    padding: 8px 16px;
+    min-width: 30px;
+    border-radius: 10px;
+    box-shadow: inset 0 -3px alpha(currentColor, 0.16);
 }
 
-/* ── Test Button ─────────────────────────────────────────────────── */
+.keycap-plus {
+    font-weight: 600;
+    opacity: 0.55;
+}
+
+/* ── Compact state pills (engine status) ─────────────────────────── */
+
+.state-pill {
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: alpha(currentColor, 0.08);
+}
+
+.state-pill.ready {
+    background: alpha(@success_bg_color, 0.18);
+    color: @success_color;
+}
+
+.state-pill.busy {
+    background: alpha(@accent_bg_color, 0.18);
+    color: @accent_color;
+}
+
+.state-pill.warning {
+    background: alpha(@warning_bg_color, 0.22);
+    color: @warning_color;
+}
+
+.state-pill.error {
+    background: alpha(@error_bg_color, 0.18);
+    color: @error_color;
+}
+
+/* ── Test area ───────────────────────────────────────────────────── */
 
 .test-button {
     min-height: 36px;
     min-width: 140px;
-    border-radius: 8px;
     font-weight: bold;
-}
-
-/* ── Voice Card ──────────────────────────────────────────────────── */
-
-.voice-quality-badge {
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: alpha(@accent_bg_color, 0.15);
-    color: @accent_fg_color;
-}
-
-.voice-quality-neural {
-    background: alpha(@success_bg_color, 0.2);
-    color: @success_color;
-}
-
-/* ── Info Banner ─────────────────────────────────────────────────── */
-
-.info-banner {
-    padding: 12px 16px;
-    border-radius: 8px;
-    background: alpha(@accent_bg_color, 0.1);
-    margin: 6px 0;
-}
-
-.info-banner label {
-    opacity: 0.85;
 }
 
 /* ── Scale Marks ─────────────────────────────────────────────────── */
@@ -113,52 +121,6 @@
 scale marks mark label {
     font-size: 10px;
     opacity: 0.5;
-}
-
-/* ── Responsive ──────────────────────────────────────────────────── */
-
-.narrow-layout .hero-section {
-    padding: 16px;
-}
-
-.narrow-layout .hero-title {
-    font-size: 16px;
-}
-
-/* ── Status Colors ───────────────────────────────────────────────── */
-
-.status-success {
-    color: @success_color;
-}
-
-.status-warning {
-    color: @warning_color;
-}
-
-.status-error {
-    color: @error_color;
-}
-
-/* ── Install Button ──────────────────────────────────────────────── */
-
-.install-voices-button {
-    margin-top: 6px;
-}
-
-/* ── Voice Manager Dialog ────────────────────────────────────────── */
-
-.voice-manager-badge {
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 10px;
-    border-radius: 12px;
-    background: alpha(@accent_bg_color, 0.15);
-    color: @accent_fg_color;
-}
-
-.voice-manager-installed-badge {
-    background: alpha(@success_bg_color, 0.2);
-    color: @success_color;
 }
 
 /* ── History Cards ───────────────────────────────────────────────── */
@@ -230,11 +192,6 @@ scale marks mark label {
     background: lighter(@accent_bg_color);
 }
 
-/* ── View Switcher ───────────────────────────────────────────────── */
-
-.tab-switcher {
-    margin: 0;
-}
 /* ── Two-pane shell (BigLinux Audio Converter visual identity) ────────── */
 
 .sidebar {
@@ -250,27 +207,4 @@ scale marks mark label {
 
 .dark-controls-bar label {
     color: rgba(255, 255, 255, 0.78);
-}
-
-.dark-controls-bar button.pill {
-    border-radius: 999px;
-    padding: 6px 20px;
-    font-weight: bold;
-    min-height: 20px;
-}
-
-.dark-controls-bar button.pill:hover {
-    filter: brightness(1.08);
-}
-
-/* Voice manager — alternating install/uninstall icon buttons */
-.vm-install {
-    color: @accent_color;
-}
-.vm-install:hover {
-    background-color: alpha(@accent_bg_color, 0.15);
-}
-.vm-remove:hover {
-    color: @destructive_color;
-    background-color: alpha(@destructive_color, 0.12);
 }

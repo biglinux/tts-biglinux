@@ -55,9 +55,11 @@ def _get_text_wayland(max_chars: int) -> ClipboardResult:
         return ClipboardResult("", False, "wl-clipboard not installed")
 
     # Try primary selection first, then regular clipboard
+    # "--type text" asks for a text representation only: an image or a file
+    # in the clipboard is skipped instead of being read as garbage.
     for args in [
-        ["wl-paste", "--primary", "--no-newline"],
-        ["wl-paste", "--no-newline"],
+        ["wl-paste", "--primary", "--no-newline", "--type", "text"],
+        ["wl-paste", "--no-newline", "--type", "text"],
     ]:
         result = _run_capture(args, max_chars)
         if result.success and result.text:
@@ -97,11 +99,12 @@ def _run_capture(args: list[str], max_chars: int) -> ClipboardResult:
         proc = subprocess.run(
             args,
             capture_output=True,
-            text=True,
             timeout=3,
         )
         if proc.returncode == 0:
-            text = proc.stdout.strip()
+            # Decode leniently: one invalid byte must not lose the whole text
+            # (a decode exception used to kill the capture thread silently).
+            text = proc.stdout.decode("utf-8", errors="replace").replace("\x00", "").strip()
             if text:
                 if max_chars > 0 and len(text) > max_chars:
                     text = text[:max_chars]

@@ -320,3 +320,80 @@ def create_status_page(
     if description:
         page.set_description(description)
     return page
+
+
+class ShortcutKeys(Gtk.Box):
+    """The global shortcut drawn as keyboard keys: [Alt] + [V].
+
+    Screen readers get one label ("Shortcut: Alt+V") for the group; the key
+    pieces themselves are presentation only.
+    """
+
+    def __init__(self, *, large: bool = False) -> None:
+        super().__init__(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=8 if large else 4,
+            accessible_role=Gtk.AccessibleRole.GROUP,
+        )
+        self.set_halign(Gtk.Align.CENTER)
+        self.set_valign(Gtk.Align.CENTER)
+        # Key combinations read modifier-first in every locale (Ctrl+C), so
+        # keep this group left-to-right even in RTL layouts.
+        self.set_direction(Gtk.TextDirection.LTR)
+        if large:
+            self.add_css_class("keycap-large")
+        self._accel = None
+
+    def set_accelerator(self, accel: str) -> None:
+        if accel == self._accel:
+            return
+        self._accel = accel
+        from services.shortcut_service import display_text, keycap_labels
+        from utils.i18n import _
+
+        child = self.get_first_child()
+        while child is not None:
+            nxt = child.get_next_sibling()
+            self.remove(child)
+            child = nxt
+
+        parts = keycap_labels(accel) if accel and accel != "none" else []
+        if not parts:
+            none = Gtk.Label(label=_("No shortcut"))
+            none.add_css_class("dim-label")
+            self.append(none)
+            self.update_property([Gtk.AccessibleProperty.LABEL], [_("No shortcut")])
+            return
+        for i, part in enumerate(parts):
+            if i:
+                plus = Gtk.Label(label="+", accessible_role=Gtk.AccessibleRole.PRESENTATION)
+                plus.add_css_class("keycap-plus")
+                self.append(plus)
+            key = Gtk.Label(label=part, accessible_role=Gtk.AccessibleRole.PRESENTATION)
+            key.add_css_class("keycap")
+            self.append(key)
+        self.update_property(
+            [Gtk.AccessibleProperty.LABEL],
+            [_("Shortcut: {keys}").format(keys=display_text(accel))],
+        )
+
+
+# Pill kinds: "ready" (green), "busy" (accent), "warning", "error", "" (neutral).
+_PILL_KINDS = ("ready", "busy", "warning", "error")
+
+
+def create_state_pill(text: str = "", kind: str = "") -> Gtk.Label:
+    """A small rounded status label; the text always states the meaning."""
+    pill = Gtk.Label(label=text)
+    pill.add_css_class("state-pill")
+    pill.set_valign(Gtk.Align.CENTER)
+    set_state_pill(pill, text, kind)
+    return pill
+
+
+def set_state_pill(pill: Gtk.Label, text: str, kind: str = "") -> None:
+    pill.set_label(text)
+    for k in _PILL_KINDS:
+        pill.remove_css_class(k)
+    if kind in _PILL_KINDS:
+        pill.add_css_class(kind)

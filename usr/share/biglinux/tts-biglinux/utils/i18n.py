@@ -103,3 +103,8 @@ else:
 
 def _(message: str) -> str:
     return _translations.get(message, message)
+
+
+def N_(message: str) -> str:
+    """Mark a string for translation without translating it yet (tables)."""
+    return message

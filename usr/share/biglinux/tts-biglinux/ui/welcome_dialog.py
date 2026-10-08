@@ -201,11 +201,9 @@ class WelcomeDialog(Adw.Dialog):
 
     def _shortcut_display(self) -> str:
         """Return the configured shortcut in a compact, human-readable form."""
-        from services.desktop_integration_service import DesktopIntegrationService
+        from services.shortcut_service import display_text
 
-        return DesktopIntegrationService.gtk_accel_to_kde(
-            self._settings_service.get().shortcut.keybinding
-        )
+        return display_text(self._settings_service.get().shortcut.keybinding)
 
     @staticmethod
     def _create_feature_box(

@@ -110,8 +110,9 @@ class TTSState(str, Enum):
     """TTS engine state machine."""
 
     IDLE = "idle"
-    SPEAKING = "speaking"
-    ERROR = "error"
+    LOADING = "loading"  # request accepted; the voice is being prepared, no sound yet
+    SPEAKING = "speaking"  # audio is playing
+    ERROR = "error"  # the last request failed; TTSService.last_error says why
 
 
 # ── Dataclasses ───────────────────────────────────────────────────────
