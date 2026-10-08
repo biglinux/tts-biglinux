@@ -13,813 +13,812 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 75
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 125
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 162
+
+#: usr/share/biglinux/tts-biglinux/application.py:64
+msgid "Read the selected text aloud"
+msgstr "Lue valittu teksti ääneen"
+
+#: usr/share/biglinux/tts-biglinux/application.py:298
+msgid "Could not read the text."
+msgstr "Tekstiä ei voitu lukea."
+
+#: usr/share/biglinux/tts-biglinux/application.py:299
+#: usr/share/biglinux/tts-biglinux/application.py:503
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1664
+#: usr/share/biglinux/tts-biglinux/window.py:310
+msgid "Could not read the text"
+msgstr "Tekstiä ei voitu lukea"
+
+#: usr/share/biglinux/tts-biglinux/application.py:310
+msgid "Reading text"
+msgstr "Luetaan tekstiä"
+
+#: usr/share/biglinux/tts-biglinux/application.py:352
+#: usr/share/biglinux/tts-biglinux/application.py:378
+#: usr/share/biglinux/tts-biglinux/application.py:636
+msgid "Playing…"
+msgstr "Pelaaminen…"
+
+#: usr/share/biglinux/tts-biglinux/application.py:502
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Asenna wl-clipboard (Wayland) tai xclip (X11), jotta valittu teksti voidaan lukea."
+
+#: usr/share/biglinux/tts-biglinux/application.py:507
+msgid "Select some text first, then press the shortcut."
+msgstr "Valitse ensin tekstiä ja paina sitten pikanäppäintä."
+
+#: usr/share/biglinux/tts-biglinux/application.py:508
+msgid "No text selected"
+msgstr "Tekstiä ei ole valittu"
+
+#: usr/share/biglinux/tts-biglinux/application.py:601
+msgid "Read text"
+msgstr "Lue teksti"
+
+#: usr/share/biglinux/tts-biglinux/application.py:607
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:89
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:139
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:176
 msgid "Play"
 msgstr "Soita"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1191
-#: 90
-msgid "Stop"
-msgstr "Lopeta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 148
+
+#: usr/share/biglinux/tts-biglinux/application.py:607
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:162
 msgid "Pause"
 msgstr "Pysäytä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 101
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 280
+
+#: usr/share/biglinux/tts-biglinux/application.py:612
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:97
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1694
+msgid "Stop"
+msgstr "Lopeta"
+
+#: usr/share/biglinux/tts-biglinux/application.py:617
+#: usr/share/biglinux/tts-biglinux/window.py:48
+#: usr/share/biglinux/tts-biglinux/window.py:148
+msgid "Settings"
+msgstr "Asetukset"
+
+#: usr/share/biglinux/tts-biglinux/application.py:619
+#: usr/share/biglinux/tts-biglinux/window.py:389
+msgid "Quit"
+msgstr "Lopeta"
+
+#: usr/share/biglinux/tts-biglinux/application.py:636
+msgid "Paused"
+msgstr "Tauolla"
+
+#: usr/share/biglinux/tts-biglinux/application.py:707
+msgid "BigLinux Team"
+msgstr "BigLinux-tiimi"
+
+#: usr/share/biglinux/tts-biglinux/application.py:718
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS muuttaa valitun tai kirjoitetun tekstin puheeksi paikallisilla äänillä, globaaleilla pikanäppäimillä ja tarkoilla toiston ohjaimilla."
+
+#: usr/share/biglinux/tts-biglinux/application.py:721
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS sai alkunsa verkkopohjaisena työkaluna vuonna 2021 ja kehittyi natiiviksi GTK4-sovellukseksi, jossa on useita puhemoottoreita, äänten hallinta ja Rustilla kirjoitettu äänimoottori."
+
+#: usr/share/biglinux/tts-biglinux/application.py:773
+msgid "Could not register the shortcut."
+msgstr "Pikanäppäintä ei voitu rekisteröidä."
+
+#: usr/share/biglinux/tts-biglinux/application.py:799
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Valitse tekstiä ja kuuntele se painamalla {shortcut}"
+
+#: usr/share/biglinux/tts-biglinux/application.py:800
+msgid "Text-to-speech assistant"
+msgstr "Tekstistä puheeksi -avustaja"
+
+#: usr/share/biglinux/tts-biglinux/main.py:17
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux tekstistä puheeksi — Lue valittu teksti ääneen"
+
+#: usr/share/biglinux/tts-biglinux/main.py:22
+msgid "Enable debug logging"
+msgstr "Ota virheenjäljitysloki käyttöön"
+
+#: usr/share/biglinux/tts-biglinux/services/desktop_integration_service.py:305
+#: usr/share/biglinux/tts-biglinux/services/desktop_integration_service.py:359
+msgid "Read or stop the selected text"
+msgstr "Lue tai pysäytä valittu teksti"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:244
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro ei ole asennettuna. Asenna biglinux-kokoro-tts-paketti."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:246
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoron äänimalli puuttuu. Asenna biglinux-kokoro-tts-paketti uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:248
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro-ääniä ei löytynyt. Lataa ääni avaamalla Äänten hallinta."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:252
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Tätä Kokoro-ääntä ei ole asennettu. Lataa se avaamalla Äänten hallinta."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:449
+#, python-brace-format
+msgid "Unknown voice: {voice_id}"
+msgstr "Tuntematon ääni: {voice_id}"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:454
+#, python-brace-format
+msgid "Invalid voice id: {voice_id}"
+msgstr "Virheellinen äänen tunniste: {voice_id}"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:475
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:487
+msgid "The voice file is larger than expected."
+msgstr "Äänitiedosto on odotettua suurempi."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:497
+#, python-brace-format
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "keskeneräinen lataus ({received}/{total} tavua)"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:502
+msgid "empty response"
+msgstr "tyhjä vastaus"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:508
+#, python-brace-format
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Ääntä ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen. ({error})"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:515
+#, python-brace-format
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Ladattu äänitiedosto on vioittunut. Yritä uudelleen. ({error})"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:526
+#, python-brace-format
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Levytilaa ei ole tarpeeksi äänen asentamiseen ({size} Mt tarvitaan)."
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:534
+#, python-brace-format
+msgid "Cannot create user voices directory: {error}"
+msgstr "Käyttäjän äänikansiota ei voi luoda: {error}"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:540
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Äänen lisääminen epäonnistui: {error}"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:553
+msgid "Cannot remove base voice"
+msgstr "Perusääntä ei voi poistaa"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:556
+msgid "No user voices installed"
+msgstr "Käyttäjän ääniä ei ole asennettu"
+
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:561
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Äänen poistaminen epäonnistui: {error}"
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:93
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Asennus peruttiin: ylläpitäjän salasanaa ei vahvistettu."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:96
+#, python-brace-format
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} ei ole saatavilla ohjelmistolähteissäsi. Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:100
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:120
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Toinen ohjelma asentaa tai päivittää paketteja. Odota, että se valmistuu, ja yritä uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:102
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Paketteja ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:104
+#, python-brace-format
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} on ristiriidassa asennettujen tiedostojen tai pakettien kanssa. Katso lisätiedot."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:106
+#, python-brace-format
+msgid "Not enough free disk space to install {packages}."
+msgstr "Vapaata levytilaa ei ole tarpeeksi kohteen {packages} asentamiseen."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:108
+#, python-brace-format
+msgid "{packages} could not be installed. See the details."
+msgstr "Kohdetta {packages} ei voitu asentaa. Katso lisätiedot."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:116
+msgid "Nothing to install."
+msgstr "Ei mitään asennettavaa."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:129
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec-ohjelmaa ei ole asennettu (polkit-paketti)."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:131
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:134
+msgid "The installation took too long and was stopped."
+msgstr "Asennus kesti liian kauan ja pysäytettiin."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:120
+msgid "This key combination is not valid."
+msgstr "Tämä näppäinyhdistelmä ei kelpaa."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:125
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Käytä Ctrl-, Alt- tai Super-näppäintä yhdessä toisen näppäimen kanssa, jotta tavallinen kirjoittaminen ei häiriinny."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:226
+msgid "This key combination is not supported by the desktop."
+msgstr "Työpöytä ei tue tätä näppäinyhdistelmää."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:238
+#, python-brace-format
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} on jo käytössä: {names}. Valitse toinen pikanäppäin."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:257
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Työpöytä ei hyväksynyt pikanäppäintä. Onko KDE:n globaalien pikanäppäinten palvelu käynnissä?"
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:263
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Työpöytä ei vahvistanut uutta pikanäppäintä."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:286
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Pikanäppäin tallennettiin, mutta työpöytä ei voinut vielä vahvistaa sitä."
+
+#: usr/share/biglinux/tts-biglinux/services/shortcut_service.py:298
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Pikanäppäintä ei voitu rekisteröidä tällä työpöydällä. Lisää se järjestelmän näppäimistöasetuksiin komennolla biglinux-tts-speak."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:129
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Ääntä ei voitu toistaa. Tarkista, että alsa-utils (aplay) on asennettu."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:450
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} ei käynnistynyt. Tarkista, että se on asennettu."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:559
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice ei ole asennettuna. Asenna rhvoice-paketti."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:641
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng ei voinut lukea tätä tekstiä. Tarkista, että espeak-ng on asennettu."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:753
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Valittua Piper-ääntä ei ole asennettu. Valitse toinen ääni Äänten hallinnassa."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:803
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper ei voinut lukea tätä tekstiä. Kokeile toista ääntä."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1044
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} kaatui tekstiä luettaessa."
+
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1053
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} pysähtyi virheeseen eikä voinut lukea tekstiä."
+
+#: usr/share/biglinux/tts-biglinux/services/voice_manager.py:607
+msgid "Extra low quality"
+msgstr "Erittäin matala laatu"
+
+#: usr/share/biglinux/tts-biglinux/services/voice_manager.py:608
+msgid "Low quality"
+msgstr "Matala laatu"
+
+#: usr/share/biglinux/tts-biglinux/services/voice_manager.py:609
+msgid "Medium quality"
+msgstr "Keskitasoinen laatu"
+
+#: usr/share/biglinux/tts-biglinux/services/voice_manager.py:610
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1115
+msgid "High quality"
+msgstr "Korkea laatu"
+
+#: usr/share/biglinux/tts-biglinux/ui/components.py:302
+#: usr/share/biglinux/tts-biglinux/ui/components.py:305
+msgid "No shortcut"
+msgstr "Ei pikanäppäintä"
+
+#: usr/share/biglinux/tts-biglinux/ui/components.py:317
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Pikanäppäin: {keys}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:125
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:302
 msgid "(no text)"
 msgstr "(no text)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 121
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 335
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:145
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:354
 msgid "Open file location"
 msgstr "Avaa tiedoston sijainti"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 128
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 342
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:152
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:361
 msgid "Delete"
 msgstr "Poista"
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 421
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 110
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:432
+#: usr/share/biglinux/tts-biglinux/window.py:288
+#: usr/share/biglinux/tts-biglinux/window.py:376
 msgid "History"
 msgstr "Historia"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 439
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:456
 msgid "Search history…"
 msgstr "Hakuhistoria…"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 447
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:464
 msgid "Toggle grid/list view"
 msgstr "Vaihda ruudukko-/luettelonäkymää"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 454
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:471
 msgid "Select items"
 msgstr "Valitse kohteet"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 461
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:478
 msgid "Refresh"
 msgstr "Päivitä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 474
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:491
 msgid "Select All"
 msgstr "Valitse kaikki"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 479
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:496
 msgid "Deselect All"
 msgstr "Poista valinta kaikista"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 490
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:507
 msgid "Delete selected"
 msgstr "Poista valitut"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 518
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 542
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:535
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:559
 msgid "History entries"
 msgstr "Historia-kirjaukset"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 551
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 743
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:568
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:783
 msgid "No History"
 msgstr "Ei historiaa"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 553
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 745
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:570
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:785
 msgid "Spoken texts will appear here when history is enabled."
 msgstr "Puhutut tekstit näkyvät täällä, kun historia on käytössä."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 737
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:777
 msgid "No Results"
 msgstr "Ei tuloksia"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/history_view.py, line: 739
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:779
 msgid "No entries match your search."
 msgstr "Hakuasi ei vastaa mitään merkintöjä."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 36
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 122
-msgid "Welcome to BigLinux TTS"
-msgstr "Tervetuloa BigLinux TTS:ään"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 99
-msgid "Let's Start"
-msgstr "Aloitetaan"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 130
-msgid "Your text-to-speech assistant"
-msgstr "Tekstistä puheeksi -avustajasi"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 153
-msgid "Multiple TTS Engines"
-msgstr "Useita TTS-moottoreita"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 155
-msgid ""
-"RHVoice, espeak-ng and Piper Neural TTS\n"
-"with automatic voice discovery"
-msgstr "RHVoice, espeak-ng ja Piper Neural TTS automaattisella äänen tunnistuksella"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 160
-msgid "Multilingual Support"
-msgstr "Monikielinen tuki"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 162
-msgid ""
-"Voices in dozens of languages\n"
-"including Portuguese (Brazil)"
-msgstr "Ääniä kymmenissä kielissä, mukaan lukien portugali (Brasilia)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 167
-msgid "Global Shortcut"
-msgstr "Globaali pikanäppäin"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 169
-msgid ""
-"Press Alt+V to read selected text\n"
-"from any application"
-msgstr "Paina Alt+V lukeaksesi valitun tekstin mistä tahansa sovelluksesta."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 174
-msgid "Clipboard Reading"
-msgstr "Leikealueen lukeminen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 176
-msgid ""
-"Paste or type text directly\n"
-"and listen instantly"
-msgstr "Liitä tai kirjoita teksti suoraan ja kuuntele heti."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 191
-msgid "Fine-Tune Speech"
-msgstr "Hienosäätää puhetta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 193
-msgid ""
-"Adjust speed, pitch and volume\n"
-"to your preference"
-msgstr "Säädä nopeus, sävelkorkeus ja äänenvoimakkuus mieltymystesi mukaan."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 198
-msgid "Neural Voices"
-msgstr "Neuraalivaihteet"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 200
-msgid ""
-"Install Piper voices for natural,\n"
-"high-quality speech synthesis"
-msgstr "Asenna Piper-äänet luonnollista, korkealaatuista puhesynteesiä varten."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 205
-msgid "Easy Installation"
-msgstr "Helppo asennus"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 207
-msgid ""
-"Install new voices and engines\n"
-"directly from the interface"
-msgstr "Asenna uusia ääniä ja moottoreita suoraan käyttöliittymästä."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 212
-msgid "Lightweight & Fast"
-msgstr "Kevyt ja nopea"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 214
-msgid ""
-"Native GTK4/Adwaita interface\n"
-"with minimal resource usage"
-msgstr ""
-"Natiivi GTK4/Adwaita-käyttöliittymä\n"
-"minimaalisen resurssinkäytön kanssa"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py, line: 227
-msgid "Show this dialog on startup"
-msgstr "Näytä tämä dialogi käynnistyksen yhteydessä"
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 325
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 249
-msgid "Voice Manager"
-msgstr "Äänijohtaja"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 287
-msgid "Loading available voices…"
-msgstr "Ladataan saatavilla olevia ääniä…"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 330
-msgid "No Voice Packages Found"
-msgstr "Äänipaketteja ei löytynyt"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 332
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Ei voitu löytää mitään TTS-ääni paketteja pacman-repositorioista."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 353
-msgid "High quality offline voices"
-msgstr "Korkealaatuiset offline-äänet"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 357
-msgid "Neural network voices — natural sounding"
-msgstr "Neuraaliverkkoäänet - luonnollisen kuuloiset"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 361
-msgid "Lightweight multi-language synthesizer"
-msgstr "Kevyt monikielinen synnyttäjä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 438
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neuraalinen TTS — korkealaatuiset monikieliset äänet (82M)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 476
-#, python-brace-format
-msgid "Add Kokoro voices — {count} available"
-msgstr "Lisää Kokoro-ääniä — {count} saatavilla"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 402
-#, python-brace-format
-msgid "{langs} languages"
-msgstr "{langs} kielet"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
-#, python-brace-format
-msgid "{count} voice(s)"
-msgstr "{count} ääni(e)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 399
-#, python-brace-format
-msgid "Add RHVoice — {count} available"
-msgstr "Lisää RHVoice — {count} saatavilla"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 425
-#, python-brace-format
-msgid "Add Piper voices — {count} available"
-msgstr "Lisää Piper-ääniä — {count} saatavilla"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 427
-msgid "Neural TTS voice packs by language"
-msgstr "Neuraalinen TTS-äänipaketit kieleittäin"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 583
-msgid "Included"
-msgstr "Sisältyy"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 474
-msgid "Installed"
-msgstr "Asennettu"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 598
-msgid "Preview voice"
-msgstr "Esikatseluääni"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 485
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 546
-msgid "Remove"
-msgstr "Poista"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 490
-#, python-brace-format
-msgid "Remove {name}"
-msgstr "Poista {name}"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1009
-#: 83
-msgid "Install"
-msgstr "Asenna"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 510
-#, python-brace-format
-msgid "Install {name}"
-msgstr "Asenna {name}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 657
-#, python-brace-format
-msgid ""
-"Download <b>{name}</b>?\n"
-"\n"
-"The voice will be downloaded from the internet (~512 KB)."
-msgstr ""
-"Lataa <b>{name}</b>?\n"
-"\n"
-"Ääni ladataan internetistä (~512 KB)."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 528
-#, python-brace-format
-msgid ""
-"Install <b>{name}</b>?\n"
-"\n"
-"This requires administrator privileges."
-msgstr ""
-"Asenna <b>{name}</b>?\n"
-"\n"
-"Tämä vaatii järjestelmänvalvojan oikeudet."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 526
-msgid "Install Voice"
-msgstr "Asenna ääni"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 665
-msgid "Download"
-msgstr "Lataa"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 542
-msgid "Remove Voice"
-msgstr "Poista ääni"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 544
-#, python-brace-format
-msgid ""
-"Remove <b>{name}</b>?\n"
-"\n"
-"You can reinstall it later."
-msgstr ""
-"Poista <b>{name}</b>?\n"
-"\n"
-"Voit asentaa sen uudelleen myöhemmin."
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1008
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 159
-#: 82
-msgid "Cancel"
-msgstr "Peruuta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 617
-msgid "Operation timed out"
-msgstr "Toiminto aikakatkaistiin"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 619
-msgid "pkexec or pacman not found"
-msgstr "pkexec tai pacman ei löytynyt"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 640
-msgid "Failed"
-msgstr "Epäonnistui"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 641
-msgid "Removal Failed"
-msgstr "Poisto epäonnistui"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 643
-msgid "Unknown error"
-msgstr "Tuntematon virhe"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 788
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 80
-#: 1
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:86
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 178
-#: 3
-msgid "This is a test, welcome to BigLinux!"
-msgstr "Tämä on testi, tervetuloa BigLinuxiin!"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 179
-#: 4
-msgid "Type text to test…"
-msgstr "Kirjoita teksti kokeillaksesi…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 190
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1200
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1211
-#: 5
-msgid "Test voice"
-msgstr "Testaa ääntä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 193
-#: 6
-msgid "Test the selected voice"
-msgstr "Testaa valittua ääntä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 207
-#: 7
-msgid "Voice settings"
-msgstr "Ääniasetukset"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 208
-#: 8
-msgid "Choose voice and adjust speech parameters"
-msgstr "Valitse ääni ja säädä puheen parametreja"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 230
-msgid "RHVoice (Native)"
-msgstr "RHVoice (Natiivi)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 231
-msgid "espeak-ng"
-msgstr "espeak-ng"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 232
-msgid "Piper (Neural TTS)"
-msgstr "Piper (Neuraalinen TTS)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 233
-msgid "Kokoro (Neural TTS)"
-msgstr "Kokoro (Neuraalinen TTS)"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 303
-#: 32
-msgid "TTS Backend"
-msgstr "TTS-taustajärjestelmä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 304
-#: 33
-msgid "Engine used for speech synthesis"
-msgstr "Puhesynteesiin käytettävä moottori"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 308
-#: 34
-msgid "Select TTS engine"
-msgstr "Valitse TTS-moottori"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 213
-#: 9
-msgid "Voice"
-msgstr "Ääni"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 214
-#: 10
-msgid "Loading voices..."
-msgstr "Ladataan ääniä..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 215
-#: 11
-msgid "Detecting installed voices..."
-msgstr "Tunnistetaan asennettuja ääniä..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 217
-#: 12
-msgid "Select TTS voice"
-msgstr "Valitse TTS-ääni"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 218
-msgid "Refresh voice list"
-msgstr "Päivitä ääniluettelo"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 226
-msgid "Manage voices for current engine"
-msgstr "Hallitse ääniä nykyiselle moottorille"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 226
-#: 13
-msgid "Speed"
-msgstr "Nopeus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 227
-#: 14
-msgid "Speech rate"
-msgstr "Puhenopeus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 234
-#: 15
-msgid "Slow"
-msgstr "Hidas"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 234
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 250
-#: 16
-msgid "Normal"
-msgstr "Normaali"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 234
-#: 17
-msgid "Fast"
-msgstr "Nopea"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 235
-#: 18
-msgid "Speech speed"
-msgstr "Puhenopeus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 242
-#: 19
-msgid "Pitch"
-msgstr "Äänenkorkeus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 243
-#: 20
-msgid "Voice tone"
-msgstr "Äänen sävy"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 250
-#: 21
-msgid "Low"
-msgstr "Matala"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 250
-#: 22
-msgid "High"
-msgstr "Korkea"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 251
-#: 23
-msgid "Voice pitch"
-msgstr "Äänen korkeus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 258
-#: 24
-msgid "Volume"
-msgstr "Äänenvoimakkuus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 259
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 267
-#: 25
-msgid "Speech volume"
-msgstr "Puheen voimakkuus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 266
-#: 26
-msgid "Mute"
-msgstr "Mykistä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 266
-#: 27
-msgid "Max"
-msgstr "Maks"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 339
-msgid "Neutral"
-msgstr "Neutraali"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 340
-msgid "Happy"
-msgstr "Onnellinen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 341
-msgid "Calm"
-msgstr "Rauhallinen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 342
-msgid "Urgent"
-msgstr "Kiireellinen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 343
-msgid "Narrative"
-msgstr "Kerronta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 356
-msgid "Expression style"
-msgstr "Ilmaustyyli"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 357
-msgid "Changes speed and intonation to match the mood"
-msgstr "Muuttaa nopeutta ja intonaatiota vastaamaan tunnelmaa"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 361
-msgid "Select expression style"
-msgstr "Valitse ilmaisutyylit"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 368
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 788
-msgid "None (single voice)"
-msgstr "Ei mitään (yksi ääni)"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 371
-msgid "Voice blend"
-msgstr "Äänisekoitus"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 372
-msgid "Mix a second voice with the primary voice"
-msgstr "Sekoita toinen ääni päääänen kanssa."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 376
-msgid "Select blend voice"
-msgstr "Valitse sekoitusääni"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 388
-msgid "Voice Management"
-msgstr "Ääninhallinta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 389
-msgid "Install or manage voice packages"
-msgstr "Asenna tai hallitse äänipaketteja"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 326
-msgid "Install or remove voice packages"
-msgstr "Asenna tai poista ääni paketteja"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 319
-msgid "Text Processing"
-msgstr "Tekstinkäsittely"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 320
-msgid "Configure how text is processed before reading"
-msgstr "Määritä, miten tekstiä käsitellään ennen lukemista."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 324
-#: 42
-msgid "Processing options"
-msgstr "Käsittelyasetukset"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 325
-#: 43
-msgid "Abbreviations, formatting, limits"
-msgstr "Lyhenteet, muotoilu, rajat"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 331
-#: 44
-msgid "Expand abbreviations"
-msgstr "Laajenna lyhenteet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 332
-#: 45
-msgid "Replace common abbreviations with full words"
-msgstr "Korvaa yleiset lyhenteet kokonaisilla sanoilla"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 335
-#: 46
-msgid "Expand text abbreviations"
-msgstr "Laajenna tekstin lyhenteet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 341
-#: 47
-msgid "Read special characters"
-msgstr "Lue erikoismerkit"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 342
-#: 48
-msgid "Speak symbols like # @ % by name"
-msgstr "Lausu symbolit kuten # @ % nimeltä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 345
-#: 49
-msgid "Read special characters aloud"
-msgstr "Lue erikoismerkit ääneen"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 351
-#: 50
-msgid "Remove formatting"
-msgstr "Poista muotoilu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 352
-#: 51
-msgid "Strip Markdown and HTML before reading"
-msgstr "Poista Markdown ja HTML ennen lukemista"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 355
-#: 52
-msgid "Remove text formatting"
-msgstr "Poista tekstin muotoilu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 361
-#: 53
-msgid "Read URLs"
-msgstr "Lue URL-osoitteet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 362
-#: 54
-msgid "Read web addresses aloud instead of skipping them"
-msgstr "Lue verkko-osoitteet ääneen sen sijaan, että ohittaisit ne"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 365
-#: 55
-msgid "Read URLs aloud"
-msgstr "Lue URL-osoitteet ääneen"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 371
-#: 56
-msgid "Unlimited"
-msgstr "Rajoittamaton"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 466
-msgid "1 000"
-msgstr "1 000"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 467
-msgid "5 000"
-msgstr "5 000"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 468
-msgid "10 000"
-msgstr "10 000"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 469
-msgid "50 000"
-msgstr "50 000"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 470
-msgid "100 000"
-msgstr "100 000"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 388
-#: 57
-msgid "Character limit"
-msgstr "Merkkirajoitus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 389
-#: 58
-msgid "Maximum number of characters to read at once"
-msgstr "Kerralla luettavien merkkien enimmäismäärä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 393
-#: 59
-msgid "Maximum character limit"
-msgstr "Merkkien enimmäisrajoitus"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 405
-#: 60
-msgid "Advanced"
-msgstr "Lisäasetukset"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 409
-#: 61
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:212
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:228
 msgid "Advanced options"
 msgstr "Lisäasetukset"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 410
-#: 62
-msgid "Shortcut, behavior settings"
-msgstr "Pikanäppäin, toiminta-asetukset"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 416
-#: 63
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:213
+msgid "Shortcut, performance, behavior"
+msgstr "Pikanäppäin, suorituskyky, toiminta"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:316
+msgid "Change shortcut"
+msgstr "Vaihda pikanäppäin"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:328
+msgid "Try again"
+msgstr "Yritä uudelleen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:332
+msgid "Open Voice Manager"
+msgstr "Avaa Äänten hallinta"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:336
+msgid "Details"
+msgstr "Lisätiedot"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:348
+msgid "This is a test, welcome to BigLinux!"
+msgstr "Tämä on testi, tervetuloa BigLinuxiin!"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:349
+msgid "Type text to test…"
+msgstr "Kirjoita teksti kokeillaksesi…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:352
+msgid "Text to test the voice"
+msgstr "Teksti äänen testaamiseen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:357
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1694
+msgid "Test voice"
+msgstr "Testaa ääntä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:360
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1696
+msgid "Test the selected voice"
+msgstr "Testaa valittua ääntä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:375
+msgid "Voice settings"
+msgstr "Ääniasetukset"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:376
+msgid "Choose voice and adjust speech parameters"
+msgstr "Valitse ääni ja säädä puheen parametreja"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:381
+msgid "RHVoice (Native)"
+msgstr "RHVoice (Natiivi)"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:382
+msgid "espeak-ng"
+msgstr "espeak-ng"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:383
+msgid "Piper (Neural TTS)"
+msgstr "Piper (Neuraalinen TTS)"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:384
+msgid "Kokoro (Neural TTS)"
+msgstr "Kokoro (Neuraalinen TTS)"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:400
+msgid "TTS Backend"
+msgstr "TTS-taustajärjestelmä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:401
+msgid "Engine used for speech synthesis"
+msgstr "Puhesynteesiin käytettävä moottori"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:405
+msgid "Select TTS engine"
+msgstr "Valitse TTS-moottori"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:413
+msgid "Engine status"
+msgstr "Moottorien tila"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:414
+msgid "Checking installed engines…"
+msgstr "Tarkistetaan asennettuja moottoreita…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:415
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:426
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:659
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1775
+msgid "Checking…"
+msgstr "Tarkistetaan…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:434
+msgid "Voice"
+msgstr "Ääni"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:435
+msgid "Loading voices..."
+msgstr "Ladataan ääniä..."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:436
+msgid "Detecting installed voices..."
+msgstr "Tunnistetaan asennettuja ääniä..."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:438
+msgid "Select TTS voice"
+msgstr "Valitse TTS-ääni"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:444
+msgid "Refresh voice list"
+msgstr "Päivitä ääniluettelo"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:452
+msgid "Manage voices for current engine"
+msgstr "Hallitse ääniä nykyiselle moottorille"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:463
+msgid "Speed"
+msgstr "Nopeus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:464
+msgid "Speech rate"
+msgstr "Puhenopeus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:471
+msgid "Slow"
+msgstr "Hidas"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:471
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:487
+msgid "Normal"
+msgstr "Normaali"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:471
+msgid "Fast"
+msgstr "Nopea"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:472
+msgid "Speech speed"
+msgstr "Puhenopeus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:479
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1210
+msgid "Pitch"
+msgstr "Äänenkorkeus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:480
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1210
+msgid "Voice tone"
+msgstr "Äänen sävy"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:487
+msgid "Low"
+msgstr "Matala"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:487
+msgid "High"
+msgstr "Korkea"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:488
+msgid "Voice pitch"
+msgstr "Äänen korkeus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:496
+msgid "Volume"
+msgstr "Äänenvoimakkuus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:497
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:505
+msgid "Speech volume"
+msgstr "Puheen voimakkuus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:504
+msgid "Mute"
+msgstr "Mykistä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:504
+msgid "Max"
+msgstr "Maks"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:515
+msgid "Neutral"
+msgstr "Neutraali"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:516
+msgid "Happy"
+msgstr "Onnellinen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:517
+msgid "Calm"
+msgstr "Rauhallinen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:518
+msgid "Urgent"
+msgstr "Kiireellinen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:519
+msgid "Narrative"
+msgstr "Kerronta"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:532
+msgid "Expression style"
+msgstr "Ilmaustyyli"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:533
+msgid "Changes speed and intonation to match the mood"
+msgstr "Muuttaa nopeutta ja intonaatiota vastaamaan tunnelmaa"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:537
+msgid "Select expression style"
+msgstr "Valitse ilmaisutyylit"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:545
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:964
+msgid "None (single voice)"
+msgstr "Ei mitään (yksi ääni)"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:548
+msgid "Voice blend"
+msgstr "Äänisekoitus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:549
+msgid "Mix a second voice with the primary voice"
+msgstr "Sekoita toinen ääni päääänen kanssa."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:553
+msgid "Select blend voice"
+msgstr "Valitse sekoitusääni"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:571
+msgid "Expand abbreviations"
+msgstr "Laajenna lyhenteet"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:572
+msgid "Replace common abbreviations with full words"
+msgstr "Korvaa yleiset lyhenteet kokonaisilla sanoilla"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:575
+msgid "Expand text abbreviations"
+msgstr "Laajenna tekstin lyhenteet"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:581
+msgid "Read special characters"
+msgstr "Lue erikoismerkit"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:582
+msgid "Speak symbols like # @ % by name"
+msgstr "Lausu symbolit kuten # @ % nimeltä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:585
+msgid "Read special characters aloud"
+msgstr "Lue erikoismerkit ääneen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:591
+msgid "Remove formatting"
+msgstr "Poista muotoilu"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:592
+msgid "Strip Markdown and HTML before reading"
+msgstr "Poista Markdown ja HTML ennen lukemista"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:595
+msgid "Remove text formatting"
+msgstr "Poista tekstin muotoilu"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:601
+msgid "Read URLs"
+msgstr "Lue URL-osoitteet"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:602
+msgid "Read web addresses aloud instead of skipping them"
+msgstr "Lue verkko-osoitteet ääneen sen sijaan, että ohittaisit ne"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:605
+msgid "Read URLs aloud"
+msgstr "Lue URL-osoitteet ääneen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:611
+msgid "Unlimited"
+msgstr "Rajoittamaton"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:612
+msgid "1 000"
+msgstr "1 000"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:613
+msgid "5 000"
+msgstr "5 000"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:614
+msgid "10 000"
+msgstr "10 000"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:615
+msgid "50 000"
+msgstr "50 000"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:616
+msgid "100 000"
+msgstr "100 000"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:628
+msgid "Character limit"
+msgstr "Merkkirajoitus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:629
+msgid "Maximum number of characters to read at once"
+msgstr "Kerralla luettavien merkkien enimmäismäärä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:633
+msgid "Maximum character limit"
+msgstr "Merkkien enimmäisrajoitus"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:647
 msgid "Keyboard shortcut"
 msgstr "Pikanäppäin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 418
-#: 64
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:650
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1720
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
-msgstr ""
-"Valitse teksti missä tahansa ja paina pikanäppäintä lukeaksesi ääneen. Paina uudelleen "
-"lopettaaksesi."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 428
-#: 65
+msgstr "Valitse teksti missä tahansa ja paina pikanäppäintä lukeaksesi ääneen. Paina uudelleen lopettaaksesi."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:662
 msgid "Change"
 msgstr "Muuta"
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 439
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 143
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:665
+msgid "Change keyboard shortcut"
+msgstr "Vaihda näppäinoikotie"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:678
 msgid "Tray icon"
 msgstr "Ilmaisinalueen kuvake"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 440
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:679
 msgid "Fixes quick access and allows running in the background"
 msgstr "Korjaa pikakäynnistys ja mahdollistaa taustalla suorittamisen."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 443
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:682
 msgid "Show system tray icon"
 msgstr "Näytä järjestelmäpalkin kuvake"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 549
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:689
 msgid "Save history"
 msgstr "Tallenna historia"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 550
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:690
 msgid "Save spoken text and audio to ~/Music/tts-biglinux"
 msgstr "Tallenna puhuttu teksti ja ääni kohtaan ~/Music/tts-biglinux"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 553
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:693
 msgid "Save speech history"
 msgstr "Tallenna puhehistorian"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 560
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:700
 msgid "Audio playback mode"
 msgstr "Äänentoistotila"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 561
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:701
 msgid "Behavior when playing multiple audios or speech"
 msgstr "Käyttäytyminen useiden äänien tai puheen toistamisen aikana"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
 msgid "Interrupt previous"
 msgstr "Keskeytä edellinen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
 msgid "Queue"
 msgstr "Jonosarja"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 564
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
 msgid "Simultaneous"
 msgstr "Samanaikaisesti"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 459
-#: 68
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:715
+msgid "Media player"
+msgstr "Mediasoitin"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:716
+msgid "Show a system mini-player (play/stop, time) while reading"
+msgstr "Näytä järjestelmän minisoitin (toisto/pysäytys, aika) lukemisen aikana"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:719
+msgid "Show system media player"
+msgstr "Näytä järjestelmän mediasoitin"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:749
 msgid "Set new shortcut"
 msgstr "Aseta uusi pikanäppäin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 485
-#: 71
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:765
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
@@ -830,340 +829,612 @@ msgstr ""
 "ja paina kirjainta tai näppäintä.\n"
 "\n"
 "<small>Paina Escape peruuttaaksesi</small>"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 469
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 475
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 493
-#: 69
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:784
 msgid "Press the new shortcut"
 msgstr "Paina uutta pikanäppäintä"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 568
-#: 72
-#, python-brace-format
-msgid "Shortcut changed to {keys}"
-msgstr "Pikanäppäin vaihdettu: {keys}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 606
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:907
 msgid "Tray icon enabled"
 msgstr "Tehtäväpalkin kuvake käytössä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 609
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:910
 msgid "Tray icon disabled"
 msgstr "Tehtäväpalkin kuvake poistettu käytöstä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 747
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:923
 msgid "History saving enabled"
 msgstr "Historia tallennus käytössä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 749
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:925
 msgid "History saving disabled"
 msgstr "Historia tallennus pois päältä"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 647
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:994
 msgid "Refreshing voices..."
 msgstr "Päivitetään ääniä..."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 649
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:996
 msgid "Refreshing voice list…"
 msgstr "Päivitetään ääniluetteloa…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 837
-#: 73
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1040
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "Ääniä ei löytynyt — asenna rhvoice tai espeak-ng"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 839
-#: 74
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1042
 msgid "No voices available"
 msgstr "Ääniä ei ole saatavilla"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 861
-#: 76
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1092
 msgid "No voices available for this engine"
 msgstr "Tälle moottorille ei ole ääniä saatavilla"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 864
-#: 77
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1095
 #, python-brace-format
 msgid "Install {engine} voices first"
 msgstr "Asenna ensin {engine}-äänet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 891
-#: 78
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1113
+msgid "Neural"
+msgstr "Neuraalinen"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1123
 #, python-brace-format
-msgid "{count} voices available"
-msgstr "{count} ääntä saatavilla"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 771
+msgid "Voices available: {count}"
+msgstr "Ääniä saatavilla: {count}"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1208
+msgid "Expressiveness"
+msgstr "Ilmeikkyys"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1208
+msgid "Voice variation (not pitch)"
+msgstr "Äänen vaihtelu (ei sävelkorkeus)"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1265
 msgid "Searching for voices..."
 msgstr "Etsitään ääniä..."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 861
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1286
 msgid "Checking for Piper voices..."
 msgstr "Tarkistetaan Piper-ääniä..."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1098
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1294
 msgid "Checking for Kokoro voices..."
 msgstr "Tarkistetaan Kokoro-ääniä..."
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 988
-#: 79
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1302
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "{engine}-ääniä ei löytynyt — asenna se ensin"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 998
-#: 80
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1355
+msgid "Piper is not available"
+msgstr "Piper ei ole saatavilla"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1356
+#, python-brace-format
+msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
+msgstr "Piper-äänipakettia ei löytynyt ohjelmistolähteistäsi ({packages}). Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1360
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1407
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1483
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:883
+msgid "OK"
+msgstr "OK"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1364
+msgid "Piper provides natural neural voices. These packages will be installed:"
+msgstr "Piper tarjoaa luonnollisia neuraalisia ääniä. Seuraavat paketit asennetaan:"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1366
+msgid "This requires administrator permissions."
+msgstr "Tämä vaatii ylläpitäjän oikeudet."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1367
 msgid "Install Piper Neural TTS?"
 msgstr "Asennetaanko Piper Neural TTS?"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1000
-#: 81
-msgid ""
-"Piper is not installed. It provides high-quality neural voices for reading text.\n"
-"\n"
-"The following packages will be installed:\n"
-"• piper-tts-bin (TTS engine)\n"
-"• piper-voices-pt-BR (Portuguese voices)\n"
-"\n"
-"This requires administrator permissions."
-msgstr ""
-"Piper ei ole asennettu. Se tarjoaa korkealaatuisia neuroääniä tekstin lukemiseen.\n"
-"\n"
-"Seuraavat paketit asennetaan:\n"
-"• piper-tts-bin (TTS-moottori)\n"
-"• piper-voices-pt-BR (portugalin äänet)\n"
-"\n"
-"Tämä vaatii järjestelmänvalvojan oikeudet."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1152
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1368
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1419
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:482
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:744
+#: usr/share/biglinux/tts-biglinux/window.py:464
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1369
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1420
+msgid "Install"
+msgstr "Asenna"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1381
 msgid "Installing Piper TTS"
 msgstr "Asennetaan Piper TTS"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1153
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1196
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1382
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1433
 msgid "Downloading and installing packages…"
 msgstr "Latausten ja asennusten paketit…"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1161
-msgid "Install Kokoro Neural TTS?"
-msgstr "Asenna Kokoro Neural TTS?"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1163
-msgid ""
-"Kokoro is not installed. It provides high-quality neural voices with emotion presets and voice "
-"blending.\n"
-"\n"
-"System dependencies (PyTorch, scipy, espeak-ng) will be installed via pacman.\n"
-"The Kokoro library will be installed via pip."
-msgstr ""
-"Kokoroa ei ole asennettu. Se tarjoaa korkealaatuisia neuroääniä, joissa on tunteiden esiasetuksia "
-"ja äänen sekoitusta.\n"
-"\n"
-"Järjestelmäriippuvuudet (PyTorch, scipy, espeak-ng) asennetaan pacmanin kautta. Kokoro-kirjasto "
-"asennetaan pipin kautta."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1195
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1402
+msgid "Kokoro is not available"
+msgstr "Kokoro ei ole saatavilla"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1403
+#, python-brace-format
+msgid "The {package} package was not found in your repositories, so Kokoro cannot be installed yet. Update the system (sudo pacman -Syu) and try again."
+msgstr "Pakettia {package} ei löytynyt ohjelmistolähteistäsi, joten Kokoroa ei voi vielä asentaa. Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1413
+msgid "Install Kokoro neural voices?"
+msgstr "Asennetaanko Kokoron neuraaliset äänet?"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1414
+msgid "Kokoro offers natural neural voices in several languages, with expression styles and voice blending."
+msgstr "Kokoro tarjoaa luonnollisia neuraalisia ääniä useilla kielillä, ilmaisutyyleineen ja äänten sekoitusmahdollisuuksineen."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1415
+#, python-brace-format
+msgid "The {package} package{size} will be installed. This requires administrator permissions."
+msgstr "Paketti {package}{size} asennetaan. Tämä vaatii ylläpitäjän oikeudet."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1432
 msgid "Installing Kokoro TTS"
 msgstr "Kokoro TTS:n asentaminen"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1255
-msgid "Database is locked by another process"
-msgstr "Tietokanta on lukittu toisen prosessin toimesta."
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1271
-msgid "pacman failed"
-msgstr "pacman epäonnistui"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1287
-msgid "pip install failed"
-msgstr "pip-asennus epäonnistui"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1292
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1461
+msgid "The installation failed."
+msgstr "Asennus epäonnistui."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1488
 #, python-brace-format
-msgid "Command not found: {cmd}"
-msgstr "Komentoa ei löytynyt: {cmd}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1294
-msgid "Installation timed out"
-msgstr "Asennus aikakatkaistiin"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1302
-msgid "Kokoro installed successfully! Discovering voices…"
-msgstr "Kokoro asennettiin onnistuneesti! Ääniä etsitään…"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
+msgid "{engine} installed. Looking for voices…"
+msgstr "{engine} asennettu. Etsitään ääniä…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1499
 #, python-brace-format
-msgid "Failed to install: {error}"
-msgstr "Asennus epäonnistui: {error}"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
-msgid "Failed to install Kokoro — check permissions"
-msgstr "Kokoro-asennus epäonnistui — tarkista käyttöoikeudet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1082
-#: 85
-msgid "Piper installed successfully! Discovering voices…"
-msgstr "Piper asennettu onnistuneesti! Etsitään ääniä…"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1086
-#: 86
-msgid "Failed to install Piper — check permissions"
-msgstr "Piperin asennus epäonnistui — tarkista oikeudet"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1137
-#: 87
+msgid "{engine} could not be installed"
+msgstr "Moottoria {engine} ei voitu asentaa"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1566
 msgid "Type some text to test"
 msgstr "Kirjoita teksti kokeillaksesi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1151
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1580
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Äänenvoimakkuus on nolla — nostetaan minimitasolle testiä varten"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1176
-#: 88
-msgid "Could not play test — check if a TTS engine is installed"
-msgstr "Testiä ei voitu toistaa — tarkista, onko TTS-moottori asennettu"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1190
-#: 89
-msgid "Press Alt+V to stop"
-msgstr "Paina Alt+V lopettaaksesi"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1199
-#: 91
-msgid "Could not play speech — check TTS engine"
-msgstr "Puhetta ei voitu toistaa — tarkista TTS-moottori"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 168
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1209
-#: 2
-msgid "Select text and press Alt+V to read aloud"
-msgstr "Valitse teksti ja paina Alt+V lukeaksesi ääneen"
-# 
-# File: tts-biglinux/src/biglinux_tts/ui/main_view.py, line: 1223
-#: 94
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1645
+#: usr/share/biglinux/tts-biglinux/window.py:306
+msgid "Loading voice…"
+msgstr "Ladataan ääntä…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1648
+#, python-brace-format
+msgid "Preparing {voice}. Speech starts in a moment."
+msgstr "Valmistellaan ääntä {voice}. Puhe alkaa hetken kuluttua."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1649
+msgid "Preparing the voice. Speech starts in a moment."
+msgstr "Valmistellaan ääntä. Puhe alkaa hetken kuluttua."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1655
+#: usr/share/biglinux/tts-biglinux/window.py:308
+msgid "Speaking…"
+msgstr "Puhutaan…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1657
+#, python-brace-format
+msgid "Press {shortcut} again to stop."
+msgstr "Pysäytä painamalla {shortcut} uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1658
+msgid "Use Stop to end the reading."
+msgstr "Lopeta lukeminen Lopeta-painikkeella."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1665
+msgid "The speech engine reported a problem."
+msgstr "Puhemoottori ilmoitti ongelmasta."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1670
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1671
+msgid "Reading was stopped."
+msgstr "Lukeminen pysäytettiin."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1675
+msgid "Ready to speak"
+msgstr "Valmis puhumaan"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1676
+msgid "Select any text and use the shortcut to hear it."
+msgstr "Valitse mitä tahansa tekstiä ja kuuntele se pikanäppäimellä."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1712
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1718
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1748
+msgid "The shortcut is not active."
+msgstr "Pikanäppäin ei ole käytössä."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1716
+msgid "Checking the shortcut with the desktop…"
+msgstr "Tarkistetaan pikanäppäintä työpöydältä…"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
+msgid "Not active"
+msgstr "Ei käytössä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
+msgid "Active"
+msgstr "Käytössä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1737
+#, python-brace-format
+msgid "Shortcut changed to {keys}"
+msgstr "Pikanäppäin vaihdettu: {keys}"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1757
+msgid "Not installed. Install the rhvoice package and a voice."
+msgstr "Ei asennettu. Asenna rhvoice-paketti ja jokin ääni."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1758
+msgid "Not installed. Install the espeak-ng package."
+msgstr "Ei asennettu. Asenna espeak-ng-paketti."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1759
+msgid "Not installed. Install Piper from the TTS Backend list."
+msgstr "Ei asennettu. Asenna Piper TTS-taustajärjestelmien luettelosta."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1760
+msgid "Not installed. Install the biglinux-kokoro-tts package."
+msgstr "Ei asennettu. Asenna biglinux-kokoro-tts-paketti."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1761
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1777
+msgid "Not installed"
+msgstr "Ei asennettu"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1780
+msgid "No voices"
+msgstr "Ei ääniä"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1781
+msgid "Installed, but no voice is available. Open the Voice Manager."
+msgstr "Asennettu, mutta ääniä ei ole saatavilla. Avaa Äänten hallinta."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1784
+msgid "Ready"
+msgstr "Valmis"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1785
+#, python-brace-format
+msgid "Voices installed: {count}"
+msgstr "Ääniä asennettu: {count}"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1788
+msgid "Loading"
+msgstr "Ladataan"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1790
+msgid "Speaking"
+msgstr "Puhuu"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1792
+msgid "Error"
+msgstr "Virhe"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1801
+#, python-brace-format
+msgid "{engine}: {state}"
+msgstr "{engine}: {state}"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1806
+msgid "Technical details"
+msgstr "Tekniset tiedot"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1808
+msgid "Close"
+msgstr "Sulje"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1828
 msgid "Settings restored to defaults"
 msgstr "Asetukset palautettu oletusarvoihin"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 103
-msgid "TTS"
-msgstr "TTS"
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 227
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 227
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 209
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 198
-# 
-# #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 644
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 198
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 124
-#: 95
-msgid "Restore Defaults"
-msgstr "Palauta oletukset"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 142
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:334
+msgid "Piper engine"
+msgstr "Piper-moottori"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:398
+msgid "Voice Manager"
+msgstr "Äänijohtaja"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:419
+msgid "Search voices by name or language…"
+msgstr "Hae ääniä nimen tai kielen mukaan…"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:451
+msgid "Loading available voices…"
+msgstr "Ladataan saatavilla olevia ääniä…"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:522
+msgid "No Voice Packages Found"
+msgstr "Äänipaketteja ei löytynyt"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:524
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Ei voitu löytää mitään TTS-ääni paketteja pacman-repositorioista."
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:570
+msgid "High quality offline voices"
+msgstr "Korkealaatuiset offline-äänet"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:574
+msgid "Neural network voices — natural sounding"
+msgstr "Neuraaliverkkoäänet - luonnollisen kuuloiset"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:578
+msgid "Lightweight multi-language synthesizer"
+msgstr "Kevyt monikielinen synnyttäjä"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:582
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neuraalinen TTS — korkealaatuiset monikieliset äänet (82M)"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:681
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:682
+#, python-brace-format
+msgid "Install {name}"
+msgstr "Asenna {name}"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:690
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:691
+#, python-brace-format
+msgid "Remove {name}"
+msgstr "Poista {name}"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:700
+msgid "Installed"
+msgstr "Asennettu"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:719
+#, python-brace-format
+msgid "Remove {name}?"
+msgstr "Poistetaanko {name}?"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:720
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Ääni ei ole enää käytettävissä lukemiseen. Voit asentaa sen myöhemmin uudelleen."
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:721
+msgid "Remove"
+msgstr "Poista"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:787
+#, python-brace-format
+msgid "Downloading {name}…"
+msgstr "Ladataan {name}…"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:796
+#, python-brace-format
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Ladataan {name}… {done}/{total} kt"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:848
+msgid "Operation timed out"
+msgstr "Toiminto aikakatkaistiin"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:850
+msgid "pkexec or pacman not found"
+msgstr "pkexec tai pacman ei löytynyt"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:875
+msgid "Download cancelled"
+msgstr "Lataus peruttu"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:879
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:880
+msgid "Removal Failed"
+msgstr "Poisto epäonnistui"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:882
+msgid "Unknown error"
+msgstr "Tuntematon virhe"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:899
+#, python-brace-format
+msgid "Play a sample of {name}"
+msgstr "Toista näyte äänestä {name}"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:968
+msgid "Stop the sample"
+msgstr "Pysäytä näyte"
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:1031
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:1036
+msgid "The sample could not be played."
+msgstr "Näytettä ei voitu toistaa."
+
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:1034
+#, python-brace-format
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Näytettä ei voitu toistaa: {program} ei ole asennettu."
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:60
+msgid "Welcome to BigLinux TTS"
+msgstr "Tervetuloa BigLinux TTS:ään"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:67
+msgid "Your text-to-speech assistant"
+msgstr "Tekstistä puheeksi -avustajasi"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:77
+msgid "Multiple TTS Engines"
+msgstr "Useita TTS-moottoreita"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:79
+msgid ""
+"RHVoice, espeak-ng, Piper and Kokoro\n"
+"with automatic voice discovery"
+msgstr ""
+"RHVoice, espeak-ng, Piper ja Kokoro\n"
+"automaattisella äänten tunnistuksella"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:83
+msgid "Multilingual Support"
+msgstr "Monikielinen tuki"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:84
+msgid ""
+"Voices in dozens of languages\n"
+"including Portuguese (Brazil)"
+msgstr "Ääniä kymmenissä kielissä, mukaan lukien portugali (Brasilia)"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:88
+msgid "Global Shortcut"
+msgstr "Globaali pikanäppäin"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:89
+#, python-brace-format
+msgid ""
+"Press {key} to read selected text\n"
+"from any application"
+msgstr ""
+"Lue valittu teksti mistä tahansa\n"
+"sovelluksesta painamalla {key}"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:93
+msgid "Clipboard Reading"
+msgstr "Leikealueen lukeminen"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:94
+msgid ""
+"Paste or type text directly\n"
+"and listen instantly"
+msgstr "Liitä tai kirjoita teksti suoraan ja kuuntele heti."
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:98
+msgid "Fine-Tune Speech"
+msgstr "Hienosäätää puhetta"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:99
+msgid ""
+"Adjust speed, pitch and volume\n"
+"to your preference"
+msgstr "Säädä nopeus, sävelkorkeus ja äänenvoimakkuus mieltymystesi mukaan."
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:101
+msgid "Easy Installation"
+msgstr "Helppo asennus"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:102
+msgid ""
+"Install new voices and engines\n"
+"directly from the interface"
+msgstr "Asenna uusia ääniä ja moottoreita suoraan käyttöliittymästä."
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:106
+msgid "Neural Voices"
+msgstr "Neuraalivaihteet"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:108
+msgid ""
+"Install Piper or Kokoro voices for natural,\n"
+"high-quality speech synthesis"
+msgstr ""
+"Asenna Piper- tai Kokoro-ääniä luonnollista,\n"
+"laadukasta puhesynteesiä varten"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:112
+msgid "Reading History"
+msgstr "Lukuhistoria"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:114
+msgid ""
+"Optionally save and replay previous\n"
+"readings when history is enabled"
+msgstr ""
+"Tallenna halutessasi aiemmat lukukerrat\n"
+"ja toista niitä, kun historia on käytössä"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:146
+#, python-brace-format
+msgid "Tip: Press {key} to read selected text from any application."
+msgstr "Vinkki: Lue valittu teksti mistä tahansa sovelluksesta painamalla {key}."
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:166
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:169
+msgid "Show dialog on startup"
+msgstr "Näytä ikkuna käynnistyksessä"
+
+#: usr/share/biglinux/tts-biglinux/ui/welcome_dialog.py:178
+msgid "Let's Start"
+msgstr "Aloitetaan"
+
+#: usr/share/biglinux/tts-biglinux/utils/i18n.py:207
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"
+
+#: usr/share/biglinux/tts-biglinux/window.py:49
+msgid "Show settings"
+msgstr "Näytä asetukset"
+
+#: usr/share/biglinux/tts-biglinux/window.py:169
+#: usr/share/biglinux/tts-biglinux/window.py:170
+msgid "Back"
+msgstr "Takaisin"
+
+#: usr/share/biglinux/tts-biglinux/window.py:178
+#: usr/share/biglinux/tts-biglinux/window.py:297
+msgid "Text narrator"
+msgstr "Tekstin lukija"
+
+#: usr/share/biglinux/tts-biglinux/window.py:247
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Pikanäppäin ei ole käytössä — korjaa se Lisäasetuksista"
+
+#: usr/share/biglinux/tts-biglinux/window.py:248
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Valitse tekstiä ja lue se ääneen painamalla {key}"
+
+#: usr/share/biglinux/tts-biglinux/window.py:381
+msgid "Show tray icon"
+msgstr "Näytä ilmoitusalueen kuvake"
+
+#: usr/share/biglinux/tts-biglinux/window.py:382
+msgid "Restore Defaults…"
+msgstr "Palauta oletukset…"
+
+#: usr/share/biglinux/tts-biglinux/window.py:387
 msgid "Welcome"
 msgstr "Tervetuloa"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 128
-#: 96
-msgid "About"
-msgstr "Tietoja"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 129
-#: 97
-msgid "Quit"
-msgstr "Lopeta"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 135
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 137
-#: 98
+
+#: usr/share/biglinux/tts-biglinux/window.py:388
+msgid "About BigLinux TTS"
+msgstr "Tietoja BigLinux TTS:stä"
+
+#: usr/share/biglinux/tts-biglinux/window.py:399
+#: usr/share/biglinux/tts-biglinux/window.py:400
 msgid "Main menu"
 msgstr "Päävalikko"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 156
-#: 99
+
+#: usr/share/biglinux/tts-biglinux/window.py:461
 msgid "Restore settings?"
 msgstr "Palautetaanko asetukset?"
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 157
-#: 100
+
+#: usr/share/biglinux/tts-biglinux/window.py:462
 msgid "This will return all adjustments to their original defaults."
 msgstr "Tämä palauttaa kaikki säädöt alkuperäisiin oletusarvoihinsa."
-# 
-# File: tts-biglinux/src/biglinux_tts/window.py, line: 160
-#: 101
+
+#: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Palauta"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 143
-msgid "Text-to-speech assistant"
-msgstr "Tekstistä puheeksi -avustaja"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 186
-msgid "Read text"
-msgstr "Lue teksti"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 148
-msgid "Settings"
-msgstr "Asetukset"
-# 
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 205
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/application.py, line: 217
-msgid "Playing…"
-msgstr "Pelaaminen…"
