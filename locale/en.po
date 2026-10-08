@@ -159,44 +159,50 @@ msgid "The installation took too long and was stopped."
 msgstr "The installation took too long and was stopped."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 79
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 99
 msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
 msgstr "Could not play audio. Check that alsa-utils (aplay) is installed."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 401
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 421
 #, python-brace-format
 msgid "{engine} could not start. Check that it is installed."
 msgstr "{engine} could not start. Check that it is installed."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 773
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 793
 msgid "RHVoice is not installed. Install the rhvoice package."
 msgstr "RHVoice is not installed. Install the rhvoice package."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 883
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 903
 msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
 msgstr "espeak-ng could not read this text. Check that espeak-ng is installed."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1035
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1193
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1055
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1213
 msgid "Piper could not read this text. Try another voice."
 msgstr "Piper could not read this text. Try another voice."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1066
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1086
 msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
 msgstr "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1375
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1395
 msgid "Kokoro could not read this text. Try another voice."
 msgstr "Kokoro could not read this text. Try another voice."
 
 #
-# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1607
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1630
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} crashed while reading the text."
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1639
 #, python-brace-format
 msgid "{engine} stopped with an error and could not read the text."
 msgstr "{engine} stopped with an error and could not read the text."
