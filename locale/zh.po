@@ -18,106 +18,106 @@ msgstr ""
 msgid "Read the selected text aloud"
 msgstr "朗读所选文本"
 
-#: usr/share/biglinux/tts-biglinux/application.py:298
+#: usr/share/biglinux/tts-biglinux/application.py:309
 msgid "Could not read the text."
 msgstr "无法朗读文本。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:299
-#: usr/share/biglinux/tts-biglinux/application.py:503
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1664
+#: usr/share/biglinux/tts-biglinux/application.py:310
+#: usr/share/biglinux/tts-biglinux/application.py:514
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1732
 #: usr/share/biglinux/tts-biglinux/window.py:310
 msgid "Could not read the text"
 msgstr "无法朗读文本"
 
-#: usr/share/biglinux/tts-biglinux/application.py:310
+#: usr/share/biglinux/tts-biglinux/application.py:321
 msgid "Reading text"
 msgstr "正在朗读文本"
 
-#: usr/share/biglinux/tts-biglinux/application.py:352
-#: usr/share/biglinux/tts-biglinux/application.py:378
-#: usr/share/biglinux/tts-biglinux/application.py:636
+#: usr/share/biglinux/tts-biglinux/application.py:363
+#: usr/share/biglinux/tts-biglinux/application.py:389
+#: usr/share/biglinux/tts-biglinux/application.py:647
 msgid "Playing…"
 msgstr "正在播放…"
 
-#: usr/share/biglinux/tts-biglinux/application.py:502
+#: usr/share/biglinux/tts-biglinux/application.py:513
 msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
 msgstr "请安装 wl-clipboard（Wayland）或 xclip（X11），以便朗读所选文本。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:507
+#: usr/share/biglinux/tts-biglinux/application.py:518
 msgid "Select some text first, then press the shortcut."
 msgstr "请先选择一些文本，然后按快捷键。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:508
+#: usr/share/biglinux/tts-biglinux/application.py:519
 msgid "No text selected"
 msgstr "未选择文本"
 
-#: usr/share/biglinux/tts-biglinux/application.py:601
+#: usr/share/biglinux/tts-biglinux/application.py:612
 msgid "Read text"
 msgstr "请阅读文本"
 
-#: usr/share/biglinux/tts-biglinux/application.py:607
+#: usr/share/biglinux/tts-biglinux/application.py:618
 #: usr/share/biglinux/tts-biglinux/ui/audio_player.py:89
-#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:139
-#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:176
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:144
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:181
 msgid "Play"
 msgstr "播放"
 
-#: usr/share/biglinux/tts-biglinux/application.py:607
-#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:162
+#: usr/share/biglinux/tts-biglinux/application.py:618
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:167
 msgid "Pause"
 msgstr "暂停"
 
-#: usr/share/biglinux/tts-biglinux/application.py:612
+#: usr/share/biglinux/tts-biglinux/application.py:623
 #: usr/share/biglinux/tts-biglinux/ui/audio_player.py:97
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1694
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1762
 msgid "Stop"
 msgstr "停止"
 
-#: usr/share/biglinux/tts-biglinux/application.py:617
+#: usr/share/biglinux/tts-biglinux/application.py:628
 #: usr/share/biglinux/tts-biglinux/window.py:48
 #: usr/share/biglinux/tts-biglinux/window.py:148
 msgid "Settings"
 msgstr "设置"
 
-#: usr/share/biglinux/tts-biglinux/application.py:619
-#: usr/share/biglinux/tts-biglinux/window.py:389
+#: usr/share/biglinux/tts-biglinux/application.py:630
+#: usr/share/biglinux/tts-biglinux/window.py:390
 msgid "Quit"
 msgstr "退出"
 
-#: usr/share/biglinux/tts-biglinux/application.py:636
+#: usr/share/biglinux/tts-biglinux/application.py:647
 msgid "Paused"
 msgstr "已暂停"
 
-#: usr/share/biglinux/tts-biglinux/application.py:707
+#: usr/share/biglinux/tts-biglinux/application.py:718
 msgid "BigLinux Team"
 msgstr "BigLinux 团队"
 
-#: usr/share/biglinux/tts-biglinux/application.py:718
+#: usr/share/biglinux/tts-biglinux/application.py:729
 msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
 msgstr "BigLinux TTS 使用本地语音、全局快捷键和精确的播放控制，将所选或输入的文本转换为语音。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:721
+#: usr/share/biglinux/tts-biglinux/application.py:732
 msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
 msgstr "BigLinux TTS 于 2021 年作为网页工具起步，后发展为原生 GTK4 应用程序，拥有多种语音引擎、语音管理和 Rust 音频引擎。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:773
+#: usr/share/biglinux/tts-biglinux/application.py:784
 msgid "Could not register the shortcut."
 msgstr "无法注册快捷键。"
 
-#: usr/share/biglinux/tts-biglinux/application.py:799
+#: usr/share/biglinux/tts-biglinux/application.py:810
 #, python-brace-format
 msgid "Select text and press {shortcut} to hear it"
 msgstr "选择文本并按 {shortcut} 即可收听"
 
-#: usr/share/biglinux/tts-biglinux/application.py:800
+#: usr/share/biglinux/tts-biglinux/application.py:811
 msgid "Text-to-speech assistant"
 msgstr "文本转语音助手"
 
-#: usr/share/biglinux/tts-biglinux/main.py:17
+#: usr/share/biglinux/tts-biglinux/main.py:24
 msgid "BigLinux Text-to-Speech — Read selected text aloud"
 msgstr "BigLinux 文本转语音 — 朗读所选文本"
 
-#: usr/share/biglinux/tts-biglinux/main.py:22
+#: usr/share/biglinux/tts-biglinux/main.py:29
 msgid "Enable debug logging"
 msgstr "启用调试日志"
 
@@ -142,64 +142,64 @@ msgstr "未找到 Kokoro 语音。请打开语音管理器下载语音。"
 msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
 msgstr "此 Kokoro 语音未安装。请打开语音管理器下载。"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:449
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:448
 #, python-brace-format
 msgid "Unknown voice: {voice_id}"
 msgstr "未知语音：{voice_id}"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:454
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:453
 #, python-brace-format
 msgid "Invalid voice id: {voice_id}"
 msgstr "无效的语音 ID：{voice_id}"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:475
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:487
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:474
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:486
 msgid "The voice file is larger than expected."
 msgstr "语音文件大于预期。"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:497
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:496
 #, python-brace-format
 msgid "incomplete download ({received} of {total} bytes)"
 msgstr "下载不完整（已接收 {received} / {total} 字节）"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:502
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:501
 msgid "empty response"
 msgstr "空响应"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:508
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:507
 #, python-brace-format
 msgid "Could not download the voice. Check your internet connection and try again. ({error})"
 msgstr "无法下载语音。请检查网络连接后重试。（{error}）"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:515
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:514
 #, python-brace-format
 msgid "The downloaded voice file is damaged. Try again. ({error})"
 msgstr "下载的语音文件已损坏。请重试。（{error}）"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:526
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:525
 #, python-brace-format
 msgid "Not enough disk space to install the voice ({size} MB needed)."
 msgstr "磁盘空间不足，无法安装语音（需要 {size} MB）。"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:534
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:533
 #, python-brace-format
 msgid "Cannot create user voices directory: {error}"
 msgstr "无法创建用户语音目录：{error}"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:540
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:539
 #, python-brace-format
 msgid "Failed to add voice: {error}"
 msgstr "添加语音失败：{error}"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:553
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:552
 msgid "Cannot remove base voice"
 msgstr "无法删除基础语音"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:556
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:555
 msgid "No user voices installed"
 msgstr "未安装用户语音"
 
-#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:561
+#: usr/share/biglinux/tts-biglinux/services/kokoro_voice_service.py:560
 #, python-brace-format
 msgid "Failed to remove voice: {error}"
 msgstr "删除语音失败：{error}"
@@ -283,37 +283,37 @@ msgstr "快捷键已保存，但桌面尚未确认。"
 msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
 msgstr "无法在此桌面上注册快捷键。请在系统键盘设置中使用命令 biglinux-tts-speak 添加。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:129
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:136
 msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
 msgstr "无法播放音频。请检查是否已安装 alsa-utils（aplay）。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:450
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:473
 #, python-brace-format
 msgid "{engine} could not start. Check that it is installed."
 msgstr "{engine} 无法启动。请检查是否已安装。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:559
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:607
 msgid "RHVoice is not installed. Install the rhvoice package."
 msgstr "未安装 RHVoice。请安装 rhvoice 软件包。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:641
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:813
 msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
 msgstr "espeak-ng 无法朗读此文本。请检查是否已安装 espeak-ng。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:753
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:828
 msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
 msgstr "所选的 Piper 语音未安装。请在语音管理器中选择其他语音。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:803
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:878
 msgid "Piper could not read this text. Try another voice."
 msgstr "Piper 无法朗读此文本。请尝试其他语音。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1044
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1049
 #, python-brace-format
 msgid "{engine} crashed while reading the text."
 msgstr "{engine} 在朗读文本时崩溃。"
 
-#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1053
+#: usr/share/biglinux/tts-biglinux/services/tts_service.py:1051
 #, python-brace-format
 msgid "{engine} stopped with an error and could not read the text."
 msgstr "{engine} 因错误停止，无法朗读文本。"
@@ -331,7 +331,7 @@ msgid "Medium quality"
 msgstr "中等质量"
 
 #: usr/share/biglinux/tts-biglinux/services/voice_manager.py:610
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1115
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1183
 msgid "High quality"
 msgstr "高质量"
 
@@ -345,77 +345,291 @@ msgstr "无快捷键"
 msgid "Shortcut: {keys}"
 msgstr "快捷键：{keys}"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:125
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:302
-msgid "(no text)"
-msgstr "（无文本）"
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:41
+msgid "Unknown"
+msgstr "未知"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:145
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:354
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:57
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "今天 {time}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:59
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "昨天 {time}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:107
+msgid "Select this reading"
+msgstr "选择此朗读"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:113
+msgid "(text not kept)"
+msgstr "（未保留文本）"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:124
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:232
+msgid "Show more"
+msgstr "显示更多"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:135
+msgid "Copy text"
+msgstr "复制文本"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:137
+msgid "Read again with the current voice"
+msgstr "用当前语音重新朗读"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:143
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:144
+msgid "More actions"
+msgstr "更多操作"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:164
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1738
+msgid "Stopped"
+msgstr "已停止"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:164
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1860
+msgid "Error"
+msgstr "错误"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:168
+msgid "Reading stopped before the end"
+msgstr "朗读在结束前停止"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:169
+msgid "The engine failed during this reading"
+msgstr "引擎在此次朗读中出错"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:185
+msgid "Audio not kept for this reading"
+msgstr "此次朗读未保留音频"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:191
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} 朗读，{when}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:222
+msgid "Save audio as…"
+msgstr "音频另存为…"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:223
 msgid "Open file location"
 msgstr "打开文件位置"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:152
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:361
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:224
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:740
 msgid "Delete"
 msgstr "删除"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:432
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:232
+msgid "Show less"
+msgstr "显示更少"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:237
+msgid "Text copied"
+msgstr "文本已复制"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:245
+msgid "Save audio as"
+msgstr "音频另存为"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:254
+msgid "Audio saved"
+msgstr "音频已保存"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:254
+msgid "Could not save the audio"
+msgstr "无法保存音频"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:285
 #: usr/share/biglinux/tts-biglinux/window.py:288
-#: usr/share/biglinux/tts-biglinux/window.py:376
+#: usr/share/biglinux/tts-biglinux/window.py:377
 msgid "History"
 msgstr "历史"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:456
-msgid "Search history…"
-msgstr "搜索历史…"
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:311
+msgid "Saving is off: new readings are not kept."
+msgstr "保存已关闭：新的朗读不会被保留。"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:464
-msgid "Toggle grid/list view"
-msgstr "切换网格/列表视图"
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:312
+msgid "Turn On"
+msgstr "开启"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:471
-msgid "Select items"
-msgstr "选择项目"
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:328
+msgid "Search text, voice, engine or date…"
+msgstr "搜索文本、语音、引擎或日期…"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:478
-msgid "Refresh"
-msgstr "刷新"
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:335
+msgid "All dates"
+msgstr "所有日期"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:491
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:335
+msgid "Today"
+msgstr "今天"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:335
+msgid "Yesterday"
+msgstr "昨天"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:335
+msgid "Last 7 days"
+msgstr "最近 7 天"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:337
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:338
+msgid "Filter by date"
+msgstr "按日期筛选"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:342
+msgid "All engines"
+msgstr "所有引擎"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:344
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:345
+msgid "Filter by engine"
+msgstr "按引擎筛选"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:352
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:655
+msgid "Newest first"
+msgstr "最新优先"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:353
+msgid "Sort order"
+msgstr "排序方式"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:358
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:359
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:662
+msgid "Show as grid"
+msgstr "以网格显示"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:364
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:365
+msgid "Select readings"
+msgstr "选择朗读记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:377
 msgid "Select All"
 msgstr "全选"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:496
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:381
 msgid "Deselect All"
 msgstr "取消全选"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:507
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:390
+msgid "Save the selected readings to a folder"
+msgstr "将所选朗读记录保存到文件夹"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:391
+msgid "Save selected"
+msgstr "保存所选"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:396
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:397
 msgid "Delete selected"
 msgstr "删除所选项"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:535
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:559
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:406
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:415
 msgid "History entries"
 msgstr "历史条目"
 
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:568
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:580
+msgid "The history could not be read"
+msgstr "无法读取历史记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:582
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "请检查文件夹 {folder} 的权限。"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:589
+msgid "No readings found"
+msgstr "未找到朗读记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:590
+msgid "Try other words or another date or engine."
+msgstr "请尝试其他词语、其他日期或引擎。"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:591
+msgid "Clear Filters"
+msgstr "清除筛选"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:595
+msgid "No readings yet"
+msgstr "暂无朗读记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:599
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "您收听的所有内容都会连同音频显示在这里。仅存储在本计算机的 {folder} 中。"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:605
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "保存已关闭。开启后可连同音频保留您收听的内容——仅保存在本计算机的 {folder} 中。"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:608
+msgid "Turn On History"
+msgstr "开启历史记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:655
+msgid "Oldest first"
+msgstr "最早优先"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:662
+msgid "Show as list"
+msgstr "以列表显示"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:682
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "已选择：{count}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:707
+msgid "Reading deleted"
+msgstr "朗读记录已删除"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:708
+msgid "Undo"
+msgstr "撤销"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:736
+msgid "Delete the selected readings?"
+msgstr "删除所选朗读记录？"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:737
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "朗读记录：{count}。其音频和文本文件将被移到回收站。"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:739
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1436
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1487
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:482
+#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:744
+#: usr/share/biglinux/tts-biglinux/window.py:464
+msgid "Cancel"
+msgstr "取消"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:752
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "已移到回收站：{count}"
+
+#: usr/share/biglinux/tts-biglinux/ui/history_view.py:763
+msgid "Save the selected readings"
+msgstr "保存所选朗读记录"
+
 #: usr/share/biglinux/tts-biglinux/ui/history_view.py:783
-msgid "No History"
-msgstr "没有历史记录"
-
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:570
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:785
-msgid "Spoken texts will appear here when history is enabled."
-msgstr "启用历史记录时，口语文本将在此处显示。"
-
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:777
-msgid "No Results"
-msgstr "没有结果"
-
-#: usr/share/biglinux/tts-biglinux/ui/history_view.py:779
-msgid "No entries match your search."
-msgstr "没有条目匹配您的搜索。"
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "已保存到 {folder}：{count}"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:86
 msgid "BigLinux TTS"
@@ -459,12 +673,12 @@ msgid "Text to test the voice"
 msgstr "用于测试语音的文本"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:357
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1694
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1762
 msgid "Test voice"
 msgstr "测试语音"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:360
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1696
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1764
 msgid "Test the selected voice"
 msgstr "测试所选语音"
 
@@ -515,8 +729,8 @@ msgstr "正在检查已安装的引擎…"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:415
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:426
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:659
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1775
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1792
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1843
 msgid "Checking…"
 msgstr "正在检查…"
 
@@ -570,12 +784,12 @@ msgid "Speech speed"
 msgstr "朗读速度"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:479
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1210
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1278
 msgid "Pitch"
 msgstr "音调"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:480
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1210
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1278
 msgid "Voice tone"
 msgstr "声调"
 
@@ -641,7 +855,7 @@ msgid "Select expression style"
 msgstr "选择表达式样式"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:545
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:964
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1032
 msgid "None (single voice)"
 msgstr "无（单声道）"
 
@@ -706,6 +920,7 @@ msgid "Read URLs aloud"
 msgstr "大声朗读网址"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:611
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:723
 msgid "Unlimited"
 msgstr "无限制"
 
@@ -746,7 +961,7 @@ msgid "Keyboard shortcut"
 msgstr "键盘快捷键"
 
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:650
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1720
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1788
 msgid "Select text anywhere and press the shortcut to read aloud. Press again to stop."
 msgstr "在任意位置选择文本并按快捷键朗读。再次按下可停止。"
 
@@ -770,55 +985,88 @@ msgstr "修复快速访问并允许在后台运行"
 msgid "Show system tray icon"
 msgstr "显示系统托盘图标"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:689
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:692
 msgid "Save history"
 msgstr "保存历史记录"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:690
-msgid "Save spoken text and audio to ~/Music/tts-biglinux"
-msgstr "将语音文本和音频保存到 ~/Music/tts-biglinux"
-
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:693
+#, python-brace-format
+msgid "Keep what you listen to, only on this computer, in {folder}"
+msgstr "保留您收听的内容，仅保存在本计算机的 {folder} 中"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:698
 msgid "Save speech history"
 msgstr "保存语音历史记录"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:700
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
+msgid "Keep the audio"
+msgstr "保留音频"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:705
+msgid "Listen to each reading again, with the same voice"
+msgstr "用相同的语音重新收听每次朗读"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:708
+msgid "Keep the audio of each reading"
+msgstr "保留每次朗读的音频"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:712
+msgid "Keep the text"
+msgstr "保留文本"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:713
+msgid "Search, copy and read again what was read"
+msgstr "搜索、复制并重新朗读已读内容"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:716
+msgid "Keep the text of each reading"
+msgstr "保留每次朗读的文本"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:721
+msgid "Keep at most"
+msgstr "最多保留"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:722
+msgid "The oldest readings are deleted beyond this number"
+msgstr "超出此数量时将删除最早的朗读记录"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:732
 msgid "Audio playback mode"
 msgstr "音频播放模式"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:701
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:733
 msgid "Behavior when playing multiple audios or speech"
 msgstr "播放多个音频或语音时的行为"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:736
 msgid "Interrupt previous"
 msgstr "中断之前"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:736
 msgid "Queue"
 msgstr "队列"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:704
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:736
 msgid "Simultaneous"
 msgstr "同时"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:715
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:747
 msgid "Media player"
 msgstr "媒体播放器"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:716
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:748
 msgid "Show a system mini-player (play/stop, time) while reading"
 msgstr "朗读时显示系统迷你播放器（播放/停止、时间）"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:719
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:751
 msgid "Show system media player"
 msgstr "显示系统媒体播放器"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:749
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:781
 msgid "Set new shortcut"
 msgstr "设置新快捷键"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:765
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:797
 msgid ""
 "<b>Hold modifier keys</b> (Alt, Ctrl, Shift, Super)\n"
 "and press a letter or key.\n"
@@ -830,318 +1078,302 @@ msgstr ""
 "\n"
 "<small>按 Escape 取消</small>"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:784
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:816
 msgid "Press the new shortcut"
 msgstr "按下新的快捷键"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:907
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:939
 msgid "Tray icon enabled"
 msgstr "托盘图标已启用"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:910
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:942
 msgid "Tray icon disabled"
 msgstr "托盘图标已禁用"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:923
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:950
 msgid "History saving enabled"
 msgstr "历史保存已启用"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:925
-msgid "History saving disabled"
-msgstr "历史保存已禁用"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:951
+msgid "History saving disabled. Saved readings are kept."
+msgstr "历史记录保存已禁用。已保存的朗读记录会被保留。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:994
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1062
 msgid "Refreshing voices..."
 msgstr "正在刷新语音..."
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:996
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1064
 msgid "Refreshing voice list…"
 msgstr "正在刷新语音列表…"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1040
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1108
 msgid "No voices found — install rhvoice or espeak-ng"
 msgstr "未找到语音 — 请安装 rhvoice 或 espeak-ng"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1042
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1110
 msgid "No voices available"
 msgstr "没有可用语音"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1092
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1160
 msgid "No voices available for this engine"
 msgstr "此引擎没有可用语音"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1095
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1163
 #, python-brace-format
 msgid "Install {engine} voices first"
 msgstr "请先安装 {engine} 语音"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1113
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1181
 msgid "Neural"
 msgstr "神经网络"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1123
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1191
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "可用语音：{count}"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1208
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1276
 msgid "Expressiveness"
 msgstr "表现力"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1208
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1276
 msgid "Voice variation (not pitch)"
 msgstr "语音变化（非音调）"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1265
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1333
 msgid "Searching for voices..."
 msgstr "正在搜索语音..."
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1286
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1354
 msgid "Checking for Piper voices..."
 msgstr "正在检查Piper语音..."
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1294
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1362
 msgid "Checking for Kokoro voices..."
 msgstr "正在检查Kokoro语音..."
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1302
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1370
 #, python-brace-format
 msgid "No voices found for {engine} — install it first"
 msgstr "未找到 {engine} 的语音 — 请先安装"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1355
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1423
 msgid "Piper is not available"
 msgstr "Piper 不可用"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1356
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1424
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "在您的软件源中未找到 Piper 语音软件包（{packages}）。请更新系统（sudo pacman -Syu）后重试。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1360
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1407
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1483
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1428
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1475
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1551
 #: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:883
 msgid "OK"
 msgstr "确定"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1364
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1432
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper 提供自然的神经网络语音。将安装以下软件包："
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1366
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1434
 msgid "This requires administrator permissions."
 msgstr "这需要管理员权限。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1367
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1435
 msgid "Install Piper Neural TTS?"
 msgstr "安装 Piper 神经网络 TTS？"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1368
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1419
-#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:482
-#: usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py:744
-#: usr/share/biglinux/tts-biglinux/window.py:464
-msgid "Cancel"
-msgstr "取消"
-
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1369
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1420
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1437
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1488
 msgid "Install"
 msgstr "安装"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1381
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1449
 msgid "Installing Piper TTS"
 msgstr "安装Piper TTS"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1382
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1433
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1450
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1501
 msgid "Downloading and installing packages…"
 msgstr "正在下载和安装软件包……"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1402
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1470
 msgid "Kokoro is not available"
 msgstr "Kokoro 不可用"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1403
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1471
 #, python-brace-format
 msgid "The {package} package was not found in your repositories, so Kokoro cannot be installed yet. Update the system (sudo pacman -Syu) and try again."
 msgstr "在您的软件源中未找到 {package} 软件包，因此暂时无法安装 Kokoro。请更新系统（sudo pacman -Syu）后重试。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1413
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1481
 msgid "Install Kokoro neural voices?"
 msgstr "安装 Kokoro 神经网络语音？"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1414
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1482
 msgid "Kokoro offers natural neural voices in several languages, with expression styles and voice blending."
 msgstr "Kokoro 提供多种语言的自然神经网络语音，支持表达风格和语音混合。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1415
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1483
 #, python-brace-format
 msgid "The {package} package{size} will be installed. This requires administrator permissions."
 msgstr "将安装 {package} 软件包{size}。这需要管理员权限。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1432
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1500
 msgid "Installing Kokoro TTS"
 msgstr "安装Kokoro TTS"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1461
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1529
 msgid "The installation failed."
 msgstr "安装失败。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1488
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1556
 #, python-brace-format
 msgid "{engine} installed. Looking for voices…"
 msgstr "{engine} 已安装。正在查找语音…"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1499
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1567
 #, python-brace-format
 msgid "{engine} could not be installed"
 msgstr "无法安装 {engine}"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1566
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1634
 msgid "Type some text to test"
 msgstr "输入一些文本进行测试"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1580
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1648
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "音量为零 - 正在增加到测试的最小值"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1645
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1713
 #: usr/share/biglinux/tts-biglinux/window.py:306
 msgid "Loading voice…"
 msgstr "正在加载语音…"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1648
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1716
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "正在准备 {voice}。即将开始朗读。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1649
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1717
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "正在准备语音。即将开始朗读。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1655
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1723
 #: usr/share/biglinux/tts-biglinux/window.py:308
 msgid "Speaking…"
 msgstr "正在朗读…"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1657
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1725
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
 msgstr "再次按 {shortcut} 即可停止。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1658
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1726
 msgid "Use Stop to end the reading."
 msgstr "使用“停止”结束朗读。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1665
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1733
 msgid "The speech engine reported a problem."
 msgstr "语音引擎报告了一个问题。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1670
-msgid "Stopped"
-msgstr "已停止"
-
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1671
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1739
 msgid "Reading was stopped."
 msgstr "朗读已停止。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1675
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1743
 msgid "Ready to speak"
 msgstr "准备朗读"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1676
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1744
 msgid "Select any text and use the shortcut to hear it."
 msgstr "选择任意文本并使用快捷键即可收听。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1712
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1718
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1748
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1780
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1786
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1816
 msgid "The shortcut is not active."
 msgstr "快捷键未激活。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1716
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1784
 msgid "Checking the shortcut with the desktop…"
 msgstr "正在与桌面核对快捷键…"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1792
 msgid "Not active"
 msgstr "未激活"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1724
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1792
 msgid "Active"
 msgstr "已激活"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1737
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1805
 #, python-brace-format
 msgid "Shortcut changed to {keys}"
 msgstr "快捷键已更改为 {keys}"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1757
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1825
 msgid "Not installed. Install the rhvoice package and a voice."
 msgstr "未安装。请安装 rhvoice 软件包和一个语音。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1758
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1826
 msgid "Not installed. Install the espeak-ng package."
 msgstr "未安装。请安装 espeak-ng 软件包。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1759
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1827
 msgid "Not installed. Install Piper from the TTS Backend list."
 msgstr "未安装。请从 TTS 后端列表中安装 Piper。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1760
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1828
 msgid "Not installed. Install the biglinux-kokoro-tts package."
 msgstr "未安装。请安装 biglinux-kokoro-tts 软件包。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1761
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1777
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1829
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1845
 msgid "Not installed"
 msgstr "未安装"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1780
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1848
 msgid "No voices"
 msgstr "无语音"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1781
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1849
 msgid "Installed, but no voice is available. Open the Voice Manager."
 msgstr "已安装，但没有可用的语音。请打开语音管理器。"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1784
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1852
 msgid "Ready"
 msgstr "就绪"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1785
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1853
 #, python-brace-format
 msgid "Voices installed: {count}"
 msgstr "已安装语音：{count}"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1788
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1856
 msgid "Loading"
 msgstr "加载中"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1790
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1858
 msgid "Speaking"
 msgstr "朗读中"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1792
-msgid "Error"
-msgstr "错误"
-
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1801
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1869
 #, python-brace-format
 msgid "{engine}: {state}"
 msgstr "{engine}：{state}"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1806
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1874
 msgid "Technical details"
 msgstr "技术详情"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1808
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1876
 msgid "Close"
 msgstr "关闭"
 
-#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1828
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1896
 msgid "Settings restored to defaults"
 msgstr "设置已恢复为默认值"
 
@@ -1397,33 +1629,33 @@ msgstr "返回"
 msgid "Text narrator"
 msgstr "文本朗读器"
 
-#: usr/share/biglinux/tts-biglinux/window.py:247
+#: usr/share/biglinux/tts-biglinux/window.py:249
 msgid "The shortcut is not active — open Advanced options to fix it"
 msgstr "快捷键未激活 — 请打开高级选项进行修复"
 
-#: usr/share/biglinux/tts-biglinux/window.py:248
+#: usr/share/biglinux/tts-biglinux/window.py:250
 #, python-brace-format
 msgid "Select text and press {key} to read it aloud"
 msgstr "选择文本并按 {key} 即可朗读"
 
-#: usr/share/biglinux/tts-biglinux/window.py:381
+#: usr/share/biglinux/tts-biglinux/window.py:382
 msgid "Show tray icon"
 msgstr "显示托盘图标"
 
-#: usr/share/biglinux/tts-biglinux/window.py:382
+#: usr/share/biglinux/tts-biglinux/window.py:383
 msgid "Restore Defaults…"
 msgstr "恢复默认设置…"
 
-#: usr/share/biglinux/tts-biglinux/window.py:387
+#: usr/share/biglinux/tts-biglinux/window.py:388
 msgid "Welcome"
 msgstr "欢迎"
 
-#: usr/share/biglinux/tts-biglinux/window.py:388
+#: usr/share/biglinux/tts-biglinux/window.py:389
 msgid "About BigLinux TTS"
 msgstr "关于 BigLinux TTS"
 
-#: usr/share/biglinux/tts-biglinux/window.py:399
 #: usr/share/biglinux/tts-biglinux/window.py:400
+#: usr/share/biglinux/tts-biglinux/window.py:401
 msgid "Main menu"
 msgstr "主菜单"
 
