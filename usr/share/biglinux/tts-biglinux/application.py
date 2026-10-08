@@ -142,6 +142,17 @@ class TTSApplication(Adw.Application):
         # Prewarm the selected neural model during idle (no audio) so the first
         # Alt+V is warm. Delayed so it never competes with UI startup.
         GLib.timeout_add_seconds(1, self._idle_prewarm)
+        # Bring the History index in line with its files (recovers entries
+        # from older versions, the Trash or a crash). Off the main thread.
+        GLib.timeout_add_seconds(2, self._repair_history)
+
+    def _repair_history(self) -> bool:
+        import threading
+
+        from services.history_service import repair_history
+
+        threading.Thread(target=repair_history, daemon=True).start()
+        return GLib.SOURCE_REMOVE
 
     def _idle_prewarm(self) -> bool:
         """Idle callback: preload the selected Piper model (no audio)."""
@@ -319,25 +330,25 @@ class TTSApplication(Adw.Application):
             else:
                 self._mpris.set_stopped()
 
-        if self._tray is None:
-            return
         # Pulse the tray icon + update the tooltip and rebuild the context menu
         # (idle → "Read text"; reading → "Playing…" with the controls).
+        # Without a tray icon the rest still runs: notifications and the queue.
         #
         # Multi-chunk backends (Piper) briefly drop to IDLE between chunks while
         # the next one synthesizes, which would make the playback controls flicker
         # out and back. So show "speaking" immediately, but DEBOUNCE the revert to
         # idle: only clear the controls if playback is still stopped after a short
         # grace period (a real end), not during an inter-chunk gap.
-        if speaking:
-            if self._tray_revert_id:
-                GLib.source_remove(self._tray_revert_id)
-                self._tray_revert_id = 0
-            self._refresh_tray_playback()
-        else:
-            if self._tray_revert_id:
-                GLib.source_remove(self._tray_revert_id)
-            self._tray_revert_id = GLib.timeout_add(700, self._on_tray_revert)
+        if self._tray is not None:
+            if speaking:
+                if self._tray_revert_id:
+                    GLib.source_remove(self._tray_revert_id)
+                    self._tray_revert_id = 0
+                self._refresh_tray_playback()
+            else:
+                if self._tray_revert_id:
+                    GLib.source_remove(self._tray_revert_id)
+                self._tray_revert_id = GLib.timeout_add(700, self._on_tray_revert)
 
         if state == TTSState.SPEAKING:
             # Cancel pending dismiss
