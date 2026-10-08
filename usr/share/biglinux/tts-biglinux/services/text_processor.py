@@ -505,6 +505,11 @@ def process_text(
     # Process special characters
     if process_special_chars:
         text = _process_special_chars(text, lang)
+    else:
+        # Leaving the symbols in is not "not reading" them: espeak-ng — and
+        # Piper and Kokoro, which phonemize through it — says "arroba",
+        # "mais", "igual", "asterisco"… on its own. Only RHVoice skips them.
+        text = _remove_spoken_symbols(text)
 
     # Final cleanup
     text = _RE_MULTI_SPACES.sub(" ", text)
@@ -563,6 +568,38 @@ def _bypass_internal_abbreviations(text: str, language: str) -> str:
         text = pattern.sub(lambda m: "\u200b".join(m.group(0)), text)
 
     return text
+
+
+# Symbols espeak-ng (and so Piper and Kokoro) turns into words, verified
+# with `espeak-ng -x` and koko's phonemizer. "#" is silent there but read by
+# other engines ("hashtag"). Pause-only marks — parentheses, brackets,
+# quotes, dashes — stay: they shape the intonation.
+_SPOKEN_SYMBOLS = frozenset("#@&=+*§¶·•©®™†‡→←↑↓↔⇒⇐※")
+# Units and currency mean something next to a number ("50%", "25°",
+# "R$ 10", "€5", "5 €"): kept there, removed elsewhere.
+_NUMBER_SYMBOLS = frozenset("%°$€£¥¢")
+
+
+def _remove_spoken_symbols(text: str) -> str:
+    """Drop symbols the engines would read aloud (special chars off)."""
+    out: list[str] = []
+    n = len(text)
+    for i, ch in enumerate(text):
+        if ch in _SPOKEN_SYMBOLS:
+            out.append(" ")
+        elif ch in _NUMBER_SYMBOLS:
+            j = i - 1
+            while j >= 0 and text[j] == " ":
+                j -= 1
+            k = i + 1
+            while k < n and text[k] == " ":
+                k += 1
+            next_is_digit = k < n and text[k].isdigit()
+            prev_is_digit = j >= 0 and text[j].isdigit()
+            out.append(ch if (prev_is_digit or next_is_digit) else " ")
+        else:
+            out.append(ch)
+    return "".join(out)
 
 
 def _process_special_chars(text: str, language: str) -> str:
