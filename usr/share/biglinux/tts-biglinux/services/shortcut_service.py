@@ -167,8 +167,12 @@ def _kga_call(path: str, iface: str, method: str, params=None, timeout_ms: int =
     )
 
 
-def kde_active_keys() -> list[int] | None:
-    """Keys KGlobalAccel has active for our launcher (None if unavailable)."""
+def kde_active_keys(raw: bool = False) -> list[int] | None:
+    """Keys KGlobalAccel has active for our launcher (None if unavailable).
+
+    ``raw`` keeps empty (0) slots, e.g. left over from an old malformed
+    config value, so they can be cleaned up.
+    """
     try:
         infos = _kga_call(
             KDE_COMPONENT_PATH, "org.kde.kglobalaccel.Component", "allShortcutInfos",
@@ -178,7 +182,7 @@ def kde_active_keys() -> list[int] | None:
         return None
     for info in infos:
         if info[0] == KDE_ACTION:
-            return [k for k in info[6] if k]
+            return list(info[6]) if raw else [k for k in info[6] if k]
     return []
 
 
@@ -236,8 +240,8 @@ def register_kde(accel: str) -> ShortcutStatus:
         )
         return status
 
-    if kde_active_keys() == [qt_key]:
-        status.registered = True  # already correct: no churn at every start
+    if kde_active_keys(raw=True) == [qt_key]:
+        status.registered = True  # already exactly right: no churn at every start
         return status
 
     action_id = GLib.Variant("(as)", ([KDE_COMPONENT, KDE_ACTION, KDE_FRIENDLY, KDE_FRIENDLY],))
