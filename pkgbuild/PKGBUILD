@@ -1,12 +1,20 @@
-# Maintainer: Bruno Goncalves <bigbruno@gmail.com>
+# Maintainer: Bruno Gonçalves <bigbruno@gmail.com>
+# Contributor: Rafael Ruscher <rruscher@gmail.com>
+# Contributor: Tales A. Mendonça
 
 pkgname=tts-biglinux
-pkgver=$(date +%y.%m.%d)
-pkgrel=$(date +%H%M)
+# Releases before 4.1.0 used date versions (26.10.08-1606 > 4.1.0 for
+# vercmp); the epoch makes 4.1.0 an upgrade over them. Never remove it.
+epoch=1
+pkgver=4.1.0
+pkgrel=1
 arch=('x86_64')
-license=('GPL')
+license=('GPL-3.0-or-later')
 url="https://github.com/biglinux/tts-biglinux"
 pkgdesc="Read selected text aloud with a global shortcut — RHVoice, espeak-ng, Piper and Kokoro voices"
+# Every dependency comes from the official Arch/Manjaro repositories (core,
+# extra): the package builds and works without the BigLinux or Big Community
+# repositories. Their extras are optional (see optdepends).
 depends=(
     # Application runtime
     'python'
@@ -16,10 +24,11 @@ depends=(
     'python-numpy'              # Kokoro voice downloads (.pt → .npy conversion)
     'polkit'                    # pkexec: install/remove voice packages
     # Native engine (tts_engine.so, built here)
-    'onnxruntime'               # Piper ONNX inference (system library, dynamic link)
+    'onnxruntime'               # Piper ONNX inference (provided by onnxruntime-cpu & co.)
     'espeak-ng'                 # espeak voices + Piper phonemizer (linked by tts_engine.so)
     # Audio
     'alsa-utils'                # aplay: every engine plays through it
+    'alsa-lib'                  # linked by tts_engine.so (rodio/cpal)
     'sox'                       # volume control on the subprocess fallback paths
     'gstreamer'                 # History player (playbin)
     'gst-plugins-base'
@@ -27,10 +36,9 @@ depends=(
     # Default voice engine, ready out of the box (Brazilian Portuguese)
     'rhvoice'
     'rhvoice-voice-leticia-f123'
-    'rhvoice-brazilian-portuguese-complementary-dict-biglinux'
     'speech-dispatcher'         # python speechd module; legacy speech-dispatcher voices
     # Selected-text capture
-    'wl-clipboard-rs'           # Wayland (wl-paste)
+    'wl-clipboard'              # Wayland (wl-paste); also provided by wl-clipboard-rs
     'xsel'                      # X11
     # System tray icon (enabled by default) and media controls
     'pyside6'
@@ -45,93 +53,83 @@ checkdepends=(
     'python-pytest'
 )
 optdepends=(
-    'biglinux-kokoro-tts: Kokoro neural voices (koko engine, model and base voices)'
-    'piper-tts-bin: Piper command-line fallback (the native engine needs only voices)'
-    'piper-voices-pt-BR: Brazilian Portuguese neural voices for Piper'
     'rhvoice-voice-evgeniy-eng: RHVoice English male voice'
     'xclip: selection capture on X11 when xsel is not available'
-    'python-kokoro: alternative Kokoro engine (PyTorch based)'
-    'python-pytorch: PyTorch runtime for python-kokoro'
-    'python-soundfile: audio file I/O for python-kokoro'
+    'biglinux-kokoro-tts: Kokoro neural voices (BigLinux repository)'
+    'piper-voices-pt-BR: Brazilian Portuguese Piper voices, preinstalled (BigLinux repository)'
+    'piper-tts-bin: Piper command-line fallback (BigLinux repository; the native engine needs only voices)'
+    'rhvoice-brazilian-portuguese-complementary-dict-biglinux: extra pronunciation dictionary for RHVoice (BigLinux repository)'
 )
 source=("git+https://github.com/biglinux/tts-biglinux.git")
-md5sums=(SKIP)
+sha256sums=('SKIP')
 
-build() {
+_srcroot() {
     if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-        _basedir="${srcdir}/${pkgname}/${pkgname}"
+        printf '%s' "${srcdir}/${pkgname}/${pkgname}"
     else
-        _basedir="${srcdir}/${pkgname}"
-    fi
-
-    # Build native Rust TTS engine.
-    # --locked: honor Cargo.lock so the ONNX Runtime binding (ort) can't be
-    # silently re-resolved to a version incompatible with the system
-    # onnxruntime (this exact drift previously broke the .so at runtime).
-    # ORT_LIB_LOCATION/ORT_PREFER_DYNAMIC_LINK: link against the system
-    # /usr/lib/libonnxruntime.so, never a pip-provided one.
-    if [ -d "${_basedir}/tts-engine" ]; then
-        cd "${_basedir}/tts-engine"
-        ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 \
-            cargo build --release --locked
+        printf '%s' "${srcdir}/${pkgname}"
     fi
 }
 
-check() {
-    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-        _basedir="${srcdir}/${pkgname}/${pkgname}"
-    else
-        _basedir="${srcdir}/${pkgname}"
+prepare() {
+    # The package version must be the version of the code it contains.
+    local _root _app _engine
+    _root="$(_srcroot)"
+    _app=$(sed -n 's/^APP_VERSION = "\(.*\)"$/\1/p' \
+        "${_root}/usr/share/biglinux/tts-biglinux/config.py")
+    _engine=$(sed -n '0,/^version = "\(.*\)"$/s//\1/p' "${_root}/tts-engine/Cargo.toml")
+    if [ "${_app}" != "${pkgver}" ] || [ "${_engine}" != "${pkgver}" ]; then
+        echo "Version mismatch: PKGBUILD ${pkgver}, app ${_app}, engine ${_engine}" >&2
+        return 1
     fi
-    cd "${_basedir}/tts-engine"
+}
+
+build() {
+    # --locked: honor Cargo.lock so the ONNX Runtime binding (ort) can't be
+    # silently re-resolved to a version incompatible with the system
+    # onnxruntime (this exact drift once broke the .so at runtime).
+    # ORT_LIB_LOCATION/ORT_PREFER_DYNAMIC_LINK: link against the system
+    # /usr/lib/libonnxruntime.so, never a pip-provided one.
+    cd "$(_srcroot)/tts-engine"
+    ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 \
+        cargo build --release --locked
+}
+
+check() {
+    local _root
+    _root="$(_srcroot)"
+    cd "${_root}/tts-engine"
     ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo test --release --locked
     # Offline, headless tests (GTK widget tests skip without a display).
     # No bytecode: package() copies usr/ afterwards and must not ship
     # __pycache__ files that embed $srcdir paths.
-    cd "${_basedir}"
+    cd "${_root}"
     PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests
 }
 
 package() {
-    # Verify default folder
-    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-        InternalDir="${srcdir}/${pkgname}/${pkgname}"
-    else
-        InternalDir="${srcdir}/${pkgname}"
-    fi
+    local _root
+    _root="$(_srcroot)"
 
-    # Install usr/ tree (bin, share/biglinux, share/applications, share/icons, share/locale, share/khotkeys)
-    if [ -d "${InternalDir}/usr" ]; then
-        cp -r "${InternalDir}/usr" "${pkgdir}/usr"
-    fi
+    # usr/ tree: launchers, application, .desktop, icons
+    cp -r "${_root}/usr" "${pkgdir}/usr"
 
-    # Never ship bytecode caches (from check() or a dirty tree).
+    # Bytecode compiled here, with the installed paths, and owned by the
+    # package: users cannot write it under /usr, so without it every start
+    # would compile in memory (and a root run would leave untracked files).
     find "${pkgdir}/usr" -type d -name __pycache__ -prune -exec rm -rf {} +
+    python -m compileall -q -s "${pkgdir}" -p / "${pkgdir}/usr/share/biglinux/tts-biglinux"
+    chmod 755 "${pkgdir}/usr/bin/"*
 
-    # Install native Rust TTS engine
-    local _so="${InternalDir}/tts-engine/target/release/libtts_engine.so"
-    if [ -f "$_so" ]; then
-        install -Dm755 "$_so" \
-            "${pkgdir}/usr/share/biglinux/tts-biglinux/tts_engine.so"
-    fi
+    # Architecture-dependent: /usr/lib (main.py adds it to the module path).
+    install -Dm755 "${_root}/tts-engine/target/release/libtts_engine.so" \
+        "${pkgdir}/usr/lib/tts-biglinux/tts_engine.so"
 
-    # Fix permissions for executables
-    if [ -d "${pkgdir}/usr/bin" ]; then
-        chmod 755 "${pkgdir}/usr/bin/"*
-    fi
-
-    # Install .po translation files
-    if [ -d "${InternalDir}/locale" ]; then
-        install -d "${pkgdir}/usr/share/tts-biglinux/locale"
-        install -m644 "${InternalDir}/locale/"*.po \
-            "${pkgdir}/usr/share/tts-biglinux/locale/"
-    fi
+    # Translations: the application reads the .po catalogs directly.
+    install -d "${pkgdir}/usr/share/tts-biglinux/locale"
+    install -m644 "${_root}/locale/"*.po "${pkgdir}/usr/share/tts-biglinux/locale/"
 
     # Icon compatibility symlink (old name → new name)
-    mkdir -p "${pkgdir}/usr/share/icons/hicolor/scalable/apps/"
-    if [ -f "${pkgdir}/usr/share/icons/hicolor/scalable/apps/biglinux-tts.svg" ] && \
-       [ ! -f "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg" ]; then
-        ln -s "biglinux-tts.svg" \
-            "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg"
-    fi
+    ln -s "biglinux-tts.svg" \
+        "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tts-biglinux.svg"
 }

@@ -12,63 +12,73 @@ on:
   push:
     branches: [ "*" ]
 
+# The job commits the updated translations back to the branch.
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
       - name: Install Translator Dependencies
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install \
-          git \
-          gettext \
-          npm
-          # Install attranslator
+          sudo apt-get install git gettext npm
           sudo npm install --location=global attranslate
 
       ## Tmate ##
       - name: Setup TMATE Session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113  # v3.24
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        with:
+          limit-access-to-actor: true
 
       - name: Translate Package
-        shell: bash #-O extglob {0}
+        shell: bash
         env:
           AZURE_KEY: ${{ secrets.AZURE_KEY }}
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           cd ..
           git clone https://github.com/biglinux/big-auto-translator.git
           mv big-auto-translator/gettext_po_generator_github.sh .
           sudo cp -f big-auto-translator/openai-translate.js /usr/local/lib/node_modules/attranslate/dist/services/openai-translate.js
-          gitfolder=$(echo ${{ github.repository }} | rev | cut -d "/" -f1 | rev)
-          bash gettext_po_generator_github.sh $gitfolder
+          bash gettext_po_generator_github.sh "${REPOSITORY##*/}"
 
-      # - name: DeepL Translate Github Action
-      #   uses: lyqht/deepl-translate-github-action@v2.1.0
-      #   with:
-      #     target_languages: fr,ja,pt-BR
-      #     input_file_path: locale/en.json
-      #     output_file_name_pattern: deepl/{language}.json
-      #     deepl_api_key: ${{ secrets.DEEPL_API_KEY }}
+      # A translation that cannot be loaded, or that uses a {placeholder} its
+      # source does not have, would break the app: keep the previous catalogs.
+      - name: Validate translations
+        shell: bash
+        run: |
+          if ! python3 scripts/sync_translations.py --check; then
+            echo "::warning::Invalid translations were discarded"
+            git checkout -- locale
+          fi
 
       - name: Update github
+        shell: bash
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add --all
-          if [ -n "$(git commit -m "translate $(date +%y-%m-%d_%H:%M)" -a | grep "nothing to commit")" ];then exit 0; fi
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          if git diff --cached --quiet; then
+            echo "No translation changes"
+          else
+            git commit -m "translate $(date +%y-%m-%d_%H:%M)"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
 
       - name: Send Hooks BigLinux Build Package
         shell: bash
+        env:
+          WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
         run: |
-          curl -X POST -H "Accept: application/json" -H "Authorization: token ${{ secrets.WEBHOOK_TOKEN }}" --data '{"event_type": "${{ github.repository }}", "client_payload": { "branch": "${{ github.ref_name }}", "url": "https://github.com/${{ github.repository }}"}}' https://api.github.com/repos/BigLinux-Package-Build/build-package/dispatches
-          curl -X POST -H "Accept: application/json" -H "Authorization: token ${{ secrets.WEBHOOK_TOKEN }}" --data '{"event_type": "${{ github.repository }}", "client_payload": { "branch": "${{ github.ref_name }}", "url": "https://github.com/${{ github.repository }}"}}' https://api.github.com/repos/BigLinux-Package-Build/build-package-ARM/dispatches
+          payload='{"event_type": "${{ github.repository }}", "client_payload": { "branch": "${{ github.ref_name }}", "url": "https://github.com/${{ github.repository }}"}}'
+          for builder in build-package build-package-ARM; do
+            curl -X POST -H "Accept: application/json" -H "Authorization: token ${WEBHOOK_TOKEN}" \
+              --data "$payload" "https://api.github.com/repos/BigLinux-Package-Build/${builder}/dispatches"
+          done
