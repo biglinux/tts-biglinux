@@ -323,6 +323,88 @@ def build_koko_command(
 # koko pipe prints this to stderr when a sentence's audio starts playing.
 KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
 
+# The Kokoro model accepts at most 510 phoneme tokens per segment. `koko pipe`
+# splits the input into sentences but does not limit a sentence's length: a
+# long sentence panics ("index out of bounds: the len is 511 but the index is
+# 550"). Portuguese yields roughly one token per character, so sentences are
+# kept well below the limit.
+KOKO_MAX_SEGMENT_CHARS = 220
+
+_RE_DOTS = re.compile(r"\.{2,}")
+_RE_PUNCT_RUN = re.compile(r"[!?…]{2,}")
+_RE_SENTENCE_END = re.compile(r"(?<=[.!?…;:])\s+")
+
+
+def _split_long(sentence: str, limit: int) -> list[str]:
+    """Split one sentence into pieces of at most ``limit`` characters.
+
+    Commas first (natural pauses), then word boundaries; a single word longer
+    than the limit is cut as a last resort.
+    """
+    if len(sentence) <= limit:
+        return [sentence]
+    pieces: list[str] = []
+    current = ""
+    for part in re.split(r"(?<=,)\s+", sentence):
+        candidate = f"{current} {part}".strip()
+        if len(candidate) <= limit:
+            current = candidate
+            continue
+        if current:
+            pieces.append(current)
+        if len(part) <= limit:
+            current = part
+            continue
+        current = ""
+        for word in part.split():
+            while len(word) > limit:
+                if current:
+                    pieces.append(current)
+                    current = ""
+                pieces.append(word[:limit])
+                word = word[limit:]
+            candidate = f"{current} {word}".strip()
+            if len(candidate) <= limit:
+                current = candidate
+            else:
+                pieces.append(current)
+                current = word
+    if current:
+        pieces.append(current)
+    return pieces
+
+
+def prepare_koko_text(text: str, limit: int = KOKO_MAX_SEGMENT_CHARS) -> str:
+    """Text ``koko pipe`` can read to the end: one sentence per line.
+
+    - ASCII ellipses ("..." / "....") become "…", and runs of sentence
+      punctuation ("?!", "!!!", "?…") become one sign: koko cuts a sentence at
+      each sign and exits with ``SendError`` on the punctuation-only piece
+      left in between ("Wait... this", "Really?! No").
+    - Sentences longer than ``limit`` are split into shorter ones (see
+      KOKO_MAX_SEGMENT_CHARS); each piece ends with punctuation so koko
+      treats it as its own segment.
+    - Segments without any letter or digit (only punctuation) are dropped.
+    """
+    text = _RE_DOTS.sub("…", text)
+    text = _RE_PUNCT_RUN.sub(
+        lambda m: "?" if "?" in m.group() else ("!" if "!" in m.group() else "…"), text
+    )
+    lines: list[str] = []
+    for paragraph in text.splitlines():
+        for sentence in _RE_SENTENCE_END.split(paragraph.strip()):
+            sentence = " ".join(sentence.split())
+            if not any(ch.isalnum() for ch in sentence):
+                continue
+            for piece in _split_long(sentence, limit):
+                piece = piece.strip().rstrip(",")
+                if not any(ch.isalnum() for ch in piece):
+                    continue
+                if piece[-1] not in ".!?…;:":
+                    piece += "."
+                lines.append(piece)
+    return "\n".join(lines)
+
 
 def get_installed_voice_ids() -> set[str]:
     """Return set of voice IDs available.
