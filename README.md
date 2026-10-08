@@ -10,14 +10,14 @@
 
 <p align="center">
   <a href="https://www.gnu.org/licenses/gpl-3.0.html"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License"></a>
-  <img src="https://img.shields.io/badge/version-4.0.0-brightgreen.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-4.1.0-brightgreen.svg" alt="Version">
   <img src="https://img.shields.io/badge/GTK-4-green.svg" alt="GTK4">
   <img src="https://img.shields.io/badge/libadwaita-1.5+-purple.svg" alt="libadwaita 1.5+">
   <img src="https://img.shields.io/badge/Rust-1.85+-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Python-3.10+-yellow.svg" alt="Python">
   <img src="https://img.shields.io/badge/engines-4-red.svg" alt="4 TTS engines">
   <img src="https://img.shields.io/badge/languages-30-lightgrey.svg" alt="30 languages">
-  <img src="https://img.shields.io/badge/tests-100-success.svg" alt="100 tests">
+  <img src="https://img.shields.io/badge/tests-222-success.svg" alt="222 tests">
 </p>
 
 ---
@@ -63,9 +63,10 @@ Select any text on screen, press **Alt+V**, and hear it read aloud. Press again 
 3. **Honest feedback** — the window shows the real state (loading the voice, speaking, stopped, error with the reason and how to fix it); nothing fails silently
 4. **Reliable global shortcut** — registered through the desktop's own API and confirmed before the app says it works; conflicts are named
 5. **Smart text processing** — expands abbreviations, normalizes numbers, pronounces special characters, strips HTML/Markdown
-6. **Desktop integration** — system tray with playback controls, MPRIS media controls, notifications, launcher pinning
-7. **Modern UI** — GTK4 + libadwaita (GNOME HIG), adaptive down to 360 px wide, light/dark, RTL
-8. **30 languages** — gettext `.po` catalogs (Portuguese of Brazil and of Portugal kept separate)
+6. **Desktop integration** — system tray with playback controls, MPRIS media controls, notifications
+7. **Modern UI** — GTK4 + libadwaita (GNOME HIG), adaptive down to 360 px wide, light/dark, RTL, reduced motion
+8. **30 languages** — every string translated; Portuguese of Brazil and of Portugal kept separate
+9. **Plain Arch packaging** — every dependency comes from the official Arch/Manjaro repositories
 
 ---
 
@@ -91,7 +92,7 @@ Select any text on screen, press **Alt+V**, and hear it read aloud. Press again 
 |---|---|---|
 | ![Narrow layout](screenshots/narrow.png) | ![Welcome dialog](screenshots/welcome.png) | ![Main window in pt-BR](screenshots/main-pt-BR.png) |
 
-<sub>Screenshots of the real application (KDE Plasma 6 fonts/theme, rendered headless in a clean profile; sample history entries).</sub>
+<sub>Screenshots of the real application, version 4.1.0 (BigLinux icon theme, rendered headless in a clean profile; sample history entries).</sub>
 
 ---
 
@@ -111,6 +112,7 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 | Jun 2026 | **4.0** | **Native Rust engine** (PyO3): espeak-ng FFI, Piper ONNX inference via `ort` with model caching (7× faster short text). Kokoro Neural TTS integration. Complete i18n audit. Full codebase cleanup |
 | Sep 2026 | 4.0 | History in SQLite with retention, Piper streaming, systray playback controls (pause/resume), MPRIS mini-player, pt-BR number/date normalization, diagnostics |
 | Oct 2026 | 4.0 | Kokoro fixed for the global shortcut, silent startup, real loading/error states, *Ready to speak* card, engine status, KGlobalAccel shortcut registration with conflict detection, GIL released in Rust, adaptive layout, tray icon breathing on HiDPI, 100 automated tests |
+| Oct 2026 | **4.1** | **Release**: history for every engine, long texts streamed by espeak-ng too (bounded memory), text rules follow the voice's language, complete translations in 30 languages, dependencies from the official repositories only, release versioning, CI |
 
 ---
 
@@ -124,8 +126,9 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 - **System tray icon** — breathes (opacity only) while reading; left-click speaks or stops, right-click offers Pause/Play and Stop while reading, plus Read text, Settings and Quit; the tooltip shows the current shortcut
 - **Notifications** — what is being read, and a clear message when something fails or nothing is selected
 - **Built-in voice test** — text field to type and hear with the current voice settings
-- **Optional history** — keep and replay previous readings (main menu → History, Ctrl+H)
+- **Optional history** — every reading that was heard, whatever the engine, is kept and can be replayed (main menu → History, Ctrl+H)
 - **Silent start** — opening the app never speaks and never starts speech-dispatcher
+- **Long texts** — read to the end with any character limit, including *Unlimited*: espeak-ng and Piper stream sentence chunks, Kokoro reads line by line
 
 ### Voice Control
 
@@ -144,14 +147,16 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 
 ### Text Processing
 
-| Feature | Description | Example |
-|---------|-------------|---------|
-| Expand abbreviations | Converts slang/abbreviations per language | `tb` → "também", `btw` → "by the way" |
-| Normalize numbers | Reads numbers, dates and times naturally (pt-BR) | `1.234,56` → "mil duzentos e trinta e quatro vírgula cinquenta e seis" |
-| Special characters | Pronounces symbols by name | `#` → "hash", `@` → "at" |
-| Strip formatting | Removes HTML tags, Markdown bold/italic/code | `**bold**` → "bold" |
-| URL handling | Option to read or skip links | `https://...` → read or skip |
-| Character limit | Truncates long text | Unlimited, 1K, 5K, 10K, 50K, 100K |
+The rules follow the **language of the selected voice** (an English voice on a Portuguese desktop gets English rules). Each option applies to every engine.
+
+| Option | What it does | Example |
+|--------|--------------|---------|
+| Expand abbreviations | Expands slang and titles per language; never inside e-mails, URLs or hyphenated words | `vc` → "você", `Dr. Silva` → "doutor Silva", `w/o` → "without" |
+| Normalize numbers (pt) | Numbers, money, percentages, dates and times as words | `R$ 1.234,56`, `08/10/2026`, `21:00` → "vinte e uma horas" |
+| Read special characters | Symbols by name (pt, en, es); off: symbols the engines would read are removed | `#` → "cerquilha"/"hash" |
+| Remove formatting | HTML tags and Markdown markers; headings keep a pause, numbered lists keep their numbers | `**bold**` → "bold" |
+| Read URLs | On: the domain (`https://www.example.com/a?b=1` → "example.com"); off: removed | |
+| Character limit | Unlimited, 1K, 5K, 10K, 50K, 100K — cut at a sentence or word boundary | |
 
 ### Keyboard Shortcuts
 
@@ -171,7 +176,7 @@ Changing the shortcut (Advanced options → Keyboard shortcut) registers it with
 
 ### 1. RHVoice
 
-High-quality multilingual TTS — **the default engine**, installed with the package together with the Brazilian Portuguese voice *Letícia* and the BigLinux pronunciation dictionary. Played as `RHVoice-test | aplay` (no speech-dispatcher), both for reading and for the Voice Manager preview.
+High-quality multilingual TTS — **the default engine**, installed with the package together with the Brazilian Portuguese voice *Letícia*. Played as `RHVoice-test | aplay` (no speech-dispatcher), both for reading and for the Voice Manager preview; the text goes through stdin, so its size is not limited.
 
 | Voice | Language | Quality |
 |-------|----------|---------|
@@ -179,7 +184,7 @@ High-quality multilingual TTS — **the default engine**, installed with the pac
 | Evgeniy | English | ★★★★ |
 | + others | Multiple | ★★★–★★★★ |
 
-A legacy speech-dispatcher backend (SSIP) remains only for migrated old settings; the app talks to speech-dispatcher only when that backend is actually used.
+Settings from versions that used the old speech-dispatcher backend are moved to RHVoice.
 
 ### 2. espeak-ng (Native FFI) ⚡
 
@@ -187,6 +192,7 @@ Direct C FFI to `libespeak-ng.so` from the Rust engine — no subprocess for syn
 
 - `AUDIO_OUTPUT_SYNCHRONOUS` mode: espeak-ng renders PCM and never opens the audio device itself (it is also Piper's phonemizer)
 - One-time initialization via `OnceLock`, all calls serialized
+- Texts longer than 600 characters are streamed in sentence chunks: sound starts at once, memory stays bounded and Stop takes effect between chunks (the command-line fallback reads the text from stdin)
 - 100+ languages with basic quality
 
 ### 3. Piper (Native ONNX Inference) ★★★★★
@@ -204,10 +210,10 @@ Neural TTS with near-human quality. ONNX models run locally through the `ort` cr
 
 ### 4. Kokoro (Neural TTS) ★★★★★
 
-Neural voices in Portuguese, English, Spanish, French, Italian, Japanese, Hindi and Chinese, with voice blending and expression presets. On BigLinux it runs through the `koko` binary from `biglinux-kokoro-tts` (model + base voices); the Python `kokoro` package (PyTorch) is used instead when installed.
+Neural voices in Portuguese, English, Spanish, French, Italian, Japanese, Hindi and Chinese, with voice blending and expression presets. It runs through the `koko` binary from the `biglinux-kokoro-tts` package (model + base voices).
 
 - One command builder (`kokoro_voice_service.build_koko_command`) serves both reading and the Voice Manager preview: explicit model, voices file, language from the voice prefix, and a private writable work directory (`$XDG_RUNTIME_DIR/biglinux-tts/koko`)
-- `koko pipe` streams sentence by sentence; the card shows *Loading voice* until koko reports that audio started
+- `koko pipe` streams sentence by sentence (sentences longer than 220 characters are split, punctuation runs collapsed); the card shows *Loading voice* until koko reports that audio started, and a crash of koko is reported as an error
 - The selected voice is checked against `voices.bin` before speaking (koko would silently use another voice)
 - Voice blending: mix two voices (`voice.W+voice.W`); expression presets adjust the speed
 - More voices can be downloaded in the Voice Manager
@@ -287,32 +293,42 @@ Result: a `VoiceCatalog` with every voice plus, per engine, whether it is instal
 
 ### BigLinux / Manjaro / Arch Linux
 
+On BigLinux the package is in the BigLinux repositories:
+
 ```bash
 sudo pacman -S tts-biglinux
 ```
 
-This installs the application, the native engine, RHVoice with the Brazilian Portuguese voice *Letícia*, espeak-ng, the tray icon (PySide6), the History player (GStreamer) and the clipboard tools — everything needed to select text and press Alt+V.
-
-Optional voices:
-
-```bash
-# Kokoro neural voices (BigLinux community package)
-sudo pacman -S biglinux-kokoro-tts
-
-# Piper neural voices (biglinux-testing)
-sudo pacman -S piper-voices-pt-BR
-
-# English RHVoice voice
-sudo pacman -S rhvoice-voice-evgeniy-eng
-```
-
-### Build from Git
+On Manjaro or Arch Linux, build it from the PKGBUILD — every dependency is in the official repositories (`core`, `extra`), no BigLinux or Big Community repository is needed:
 
 ```bash
 git clone https://github.com/biglinux/tts-biglinux.git
 cd tts-biglinux/pkgbuild
 makepkg -si
 ```
+
+This installs the application, the native engine, RHVoice with the Brazilian Portuguese voice *Letícia*, espeak-ng (voices for 100+ languages), the tray icon (PySide6), the History player (GStreamer) and the clipboard tools — everything needed to select text and press Alt+V.
+
+Optional voices:
+
+```bash
+# English RHVoice voice (official repositories)
+sudo pacman -S rhvoice-voice-evgeniy-eng
+
+# BigLinux repositories only:
+sudo pacman -S biglinux-kokoro-tts   # Kokoro neural voices
+sudo pacman -S piper-voices-pt-BR    # Brazilian Portuguese Piper voices
+```
+
+Piper voices can also be downloaded in the Voice Manager.
+
+### Uninstall
+
+```bash
+sudo pacman -R tts-biglinux
+```
+
+Personal data stays in your home folder (settings, history, downloaded voices — see [File Locations](#file-locations)); delete those folders to remove it too.
 
 ### Run without Installing (Development)
 
@@ -338,39 +354,41 @@ python main.py --debug
 
 #### Required (installed with the package)
 
+All from the official Arch/Manjaro repositories.
+
 | Package | Why |
 |---------|-----|
 | `python`, `python-gobject` | Python 3 and PyGObject |
 | `gtk4`, `libadwaita>=1:1.5` | Interface (AlertDialog, OverlaySplitView, Breakpoint) |
 | `python-numpy` | Kokoro voice download conversion (`.pt` → `.npy`) |
 | `polkit` | `pkexec` to install/remove voice packages |
-| `onnxruntime` | Piper neural inference (system library, dynamic link) |
+| `onnxruntime` | Piper neural inference (system library, dynamic link; provided by `onnxruntime-cpu` and variants) |
 | `espeak-ng` | espeak voices and Piper phonemizer (linked by `tts_engine.so`) |
-| `alsa-utils` | `aplay` — every engine plays through it |
+| `alsa-utils`, `alsa-lib` | `aplay` — every engine plays through it; `libasound` for the native engine |
 | `sox` | Volume control on the subprocess fallback paths |
 | `gstreamer`, `gst-plugins-base`, `gst-plugins-good` | History player (`playbin`, `wavparse`, audio sink) |
-| `rhvoice`, `rhvoice-voice-leticia-f123`, `rhvoice-brazilian-portuguese-complementary-dict-biglinux` | Default engine and voice, ready out of the box |
-| `speech-dispatcher` | Python `speechd` module; legacy speech-dispatcher voices |
-| `wl-clipboard-rs`, `xsel` | Selected text on Wayland (`wl-paste`) and X11 |
+| `rhvoice`, `rhvoice-voice-leticia-f123` | Default engine and voice, ready out of the box |
+| `speech-dispatcher` | Required by RHVoice's package (the app itself never starts it) |
+| `wl-clipboard`, `xsel` | Selected text on Wayland (`wl-paste`; `wl-clipboard-rs` also provides it) and X11 |
 | `pyside6`, `qt6-svg` | System tray icon (SVG icons) |
 
 #### Build and check
 
 | Package | Why |
 |---------|-----|
-| `git`, `rust>=1.85`, `cargo` | Fetch sources, build `tts_engine.so` |
+| `git`, `rust>=1.85`, `cargo` | Fetch sources, build `tts_engine.so` (also needs `pkgconf` from `base-devel`) |
 | `python-pytest` | `check()` runs the test suite |
 
 #### Optional
 
-| Package | Why |
-|---------|-----|
-| `biglinux-kokoro-tts` | Kokoro neural voices (`koko`, model, base voices) — BigLinux community package |
-| `piper-voices-pt-BR` | Brazilian Portuguese Piper voices |
-| `piper-tts-bin` | Piper command-line fallback (the native engine needs only voices) |
-| `rhvoice-voice-evgeniy-eng` | RHVoice English voice |
-| `xclip` | X11 selection capture when `xsel` is missing |
-| `python-kokoro`, `python-pytorch`, `python-soundfile` | Alternative PyTorch-based Kokoro engine |
+| Package | Repository | Why |
+|---------|------------|-----|
+| `rhvoice-voice-evgeniy-eng` | official | RHVoice English voice |
+| `xclip` | official | X11 selection capture when `xsel` is missing |
+| `biglinux-kokoro-tts` | BigLinux | Kokoro neural voices (`koko`, model, base voices) |
+| `piper-voices-pt-BR` | BigLinux | Brazilian Portuguese Piper voices, preinstalled |
+| `piper-tts-bin` | BigLinux | Piper command-line fallback (the native engine needs only voices) |
+| `rhvoice-brazilian-portuguese-complementary-dict-biglinux` | BigLinux | Extra pronunciation dictionary for RHVoice |
 
 ---
 
@@ -412,7 +430,7 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
 | Path | Content |
 |------|---------|
 | `~/.config/biglinux-tts/settings.json` | All app settings (JSON) |
-| `~/Music/tts-biglinux/history.db` | Reading history (SQLite) and saved audio, when enabled |
+| `~/Music/tts-biglinux/` | Reading history (`history.db`, SQLite) and saved audio, when enabled — a private folder (mode 0700) |
 | `~/.local/share/biglinux-tts/kokoro-voices/voices.bin` | Kokoro voices downloaded by the user (system base voices + downloads) |
 | `$XDG_RUNTIME_DIR/biglinux-tts/koko/` | Kokoro scratch audio (private, temporary) |
 | `~/.local/share/applications/biglinux-tts-speak.desktop` | Launcher bound to the global shortcut |
@@ -428,13 +446,10 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
     "volume": 75,
     "voice_id": "",
     "backend": "rhvoice",
-    "output_module": "",
     "kokoro": {
-      "speed": 1.0,
       "voice_blend": "",
       "blend_ratio": 0.5,
-      "emotion_preset": "neutral",
-      "lang_code": "p"
+      "emotion_preset": "neutral"
     }
   },
   "text": {
@@ -447,14 +462,12 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
   },
   "shortcut": {
     "keybinding": "<Alt>v",
-    "enabled": true,
     "show_in_launcher": true
   },
   "window": {
     "width": 900,
     "height": 740,
-    "maximized": false,
-    "tray_warning_shown": false
+    "maximized": false
   },
   "history": {
     "enabled": false,
@@ -470,11 +483,11 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
 }
 ```
 
-`playback_mode`: `interrupt` (a new reading replaces the current one; the shortcut toggles), `queue` or `simultaneous`.
+`playback_mode`: `interrupt` (a new reading replaces the current one; the shortcut toggles), `queue` or `simultaneous` (Stop and Pause reach every reading). `show_in_launcher` turns the tray icon on. The file is written atomically; keys from older versions are ignored and a wrong value falls back to its default without losing the others.
 
 ### Legacy Migration
 
-Old-format settings in `~/.config/tts-biglinux/` (individual files: `rate`, `pitch`, `volume`, `voice`) are detected and migrated to the JSON format automatically.
+Old-format settings in `~/.config/tts-biglinux/` (individual files: `rate`, `pitch`, `volume`, `voice`) are migrated to the JSON format automatically. Settings that still name the removed speech-dispatcher engine switch to RHVoice.
 
 ---
 
@@ -482,18 +495,19 @@ Old-format settings in `~/.config/tts-biglinux/` (individual files: `rate`, `pit
 
 ### i18n System
 
-Translations are gettext `.po` files read by a small Python parser (no `.mo` compilation):
+Translations are gettext `.po` catalogs, read directly by a small parser (`utils/i18n.py`, no `.mo` compilation) — the format BigLinux's translation pipeline produces.
 
-1. **Locale detection**: `LANGUAGE` → `LC_ALL` → `LC_MESSAGES` → `LANG`
-2. **File lookup**: `pt-BR` / `pt_BR` variants, then the base code `pt`
-3. **Search paths**: `<repo>/locale/` (development) → `/usr/share/tts-biglinux/locale/` (installed)
+1. **Language**: GNU gettext rules — `LC_ALL` > `LC_MESSAGES` > `LANG` decide the locale; a `C`/`POSIX` locale means English; otherwise `LANGUAGE` (a colon list) wins
+2. **Fallback per message**: through the `LANGUAGE` list and from region to language (`pt_BR` → `pt-BR.po` → `pt.po`), then English; catalog names match case-insensitively (`nb`/`nn` use `no.po`)
+3. **Search paths**: `<repo>/locale/` (source checkout) → `/usr/share/tts-biglinux/locale/` (installed)
+4. **Language and country names** (voice lists) come already translated from the system's `iso-codes`
 
 ```python
 from utils.i18n import _
 label.set_text(_("Ready to speak"))  # → "Pronto para falar" in pt-BR
 ```
 
-300 translatable strings; `locale/tts-biglinux.pot` is the template. The CI workflow translates new strings for the other languages; Portuguese (Brazil) and Portuguese (Portugal) are maintained as separate catalogs.
+Every user-visible string is a literal inside `_()`, so the CI's plain `xgettext` sees it (a test enforces this). `locale/tts-biglinux.pot` is the template; the CI translates new strings for 27 languages. Portuguese (Brazil) is not in the CI's list: `python3 scripts/sync_translations.py` regenerates the template and brings every catalog in line, keeping existing translations (`--merge pt-BR=file.json` adds new ones, `--check` validates placeholders).
 
 ### Available Languages (30)
 
@@ -517,9 +531,9 @@ label.set_text(_("Ready to speak"))  # → "Pronto para falar" in pt-BR
 
 ### Adding a New Translation
 
-1. Copy the template: `cp locale/tts-biglinux.pot locale/<code>.po`
-2. Translate the `msgstr` entries (keep `{placeholders}` unchanged)
-3. Validate: `msgfmt --check --check-format -o /dev/null locale/<code>.po`
+1. Copy the template: `cp locale/tts-biglinux.pot locale/<code>.po` and set `Language:` in the header
+2. Translate the `msgstr` entries (keep `{placeholders}`, line breaks and markup unchanged)
+3. Validate: `python3 scripts/sync_translations.py --check`
 4. The app loads `.po` files directly — no compilation step
 
 ---
@@ -548,14 +562,15 @@ tts-engine/
 
 ### Text Processing Pipeline
 
-`text_processor.py` applies transformations before synthesis:
+`text_processor.py` prepares the text before synthesis, with the rules of the voice's language:
 
-1. **Strip formatting**: HTML tags, Markdown bold/italic/code, headers, lists, links
-2. **URL handling**: remove or keep `https?://\S+`
-3. **Abbreviation expansion** (language-aware): ~65 Portuguese, ~30 English, ~10 Spanish
-4. **Number normalization** (pt-BR): numbers, decimals, dates and times
-5. **Special characters** (language-aware): `#` → "hash"/"cerquilha", `@` → "at"/"arroba"
-6. **Cleanup**: collapse spaces/newlines; long text is split into sentence chunks
+1. **Character limit**: cut at a sentence or word boundary
+2. **Strip formatting**: HTML tags (only real tags: `x < 5 e y > 3` survives), Markdown bold/italic/code/links/headings/bullets; entities are always decoded
+3. **URLs**: the domain, or removed with the space before them
+4. **Number normalization** (pt): numbers, money, percentages, dates, times (feminine hours, seconds)
+5. **Abbreviations**: one precompiled pattern per language; titles drop their period; with the option off, slang is spelled out so RHVoice does not expand it itself (real words are left alone)
+6. **Special characters**: spoken names (pt, en, es), or removal of the symbols engines would read
+7. **Cleanup**: spaces collapsed, paragraph breaks kept as pauses
 
 ### Selected Text Capture
 
@@ -574,7 +589,7 @@ tts-engine/
 
 ### speech-dispatcher Policy
 
-The app never starts speech-dispatcher on its own: no query at startup, no cancel on Stop unless the legacy speech-dispatcher backend was used. Starting the daemon runs every installed output module, and some of them speak when started.
+The app never starts or queries speech-dispatcher: starting the daemon runs every installed output module, and some of them speak when started. RHVoice, espeak-ng, Piper and Kokoro are all used directly.
 
 ### System Tray IPC Protocol
 
@@ -584,7 +599,7 @@ JSON lines over stdin/stdout between the GTK app and the PySide6 helper:
 GTK (parent)                         Qt (child)
     │── {"cmd":"set_menu", items} ────▶│  fixed rows, only properties change
     │── {"cmd":"set_tooltip"} ────────▶│  idle tooltip (shows the shortcut)
-    │── {"cmd":"set_speaking"} ───────▶│  breathe / dim (paused) / steady
+    │── {"cmd":"set_speaking"} ───────▶│  breathe / dim (paused) / steady (reduced motion)
     │◀── {"event":"ready"} ────────────│
     │◀── {"event":"activate"} ─────────│  left click while idle → read
     │◀── {"event":"player","action":"stop"}  left click while reading
@@ -592,11 +607,13 @@ GTK (parent)                         Qt (child)
     │── {"cmd":"quit"} ───────────────▶│
 ```
 
-The breathing icon (`tray_icon_frames.py`) changes opacity only: every frame keeps the original pixel size **and** device-pixel ratio, so the icon never shrinks on scaled screens. Frames are cached per opacity level, sizes are limited to 16–48 px per screen scale, and the timer stops when reading ends or pauses.
+The breathing icon (`tray_icon_frames.py`) changes opacity only: every frame keeps the original pixel size **and** device-pixel ratio, so the icon never shrinks on scaled screens. Frames are cached per opacity level, sizes are limited to 16–48 px per screen scale, and the timer stops when reading ends or pauses. When the desktop asks for reduced motion (`gtk-enable-animations` off) the icon holds a steady level instead of breathing.
 
 ### Async and Threading
 
-- **Workers**: clipboard capture, voice discovery, shortcut registration, synthesis and downloads run in daemon threads; results return through `GLib.idle_add()`
+- **Workers**: clipboard capture, voice discovery, shortcut registration, synthesis, history saving and downloads run in daemon threads; results return through `GLib.idle_add()`
+- **Requests**: a generation counter discards stale audio; a request id keeps simultaneous readings apart; a player started after Stop is terminated at once
+- **Shutdown**: SIGTERM/SIGINT/SIGHUP quit cleanly, so no player keeps speaking after logout
 - **TTS watch**: 300 ms `GLib.timeout_add()` follows the player process and its exit status
 - **Settings**: saved 500 ms after the last change
 - **No blocking work on the GTK main thread**
@@ -609,28 +626,37 @@ The breathing icon (`tray_icon_frames.py`) changes opacity only: every frame kee
 # Whole suite (GTK widget tests skip automatically without a display)
 python -m pytest -q -p no:cacheprovider tests
 
-# Headless GTK, e.g. in CI
+# Headless GTK
 gtk4-broadwayd :5 & GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 python -m pytest -q tests
 
 # Rust engine
-cd tts-engine && ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo test --release --locked
+cd tts-engine
+cargo fmt --all -- --check
+ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo clippy --all-targets --all-features --locked -- -D warnings
+ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo test --release --locked
 
-# Lint and translations
-ruff check usr/share/biglinux/tts-biglinux tests
-for f in locale/*.po; do msgfmt --check --check-format -o /dev/null "$f"; done
+# Lint, translations, native engine benchmark
+ruff check usr/share/biglinux/tts-biglinux tests scripts
+python3 scripts/sync_translations.py --check
+python3 scripts/benchmark_tts.py
 ```
 
-100 tests cover, among others:
+222 Python tests and 4 Rust tests cover, among others:
 
 | Area | Tests |
 |------|-------|
-| Request lifecycle | `test_tts_lifecycle.py` — a fake `koko` process (real subprocess): LOADING → SPEAKING → IDLE, sticky errors, stop while loading, no speech-dispatcher on stop, listeners on the main thread |
-| Kokoro | `test_koko_workdir.py`, `test_kokoro_download.py` — private work dir, shared preview/playback command, blend argv |
+| Request lifecycle | `test_tts_lifecycle.py` — a fake `koko` process: LOADING → SPEAKING → IDLE, sticky errors, crashes reported, stop while loading, huge texts never block |
+| Streaming, history, simultaneous | `test_tts_streaming.py` — every chunk played in order, at most two chunk files, Stop mid-stream, history for RHVoice/espeak-ng/Kokoro, nothing recorded when off or stopped, Stop reaches simultaneous readings |
+| Text | `test_text_rules.py`, `test_text_numbers.py`, `test_special_chars.py`, `test_chunking.py`, `test_koko_text.py` |
+| Translations | `test_i18n.py` — parser, GNU language precedence, real catalogs, every string extractable by `xgettext`, complete Portuguese catalogs |
 | Interface | `test_ui_states.py` — card states, shortcut keys and conflicts, engine status, saved voice kept, sidebar |
-| Tray icon | `test_tray_breathing.py` — constant size at 100/125/175/200 % scale, smooth bounded breathing, timer stops |
-| Text | `test_text_numbers.py`, `test_chunking.py`, `test_preview_lang.py` |
-| Storage | `test_history_db.py`, `test_history.py`, `test_config.py` |
-| Native engine | `test_engine_native.py`, `test_piper_streaming.py` (skipped without the built engine or the pt-BR Piper model) |
+| Tray icon | `test_tray_breathing.py` — constant size at 100/125/150/175/200 % scale, smooth bounded breathing, reduced motion |
+| Storage and release | `test_history_db.py`, `test_history.py`, `test_config.py`, `test_release.py` (one version and author list everywhere) |
+| Native engine | `test_engine_native.py` (skipped without the built engine) |
+
+### Continuous Integration
+
+`.github/workflows/ci.yml` runs on every push and pull request, in an Arch Linux container with the official repositories: Python (ruff, compileall, translations check, pytest), Rust (fmt, clippy `-D warnings`, tests) and the PKGBUILD (namcap, `.SRCINFO`). `translate-and-build-package.yml` updates the translations, discards them if they fail the check, and asks the BigLinux build service for a package.
 
 ---
 
@@ -646,28 +672,36 @@ The build:
 
 1. `build()` compiles the Rust `tts-engine` with `cargo build --release --locked` against the system ONNX Runtime
 2. `check()` runs `cargo test` and the Python test suite (GTK widget tests skip without a display)
-3. `package()` copies the `usr/` tree (Python code, icons, desktop files), installs `libtts_engine.so` as `tts_engine.so` in the application directory and the `.po` catalogs in `/usr/share/tts-biglinux/locale/`
+3. `package()` copies the `usr/` tree (Python code, icons, desktop files) with its compiled bytecode, installs `libtts_engine.so` as `/usr/lib/tts-biglinux/tts_engine.so` (architecture-dependent) and the `.po` catalogs in `/usr/share/tts-biglinux/locale/`
 
 ### Package Versioning
 
 ```
-pkgver=$(date +%y.%m.%d)    # Date-based: e.g. 26.10.08
-pkgrel=$(date +%H%M)        # Several builds per day
-arch=('x86_64')             # Native Rust binary
+epoch=1          # 4.1.0 is newer than the old date versions (26.10.08 > 4.1.0 for vercmp)
+pkgver=4.1.0     # = APP_VERSION in config.py = version in tts-engine/Cargo.toml
+pkgrel=1
 ```
+
+`prepare()` refuses to build when the PKGBUILD, the application and the engine disagree on the version; `tests/test_release.py` checks the same in CI.
+
+**Releasing a version**: set the new version in `config.py`, `tts-engine/Cargo.toml` (and `Cargo.lock`), `pkgbuild/PKGBUILD` and the README badge; reset `pkgrel=1` (bump only `pkgrel` to rebuild the same version); merge; tag `vX.Y.Z`.
 
 ### Project Structure
 
 ```
 tts-biglinux/
+├── .github/workflows/               # CI checks; translation + package build
 ├── locale/                          # Translations (.po) and template (.pot)
 ├── pkgbuild/PKGBUILD                # Arch/BigLinux packaging
 ├── screenshots/                     # README images
-├── tests/                           # pytest suite (100 tests)
+├── scripts/
+│   ├── benchmark_tts.py             # Native engine timings (JSON)
+│   └── sync_translations.py         # Template + catalogs, like the CI
+├── tests/                           # pytest suite
 ├── tts-engine/                      # Native Rust engine (PyO3)
 ├── usr/
 │   ├── bin/
-│   │   ├── biglinux-tts             # Launcher: exec python main.py
+│   │   ├── biglinux-tts             # Launcher
 │   │   └── biglinux-tts-speak       # Global shortcut: biglinux-tts --speak
 │   └── share/
 │       ├── applications/            # br.com.biglinux.tts.desktop
@@ -678,10 +712,11 @@ tts-biglinux/
 │       │   ├── window.py            # Window, main menu, status bar, adaptive layout
 │       │   ├── services/            # TTS, voices, Kokoro, shortcut, clipboard, tray, MPRIS, history
 │       │   ├── ui/                  # Main view, Voice Manager, History, welcome, components
-│       │   ├── utils/               # i18n, async helpers, speechd
+│       │   ├── utils/               # i18n, async helpers
 │       │   └── resources/           # style.css
-│       ├── icons/hicolor/scalable/  # SVG icons (app + tray status)
-│       └── khotkeys/                # KDE Plasma 5 legacy shortcut
+│       └── icons/hicolor/scalable/  # SVG icons (app + tray status)
+├── LICENSE                          # GPL-3.0-or-later
+├── ruff.toml                        # Lint rules (pinned)
 └── README.md
 ```
 
@@ -689,22 +724,28 @@ tts-biglinux/
 
 ## License
 
-Licensed under [GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.html).
+BigLinux TTS is free software, licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
-TTS engines (speech-dispatcher, espeak-ng, RHVoice, Piper, Kokoro) have their own licenses. See their respective documentation.
+The engines and libraries it uses keep their own licenses, among them:
+
+| Component | License |
+|-----------|---------|
+| espeak-ng, RHVoice | GPL-3.0-or-later |
+| RHVoice voice Letícia F123 | CC-BY-SA-4.0 |
+| Kokoro model (`biglinux-kokoro-tts`) | Apache-2.0 |
+| Piper voices (`piper-voices-pt-BR`) | MIT |
+| ONNX Runtime | MIT |
+| GTK 4, libadwaita, PyGObject, GStreamer | LGPL-2.1-or-later |
+| PySide6 / Qt 6 | LGPL-3.0 (or GPL-3.0) |
+| Rust crates (PyO3, ort, rodio, serde, …) | MIT or Apache-2.0 |
 
 ---
 
 ## Authors
 
-- **Tales A. Mendonça** — BigLinux project creator
-- **Bruno Gonçalves Araujo <bigbruno@gmail.com>** — BigLinux project, initial implementation
-- **Rafael Ruscher <rruscher@gmail.com>** — Architecture, GTK4 rewrite, Rust engine, v3.0–4.0
+- **Rafael Ruscher** <rruscher@gmail.com>
+- **Bruno Gonçalves** <bigbruno@gmail.com>
+- **Tales A. Mendonça**
 
 ---
 
-<p align="center">
-  <img src="usr/share/icons/hicolor/scalable/apps/biglinux-tts.svg" alt="BigLinux TTS" width="48">
-  <br>
-  <em>BigLinux TTS v4.0.0 — Text-to-speech for Linux desktop</em>
-</p>
