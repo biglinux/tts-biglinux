@@ -65,12 +65,6 @@ def _spinner() -> Gtk.Widget:
     return Adw.Spinner() if hasattr(Adw, "Spinner") else Gtk.Spinner(spinning=True)
 
 
-def _duration_label(seconds: float) -> str:
-    seconds = int(round(seconds))
-    return f"{seconds // 3600}:{seconds % 3600 // 60:02d}:{seconds % 60:02d}" if seconds >= 3600 \
-        else f"{seconds // 60}:{seconds % 60:02d}"
-
-
 def _show_in_file_manager(file_path: Path | None) -> None:
     """Show the file in the file manager (FileManager1 D-Bus, or xdg-open)."""
     target = file_path or history_service.get_history_dir()
@@ -178,11 +172,6 @@ class HistoryCard(Gtk.Box):
         spacer = Gtk.Box()
         spacer.set_hexpand(True)
         meta.append(spacer)
-        if entry.get("duration"):
-            dur = Gtk.Label(label=_duration_label(entry["duration"]))
-            dur.add_css_class("history-meta")
-            dur.add_css_class("numeric")
-            meta.append(dur)
         when = Gtk.Label(label=_when_label(entry.get("timestamp", "")))
         when.add_css_class("history-meta")
         meta.append(when)
