@@ -11,16 +11,23 @@ from __future__ import annotations
 import io
 import logging
 import os
+import re
 import shutil
+import tempfile
+import time
 import zipfile
 from pathlib import Path
 from typing import NamedTuple
 from urllib.request import Request, urlopen
 from urllib.error import URLError
 
-import numpy as np
+from utils.i18n import _
 
 logger = logging.getLogger(__name__)
+
+# Voice ids are safe identifiers only — never allow path separators / traversal
+# into a download URL or a ZIP entry name.
+_RE_SAFE_VOICE_ID = re.compile(r"^[A-Za-z0-9_]+$")
 
 # ── Paths ────────────────────────────────────────────────────────────
 
@@ -31,9 +38,10 @@ USER_VOICES_BIN = USER_VOICES_DIR / "voices.bin"
 HF_REPO = "hexgrad/Kokoro-82M"
 HF_BASE_URL = f"https://huggingface.co/{HF_REPO}/resolve/main/voices"
 
-# Shape of each Kokoro voice style vector
+# Shape of each Kokoro voice style vector (float32). numpy is imported only
+# when a voice is converted: it is not needed to start the app or to speak.
 _VOICE_SHAPE = (510, 1, 256)
-_VOICE_DTYPE = np.float32
+_VOICE_ITEMSIZE = 4
 
 
 # ── Voice catalog ────────────────────────────────────────────────────
@@ -125,13 +133,24 @@ _CATALOG_BY_ID: dict[str, KokoroVoiceEntry] = {v.voice_id: v for v in KOKORO_CAT
 
 # ── Public API ───────────────────────────────────────────────────────
 
+def _python_kokoro_available() -> bool:
+    """True if the Python ``kokoro`` package is importable.
+
+    Uses find_spec instead of importing: ``import kokoro`` pulls in PyTorch,
+    which takes seconds and must never run just to answer "is it installed?".
+    """
+    import importlib.util
+
+    try:
+        return importlib.util.find_spec("kokoro") is not None
+    except (ImportError, ValueError):
+        return False
+
+
 def is_kokoro_installed() -> bool:
     """Check if Kokoro TTS is available (Python library OR koko binary)."""
-    try:
-        import kokoro  # noqa: F401
+    if _python_kokoro_available():
         return True
-    except ImportError:
-        pass
     # Fallback: check for koko binary (biglinux-kokoro-tts package)
     return shutil.which("koko") is not None
 
@@ -144,14 +163,165 @@ def kokoro_backend_type() -> str:
         'koko' if koko binary is available,
         'none' if neither.
     """
-    try:
-        import kokoro  # noqa: F401
+    if _python_kokoro_available():
         return "python"
-    except ImportError:
-        pass
     if shutil.which("koko") is not None:
         return "koko"
     return "none"
+
+
+# ── koko command line (shared by playback and the Voice Manager preview) ──
+#
+# Both paths MUST build the koko invocation here so that what the preview
+# plays is exactly what the shortcut plays: same model, same voices.bin, same
+# language, and a writable output location.
+
+SYSTEM_MODEL = Path("/usr/share/biglinux-kokoro-tts/model/model.onnx")
+
+# koko takes an espeak language id; Kokoro voice ids start with a language
+# letter (pf_/pm_ = Brazilian Portuguese, af_/am_ = US English, ...).
+_KOKO_LANG_BY_PREFIX = {
+    "a": "en-us", "b": "en-gb", "p": "pt-br", "e": "es", "f": "fr",
+    "i": "it", "h": "hi", "j": "ja", "z": "zh",
+}
+DEFAULT_KOKORO_VOICE = "pf_dora"
+
+_koko_workdir_cache: str | None = None
+
+
+def kokoro_model_path() -> Path:
+    """The Kokoro ONNX model koko should load (explicit, never koko's default).
+
+    Without ``-m`` koko falls back to a model path relative to its cwd and
+    tries to download it there.
+    """
+    env = os.environ.get("KOKO_MODEL_PATH", "")
+    if env and os.path.isfile(env):
+        return Path(env)
+    return SYSTEM_MODEL
+
+
+def koko_voice_name(voice_id: str) -> str:
+    """``kokoro:pm_alex`` → ``pm_alex`` (default voice when empty)."""
+    name = voice_id.removeprefix("kokoro:") if voice_id else ""
+    return name or DEFAULT_KOKORO_VOICE
+
+
+def koko_language(voice_id: str) -> str:
+    """espeak language id koko should phonemize with, from the voice prefix."""
+    return _KOKO_LANG_BY_PREFIX.get(koko_voice_name(voice_id)[:1], "en-us")
+
+
+def koko_workdir() -> str:
+    """A private, writable working directory for the koko binary.
+
+    koko writes its output WAV (``tmp/pipe_output.wav`` by default) relative to
+    its current directory. Inheriting the app's cwd — the root-owned install
+    dir under /usr/share — makes it exit with "Permission denied" and nothing
+    is heard.
+    """
+    global _koko_workdir_cache
+    if _koko_workdir_cache and os.access(_koko_workdir_cache, os.W_OK):
+        return _koko_workdir_cache
+    runtime = os.environ.get("XDG_RUNTIME_DIR")
+    path = ""
+    if runtime and os.path.isdir(runtime):
+        candidate = os.path.join(runtime, "biglinux-tts", "koko")
+        try:
+            os.makedirs(candidate, mode=0o700, exist_ok=True)
+            if os.access(candidate, os.W_OK):
+                path = candidate
+        except OSError:
+            pass
+    if not path:
+        path = tempfile.mkdtemp(prefix="biglinux-tts-koko-")
+    _koko_workdir_cache = path
+    return path
+
+
+# Expression presets change the speaking speed (both Kokoro backends).
+KOKORO_EMOTION_SPEED = {
+    "neutral": 1.0,
+    "happy": 1.1,
+    "calm": 0.8,
+    "urgent": 1.4,
+    "narrative": 0.9,
+}
+
+
+def kokoro_speed(rate: int, emotion: str = "neutral") -> float:
+    """UI rate (-100..100) and expression preset → Kokoro speed (0.5..2.0)."""
+    base = max(0.5, min(2.0, 1.0 + (rate / 100.0)))
+    return max(0.5, min(2.0, base * KOKORO_EMOTION_SPEED.get(emotion, 1.0)))
+
+
+def koko_style(voice_id: str, blend: str = "", blend_ratio: float = 0.5) -> str:
+    """koko ``-s`` value: one voice, or ``a.W+b.W`` (weights 1..9 of 10)."""
+    voice = koko_voice_name(voice_id)
+    other = blend.removeprefix("kokoro:") if blend else ""
+    if not other or other == voice or not _RE_SAFE_VOICE_ID.match(other):
+        return voice
+    second = max(1, min(9, round(blend_ratio * 10)))
+    return f"{voice}.{10 - second}+{other}.{second}"
+
+
+def koko_problem(voice_id: str, blend: str = "") -> str:
+    """Why koko cannot speak with ``voice_id`` right now ("" when it can).
+
+    Returned text is translated and tells the person how to fix it. koko
+    itself silently substitutes another voice for an unknown one, so the voice
+    is checked against voices.bin here.
+    """
+    if shutil.which("koko") is None:
+        return _("Kokoro is not installed. Install the biglinux-kokoro-tts package.")
+    if not kokoro_model_path().is_file():
+        return _("The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package.")
+    if not get_active_voices_bin().is_file():
+        return _("No Kokoro voices were found. Open the Voice Manager to download a voice.")
+    installed = get_installed_voice_ids()
+    wanted = [koko_voice_name(voice_id)] + ([blend.removeprefix("kokoro:")] if blend else [])
+    if installed and any(v not in installed for v in wanted):
+        return _("This Kokoro voice is not installed. Open the Voice Manager to download it.")
+    return ""
+
+
+def build_koko_command(
+    voice_id: str,
+    *,
+    speed: float = 1.0,
+    text: str | None = None,
+    output: str | None = None,
+    koko_path: str | None = None,
+    blend: str = "",
+    blend_ratio: float = 0.5,
+) -> list[str]:
+    """argv for koko.
+
+    With ``text`` it renders that text to ``output`` (``koko text``). Without
+    it, koko streams sentences read from stdin straight to the speaker
+    (``koko pipe``), writing its scratch WAV inside :func:`koko_workdir`.
+    """
+    voice = koko_voice_name(voice_id)
+    cmd = [
+        koko_path or shutil.which("koko") or "koko",
+        "-m", str(kokoro_model_path()),
+        "-d", str(get_active_voices_bin()),
+        "-l", koko_language(voice),
+        "-s", koko_style(voice, blend, blend_ratio),
+        "--force-style", "true",
+        "-p", f"{max(0.5, min(2.0, speed)):.2f}",
+    ]
+    if text is None:
+        cmd += ["pipe", "-o", output or os.path.join(koko_workdir(), "pipe_output.wav")]
+    else:
+        if not output:
+            raise ValueError("koko text needs an output path")
+        cmd += ["text", "-o", output, "--", text]
+    return cmd
+
+
+# koko pipe prints this to stderr when a sentence's audio starts playing.
+KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
 
 
 def get_installed_voice_ids() -> set[str]:
@@ -214,44 +384,111 @@ def get_active_voices_bin() -> Path:
     return _active_voices_bin()
 
 
-def download_voice(voice_id: str) -> tuple[bool, str]:
+def download_voice(
+    voice_id: str,
+    progress_cb=None,
+    cancel_check=None,
+) -> tuple[bool, str]:
     """Download a voice from HuggingFace and add to user voices.bin.
+
+    Args:
+        voice_id: catalog voice id.
+        progress_cb: optional callable(downloaded_bytes, total_bytes) for a
+            real progress bar (total may be 0 if the server omits Content-Length).
+        cancel_check: optional callable() -> bool; when it returns True the
+            download aborts cleanly.
 
     Returns (success, error_message).
     """
     if voice_id not in _CATALOG_BY_ID:
-        return False, f"Unknown voice: {voice_id}"
+        return False, _("Unknown voice: {voice_id}").format(voice_id=voice_id)
+
+    # Defense-in-depth: never interpolate an unsafe id into a URL or ZIP name,
+    # even though the catalog whitelist already gates this.
+    if not _RE_SAFE_VOICE_ID.match(voice_id):
+        return False, _("Invalid voice id: {voice_id}").format(voice_id=repr(voice_id))
 
     if voice_id in BASE_VOICE_IDS and not USER_VOICES_BIN.exists():
         return True, ""  # Already in system voices.bin
 
-    # Download .pt from HuggingFace
+    # Download .pt from HuggingFace, in chunks (real progress), with retries.
     url = f"{HF_BASE_URL}/{voice_id}.pt"
-    try:
-        logger.info("Downloading Kokoro voice %s from %s", voice_id, url)
-        req = Request(url, headers={"User-Agent": "biglinux-tts/1.0"})  # noqa: S310
-        with urlopen(req, timeout=60) as resp:  # noqa: S310
-            pt_data = resp.read()
-    except (URLError, OSError, TimeoutError) as e:
-        return False, f"Download failed: {e}"
+    pt_data = b""
+    last_err = ""
+    for attempt in range(3):
+        if cancel_check and cancel_check():
+            return False, "cancelled"
+        try:
+            logger.info("Downloading Kokoro voice %s (attempt %d)", voice_id, attempt + 1)
+            req = Request(url, headers={"User-Agent": "biglinux-tts/1.0"})  # noqa: S310
+            with urlopen(req, timeout=60) as resp:  # noqa: S310
+                try:
+                    total = int(resp.headers.get("Content-Length", 0) or 0)
+                except (TypeError, ValueError):
+                    total = 0
+                buf = bytearray()
+                cancelled = False
+                while True:
+                    if cancel_check and cancel_check():
+                        cancelled = True
+                        break
+                    chunk = resp.read(65536)
+                    if not chunk:
+                        break
+                    buf += chunk
+                    if progress_cb:
+                        try:
+                            progress_cb(len(buf), total)
+                        except Exception:
+                            pass
+                if cancelled:
+                    return False, "cancelled"
+                if total and len(buf) != total:
+                    # Connection dropped mid-file: never convert a partial file.
+                    last_err = f"incomplete download ({len(buf)} of {total} bytes)"
+                    buf = bytearray()
+                pt_data = bytes(buf)
+            if pt_data:
+                break
+            last_err = last_err or "empty response"
+        except (URLError, OSError, TimeoutError) as e:
+            last_err = str(e)
+            if attempt < 2:
+                time.sleep(1.5 * (attempt + 1))  # backoff
+    if not pt_data:
+        return False, _("Could not download the voice. Check your internet connection and try again. ({error})").format(error=last_err)
 
-    # Convert .pt → .npy
+    # Convert .pt → .npy (validates shape and values: a corrupted download
+    # never reaches voices.bin)
     try:
         npy_data = _pt_to_npy(pt_data, voice_id)
     except (zipfile.BadZipFile, KeyError, ValueError) as e:
-        return False, f"Conversion failed: {e}"
+        return False, _("The downloaded voice file is damaged. Try again. ({error})").format(error=e)
+
+    # voices.bin is rewritten atomically: room for a full copy is needed.
+    current = _active_voices_bin()
+    needed = (current.stat().st_size if current.exists() else 0) + len(npy_data) + 1_048_576
+    try:
+        USER_VOICES_DIR.mkdir(parents=True, exist_ok=True)
+        free = shutil.disk_usage(USER_VOICES_DIR).free
+    except OSError:
+        free = needed
+    if free < needed:
+        return False, _("Not enough disk space to install the voice ({size} MB needed).").format(
+            size=max(1, needed // 1_048_576)
+        )
 
     # Ensure user voices.bin exists (copy from system if needed)
     try:
         _ensure_user_voices_bin()
     except OSError as e:
-        return False, f"Cannot create user voices directory: {e}"
+        return False, _("Cannot create user voices directory: {error}").format(error=e)
 
     # Add to user voices.bin
     try:
         _add_voice_to_zip(voice_id, npy_data)
     except (zipfile.BadZipFile, OSError) as e:
-        return False, f"Failed to add voice: {e}"
+        return False, _("Failed to add voice: {error}").format(error=e)
 
     logger.info("Voice %s installed successfully", voice_id)
     return True, ""
@@ -264,15 +501,15 @@ def remove_voice(voice_id: str) -> tuple[bool, str]:
     Base voices cannot be removed.
     """
     if voice_id in BASE_VOICE_IDS:
-        return False, "Cannot remove base voice"
+        return False, _("Cannot remove base voice")
 
     if not USER_VOICES_BIN.exists():
-        return False, "No user voices installed"
+        return False, _("No user voices installed")
 
     try:
         _remove_voice_from_zip(voice_id)
     except (zipfile.BadZipFile, OSError) as e:
-        return False, f"Failed to remove voice: {e}"
+        return False, _("Failed to remove voice: {error}").format(error=e)
 
     logger.info("Voice %s removed", voice_id)
     return True, ""
@@ -305,6 +542,8 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
     The .pt file is a ZIP containing a data/0 entry with raw float32 tensor data.
     The internal directory name varies per file, so we search for */data/0.
     """
+    import numpy as np
+
     with zipfile.ZipFile(io.BytesIO(pt_data), "r") as z:
         # Find the raw tensor data entry (pattern: {name}/data/0)
         data_entry = None
@@ -316,23 +555,49 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
             raise KeyError(f"No tensor data entry found in {voice_id}.pt")
         raw = z.read(data_entry)
 
-    expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * np.dtype(_VOICE_DTYPE).itemsize
+    expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * _VOICE_ITEMSIZE
     if len(raw) != expected_size:
         raise ValueError(
             f"Unexpected data size for {voice_id}: {len(raw)} (expected {expected_size})"
         )
 
-    arr = np.frombuffer(raw, dtype=_VOICE_DTYPE).reshape(_VOICE_SHAPE)
+    arr = np.frombuffer(raw, dtype=np.float32).reshape(_VOICE_SHAPE)
+    if not np.isfinite(arr).all():
+        raise ValueError(f"{voice_id} contains invalid values")
     buf = io.BytesIO()
     np.save(buf, arr)
     return buf.getvalue()
 
 
+def _write_voices_bin_atomic(entries: dict[str, bytes]) -> None:
+    """Write voices.bin atomically: temp file in same dir → os.replace.
+
+    Guarantees the user's existing voices.bin is never left truncated/corrupt
+    if the process is interrupted mid-write (the previous in-place rewrite could
+    destroy ALL installed voices).
+    """
+    USER_VOICES_DIR.mkdir(parents=True, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(dir=str(USER_VOICES_DIR), suffix=".bin.part")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            with zipfile.ZipFile(f, "w", zipfile.ZIP_STORED) as z:
+                for name, data in sorted(entries.items()):
+                    z.writestr(name, data)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, str(USER_VOICES_BIN))
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
+
+
 def _add_voice_to_zip(voice_id: str, npy_data: bytes) -> None:
-    """Add or replace a voice .npy in user voices.bin."""
+    """Add or replace a voice .npy in user voices.bin (atomic)."""
     npy_name = f"{voice_id}.npy"
 
-    # Read existing, filter out the voice if already present, re-write
     entries: dict[str, bytes] = {}
     if USER_VOICES_BIN.exists():
         with zipfile.ZipFile(USER_VOICES_BIN, "r") as z:
@@ -340,10 +605,7 @@ def _add_voice_to_zip(voice_id: str, npy_data: bytes) -> None:
                 entries[name] = z.read(name)
 
     entries[npy_name] = npy_data
-
-    with zipfile.ZipFile(USER_VOICES_BIN, "w", zipfile.ZIP_STORED) as z:
-        for name, data in sorted(entries.items()):
-            z.writestr(name, data)
+    _write_voices_bin_atomic(entries)
 
 
 def _remove_voice_from_zip(voice_id: str) -> None:
@@ -367,6 +629,4 @@ def _remove_voice_from_zip(voice_id: str) -> None:
         USER_VOICES_BIN.unlink(missing_ok=True)
         return
 
-    with zipfile.ZipFile(USER_VOICES_BIN, "w", zipfile.ZIP_STORED) as z:
-        for name, data in sorted(entries.items()):
-            z.writestr(name, data)
+    _write_voices_bin_atomic(entries)

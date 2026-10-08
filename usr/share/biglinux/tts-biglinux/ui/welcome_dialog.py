@@ -1,13 +1,9 @@
-"""
-Welcome window for BigLinux TTS.
+"""First-run welcome dialog for BigLinux TTS."""
 
-Standalone Gtk.Window presenting the main features on first launch.
-Completely independent from the main application window.
-"""
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 import gi
@@ -21,233 +17,241 @@ from utils.i18n import _
 if TYPE_CHECKING:
     from services.settings_service import SettingsService
 
-logger = logging.getLogger(__name__)
 
-
-class WelcomeWindow(Adw.Window):
-    """Standalone welcome window explaining TTS BigLinux features."""
+class WelcomeDialog(Adw.Dialog):
+    """Welcome dialog explaining BigLinux TTS capabilities."""
 
     def __init__(
         self,
         application: Gtk.Application,
         settings_service: SettingsService,
     ) -> None:
-        super().__init__(
-            title=_("Welcome to BigLinux TTS"),
-            default_width=590,
-            default_height=700,
-            resizable=True,
-            deletable=True,
-        )
-        # Bind to application so it keeps the app alive
-        self.set_application(application)
+        super().__init__()
+        self._application = application
         self._settings_service = settings_service
         self._show_switch: Gtk.Switch | None = None
-
+        self.connect("closed", self._on_closed)
         self._build_ui()
-
-    # ── Public ────────────────────────────────────────────────────
 
     @staticmethod
     def should_show(settings_service: SettingsService) -> bool:
-        """Return True if the welcome window should be shown."""
+        """Return whether the introduction should be shown at startup."""
         return settings_service.get().show_welcome
 
-    # ── UI Construction ───────────────────────────────────────────
-
     def _build_ui(self) -> None:
-        toolbar = Adw.ToolbarView()
-
-        header = Adw.HeaderBar()
-        header.set_show_end_title_buttons(True)
-        toolbar.add_top_bar(header)
-
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrolled.set_vexpand(True)
 
         content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        content.set_margin_start(24)
-        content.set_margin_end(24)
-        content.set_margin_top(24)
-        content.set_margin_bottom(24)
+        content.set_margin_start(20)
+        content.set_margin_end(20)
+        content.set_margin_top(20)
+        content.set_margin_bottom(12)
 
-        # Header
-        content.append(self._build_header())
-
-        # Feature columns
-        columns = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=24)
-        columns.set_margin_top(18)
-        columns.set_halign(Gtk.Align.CENTER)
-        columns.set_hexpand(True)
-
-        columns.append(self._build_left_column())
-        columns.append(self._build_right_column())
-        content.append(columns)
-
-        # Separator + switch
-        sep = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
-        sep.set_margin_top(12)
-        content.append(sep)
-        content.append(self._build_switch_row())
-
-        # Close button
-        btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        btn_box.set_margin_top(18)
-        btn_box.set_halign(Gtk.Align.CENTER)
-
-        btn = Gtk.Button(label=_("Let's Start"))
-        btn.add_css_class("suggested-action")
-        btn.add_css_class("pill")
-        btn.set_size_request(150, -1)
-        btn.connect("clicked", self._on_close_clicked)
-        btn_box.append(btn)
-        content.append(btn_box)
-
-        scrolled.set_child(content)
-        toolbar.set_content(scrolled)
-        self.set_content(toolbar)
-
-    def _build_header(self) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        box.set_halign(Gtk.Align.CENTER)
+        header = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        header.set_halign(Gtk.Align.CENTER)
 
         icon = Gtk.Image.new_from_icon_name("tts-biglinux")
         icon.set_pixel_size(64)
-        box.append(icon)
+        header.append(icon)
 
         title = Gtk.Label()
         title.set_markup(
             "<span size='xx-large' weight='bold'>"
-            + _("Welcome to BigLinux TTS")
-            + "</span>"
+            f"{GLib.markup_escape_text(_('Welcome to BigLinux TTS'))}"
+            "</span>"
         )
-        box.append(title)
+        header.append(title)
 
         subtitle = Gtk.Label()
         subtitle.set_markup(
-            "<span size='large'>" + _("Your text-to-speech assistant") + "</span>"
+            "<span size='large'>"
+            f"{GLib.markup_escape_text(_('Your text-to-speech assistant'))}"
+            "</span>"
         )
         subtitle.add_css_class("dim-label")
-        box.append(subtitle)
+        header.append(subtitle)
 
-        return box
-
-    def _build_left_column(self) -> Gtk.Widget:
-        col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        col.set_hexpand(True)
-
-        accel = self._settings_service.get().shortcut.keybinding
-        kde_shortcut = (
-            accel.replace("<Control>", "Ctrl+")
-            .replace("<Shift>", "Shift+")
-            .replace("<Alt>", "Alt+")
-            .replace("<Super>", "Meta+")
-        )
-        if "+" in kde_shortcut:
-            parts = kde_shortcut.rsplit("+", 1)
-            kde_shortcut = parts[0] + "+" + parts[1].upper()
-        else:
-            kde_shortcut = kde_shortcut.upper()
-        sc = kde_shortcut
+        content.append(header)
 
         features = [
             (
-                "🗣️ " + _("Multiple TTS Engines"),
+                "audio-input-microphone-symbolic",
+                _("Multiple TTS Engines"),
                 _(
-                    "RHVoice, espeak-ng and Piper Neural TTS\n"
+                    "RHVoice, espeak-ng, Piper and Kokoro\n"
                     "with automatic voice discovery"
                 ),
-            ),
-            (
-                "🌍 " + _("Multilingual Support"),
+                "globe-symbolic",
+                _("Multilingual Support"),
                 _("Voices in dozens of languages\nincluding Portuguese (Brazil)"),
             ),
             (
-                "⌨️ " + _("Global Shortcut"),
-                _("Press Alt+V to read selected text\nfrom any application").replace(
-                    "Alt+V", sc
+                "input-keyboard-symbolic",
+                _("Global Shortcut"),
+                _("Press {key} to read selected text\nfrom any application").format(
+                    key=self._shortcut_display()
                 ),
-            ),
-            (
-                "📋 " + _("Clipboard Reading"),
+                "edit-paste-symbolic",
+                _("Clipboard Reading"),
                 _("Paste or type text directly\nand listen instantly"),
             ),
-        ]
-        for title, desc in features:
-            col.append(self._make_feature(title, desc))
-        return col
-
-    def _build_right_column(self) -> Gtk.Widget:
-        col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        col.set_hexpand(True)
-
-        features = [
             (
-                "🎛️ " + _("Fine-Tune Speech"),
+                "preferences-system-symbolic",
+                _("Fine-Tune Speech"),
                 _("Adjust speed, pitch and volume\nto your preference"),
-            ),
-            (
-                "🤖 " + _("Neural Voices"),
-                _("Install Piper voices for natural,\nhigh-quality speech synthesis"),
-            ),
-            (
-                "📦 " + _("Easy Installation"),
+                "folder-download-symbolic",
+                _("Easy Installation"),
                 _("Install new voices and engines\ndirectly from the interface"),
             ),
             (
-                "⚡ " + _("Lightweight & Fast"),
-                _("Native GTK4/Adwaita interface\nwith minimal resource usage"),
+                "audio-x-generic-symbolic",
+                _("Neural Voices"),
+                _(
+                    "Install Piper or Kokoro voices for natural,\n"
+                    "high-quality speech synthesis"
+                ),
+                "document-open-recent-symbolic",
+                _("Reading History"),
+                _(
+                    "Optionally save and replay previous\n"
+                    "readings when history is enabled"
+                ),
             ),
         ]
-        for title, desc in features:
-            col.append(self._make_feature(title, desc))
-        return col
 
-    def _build_switch_row(self) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        box.set_margin_top(12)
+        grid = Gtk.Grid()
+        grid.set_row_spacing(16)
+        grid.set_column_spacing(24)
+        grid.set_margin_top(18)
+        grid.set_halign(Gtk.Align.CENTER)
+        grid.set_hexpand(True)
 
-        label = Gtk.Label(label=_("Show this dialog on startup"))
-        label.set_xalign(0)
-        label.set_hexpand(True)
+        for row_idx, (
+            left_icon,
+            left_title,
+            left_desc,
+            right_icon,
+            right_title,
+            right_desc,
+        ) in enumerate(features):
+            left_box = self._create_feature_box(left_icon, left_title, left_desc)
+            left_box.set_hexpand(True)
+            grid.attach(left_box, 0, row_idx, 1, 1)
+
+            right_box = self._create_feature_box(right_icon, right_title, right_desc)
+            right_box.set_hexpand(True)
+            grid.attach(right_box, 1, row_idx, 1, 1)
+
+        content.append(grid)
+
+        shortcuts_label = Gtk.Label()
+        shortcuts_label.set_markup(
+            "<span size='small'>"
+            f"{GLib.markup_escape_text(_('Tip: Press {key} to read selected text from any application.').format(key=self._shortcut_display()))}"
+            "</span>"
+        )
+        shortcuts_label.add_css_class("dim-label")
+        shortcuts_label.set_margin_top(12)
+        content.append(shortcuts_label)
+
+        scrolled.set_child(content)
+
+        bottom_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        bottom_bar.set_margin_start(20)
+        bottom_bar.set_margin_end(20)
+        bottom_bar.set_margin_top(12)
+        bottom_bar.set_margin_bottom(16)
 
         self._show_switch = Gtk.Switch()
         self._show_switch.set_valign(Gtk.Align.CENTER)
         self._show_switch.set_active(self._settings_service.get().show_welcome)
+        self._show_switch.update_property(
+            [Gtk.AccessibleProperty.LABEL], [_("Show dialog on startup")]
+        )
 
-        box.append(label)
-        box.append(self._show_switch)
-        return box
+        switch_label = Gtk.Label(label=_("Show dialog on startup"))
+        switch_label.set_xalign(0)
 
-    # ── Helpers ───────────────────────────────────────────────────
+        switch_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        switch_box.append(self._show_switch)
+        switch_box.append(switch_label)
+        switch_box.set_hexpand(True)
+        bottom_bar.append(switch_box)
+
+        start_button = Gtk.Button(label=_("Let's Start"))
+        start_button.add_css_class("suggested-action")
+        start_button.add_css_class("pill")
+        start_button.set_size_request(150, -1)
+        start_button.connect("clicked", self._on_close)
+        bottom_bar.append(start_button)
+
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        outer.append(scrolled)
+        outer.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+        outer.append(bottom_bar)
+
+        handle = Gtk.WindowHandle()
+        handle.set_child(outer)
+
+        self.set_content_width(900)
+        self.set_content_height(650)
+        self.set_child(handle)
+
+    def _shortcut_display(self) -> str:
+        """Return the configured shortcut in a compact, human-readable form."""
+        from services.shortcut_service import display_text
+
+        return display_text(self._settings_service.get().shortcut.keybinding)
 
     @staticmethod
-    def _make_feature(title: str, description: str) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+    def _create_feature_box(
+        icon_name: str,
+        title: str,
+        description: str,
+    ) -> Gtk.Box:
+        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
 
-        title_lbl = Gtk.Label()
-        title_lbl.set_markup(GLib.markup_escape_text(title))
-        title_lbl.set_halign(Gtk.Align.START)
-        title_lbl.set_wrap(True)
-        box.append(title_lbl)
+        icon = Gtk.Image.new_from_icon_name(icon_name)
+        icon.set_pixel_size(32)
+        icon.set_valign(Gtk.Align.START)
+        icon.add_css_class("dim-label")
+        row.append(icon)
 
-        desc_lbl = Gtk.Label(label=description)
-        desc_lbl.set_halign(Gtk.Align.START)
-        desc_lbl.set_wrap(True)
-        desc_lbl.set_xalign(0)
-        desc_lbl.add_css_class("dim-label")
-        desc_lbl.set_max_width_chars(40)
-        box.append(desc_lbl)
+        text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
 
-        return box
+        title_label = Gtk.Label()
+        title_label.set_markup(f"<b>{GLib.markup_escape_text(title)}</b>")
+        title_label.set_halign(Gtk.Align.START)
+        title_label.set_wrap(True)
+        text_box.append(title_label)
 
-    # ── Callbacks ─────────────────────────────────────────────────
+        description_label = Gtk.Label(label=description)
+        description_label.set_halign(Gtk.Align.START)
+        description_label.set_wrap(True)
+        description_label.set_xalign(0)
+        description_label.add_css_class("dim-label")
+        description_label.set_max_width_chars(40)
+        text_box.append(description_label)
 
-    def _on_close_clicked(self, _button: Gtk.Button) -> None:
-        if self._show_switch is not None:
-            settings = self._settings_service.get()
-            settings.show_welcome = self._show_switch.get_active()
-            self._settings_service.save(settings)
+        row.append(text_box)
+        return row
 
+    def _save_preferences(self) -> None:
+        if self._show_switch is None:
+            return
+        settings = self._settings_service.get()
+        settings.show_welcome = self._show_switch.get_active()
+        self._settings_service.save(settings)
+
+    def _on_close(self, _button: Gtk.Button) -> None:
+        self._save_preferences()
         self.close()
+
+    def _on_closed(self, _dialog: Adw.Dialog) -> None:
+        self._save_preferences()
+
+
+# Keep the old import name available to downstream integrations.
+WelcomeWindow = WelcomeDialog

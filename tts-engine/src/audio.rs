@@ -3,8 +3,8 @@
 //! Uses a dedicated audio thread since `OutputStream` is `!Send + !Sync`.
 
 use std::io::Cursor;
-use std::sync::mpsc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::mpsc;
 use std::thread;
 
 use rodio::{Decoder, OutputStream, Sink};
@@ -22,8 +22,7 @@ pub fn play_wav(wav_data: Vec<u8>) -> Result<()> {
 
     thread::spawn(move || {
         let result = (|| -> std::result::Result<(), String> {
-            let (_stream, handle) =
-                OutputStream::try_default().map_err(|e| e.to_string())?;
+            let (_stream, handle) = OutputStream::try_default().map_err(|e| e.to_string())?;
             let sink = Sink::try_new(&handle).map_err(|e| e.to_string())?;
 
             let cursor = Cursor::new(wav_data);
@@ -53,4 +52,3 @@ pub fn play_wav(wav_data: Vec<u8>) -> Result<()> {
 pub fn stop_playback() {
     STOP_FLAG.store(true, Ordering::SeqCst);
 }
-

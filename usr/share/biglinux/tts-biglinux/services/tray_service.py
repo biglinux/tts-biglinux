@@ -4,16 +4,30 @@ System tray icon via Qt6 subprocess.
 Runs a minimal PySide6 QSystemTrayIcon in a separate process to avoid
 GTK3/GTK4 conflicts. Communicates via stdin/stdout lines.
 
+While reading, the tray icon pulses (fade in/out) and the tooltip shows the
+playing label; a left-click stops playback (and otherwise reads the selection).
+The right-click context menu is STATIC: the parent always sends the full,
+fixed-order list of rows (idle "Read text" plus the playback controls) and the
+helper creates them once, then only toggles each row's visible/label/enabled.
+Plasma renders the menu through DBusMenu, where property updates propagate
+reliably but structural rebuilds do not (see the helper's comment). The menu is
+compositor-anchored to the tray icon, so it works on Wayland where a free popup
+would not.
+
 Protocol (parent → child): JSON lines
   {"cmd": "quit"}
-  {"cmd": "set_menu", "items": [{"id":1,"label":"X"}, {"id":2,"separator":true}]}
+  {"cmd": "set_menu", "items": [{"id":1,"label":"X","visible":true},
+       {"id":10,"label":"Playing…","enabled":false,"visible":false},
+       {"id":3,"separator":true,"visible":false}]}
   {"cmd": "set_tooltip", "text": "..."}
-  {"cmd": "set_icon", "path": "/path/to/icon.svg"}
+  {"cmd": "set_speaking", "speaking": true, "paused": false, "label": "..."}
+  {"cmd": "update_icon"}
 
 Protocol (child → parent): JSON lines
-  {"event": "activate"}          # left-click
-  {"event": "menu", "id": 1}     # menu item clicked
-  {"event": "ready"}             # tray icon visible
+  {"event": "activate"}                       # left-click while idle → read selection
+  {"event": "menu", "id": 1}                  # menu item (or submenu item) clicked
+  {"event": "player", "action": "stop"}       # left-click while speaking → stop
+  {"event": "ready"}                          # tray icon visible
 """
 
 from __future__ import annotations
@@ -22,9 +36,7 @@ import json
 import logging
 import os
 import subprocess
-import sys
 import textwrap
-from pathlib import Path
 from typing import Callable
 
 from gi.repository import GLib
@@ -35,12 +47,8 @@ _HELPER_SCRIPT = textwrap.dedent("""
 import json
 import math
 import os
-import random
 import signal
-import struct
-import subprocess
 import sys
-import threading
 
 def send(data: dict) -> None:
     try:
@@ -50,250 +58,19 @@ def send(data: dict) -> None:
         pass
 
 try:
-    from PySide6.QtCore import Qt, QTimer, QRect, QPoint, QSize, Signal, QObject
-    from PySide6.QtGui import (
-        QAction, QColor, QIcon, QLinearGradient, QPainter, QPainterPath, QPen,
-    )
-    from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon, QWidget
+    from PySide6.QtCore import Qt, QTimer, QSize
+    from PySide6.QtGui import QIcon, QCursor, QPixmap, QPainter
+    from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 except ImportError:
     send({"event": "error", "message": "PySide6 not installed (python-pyside6). Tray icon is disabled."})
     sys.exit(1)
 
 
-class AudioLevelSignal(QObject):
-    '''Thread-safe bridge: audio thread emits levels → UI thread receives.'''
-    levels_ready = Signal(list)
-
-
-class AudioMonitor:
-    '''Captures audio peaks from PulseAudio/PipeWire default sink monitor.
-
-    Reads raw s16le 1ch 16kHz from parec, splits into NUM_BANDS frequency-ish
-    buckets by sub-dividing each read chunk, and emits RMS per bucket.
-    '''
-    NUM_BANDS = 7
-
-    def __init__(self, signal_bridge: AudioLevelSignal) -> None:
-        self._signal = signal_bridge
-        self._proc: subprocess.Popen | None = None
-        self._thread: threading.Thread | None = None
-        self._running = False
-
-    def start(self) -> None:
-        if self._running:
-            return
-        self._running = True
-        self._thread = threading.Thread(target=self._read_loop, daemon=True)
-        self._thread.start()
-
-    def stop(self) -> None:
-        self._running = False
-        if self._proc:
-            try:
-                self._proc.kill()
-            except Exception:
-                pass
-            self._proc = None
-
-    def _read_loop(self) -> None:
-        try:
-            # Record from default sink monitor, mono 16-bit 16 kHz
-            self._proc = subprocess.Popen(
-                [
-                    "parec",
-                    "--format=s16le",
-                    "--channels=1",
-                    "--rate=16000",
-                    "--device=@DEFAULT_MONITOR@",
-                    "--latency-msec=50",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL,
-            )
-        except FileNotFoundError:
-            self._running = False
-            return
-
-        CHUNK = 1024  # 512 samples (16-bit) → ~32ms at 16kHz
-        while self._running and self._proc and self._proc.poll() is None:
-            data = self._proc.stdout.read(CHUNK)
-            if not data:
-                break
-            samples = struct.unpack(f"<{len(data)//2}h", data)
-            bands = self._compute_bands(samples)
-            self._signal.levels_ready.emit(bands)
-
-        self.stop()
-
-    def _compute_bands(self, samples) -> list:
-        '''Split samples into NUM_BANDS sub-chunks and compute normalised RMS.'''
-        n = len(samples)
-        band_size = max(1, n // self.NUM_BANDS)
-        levels = []
-        for i in range(self.NUM_BANDS):
-            start = i * band_size
-            end = min(start + band_size, n)
-            chunk = samples[start:end]
-            if not chunk:
-                levels.append(0.0)
-                continue
-            rms = math.sqrt(sum(s * s for s in chunk) / len(chunk))
-            # Normalise: max s16 = 32767
-            level = min(1.0, rms / 12000.0)
-            levels.append(level)
-        return levels
-
-
-class EqualizerPopup(QWidget):
-    '''Frameless popup drawn above the tray icon with animated equalizer bars
-    and a persistent "Playing…" label.'''
-
-    NUM_BARS = 7
-    BAR_WIDTH = 6
-    BAR_GAP = 3
-    EQ_H = 44        # Height for equalizer bars area
-    LABEL_H = 18     # Height for text label area
-    CORNER_RADIUS = 8
-
-    def __init__(self, parent=None) -> None:
-        super().__init__(parent)
-        total_w = max(
-            self.NUM_BARS * self.BAR_WIDTH + (self.NUM_BARS - 1) * self.BAR_GAP + 16,
-            100,  # Minimum width for label
-        )
-        total_h = self.EQ_H + self.LABEL_H
-        self.setFixedSize(total_w, total_h)
-        self.setWindowFlags(
-            Qt.WindowType.ToolTip
-            | Qt.WindowType.FramelessWindowHint
-            | Qt.WindowType.WindowStaysOnTopHint
-            | Qt.WindowType.WindowDoesNotAcceptFocus
-        )
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
-
-        self._label_text = "Playing…"
-
-        # Current and target bar heights (0.0 → 1.0)
-        self._levels = [0.0] * self.NUM_BARS
-        self._targets = [0.0] * self.NUM_BARS
-
-        # Smooth animation timer
-        self._anim_timer = QTimer(self)
-        self._anim_timer.timeout.connect(self._animate_step)
-        self._anim_timer.setInterval(33)  # ~30 fps
-
-    def set_label(self, text: str) -> None:
-        '''Update the persistent label text.'''
-        self._label_text = text
-        self.update()
-
-    def set_levels(self, levels: list) -> None:
-        '''Set target levels from audio monitor (0.0-1.0 per band).'''
-        for i in range(min(len(levels), self.NUM_BARS)):
-            self._targets[i] = levels[i]
-
-    def show_at_tray(self, tray_geometry: QRect) -> None:
-        '''Position popup above the tray icon and show it.'''
-        if tray_geometry.isValid() and not tray_geometry.isNull() and tray_geometry.width() > 0:
-            x = tray_geometry.center().x() - self.width() // 2
-            y = tray_geometry.top() - self.height() - 4
-            # If tray is at top of screen, show below instead
-            if y < 0:
-                y = tray_geometry.bottom() + 4
-            self.move(x, y)
-        else:
-            # Fallback: bottom-right corner of primary screen
-            screen = QApplication.primaryScreen()
-            if screen:
-                avail = screen.availableGeometry()
-                x = avail.right() - self.width() - 8
-                y = avail.bottom() - self.height() - 8
-                self.move(x, y)
-        self.show()
-        self.raise_()
-        self._anim_timer.start()
-
-    def hide_popup(self) -> None:
-        self._anim_timer.stop()
-        self._levels = [0.0] * self.NUM_BARS
-        self._targets = [0.0] * self.NUM_BARS
-        self.hide()
-
-    def _animate_step(self) -> None:
-        '''Smoothly interpolate current levels toward targets.'''
-        changed = False
-        for i in range(self.NUM_BARS):
-            diff = self._targets[i] - self._levels[i]
-            if abs(diff) > 0.005:
-                # Fast attack, slower decay
-                speed = 0.35 if diff > 0 else 0.18
-                self._levels[i] += diff * speed
-                changed = True
-            else:
-                if self._levels[i] != self._targets[i]:
-                    self._levels[i] = self._targets[i]
-                    changed = True
-        if changed:
-            self.update()
-
-    def paintEvent(self, event) -> None:
-        p = QPainter(self)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        # Background with rounded corners
-        bg_path = QPainterPath()
-        bg_path.addRoundedRect(0.0, 0.0, self.width(), self.height(),
-                               self.CORNER_RADIUS, self.CORNER_RADIUS)
-        bg_color = QColor(30, 30, 30, 210)
-        p.fillPath(bg_path, bg_color)
-
-        # Draw equalizer bars in top area
-        margin_x = (self.width() - (self.NUM_BARS * self.BAR_WIDTH + (self.NUM_BARS - 1) * self.BAR_GAP)) // 2
-        bar_area_h = self.EQ_H - 16  # vertical padding
-        base_y = self.EQ_H - 4
-
-        for i in range(self.NUM_BARS):
-            x = margin_x + i * (self.BAR_WIDTH + self.BAR_GAP)
-            level = max(0.05, self._levels[i])  # Minimum visible height
-            bar_h = int(level * bar_area_h)
-
-            # Gradient: green at bottom → yellow → orange at top
-            grad = QLinearGradient(x, base_y, x, base_y - bar_h)
-            grad.setColorAt(0.0, QColor(76, 175, 80))    # green
-            grad.setColorAt(0.5, QColor(255, 235, 59))   # yellow
-            grad.setColorAt(1.0, QColor(255, 87, 34))    # orange-red
-
-            p.setPen(Qt.PenStyle.NoPen)
-            p.setBrush(grad)
-            bar_path = QPainterPath()
-            bar_path.addRoundedRect(
-                float(x), float(base_y - bar_h),
-                float(self.BAR_WIDTH), float(bar_h),
-                2.0, 2.0,
-            )
-            p.drawPath(bar_path)
-
-        # Draw label text below bars
-        if self._label_text:
-            from PySide6.QtGui import QFont
-            font = QFont()
-            font.setPointSize(8)
-            font.setBold(True)
-            p.setFont(font)
-            p.setPen(QColor(220, 220, 220))
-            label_rect = QRect(4, self.EQ_H, self.width() - 8, self.LABEL_H)
-            p.drawText(label_rect, Qt.AlignmentFlag.AlignCenter, self._label_text)
-
-        p.end()
-
-
 try:
-    # argv: icon_name, title, tooltip, icon_dark_path, icon_light_path
     title       = sys.argv[1] if len(sys.argv) > 1 else "App"
     tooltip     = sys.argv[2] if len(sys.argv) > 2 else title
-    icon_dark   = sys.argv[3] if len(sys.argv) > 3 else ""   # for dark bg (white icon)
-    icon_light  = sys.argv[4] if len(sys.argv) > 4 else ""   # for light bg (dark icon)
+    icon_dark   = sys.argv[3] if len(sys.argv) > 3 else ""
+    icon_light  = sys.argv[4] if len(sys.argv) > 4 else ""
 
     sys.argv[0] = title
     app = QApplication(sys.argv)
@@ -301,98 +78,196 @@ try:
     app.setDesktopFileName("br.com.biglinux.tts")
     app.setQuitOnLastWindowClosed(False)
 
-    def is_dark_theme() -> bool:
-        '''Detect if the current system palette is dark.'''
-        palette = app.palette()
-        bg = palette.window().color()
-        return bg.lightness() < 128
+    state = {"speaking": False, "paused": False}
 
-    def get_icon_for_theme() -> "QIcon":
-        '''Return white icon for dark bg, dark icon for light bg.'''
-        if is_dark_theme():
-            path = icon_dark
-        else:
-            path = icon_light
+    def is_dark_theme() -> bool:
+        return app.palette().window().color().lightness() < 128
+
+    def get_icon_for_theme() -> QIcon:
+        path = icon_dark if is_dark_theme() else icon_light
         if path:
             return QIcon(path)
         return QIcon.fromTheme("tts-biglinux-symbolic")
 
-    icon = get_icon_for_theme()
-    tray = QSystemTrayIcon(icon, app)
+    # Base icon + a 64px pixmap we repaint at varying opacity to pulse the tray
+    # icon while reading. Both refresh on palette (theme) changes.
+    base = {"icon": get_icon_for_theme()}
+    base["pixmap"] = base["icon"].pixmap(QSize(64, 64))
+
+    tray = QSystemTrayIcon(base["icon"], app)
     tray.setToolTip(tooltip)
 
-    def update_icon_from_theme():
-        '''Reload icon when system palette changes.'''
-        new_icon = get_icon_for_theme()
-        tray.setIcon(new_icon)
+    def apply_opacity(op) -> None:
+        pm = base["pixmap"]
+        if pm is None or pm.isNull():
+            tray.setIcon(base["icon"])
+            return
+        out = QPixmap(pm.size())
+        out.fill(Qt.transparent)
+        p = QPainter(out)
+        p.setOpacity(max(0.0, min(1.0, op)))
+        p.drawPixmap(0, 0, pm)
+        p.end()
+        tray.setIcon(QIcon(out))
 
-    app.paletteChanged.connect(lambda _: update_icon_from_theme())
+    def refresh_base() -> None:
+        base["icon"] = get_icon_for_theme()
+        base["pixmap"] = base["icon"].pixmap(QSize(64, 64))
 
+    # Fade in/out pulse while reading (not while paused).
+    pulse = {"phase": 0.0}
+
+    def pulse_tick() -> None:
+        pulse["phase"] += 0.30
+        op = 0.35 + 0.65 * (0.5 + 0.5 * math.sin(pulse["phase"]))
+        apply_opacity(op)
+
+    pulse_timer = QTimer()
+    pulse_timer.setInterval(80)
+    pulse_timer.timeout.connect(pulse_tick)
+
+    def render_icon() -> None:
+        # Repaint the tray icon for the current speaking/paused state.
+        if state["speaking"] and not state["paused"]:
+            if not pulse_timer.isActive():
+                pulse["phase"] = 0.0
+                pulse_timer.start()
+        elif state["speaking"] and state["paused"]:
+            pulse_timer.stop()
+            apply_opacity(0.45)   # steady dim = paused
+        else:
+            pulse_timer.stop()
+            tray.setIcon(base["icon"])
+
+    theme = {"dark": is_dark_theme()}
+
+    def on_theme_changed(*_) -> None:
+        refresh_base()
+        render_icon()
+
+    def check_theme() -> None:
+        # Polled: only repaint when light/dark actually flipped. Re-setting the
+        # icon every poll would spam the panel with NewIcon over D-Bus.
+        dark = is_dark_theme()
+        if dark != theme["dark"]:
+            theme["dark"] = dark
+            on_theme_changed()
+
+    app.paletteChanged.connect(on_theme_changed)
+
+    # Static context menu. Plasma renders SNI menus through DBusMenu, and Qt's
+    # exporter does not reliably propagate STRUCTURAL changes (removing/adding
+    # rows) made while the menu is closed: the panel keeps a stale layout, and a
+    # rebuild triggered on aboutToShow races Plasma's GetLayout ("one revision
+    # behind"). Item PROPERTY changes, however, propagate immediately as
+    # ItemsPropertiesUpdated and the importer applies them to the existing rows.
+    # So every possible row is created once, in a fixed order, and playback state
+    # only toggles each row's visibility / label / enabled flag.
     menu = QMenu()
     tray.setContextMenu(menu)
+    actions = {}   # item id -> QAction (separators included)
+    order = []     # item ids in creation order
 
-    # ── Equalizer popup & audio monitor ──
-    eq_popup = EqualizerPopup()
-    audio_signal = AudioLevelSignal()
-    audio_monitor = AudioMonitor(audio_signal)
-
-    def _on_levels(levels: list) -> None:
-        eq_popup.set_levels(levels)
-
-    audio_signal.levels_ready.connect(_on_levels)
-
-    action_map: dict = {}
-
-    def on_activated(reason) -> None:
-        if reason == QSystemTrayIcon.ActivationReason.Trigger:
-            send({"event": "activate"})
-
-    def on_menu_click(item_id: int) -> None:
+    def on_menu_click(item_id) -> None:
         send({"event": "menu", "id": item_id})
 
-    def handle_input() -> None:
-        import select
-        while select.select([sys.stdin], [], [], 0)[0]:
-            line = sys.stdin.readline()
-            if not line:
+    def build_actions(items) -> None:
+        menu.clear()
+        actions.clear()
+        order.clear()
+        for item in items:
+            iid = item["id"]
+            if item.get("separator"):
+                a = menu.addSeparator()
+            else:
+                a = menu.addAction(item.get("label", ""))
+                a.triggered.connect(lambda checked, i=iid: on_menu_click(i))
+            actions[iid] = a
+            order.append(iid)
+
+    def apply_props(items) -> None:
+        for item in items:
+            a = actions[item["id"]]
+            if not item.get("separator"):
+                a.setText(item.get("label", ""))
+                a.setEnabled(bool(item.get("enabled", True)))
+            a.setVisible(bool(item.get("visible", True)))
+
+    def set_menu(items) -> None:
+        # Structure is created on the first call (or if the parent ever changes
+        # the set of rows); afterwards only properties are updated.
+        if [it["id"] for it in items] != order:
+            build_actions(items)
+        apply_props(items)
+
+    def on_activated(reason) -> None:
+        # Left-click: while reading it stops playback; otherwise it reads the
+        # current selection. Middle-click pops the native context menu (its
+        # activation carries a valid input serial that Wayland requires).
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:
+            if state["speaking"]:
+                send({"event": "player", "action": "stop"})
+            else:
+                send({"event": "activate"})
+        elif reason == QSystemTrayIcon.ActivationReason.MiddleClick:
+            menu.popup(QCursor.pos())
+
+    # Read the parent's commands from the raw, non-blocking fd into our own
+    # buffer. NEVER mix select() with sys.stdin.readline(): the parent sends
+    # bursts of several lines (set_speaking + set_menu), readline() slurps them
+    # all into TextIOWrapper's buffer, select() then reports the fd idle, and
+    # the remaining lines sit unprocessed until the NEXT message — which made
+    # the menu lag exactly one update behind.
+    stdin_fd = sys.stdin.fileno()
+    os.set_blocking(stdin_fd, False)
+    inbuf = bytearray()
+
+    def read_lines():
+        while True:
+            try:
+                chunk = os.read(stdin_fd, 65536)
+            except BlockingIOError:
+                break
+            if not chunk:          # EOF: parent is gone
                 app.quit()
                 return
+            inbuf.extend(chunk)
+            if len(chunk) < 65536:
+                break
+        while True:
+            nl = inbuf.find(b"\\n")
+            if nl < 0:
+                break
+            line = bytes(inbuf[:nl]); del inbuf[:nl + 1]
+            yield line.decode("utf-8", "replace").strip()
+
+    def handle_input() -> None:
+        for line in read_lines():
+            if not line:
+                continue
             try:
-                msg = json.loads(line.strip())
+                msg = json.loads(line)
             except (json.JSONDecodeError, ValueError):
                 continue
             cmd = msg.get("cmd")
             if cmd == "quit":
-                audio_monitor.stop()
                 app.quit()
             elif cmd == "set_menu":
-                menu.clear()
-                action_map.clear()
-                for item in msg.get("items", []):
-                    if item.get("separator"):
-                        menu.addSeparator()
-                    else:
-                        item_id = item["id"]
-                        action = menu.addAction(item["label"])
-                        action.triggered.connect(lambda checked, iid=item_id: on_menu_click(iid))
-                        action_map[item_id] = action
+                set_menu(msg.get("items", []))
             elif cmd == "set_tooltip":
-                tray.setToolTip(msg.get("text", ""))
+                # New idle tooltip (e.g. the shortcut changed).
+                state["tooltip"] = msg.get("text", "") or tooltip
+                if not state["speaking"]:
+                    tray.setToolTip(state["tooltip"])
             elif cmd == "set_speaking":
-                speaking = msg.get("speaking", False)
-                label = msg.get("label", "Playing…")
-                if speaking:
-                    tray.setToolTip(label)
-                    eq_popup.set_label(label)
-                    tray_geo = tray.geometry()
-                    eq_popup.show_at_tray(tray_geo)
-                    audio_monitor.start()
-                else:
-                    audio_monitor.stop()
-                    eq_popup.hide_popup()
-                    tray.setToolTip(tooltip)
+                state["speaking"] = bool(msg.get("speaking", False))
+                state["paused"] = bool(msg.get("paused", False))
+                label = msg.get("label", "")
+                idle_tip = state.get("tooltip") or tooltip
+                tray.setToolTip(label or idle_tip if state["speaking"] else idle_tip)
+                render_icon()
             elif cmd == "update_icon":
-                update_icon_from_theme()
+                on_theme_changed()
 
     tray.activated.connect(on_activated)
     tray.show()
@@ -403,11 +278,10 @@ try:
     timer.start(100)
 
     theme_timer = QTimer()
-    theme_timer.timeout.connect(update_icon_from_theme)
+    theme_timer.timeout.connect(check_theme)
     theme_timer.start(2000)
 
     def _cleanup(*_):
-        audio_monitor.stop()
         app.quit()
 
     signal.signal(signal.SIGTERM, _cleanup)
@@ -421,7 +295,11 @@ except Exception as e:
 
 
 class MenuItem:
-    """Simple menu item descriptor."""
+    """Simple menu item descriptor.
+
+    A ``submenu`` (list of child MenuItems) turns this into a parent row whose
+    children open in a nested menu; the parent itself has no direct action.
+    """
 
     def __init__(
         self,
@@ -430,11 +308,18 @@ class MenuItem:
         callback: Callable[[], None] | None = None,
         *,
         separator: bool = False,
+        submenu: list["MenuItem"] | None = None,
+        enabled: bool = True,
+        visible: bool = True,
     ) -> None:
         self.item_id = item_id
         self.label = label
         self.callback = callback
         self.separator = separator
+        self.submenu = submenu
+        self.enabled = enabled
+        # Rows are created once in the helper; state changes only toggle this.
+        self.visible = visible
 
 
 class TrayIcon:
@@ -465,6 +350,8 @@ class TrayIcon:
 
         # Callbacks
         self.on_activate: Callable[[], None] | None = None
+        # on_player(action) where action is "play" or "stop"
+        self.on_player: Callable[[str], None] | None = None
 
     def set_menu(self, items: list[MenuItem]) -> None:
         """Set the context menu items."""
@@ -538,17 +425,47 @@ class TrayIcon:
 
     def _send_menu(self) -> None:
         """Send current menu items to the helper."""
+        # Every row (separators included) carries a stable id so the helper can
+        # create the structure once and then only update properties.
         items = []
         for m in self._menu_items:
+            entry: dict = {"id": m.item_id, "visible": m.visible}
             if m.separator:
-                items.append({"separator": True})
+                entry["separator"] = True
             else:
-                items.append({"id": m.item_id, "label": m.label})
+                entry["label"] = m.label
+                entry["enabled"] = m.enabled
+            items.append(entry)
         self._send({"cmd": "set_menu", "items": items})
 
-    def set_speaking(self, speaking: bool, label: str = "") -> None:
-        """Update tray icon tooltip and equalizer popup while speaking."""
-        msg: dict = {"cmd": "set_speaking", "speaking": speaking}
+    def _find_callback(self, item_id: int) -> Callable[[], None] | None:
+        """Find a menu item's callback, searching submenus too."""
+        for m in self._menu_items:
+            if m.item_id == item_id and m.callback:
+                return m.callback
+            for c in (m.submenu or []):
+                if c.item_id == item_id and c.callback:
+                    return c.callback
+        return None
+
+    def set_tooltip(self, text: str) -> None:
+        """Tooltip shown while idle (playback labels take over while reading)."""
+        self._tooltip = text
+        self._send({"cmd": "set_tooltip", "text": text})
+
+    def set_speaking(
+        self,
+        speaking: bool,
+        label: str = "",
+        *,
+        paused: bool = False,
+    ) -> None:
+        """Drive the tray icon animation and tooltip for the playback state.
+
+        While ``speaking`` and not ``paused`` the icon pulses (fade in/out) and
+        the tooltip shows ``label``; while ``paused`` the icon holds a steady dim.
+        """
+        msg: dict = {"cmd": "set_speaking", "speaking": speaking, "paused": paused}
         if label:
             msg["label"] = label
         self._send(msg)
@@ -581,11 +498,12 @@ class TrayIcon:
                     if self.on_activate:
                         self.on_activate()
                 elif event == "menu":
-                    item_id = msg.get("id")
-                    for m in self._menu_items:
-                        if m.item_id == item_id and m.callback:
-                            m.callback()
-                            break
+                    cb = self._find_callback(msg.get("id"))
+                    if cb:
+                        cb()
+                elif event == "player":
+                    if self.on_player:
+                        self.on_player(msg.get("action", ""))
                 elif event == "ready":
                     logger.info("Tray icon is visible")
                     self._send_menu()

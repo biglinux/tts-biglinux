@@ -244,7 +244,7 @@ msgstr "Lisää Kokoro-ääniä — {count} saatavilla"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 402
 #, python-brace-format
 msgid "{langs} languages"
-msgstr "{kielet} kielet"
+msgstr "{langs} kielet"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/voice_manager_dialog.py, line: 411
 #, python-brace-format

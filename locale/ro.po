@@ -922,7 +922,7 @@ msgstr "Kokoro a fost instalat cu succes! Descoperirea vocilor…"
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1006
 #, python-brace-format
 msgid "Failed to install: {error}"
-msgstr "Instalarea a eșuat: {eroare}"
+msgstr "Instalarea a eșuat: {error}"
 # 
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1317
 msgid "Failed to install Kokoro — check permissions"

@@ -55,6 +55,8 @@ def _get_locale_candidates() -> list[str]:
             continue
         for part in val.split(":"):
             code = part.split(".")[0].split("@")[0]
+            if code in ("C", "POSIX"):
+                continue
             if code and code not in candidates:
                 candidates.append(code)
             short = code.split("_")[0]
@@ -75,7 +77,7 @@ def _find_po(locale_dir: Path, candidates: list[str]) -> Path | None:
 
 
 # Locate .po files — try development dir first, then system install
-_project_root = Path(__file__).parent.parent.parent.parent
+_project_root = Path(__file__).resolve().parents[5]
 _po_dirs = [
     _project_root / "locale",
     Path("/usr/share/tts-biglinux/locale"),
@@ -101,3 +103,8 @@ else:
 
 def _(message: str) -> str:
     return _translations.get(message, message)
+
+
+def N_(message: str) -> str:
+    """Mark a string for translation without translating it yet (tables)."""
+    return message

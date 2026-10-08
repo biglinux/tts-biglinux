@@ -238,6 +238,51 @@ class DesktopIntegrationService:
             pass
 
     @staticmethod
+    def purge_stale_kde_components(keep: str = "biglinux_tts_speak_desktop") -> None:
+        """Remove stale KGlobalAccel components that fight over our shortcut.
+
+        Older versions registered the speak shortcut under component names such
+        as ``bigtts.desktop`` / ``tts-speak.desktop``. Those linger in
+        kglobalacceld's *in-memory* registry (the config file may already say
+        ``none``) and their ``.desktop`` targets no longer exist. When several
+        components claim the same key (e.g. Alt+V), KGlobalAccel cannot route
+        the press to our launcher, so the shortcut silently fails when the app
+        is not already running. ``Component.cleanUp`` drops each zombie so the
+        live ``biglinux-tts-speak.desktop`` component owns the key alone.
+        """
+        import shutil
+
+        # D-Bus object-path names (dots/dashes → underscores) of components
+        # historically used for the speak shortcut. Never touch ``keep``.
+        stale = [
+            "bigtts_desktop",
+            "tts_speak_desktop",
+            "br_com_biglinux_tts_desktop",
+        ]
+        qdbus = next((c for c in ("qdbus6", "qdbus") if shutil.which(c)), None)
+        if not qdbus:
+            return
+        for name in stale:
+            if name == keep:
+                continue
+            try:
+                subprocess.run(
+                    [
+                        qdbus,
+                        "org.kde.kglobalaccel",
+                        f"/component/{name}",
+                        "org.kde.kglobalaccel.Component.cleanUp",
+                    ],
+                    timeout=3,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+        logger.debug("Purged stale KDE shortcut components (kept %s)", keep)
+
+    @staticmethod
     def ensure_desktop_file(kde_key: str) -> Path:
         """Ensure the shortcut desktop file exists locally with current keybinding."""
         local_apps = Path.home() / ".local" / "share" / "applications"
@@ -259,7 +304,7 @@ Icon=tts-biglinux
 Categories=Utility;Accessibility;
 StartupNotify=false
 NoDisplay=true
-        X-KDE-Shortcuts={kde_key}
+X-KDE-Shortcuts={kde_key}
 Name=BigLinux TTS
 GenericName=Speech or stop selected text
 GenericName[pt_BR]=Narrador de texto (Alt+V)
@@ -323,7 +368,14 @@ Exec=IntegratedRender {exec_path}
                         continue
 
                     if kde_shortcut.lower() != "none":
-                        val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
+                        # [services] entries hold only the key(s), separated by
+                        # TAB. The "active,default,name" triple belongs to
+                        # component groups — written here it would be parsed as
+                        # a multi-chord sequence (press Alt+V, then Alt+V).
+                        if group_prefix == "services":
+                            val = kde_shortcut
+                        else:
+                            val = f"{kde_shortcut},{kde_shortcut},Speech or stop selected text"
                         subprocess.run(cmd + [val], timeout=2, check=False)
                     else:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)
@@ -597,7 +649,7 @@ Type=SHORTCUT
                 )
                 if "khotkeys" in res.stdout:
                     modules.append(kded)
-            except:
+            except (OSError, subprocess.SubprocessError):
                 pass
         
         for kded in modules:
@@ -608,7 +660,7 @@ Type=SHORTCUT
                      "org.kde.khotkeys.reread_configuration"],
                     timeout=2, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
                 )
-            except:
+            except (OSError, subprocess.SubprocessError):
                 pass
 
     # ── Cross-DE Shortcut Support ────────────────────────────────────
@@ -667,8 +719,6 @@ Type=SHORTCUT
           org.gnome.settings-daemon.plugins.media-keys custom-keybindings
         Each binding is a separate dconf path: .../customN/
         """
-        import json
-
         schema = "org.gnome.settings-daemon.plugins.media-keys"
         base_path = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
         binding_name = "BigLinux TTS Speak"

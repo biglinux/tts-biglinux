@@ -56,3 +56,10 @@ tts-engine/target/
 Thumbs.db
 *.tmp
 *.log
+
+# Internal documentation (not shipped; only README.md is tracked)
+docs/
+
+# Runtime temp audio
+tmp/
+**/tmp/

@@ -12,13 +12,14 @@ import os
 import re
 import shutil
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 
 from config import TTSBackend
-from services.kokoro_voice_service import get_active_voices_bin
+from services.kokoro_voice_service import get_active_voices_bin, koko_workdir, kokoro_model_path
 from services.text_processor import get_system_language
-from utils.i18n import _
 from utils.speechd_utils import try_restart_speechd
 
 logger = logging.getLogger(__name__)
@@ -50,6 +51,8 @@ class VoiceCatalog:
 
     voices: list[VoiceInfo] = field(default_factory=list)
     backends_available: list[str] = field(default_factory=list)
+    # Per selectable engine: is the program installed, and does it have voices?
+    engines: dict[str, EngineAvailability] = field(default_factory=dict)
 
     def get_by_language(self, lang_code: str) -> list[VoiceInfo]:
         """Get voices matching a language code prefix (e.g. 'pt' matches 'pt-BR')."""
@@ -178,11 +181,62 @@ def _lang_name(code: str) -> str:
 # ── Voice Discovery ──────────────────────────────────────────────────
 
 
-from concurrent.futures import ThreadPoolExecutor
+class EngineAvailability(str, Enum):
+    """What is installed for an engine (not whether it is speaking)."""
 
-def discover_voices() -> VoiceCatalog:
+    NOT_INSTALLED = "not-installed"  # the program itself is missing
+    NO_VOICES = "no-voices"  # installed, but no voice to speak with
+    READY = "ready"  # installed with at least one voice
+
+
+def _engine_installed(backend: str) -> bool:
+    """Is the program for ``backend`` present? (blocking: worker thread)"""
+    if backend == TTSBackend.RHVOICE.value:
+        return shutil.which("RHVoice-test") is not None
+    if backend == TTSBackend.ESPEAK_NG.value:
+        return shutil.which("espeak-ng") is not None
+    if backend == TTSBackend.PIPER.value:
+        try:
+            import tts_engine  # noqa: F401  (native Piper)
+            return True
+        except ImportError:
+            return _find_piper_binary() is not None
+    if backend == TTSBackend.KOKORO.value:
+        from services.kokoro_voice_service import is_kokoro_installed, kokoro_backend_type
+
+        if not is_kokoro_installed():
+            return False
+        return kokoro_backend_type() == "python" or kokoro_model_path().is_file()
+    return False
+
+
+def engine_availability(catalog: VoiceCatalog) -> dict[str, EngineAvailability]:
+    """Availability of the four selectable engines (blocking: worker thread)."""
+    result: dict[str, EngineAvailability] = {}
+    for backend in (
+        TTSBackend.RHVOICE.value,
+        TTSBackend.ESPEAK_NG.value,
+        TTSBackend.PIPER.value,
+        TTSBackend.KOKORO.value,
+    ):
+        if not _engine_installed(backend):
+            result[backend] = EngineAvailability.NOT_INSTALLED
+        elif catalog.get_by_backend(backend):
+            result[backend] = EngineAvailability.READY
+        else:
+            result[backend] = EngineAvailability.NO_VOICES
+    return result
+
+
+def discover_voices(include_speechd: bool = False) -> VoiceCatalog:
     """
     Discover all available TTS voices from all installed backends in parallel.
+
+    Args:
+        include_speechd: also list speech-dispatcher voices. Off by default:
+            no selectable engine uses speech-dispatcher, and querying it
+            (``spd-say -L``) starts the daemon, which starts every installed
+            output module — some of them speak when started.
 
     Returns:
         VoiceCatalog with all discovered voices.
@@ -191,9 +245,14 @@ def discover_voices() -> VoiceCatalog:
     _is_speechd_broken = False  # Reset on each new full catalog refresh attempt
     catalog = VoiceCatalog()
 
+    def _no_spd(retrying: bool = False) -> list[VoiceInfo]:
+        return []
+
     # Parallelize discovery across backends
     with ThreadPoolExecutor(max_workers=5) as executor:
-        future_spd = executor.submit(_discover_spd_voices, retrying=False)
+        future_spd = executor.submit(
+            _discover_spd_voices if include_speechd else _no_spd, retrying=False
+        )
         future_espeak = executor.submit(_discover_espeak_voices)
         future_piper = executor.submit(_discover_piper_voices)
         future_rhvoice = executor.submit(_discover_rhvoice_voices)
@@ -243,6 +302,11 @@ def discover_voices() -> VoiceCatalog:
                 catalog.backends_available.append(TTSBackend.KOKORO.value)
         except Exception as e:
             logger.error("Error in Kokoro discovery: %s", e)
+
+    try:
+        catalog.engines = engine_availability(catalog)
+    except Exception as e:
+        logger.error("Engine availability check failed: %s", e)
 
     logger.info(
         "Discovered %d voices from %d backends",
@@ -570,8 +634,9 @@ def _discover_kokoro_voices() -> list[VoiceInfo]:
             ["koko", "voices"],
             capture_output=True, text=True, timeout=5,
             env={**os.environ,
-                 "KOKO_MODEL_PATH": "/usr/share/biglinux-kokoro-tts/model/model.onnx",
+                 "KOKO_MODEL_PATH": str(kokoro_model_path()),
                  "KOKO_DATA_PATH": str(get_active_voices_bin())},
+            cwd=koko_workdir(),
         )
         if proc.returncode == 0:
             lang_map = {
@@ -923,11 +988,6 @@ def get_supported_but_missing_voices() -> list[dict[str, str]]:
     if not lang_dir.exists():
         return []
         
-    # Get names of installed voices (dirs)
-    installed_voices = []
-    if voice_dir.exists():
-        installed_voices = [d.name.lower() for d in voice_dir.iterdir() if d.is_dir()]
-        
     # Map of language support package to expected voice packages
     recommendations = {
         "polish": ("rhvoice-voice-magda", "Magda"),
@@ -955,7 +1015,8 @@ def get_supported_but_missing_voices() -> list[dict[str, str]]:
                         if f"language={lang_name}" in content or f"language={lang_name.replace('-', ' ')}" in content:
                             found = True
                             break
-                    except: pass
+                    except (OSError, UnicodeError):
+                        pass
         
         if not found:
             pkg, voice_name_rec = recommendations.get(lang_name, ("rhvoice-voice-*", "Any"))

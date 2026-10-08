@@ -4,6 +4,8 @@ Reusable UI components for BigLinux TTS.
 Factory functions for consistent Adwaita widgets with full accessibility.
 """
 
+# ruff: noqa: E402  # gi.require_version must run before repository imports.
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -68,32 +70,36 @@ def create_action_row_with_scale(
     marks: list[tuple[float, str]] | None = None,
     accessible_name: str | None = None,
     title_size_group: Gtk.SizeGroup | None = None,
-) -> tuple[Adw.ActionRow, Gtk.Scale]:
-    """Create an action row with a horizontal scale slider."""
-    row = Adw.ActionRow()
+) -> tuple[Adw.PreferencesRow, Gtk.Scale]:
+    """Create a preferences row with a title/subtitle above a full-width scale.
 
-    if title_size_group:
-        # Custom title area with SizeGroup for alignment
-        title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        title_box.set_valign(Gtk.Align.CENTER)
-        title_box.set_spacing(2)
+    The scale is stacked BELOW the title (vertical layout) so it renders cleanly
+    in a narrow settings sidebar instead of being squeezed beside the title.
+    The returned row exposes `_title_label` / `_subtitle_label` so callers can
+    relabel it later (e.g. Pitch → Expressiveness per backend).
+    """
+    row = Adw.PreferencesRow()
+    row.set_activatable(False)
 
-        title_label = Gtk.Label(label=title, xalign=0)
-        title_label.add_css_class("title")
-        title_box.append(title_label)
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+    box.set_margin_top(10)
+    box.set_margin_bottom(6)
+    box.set_margin_start(12)
+    box.set_margin_end(12)
 
-        if subtitle:
-            sub_label = Gtk.Label(label=subtitle, xalign=0)
-            sub_label.add_css_class("dim-label")
-            sub_label.set_css_classes(["dim-label", "caption"])
-            title_box.append(sub_label)
+    title_label = Gtk.Label(label=title, xalign=0)
+    title_label.add_css_class("heading")
+    title_label.set_halign(Gtk.Align.START)
+    box.append(title_label)
+    row._title_label = title_label  # type: ignore[attr-defined]
 
-        row.add_prefix(title_box)
-        title_size_group.add_widget(title_box)
-    else:
-        row.set_title(title)
-        if subtitle:
-            row.set_subtitle(subtitle)
+    sub_label = Gtk.Label(label=subtitle or "", xalign=0)
+    sub_label.set_css_classes(["dim-label", "caption"])
+    sub_label.set_halign(Gtk.Align.START)
+    sub_label.set_wrap(True)
+    sub_label.set_visible(bool(subtitle))
+    box.append(sub_label)
+    row._subtitle_label = sub_label  # type: ignore[attr-defined]
 
     adjustment = Gtk.Adjustment(
         value=value,
@@ -109,10 +115,9 @@ def create_action_row_with_scale(
     )
     scale.set_digits(digits)
     scale.set_hexpand(True)
-    scale.set_size_request(280, -1)
-    scale.set_valign(Gtk.Align.CENTER)
+    scale.set_draw_value(False)
+    scale.set_margin_top(2)
 
-    # Accessibility
     acc_name = accessible_name or title
     scale.update_property([Gtk.AccessibleProperty.LABEL], [acc_name])
 
@@ -123,7 +128,8 @@ def create_action_row_with_scale(
     if on_changed:
         scale.connect("value-changed", lambda s: on_changed(s.get_value()))
 
-    row.add_suffix(scale)
+    box.append(scale)
+    row.set_child(box)
     return row, scale
 
 
@@ -314,3 +320,80 @@ def create_status_page(
     if description:
         page.set_description(description)
     return page
+
+
+class ShortcutKeys(Gtk.Box):
+    """The global shortcut drawn as keyboard keys: [Alt] + [V].
+
+    Screen readers get one label ("Shortcut: Alt+V") for the group; the key
+    pieces themselves are presentation only.
+    """
+
+    def __init__(self, *, large: bool = False) -> None:
+        super().__init__(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=8 if large else 4,
+            accessible_role=Gtk.AccessibleRole.GROUP,
+        )
+        self.set_halign(Gtk.Align.CENTER)
+        self.set_valign(Gtk.Align.CENTER)
+        # Key combinations read modifier-first in every locale (Ctrl+C), so
+        # keep this group left-to-right even in RTL layouts.
+        self.set_direction(Gtk.TextDirection.LTR)
+        if large:
+            self.add_css_class("keycap-large")
+        self._accel = None
+
+    def set_accelerator(self, accel: str) -> None:
+        if accel == self._accel:
+            return
+        self._accel = accel
+        from services.shortcut_service import display_text, keycap_labels
+        from utils.i18n import _
+
+        child = self.get_first_child()
+        while child is not None:
+            nxt = child.get_next_sibling()
+            self.remove(child)
+            child = nxt
+
+        parts = keycap_labels(accel) if accel and accel != "none" else []
+        if not parts:
+            none = Gtk.Label(label=_("No shortcut"))
+            none.add_css_class("dim-label")
+            self.append(none)
+            self.update_property([Gtk.AccessibleProperty.LABEL], [_("No shortcut")])
+            return
+        for i, part in enumerate(parts):
+            if i:
+                plus = Gtk.Label(label="+", accessible_role=Gtk.AccessibleRole.PRESENTATION)
+                plus.add_css_class("keycap-plus")
+                self.append(plus)
+            key = Gtk.Label(label=part, accessible_role=Gtk.AccessibleRole.PRESENTATION)
+            key.add_css_class("keycap")
+            self.append(key)
+        self.update_property(
+            [Gtk.AccessibleProperty.LABEL],
+            [_("Shortcut: {keys}").format(keys=display_text(accel))],
+        )
+
+
+# Pill kinds: "ready" (green), "busy" (accent), "warning", "error", "" (neutral).
+_PILL_KINDS = ("ready", "busy", "warning", "error")
+
+
+def create_state_pill(text: str = "", kind: str = "") -> Gtk.Label:
+    """A small rounded status label; the text always states the meaning."""
+    pill = Gtk.Label(label=text)
+    pill.add_css_class("state-pill")
+    pill.set_valign(Gtk.Align.CENTER)
+    set_state_pill(pill, text, kind)
+    return pill
+
+
+def set_state_pill(pill: Gtk.Label, text: str, kind: str = "") -> None:
+    pill.set_label(text)
+    for k in _PILL_KINDS:
+        pill.remove_css_class(k)
+    if kind in _PILL_KINDS:
+        pill.add_css_class(kind)

@@ -10,21 +10,28 @@ pkgdesc="Text to speech with graphical configuration and very easy to use"
 depends=(
     'python'
     'python-gobject'
+    'python-numpy'      # Kokoro voice downloads (.pt → .npy conversion)
     'gtk4'
     'libadwaita'
-    'speech-dispatcher'
-    'espeak-ng'
+    'speech-dispatcher' # legacy speech-dispatcher voices (settings migration)
+    'espeak-ng'         # linked by tts_engine.so; also Piper phonemization
     'xsel'
     'wl-clipboard-rs'
-    'alsa-utils'
+    'alsa-utils'        # aplay: every engine plays through it
     'onnxruntime'
+    'polkit'            # pkexec: install/remove voice packages
 )
 makedepends=(
-    'rust'
+    'git'
+    'rust>=1.85'
     'cargo'
 )
+checkdepends=(
+    'python-pytest'
+)
 optdepends=(
-    'pyside6: system tray icon support'
+    'pyside6: system tray icon support (enabled by default)'
+    'biglinux-kokoro-tts: Kokoro neural voices (koko engine, model and base voices)'
     'rhvoice: high-quality multilingual TTS engine'
     'rhvoice-voice-leticia-f123: Brazilian Portuguese female voice'
     'rhvoice-voice-evgeniy-eng: English male voice'
@@ -32,9 +39,10 @@ optdepends=(
     'piper-tts-bin: neural TTS engine (high quality, offline)'
     'piper-voices-pt-BR: Brazilian Portuguese neural voices for Piper'
     'sox: volume control for Piper/Kokoro audio output'
-    'python-kokoro: Kokoro neural TTS engine (high quality, multilingual)'
-    'python-pytorch: PyTorch runtime for Kokoro TTS'
-    'python-soundfile: audio file I/O for Kokoro TTS'
+    'python-kokoro: alternative Kokoro engine (PyTorch based)'
+    'python-pytorch: PyTorch runtime for python-kokoro'
+    'python-soundfile: audio file I/O for python-kokoro'
+    'xclip: selection capture on X11 when xsel is not available'
 )
 source=("git+https://github.com/biglinux/tts-biglinux.git")
 md5sums=(SKIP)
@@ -46,12 +54,30 @@ build() {
         _basedir="${srcdir}/${pkgname}"
     fi
 
-    # Build native Rust TTS engine
+    # Build native Rust TTS engine.
+    # --locked: honor Cargo.lock so the ONNX Runtime binding (ort) can't be
+    # silently re-resolved to a version incompatible with the system
+    # onnxruntime (this exact drift previously broke the .so at runtime).
+    # ORT_LIB_LOCATION/ORT_PREFER_DYNAMIC_LINK: link against the system
+    # /usr/lib/libonnxruntime.so, never a pip-provided one.
     if [ -d "${_basedir}/tts-engine" ]; then
         cd "${_basedir}/tts-engine"
         ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 \
-            cargo build --release
+            cargo build --release --locked
     fi
+}
+
+check() {
+    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
+        _basedir="${srcdir}/${pkgname}/${pkgname}"
+    else
+        _basedir="${srcdir}/${pkgname}"
+    fi
+    cd "${_basedir}/tts-engine"
+    ORT_LIB_LOCATION=/usr/lib ORT_PREFER_DYNAMIC_LINK=1 cargo test --release --locked
+    # Offline, headless tests (GTK widget tests skip without a display).
+    cd "${_basedir}"
+    python -m pytest -q -p no:cacheprovider tests
 }
 
 package() {
