@@ -632,7 +632,7 @@ class VoiceManagerDialog(Adw.Dialog):
         # installed size once installed). Piper titles already carry the
         # language, so skip it there — but always show the size.
         lang = pkg.get("language", "")
-        lang_display = _LANG_DISPLAY.get(lang, lang.title()) if lang else ""
+        lang_display = _LANG_DISPLAY.get(lang.lower(), lang.title()) if lang else ""
         sub_parts: list[str] = []
         if (
             lang_display
