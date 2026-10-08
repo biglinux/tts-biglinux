@@ -1795,3 +1795,117 @@ msgstr "Selecione um texto e pressione {key} para ouvi-lo"
 # File: tts-biglinux/window.py, line: 160
 msgid  "Show settings"
 msgstr "Mostrar configurações"
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 93
+msgid  "The installation was cancelled: the administrator password was not confirmed."
+msgstr "A instalação foi cancelada: a senha de administrador não foi confirmada."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 116
+msgid  "Nothing to install."
+msgstr "Nada para instalar."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 120
+msgid  "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Outro programa está instalando ou atualizando pacotes. Aguarde terminar e tente novamente."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 129
+msgid  "pkexec is not installed (package polkit)."
+msgstr "O pkexec não está instalado (pacote polkit)."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 131
+msgid  "The installation took too long and was stopped."
+msgstr "A instalação demorou demais e foi interrompida."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 96
+#, python-brace-format
+msgid  "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} não está disponível nos seus repositórios. Atualize o sistema (sudo pacman -Syu) e tente novamente."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 102
+msgid  "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Não foi possível baixar os pacotes. Verifique sua conexão com a internet e tente novamente."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 104
+#, python-brace-format
+msgid  "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} entra em conflito com arquivos ou pacotes instalados. Veja os detalhes."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 106
+#, python-brace-format
+msgid  "Not enough free disk space to install {packages}."
+msgstr "Não há espaço livre suficiente em disco para instalar {packages}."
+
+#
+# File: tts-biglinux/services/package_installer.py, line: 108
+#, python-brace-format
+msgid  "{packages} could not be installed. See the details."
+msgstr "Não foi possível instalar {packages}. Veja os detalhes."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1390
+msgid  "Piper provides natural neural voices. These packages will be installed:"
+msgstr "O Piper oferece vozes neurais naturais. Estes pacotes serão instalados:"
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1392
+msgid  "This requires administrator permissions."
+msgstr "É necessária permissão de administrador."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1439
+msgid  "Install Kokoro neural voices?"
+msgstr "Instalar as vozes neurais do Kokoro?"
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1381
+msgid  "Piper is not available"
+msgstr "O Piper não está disponível"
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1428
+msgid  "Kokoro is not available"
+msgstr "O Kokoro não está disponível"
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1440
+msgid  "Kokoro offers natural neural voices in several languages, with expression styles and voice blending."
+msgstr "O Kokoro oferece vozes neurais naturais em vários idiomas, com estilos de expressão e mistura de vozes."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1519
+#, python-brace-format
+msgid  "{engine} could not be installed"
+msgstr "Não foi possível instalar o {engine}"
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1382
+#, python-brace-format
+msgid  "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
+msgstr "Nenhum pacote de voz do Piper foi encontrado nos seus repositórios ({packages}). Atualize o sistema (sudo pacman -Syu) e tente novamente."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1429
+#, python-brace-format
+msgid  "The {package} package was not found in your repositories, so Kokoro cannot be installed yet. Update the system (sudo pacman -Syu) and try again."
+msgstr "O pacote {package} não foi encontrado nos seus repositórios, por isso o Kokoro ainda não pode ser instalado. Atualize o sistema (sudo pacman -Syu) e tente novamente."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1441
+#, python-brace-format
+msgid  "The {package} package{size} will be installed. This requires administrator permissions."
+msgstr "O pacote {package}{size} será instalado. É necessária permissão de administrador."
+
+#
+# File: tts-biglinux/ui/main_view.py, line: 1508
+#, python-brace-format
+msgid  "{engine} installed. Looking for voices…"
+msgstr "{engine} instalado. Procurando vozes…"

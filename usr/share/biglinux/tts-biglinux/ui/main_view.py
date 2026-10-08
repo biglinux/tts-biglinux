@@ -12,11 +12,9 @@ Layout:
 from __future__ import annotations
 
 import logging
-import subprocess
 import threading
 from collections.abc import Callable
 from contextlib import contextmanager
-from pathlib import Path
 from typing import TYPE_CHECKING, Iterator
 
 import gi
@@ -1334,61 +1332,114 @@ class MainView(Adw.NavigationPage):
                 )
             self._on_voices_discovered(self._catalog)
 
+    # ── Engine installation (pacman, checked first) ─────────────────
+
+    KOKORO_PACKAGE = "biglinux-kokoro-tts"
+    _PIPER_VOICE_PACKAGES = {
+        "pt": "piper-voices-pt-BR",
+        "en": "piper-voices-en-US",
+        "es": "piper-voices-es-ES",
+        "fr": "piper-voices-fr-FR",
+        "de": "piper-voices-de-DE",
+        "it": "piper-voices-it-IT",
+        "ru": "piper-voices-ru-RU",
+        "ja": "piper-voices-ja-JP",
+        "ko": "piper-voices-ko-KR",
+        "zh": "piper-voices-zh-CN",
+    }
+
+    def _revert_to_rhvoice(self) -> None:
+        with self._guard_ui():
+            self._settings.speech.backend = TTSBackend.RHVOICE.value
+            self._settings_service.save(self._settings)
+            self._backend_combo.set_selected(0)
+            if self._catalog:
+                self._on_voices_discovered(self._catalog)
+
+    def _piper_package_plan(self) -> tuple[list[str], list[str]]:
+        """Piper packages to install and those not in the repositories (worker)."""
+        from services import package_installer
+
+        lang = get_system_language()
+        wanted = ["piper-tts-bin", self._PIPER_VOICE_PACKAGES.get(lang, "piper-voices-en-US")]
+        if "piper-voices-pt-BR" not in wanted:
+            wanted.append("piper-voices-pt-BR")  # BigLinux default language
+        available, missing = [], []
+        for name in wanted:
+            (available if package_installer.query(name).available else missing).append(name)
+        return available, missing
+
     def _ask_install_piper(self) -> None:
-        """Show dialog to install Piper TTS and voices."""
-        dialog = Adw.AlertDialog.new(
-            _("Install Piper Neural TTS?"),
-            _(
-                "Piper is not installed. It provides high-quality neural "
-                "voices for reading text.\n\n"
-                "The following packages will be installed:\n"
-                "• piper-tts-bin (TTS engine)\n"
-                "• piper-voices-pt-BR (Portuguese voices)\n\n"
-                "This requires administrator permissions."
-            ),
-        )
+        """Offer to install Piper — only the packages that really exist."""
+        run_in_thread(self._piper_package_plan, on_done=self._show_piper_install_dialog)
+
+    def _show_piper_install_dialog(self, plan: tuple[list[str], list[str]]) -> None:
+        available, missing = plan
+        voices = [p for p in available if p.startswith("piper-voices-")]
+        if not voices:
+            dialog = Adw.AlertDialog.new(
+                _("Piper is not available"),
+                _("No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again.").format(
+                    packages=", ".join(p for p in missing if p.startswith("piper-voices-"))
+                ),
+            )
+            dialog.add_response("ok", _("OK"))
+            dialog.connect("response", lambda *_a: self._revert_to_rhvoice())
+            dialog.present(self._root_window())
+            return
+        body = _("Piper provides natural neural voices. These packages will be installed:") + "\n"
+        body += "\n".join(f"• {name}" for name in available)
+        body += "\n\n" + _("This requires administrator permissions.")
+        dialog = Adw.AlertDialog.new(_("Install Piper Neural TTS?"), body)
         dialog.add_response("cancel", _("Cancel"))
         dialog.add_response("install", _("Install"))
         dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("install")
         dialog.set_close_response("cancel")
-        dialog.connect("response", self._on_install_piper_response)
 
-        window = self._root_window()
-        dialog.present(window)
+        def _on_response(_d, response: str) -> None:
+            if response != "install":
+                self._revert_to_rhvoice()
+                return
+            from services import package_installer
 
-    def _on_install_piper_response(
-        self, dialog: Adw.AlertDialog, response: str
-    ) -> None:
-        """Handle install dialog response."""
-        if response != "install":
-            # Revert to previous backend
-            with self._guard_ui():
-                prev_backend = TTSBackend.RHVOICE.value
-                self._settings.speech.backend = prev_backend
-                self._settings_service.save(self._settings)
-                self._backend_combo.set_selected(0)
-                if self._catalog:
-                    self._on_voices_discovered(self._catalog)
-            return
+            self._run_install_with_progress(
+                title=_("Installing Piper TTS"),
+                status_text=_("Downloading and installing packages…"),
+                worker=lambda: package_installer.install(available),
+                on_done=self._on_piper_installed,
+            )
 
-        self._run_install_with_progress(
-            title=_("Installing Piper TTS"),
-            status_text=_("Downloading and installing packages…"),
-            worker=self._install_piper_packages,
-            on_done=self._on_piper_installed,
-        )
+        dialog.connect("response", _on_response)
+        dialog.present(self._root_window())
 
     def _ask_install_kokoro(self) -> None:
-        """Show dialog to install Kokoro Neural TTS."""
+        """Offer to install Kokoro if its package exists; say so if it does not."""
+        from services import package_installer
+
+        run_in_thread(
+            lambda: package_installer.query(self.KOKORO_PACKAGE),
+            on_done=self._show_kokoro_install_dialog,
+        )
+
+    def _show_kokoro_install_dialog(self, info) -> None:
+        if not info.available:
+            dialog = Adw.AlertDialog.new(
+                _("Kokoro is not available"),
+                _("The {package} package was not found in your repositories, so Kokoro cannot be installed yet. Update the system (sudo pacman -Syu) and try again.").format(
+                    package=self.KOKORO_PACKAGE
+                ),
+            )
+            dialog.add_response("ok", _("OK"))
+            dialog.connect("response", lambda *_a: self._revert_to_rhvoice())
+            dialog.present(self._root_window())
+            return
+        size = f" ({info.download_size})" if info.download_size else ""
         dialog = Adw.AlertDialog.new(
-            _("Install Kokoro Neural TTS?"),
-            _(
-                "Kokoro is not installed. It provides high-quality neural "
-                "voices with emotion presets and voice blending.\n\n"
-                "System dependencies (PyTorch, scipy, espeak-ng) will be "
-                "installed via pacman.\n"
-                "The Kokoro library will be installed via pip."
+            _("Install Kokoro neural voices?"),
+            _("Kokoro offers natural neural voices in several languages, with expression styles and voice blending.") + "\n\n"
+            + _("The {package} package{size} will be installed. This requires administrator permissions.").format(
+                package=self.KOKORO_PACKAGE, size=size
             ),
         )
         dialog.add_response("cancel", _("Cancel"))
@@ -1396,38 +1447,29 @@ class MainView(Adw.NavigationPage):
         dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("install")
         dialog.set_close_response("cancel")
-        dialog.connect("response", self._on_install_kokoro_response)
 
-        window = self._root_window()
-        dialog.present(window)
+        def _on_response(_d, response: str) -> None:
+            if response != "install":
+                self._revert_to_rhvoice()
+                return
+            from services import package_installer
 
-    def _on_install_kokoro_response(
-        self, dialog: Adw.AlertDialog, response: str
-    ) -> None:
-        """Handle Kokoro install dialog response."""
-        if response != "install":
-            with self._guard_ui():
-                prev_backend = TTSBackend.RHVOICE.value
-                self._settings.speech.backend = prev_backend
-                self._settings_service.save(self._settings)
-                self._backend_combo.set_selected(0)
-                if self._catalog:
-                    self._on_voices_discovered(self._catalog)
-            return
+            self._run_install_with_progress(
+                title=_("Installing Kokoro TTS"),
+                status_text=_("Downloading and installing packages…"),
+                worker=lambda: package_installer.install([self.KOKORO_PACKAGE]),
+                on_done=self._on_kokoro_installed,
+            )
 
-        self._run_install_with_progress(
-            title=_("Installing Kokoro TTS"),
-            status_text=_("Downloading and installing packages…"),
-            worker=self._install_kokoro_packages,
-            on_done=self._on_kokoro_installed,
-        )
+        dialog.connect("response", _on_response)
+        dialog.present(self._root_window())
 
     def _run_install_with_progress(
         self,
         title: str,
         status_text: str,
-        worker: Callable[[], tuple[bool, str]],
-        on_done: Callable[[tuple[bool, str]], None],
+        worker: Callable[[], object],
+        on_done: Callable[[object], None],
     ) -> None:
         """Run a package install in the background, showing only the thin OSD
         progress bar at the top of the window (no modal, no text)."""
@@ -1448,66 +1490,41 @@ class MainView(Adw.NavigationPage):
 
         threading.Thread(target=_threaded, daemon=True).start()
 
-    def _install_kokoro_packages(self) -> tuple[bool, str]:
-        """Install Kokoro TTS via distro packages (pacman only).
+    def _show_install_failure(self, heading: str, result) -> None:
+        """Explain a failed install: what happened, what to do, pacman's words."""
+        dialog = Adw.AlertDialog.new(heading, result.message)
+        if result.detail:
+            detail = Gtk.Label(label=result.detail, xalign=0)
+            detail.set_wrap(True)
+            detail.set_selectable(True)
+            detail.add_css_class("monospace")
+            detail.add_css_class("dim-label")
+            dialog.set_extra_child(detail)
+        dialog.add_response("ok", _("OK"))
+        dialog.present(self._root_window())
 
-        Uses the Arch/BigLinux packages `python-kokoro` and `python-soundfile`
-        (which pull PyTorch and the rest as dependencies) instead of
-        `pip install --break-system-packages`, which mixes package managers on a
-        pacman-managed system and can corrupt the Python environment.
-        """
-        try:
-            lock_file = Path("/var/lib/pacman/db.lck")
-            if lock_file.exists():
-                return False, _("Database is locked by another process")
-
-            # Single pacman transaction — distro packages resolve their own deps.
-            pkgs = ["python-kokoro", "python-soundfile", "espeak-ng"]
-            result = subprocess.run(
-                ["pkexec", "pacman", "-S", "--noconfirm", "--needed", *pkgs],
-                capture_output=True,
-                text=True,
-                timeout=900,
-            )
-            if result.returncode != 0:
-                stderr = result.stderr.strip()
-                error_msg = stderr.splitlines()[-1] if stderr else _("pacman failed")
-                return False, error_msg
-
-            return True, ""
-        except FileNotFoundError as e:
-            return False, _("Command not found: {cmd}").format(cmd=str(e))
-        except subprocess.TimeoutExpired:
-            return False, _("Installation timed out")
-        except Exception as e:
-            return False, str(e)
-
-    def _on_kokoro_installed(self, result: tuple[bool, str]) -> None:
-        """Called after Kokoro install completes."""
-        success, error_msg = result
-        if success:
-            self._on_toast(_("Kokoro installed successfully! Discovering voices…"), 3)
+    def _on_engine_installed(self, result, engine_name: str, backend_index: int) -> None:
+        if result.ok:
+            self._on_toast(_("{engine} installed. Looking for voices…").format(engine=engine_name), 3)
 
             def _on_done(catalog: VoiceCatalog) -> None:
                 self._on_voices_discovered(catalog)
                 with self._guard_ui():
-                    self._backend_combo.set_selected(3)
-                    self._on_backend_selected(3)
+                    self._backend_combo.set_selected(backend_index)
+                    self._on_backend_selected(backend_index)
 
             run_in_thread(discover_voices, on_done=_on_done)
-        else:
-            if error_msg:
-                self._on_toast(
-                    _("Failed to install: {error}").format(error=error_msg), 5
-                )
-            else:
-                self._on_toast(_("Failed to install Kokoro — check permissions"), 5)
-            with self._guard_ui():
-                self._settings.speech.backend = TTSBackend.RHVOICE.value
-                self._settings_service.save(self._settings)
-                self._backend_combo.set_selected(0)
-                if self._catalog:
-                    self._on_voices_discovered(self._catalog)
+            return
+        self._show_install_failure(
+            _("{engine} could not be installed").format(engine=engine_name), result
+        )
+        self._revert_to_rhvoice()
+
+    def _on_kokoro_installed(self, result) -> None:
+        self._on_engine_installed(result, "Kokoro", 3)
+
+    def _on_piper_installed(self, result) -> None:
+        self._on_engine_installed(result, "Piper", 2)
 
     def _on_piper_discovery_retry(self, catalog: VoiceCatalog) -> None:
         """Second attempt at discovery after switching to Piper."""
@@ -1517,99 +1534,6 @@ class MainView(Adw.NavigationPage):
             self._ask_install_piper()
         else:
             self._on_voices_discovered(catalog)
-
-    def _install_piper_packages(self) -> tuple[bool, str]:
-        """Install piper-tts-bin and piper-voices-pt-BR via pkexec + pacman."""
-        # Detect system language for voice package
-        lang = get_system_language()
-        voice_pkgs = []
-        lang_map = {
-            "pt": "piper-voices-pt-BR",
-            "en": "piper-voices-en-US",
-            "es": "piper-voices-es-ES",
-            "fr": "piper-voices-fr-FR",
-            "de": "piper-voices-de-DE",
-            "it": "piper-voices-it-IT",
-            "ru": "piper-voices-ru-RU",
-            "ja": "piper-voices-ja-JP",
-            "ko": "piper-voices-ko-KR",
-            "zh": "piper-voices-zh-CN",
-        }
-        voice_pkg = lang_map.get(lang, "piper-voices-en-US")
-        voice_pkgs.append(voice_pkg)
-
-        # Always include pt-BR for BigLinux
-        if voice_pkg != "piper-voices-pt-BR":
-            voice_pkgs.append("piper-voices-pt-BR")
-
-        # List of packages to install
-        pkgs = ["piper-tts-bin"] + voice_pkgs
-
-        try:
-            # Detect if a pacman lock exists before even trying
-            lock_file = Path("/var/lib/pacman/db.lck")
-            if lock_file.exists():
-                logger.warning("Pacman database is locked")
-                return False, _("Database is locked by another process")
-
-            result = subprocess.run(
-                ["pkexec", "pacman", "-Sy", "--noconfirm", "--needed"] + pkgs,
-                capture_output=True,
-                text=True,
-                timeout=600,  # Increased timeout for large voice packages
-            )
-            stdout = result.stdout[-500:] if result.stdout else ""
-            stderr = result.stderr[-500:] if result.stderr else ""
-            
-            logger.info("Piper install stdout: %s", stdout)
-            if result.returncode != 0:
-                logger.error(
-                    "Piper install failed (code %d): %s", result.returncode, stderr
-                )
-                if result.returncode == 126 or result.returncode == 1:
-                    if "authorization" in stderr.lower() or not stderr:
-                        return False, _("Authorization denied")
-                
-                # Try to extract the most meaningful error from pacman output
-                error_msg = stderr.strip().splitlines()[-1] if stderr.strip() else _("Unknown error")
-                return False, error_msg
-            return True, ""
-        except FileNotFoundError:
-            return False, _("pkexec not found")
-        except subprocess.TimeoutExpired:
-            return False, _("Installation timed out")
-        except Exception as e:
-            return False, str(e)
-    def _on_piper_installed(self, result: tuple[bool, str]) -> None:
-        """Called after Piper install completes."""
-        success, error_msg = result
-        if success:
-            self._on_toast(_("Piper installed successfully! Discovering voices…"), 3)
-
-            def _on_done(catalog: VoiceCatalog) -> None:
-                self._on_voices_discovered(catalog)
-                # After discovery, force selecting the Piper backend index (2)
-                with self._guard_ui():
-                    self._backend_combo.set_selected(2)
-                    self._on_backend_selected(2)
-
-            # Re-discover voices
-            run_in_thread(discover_voices, on_done=_on_done)
-        else:
-            # If error_msg is descriptive, show it, otherwise fallback to generic
-            if error_msg:
-                detailed_error = _("Failed to install: {error}").format(error=error_msg)
-                self._on_toast(detailed_error, 5)
-            else:
-                self._on_toast(_("Failed to install Piper — check permissions"), 5)
-
-            # Revert to native RHVoice
-            with self._guard_ui():
-                self._settings.speech.backend = TTSBackend.RHVOICE.value
-                self._settings_service.save(self._settings)
-                self._backend_combo.set_selected(0)
-                if self._catalog:
-                    self._on_voices_discovered(self._catalog)
 
     def _on_abbreviations_toggled(self, active: bool) -> None:
         if self._updating_ui:
