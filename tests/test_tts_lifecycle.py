@@ -197,3 +197,22 @@ def test_preview_and_playback_share_the_koko_command(tmp_path, monkeypatch):
     assert play[: play.index("pipe")] == preview[: preview.index("text")]
     assert play[play.index("-l") + 1] == "pt-br"
     assert preview[-2:] == ["--", "Oi"]  # text after "--": "-5 graus" is not an option
+
+
+FAKE_RECORD = """#!/bin/sh
+cat > "$KOKO_STDIN_COPY"
+echo "Streaming audio for this segment..." >&2
+exit 0
+"""
+
+
+def test_koko_receives_prepared_text(tmp_path, monkeypatch):
+    _fake_koko(tmp_path, monkeypatch, FAKE_RECORD)
+    copy = tmp_path / "stdin.txt"
+    monkeypatch.setenv("KOKO_STDIN_COPY", str(copy))
+    svc = ts.TTSService()
+    assert svc.speak("Espere... sério?! Sim.", backend="kokoro", voice_id="kokoro:pm_alex", volume=50,
+                     expand_abbreviations=False, normalize_numbers=False)
+    _run_watch(svc)
+    assert svc.state is TTSState.IDLE
+    assert copy.read_text() == "Espere…\nsério?\nSim."
