@@ -75,6 +75,26 @@ def _in_main_thread() -> bool:
     return threading.current_thread() is threading.main_thread()
 
 
+# Exit by one of these signals means the engine crashed (e.g. a Rust panic
+# aborts with SIGABRT). Stop/supersede use SIGTERM/SIGKILL, which are not errors.
+_CRASH_SIGNALS = frozenset({
+    signal.SIGABRT, signal.SIGSEGV, signal.SIGBUS, signal.SIGFPE, signal.SIGILL,
+})
+
+
+def _feed_stdin(proc: subprocess.Popen, data: bytes) -> None:
+    """Write ``data`` to the process and close its stdin (worker thread)."""
+    try:
+        proc.stdin.write(data)
+    except (BrokenPipeError, OSError, ValueError):
+        pass  # exited early or was stopped; its exit status reports why
+    finally:
+        try:
+            proc.stdin.close()
+        except (BrokenPipeError, OSError, ValueError):
+            pass
+
+
 def _player_missing() -> str:
     return _("Could not play audio. Check that alsa-utils (aplay) is installed.")
 
@@ -1454,11 +1474,12 @@ class TTSService:
                 cwd=cwd,
             )
             if proc.stdin:
-                try:
-                    proc.stdin.write(text.encode("utf-8"))
-                    proc.stdin.close()
-                except BrokenPipeError:
-                    pass  # exited early; its exit status reports why
+                # Fed from a thread: `koko pipe` reads one line, synthesizes
+                # it, then reads the next, so a text larger than the pipe
+                # buffer (64 KB) would block this (GTK) thread for minutes.
+                threading.Thread(
+                    target=_feed_stdin, args=(proc, text.encode("utf-8")), daemon=True
+                ).start()
 
             self._process = proc
             if audio_marker and proc.stderr is not None:
@@ -1599,8 +1620,19 @@ class TTSService:
                     pass
                 self._rh_proc = None
             self._process = None
-            # A positive status is the engine reporting a failure; a negative
-            # one means it was killed by a signal (stop/supersede), not an error.
+            # A positive status is the engine reporting a failure. A negative
+            # one is a signal: SIGTERM/SIGKILL come from stop/supersede (not an
+            # error), but SIGABRT & co. mean the engine itself crashed.
+            crashed = rc < 0 and -rc in {int(sig) for sig in _CRASH_SIGNALS}
+            if crashed and self._state != TTSState.ERROR:
+                self._watch_id = 0
+                self._fail(
+                    _("{engine} crashed while reading the text.").format(
+                        engine=engine_name(self._active_backend)
+                    ),
+                    "\n".join(self._stderr_tail),
+                )
+                return False
             if rc > 0 and self._state != TTSState.ERROR:
                 self._watch_id = 0
                 self._fail(
