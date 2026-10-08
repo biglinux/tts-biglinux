@@ -43,8 +43,10 @@ def test_newest_entry_comes_first(tmp_path, monkeypatch):
 def test_text_is_not_kept_when_save_text_is_off(tmp_path, monkeypatch):
     hs = importlib.import_module("services.history_service")
     monkeypatch.setattr(hs, "_MUSIC_DIR", tmp_path)
+    from fake_engines import text_wav
+
     wav = tmp_path / "a.wav"
-    wav.write_bytes(b"RIFF" + b"\0" * 200)
+    text_wav(wav, "audio")
     hs.save_history_entry(text="segredo", audio_path=str(wav), backend="espeak-ng",
                           voice_id="v", save_audio=True, save_text=False)
     hs.save_history_entry(text="nada a guardar", audio_path=None, backend="rhvoice",

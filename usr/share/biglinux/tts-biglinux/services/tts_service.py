@@ -17,9 +17,11 @@ import threading
 import time
 from collections import deque
 from collections.abc import Callable
+from dataclasses import dataclass, field
 from typing import Any
 
 from config import TTSBackend, TTSState
+from services.history_service import Recording, new_entry_id, new_recording, save_reading, wav_layout
 from services.text_processor import chunk_text, get_system_language, limit_text, process_text
 from services.voice_manager import VoiceInfo
 from utils.i18n import _
@@ -54,13 +56,18 @@ _WATCH_INTERVAL_MS = 300
 # chunk, memory stays bounded and Stop takes effect between chunks.
 _STREAM_CHUNK_CHARS = 600
 
-# koko writes the text it phonemizes to stderr: never keep that (it would end
-# up in error details and logs).
-_KOKO_TEXT_LINES = ("CALLING PHONEMIZE ON:", "phonemes:")
+# Engine stderr lines that are progress, not errors — and koko's lines that
+# contain the text being read, which must never reach error details or logs.
+_ENGINE_NOISE = (
+    "CALLING PHONEMIZE ON:", "phonemes:", "voice styles loaded", "Entering streaming mode",
+    "Audio written to stdout", "shape_style", "MANUAL LANGUAGE MODE", "Processing segment",
+    "WARNING: Character", "TOKENIZE:",
+)
 
 # Backends that synthesize before any sound is heard: their requests start in
 # LOADING and switch to SPEAKING when playback really begins.
 _SYNTHESIZE_FIRST = frozenset({
+    TTSBackend.RHVOICE.value,
     TTSBackend.ESPEAK_NG.value,
     TTSBackend.PIPER.value,
     TTSBackend.KOKORO.value,
@@ -181,40 +188,66 @@ def volume_factor(volume: int) -> float:
     return max(0.2, min(2.0, volume / 50.0))
 
 
+@dataclass(eq=False)
+class _Reading:
+    """One speak() request: what is read, by which engine, and its outcome.
+
+    Every process, temporary file, worker thread and the history recording of
+    a reading hang off this object, so simultaneous and queued readings never
+    mix, and one place (TTSService._finish_reading) decides what reaches the
+    history.
+    """
+
+    id: str
+    text: str  # as given (after the character limit)
+    processed: str  # what the engine was given
+    backend: str
+    voice_id: str
+    gen: int
+    started: float = field(default_factory=time.time)
+    recording: Recording | None = None
+    procs: list[subprocess.Popen] = field(default_factory=list)
+    engines: list[subprocess.Popen] = field(default_factory=list)  # synthesizers (exit status matters)
+    files: list[str] = field(default_factory=list)  # temporary files, removed at the end
+    threads: list[threading.Thread] = field(default_factory=list)
+    audio_started: bool = False
+    finished: bool = False
+    lock: threading.Lock = field(default_factory=threading.Lock)
+
+    def alive(self) -> bool:
+        if any(t.is_alive() for t in self.threads):
+            return True
+        return any(p.poll() is None for p in self.procs)
+
+    def live_procs(self) -> list[subprocess.Popen]:
+        return [p for p in self.procs if p.poll() is None]
+
+
 class TTSService:
     """Speak/stop lifecycle for every backend."""
 
     def __init__(self, settings=None) -> None:
         self._state: TTSState = TTSState.IDLE
-        self._process: subprocess.Popen[bytes] | None = None
         self._on_state_changed: OnStateChanged | None = None
         self._on_state_changed_extra: list[OnStateChanged] = []
         self._watch_id: int = 0
-        self._rh_proc: subprocess.Popen[bytes] | None = None  # RHVoice-test feeding aplay
-        self._piper_proc: subprocess.Popen[bytes] | None = None  # piper CLI fallback
-        self._piper_tmp_path: str | None = None  # WAV being played (kept for history)
-        # Players of earlier readings still running in "simultaneous" mode:
-        # Stop and Pause must reach them too.
-        self._overlapped: list[tuple[subprocess.Popen, str | None]] = []
-        self._last_text: str = ""  # what was asked to be read (for history/replay)
-        self._bg_thread: threading.Thread | None = None  # Generic background thread (Piper, etc.)
-        self._last_spoken_text: str = ""  # For history
-        self._last_backend: str = ""
-        self._last_voice_id: str = ""
         self._settings = settings  # AppSettings reference
-        # Monotonic request generation. Incremented on every speak()/stop().
-        # Background synthesis captures the generation at dispatch and refuses
-        # to start playback if a newer request has since arrived — this prevents
-        # stale audio from a previous Alt+V starting after a newer one.
+        # The reading in progress, and earlier ones still playing beside it
+        # ("simultaneous" mode): Stop and Pause reach all of them.
+        self._reading: _Reading | None = None
+        self._overlapped: list[_Reading] = []
+        # Player of the current reading (the watch and the tests follow it).
+        self._process: subprocess.Popen | None = None
+        self._last_text: str = ""  # for "read again" (media keys)
+        self._last_spoken_text: str = ""  # shown in notifications
+        # Monotonic request generation, bumped by stop(). Workers capture it at
+        # dispatch and never start audio for a generation that is gone: stale
+        # audio from a previous Alt+V cannot start after a newer one.
+        # Simultaneous readings share a generation (only stop() ends them).
         self._generation: int = 0
-        self._dispatch_gen: int = 0
-        # Identity of each speak() call. In simultaneous mode the generation
-        # does not change between readings; this tells a worker whether its
-        # player belongs to the newest reading or to an earlier one.
-        self._request_id: int = 0
-        # Pause/resume: SIGSTOP/SIGCONT the audio player process. The player
-        # (aplay) keeps poll()==None while stopped, so state stays SPEAKING and
-        # the watch keeps running — playback simply freezes and resumes in place.
+        # Pause/resume: SIGSTOP/SIGCONT the processes of the readings. A
+        # stopped process keeps poll()==None, so the state stays SPEAKING and
+        # playback freezes and resumes in place.
         self._paused: bool = False
         # Why the last request failed: a translated sentence that says how to
         # fix it, plus optional technical detail (engine stderr). Kept until
@@ -223,9 +256,7 @@ class TTSService:
         self._error_detail: str = ""
         # What the UI can offer to fix it: "voice-manager", "retry" or "".
         self._error_action: str = ""
-        # Backend of the request being handled (for error messages).
         self._active_backend: str = ""
-        # Set when audio for the current request has actually started.
         self._audio_started: bool = False
         # The last transition to IDLE came from stop() during speech.
         self._stopped_by_user: bool = False
@@ -280,14 +311,12 @@ class TTSService:
         """Whether playback is currently paused (SIGSTOP'd)."""
         return self._paused and self.is_speaking
 
+    def _readings(self) -> list[_Reading]:
+        return ([self._reading] if self._reading else []) + list(self._overlapped)
+
     def _audio_procs(self) -> list[subprocess.Popen]:
-        """Live audio/synthesis subprocesses that can be paused as a group."""
-        procs = []
-        overlapped = [p for p, _path in self._overlapped]
-        for p in (self._process, self._rh_proc, self._piper_proc, *overlapped):
-            if p is not None and p.poll() is None:
-                procs.append(p)
-        return procs
+        """Live processes of every reading, paused and resumed as a group."""
+        return [p for r in self._readings() for p in r.live_procs()]
 
     def pause(self) -> bool:
         """Freeze playback in place (SIGSTOP). Returns True if it paused."""
@@ -378,14 +407,11 @@ class TTSService:
         self._error_action = ""
 
         if stop_previous:
-            # Always stop any previous speech (even if state tracking says idle,
-            # a background thread might still be alive between chunks).
             # No sleep here: speak() may run on the GTK main thread.
             self.stop()
         else:
             self._overlap_current()
 
-        # Resolve voice parameters
         if voice:
             voice_id = voice.voice_id
             backend = voice.backend
@@ -402,33 +428,30 @@ class TTSService:
             normalize_numbers=normalize_numbers,
             language=language,
         )
-
         if not processed:
             logger.debug("Text is empty after processing")
             return False
-
         logger.debug("Processed text: %d chars", len(processed))
 
-        # Capture the current request generation for background synths. In
-        # interrupt mode stop() (above) already bumped it, so stale synths from
-        # the previous request abort. In simultaneous mode (stop_previous=False)
-        # the generation is unchanged, so concurrent speeches coexist and only
-        # an explicit stop() invalidates them.
-        self._dispatch_gen = self._generation
-        self._request_id += 1
+        reading = _Reading(
+            id=new_entry_id(), text=text, processed=processed,
+            backend=backend, voice_id=voice_id, gen=self._generation,
+        )
+        reading.recording = self._new_recording(reading)
+        self._reading = reading
+        self._process = None
         self._active_backend = backend
         self._audio_started = False
         self._stderr_tail.clear()
 
-        # Speak via appropriate backend
         if backend == TTSBackend.RHVOICE.value:
-            success = self._speak_rhvoice(processed, voice_id, rate, pitch, volume)
+            success = self._speak_rhvoice(reading, voice_id, rate, pitch, volume)
         elif backend == TTSBackend.ESPEAK_NG.value:
-            success = self._speak_espeak(processed, voice_id, rate, pitch, volume)
+            success = self._speak_espeak(reading, voice_id, rate, pitch, volume)
         elif backend == TTSBackend.PIPER.value:
-            success = self._speak_piper(processed, voice_id, rate, pitch, volume)
+            success = self._speak_piper(reading, voice_id, rate, pitch, volume)
         elif backend == TTSBackend.KOKORO.value:
-            success = self._speak_kokoro_koko(processed, voice_id, rate, pitch, volume)
+            success = self._speak_kokoro(reading, voice_id, rate, pitch, volume)
         else:
             logger.error("Unknown backend: %s", backend)
             success = False
@@ -438,14 +461,14 @@ class TTSService:
             self._stopped_by_user = False
             self._last_spoken_text = processed
             self._last_text = text
-            self._last_backend = backend
-            self._last_voice_id = voice_id
             if self._audio_started or backend not in _SYNTHESIZE_FIRST:
                 self._set_state(TTSState.SPEAKING)
             else:
                 self._set_state(TTSState.LOADING)
             self._start_watch()
         else:
+            self._reading = None
+            self._finish_reading(reading, "error")
             if not self._error_message:
                 self._error_message = _("{engine} could not start. Check that it is installed.").format(
                     engine=engine_name(backend)
@@ -457,7 +480,7 @@ class TTSService:
         return success
 
     def stop(self) -> None:
-        """Stop current speech immediately."""
+        """Stop every reading immediately (recorded as stopped if heard)."""
         was_busy = self._state in (TTSState.LOADING, TTSState.SPEAKING)
         # Invalidate any in-flight background synthesis so it won't start audio.
         self._generation += 1
@@ -465,27 +488,23 @@ class TTSService:
         self._error_message = ""
         self._error_detail = ""
 
-        # If paused, resume the frozen players first so SIGTERM is delivered
-        # promptly (a SIGSTOP'd process ignores SIGTERM until continued).
+        readings = self._readings()
+        self._reading = None
+        self._overlapped = []
+        self._process = None
+        procs = [p for r in readings for p in r.live_procs()]
+        # A SIGSTOP'd process ignores SIGTERM until continued.
         if self._paused:
-            for p in self._audio_procs():
+            for p in procs:
                 try:
                     p.send_signal(signal.SIGCONT)
                 except (ProcessLookupError, OSError):
                     pass
             self._paused = False
-
-        # Terminate every process of the request (and of overlapped earlier
-        # readings). stop() may run on the GTK main thread: the reap is
-        # bounded and short — aplay, RHVoice-test, piper and koko die at once.
-        procs = [self._process, self._rh_proc, self._piper_proc]
-        procs += [p for p, _path in self._overlapped]
-        files = [self._piper_tmp_path] + [path for _p, path in self._overlapped]
-        self._process = self._rh_proc = self._piper_proc = self._piper_tmp_path = None
-        self._overlapped = []
+        # stop() may run on the GTK main thread: the reap is bounded and short
+        # (aplay, RHVoice-test, piper and koko die at once). Workers see the new
+        # generation and exit at their next check; they are not joined here.
         for proc in procs:
-            if proc is None:
-                continue
             try:
                 proc.terminate()
                 proc.wait(timeout=0.5)
@@ -493,51 +512,83 @@ class TTSService:
                 proc.kill()
             except (ProcessLookupError, OSError):
                 pass
-
-        for path in files:
-            _unlink(path)
-
-        # The worker of the stopped request sees the new generation and exits
-        # at its next check; it is not joined here (that could block the UI).
-        self._bg_thread = None
+        for reading in readings:
+            self._finish_reading(reading, "stopped")
 
         self._stopped_by_user = was_busy
         self._set_state(TTSState.IDLE)
         logger.debug("Speech stopped")
 
-    def toggle(
-        self,
-        text: str,
-        **kwargs: Any,
-    ) -> bool:
-        """
-        Toggle speak/stop — the Alt+V behavior.
-
-        If speaking → stop.
-        If idle + text → speak.
-        If idle + no text → return False.
-
-        Returns:
-            True if state changed.
-        """
+    def toggle(self, text: str, **kwargs: Any) -> bool:
+        """Toggle speak/stop — the shortcut behavior. True if state changed."""
         if self.is_speaking:
             self.stop()
             return True
-
         if text and text.strip():
             return self.speak(text, **kwargs)
-
         return False
 
+    # ── History ──────────────────────────────────────────────────────
+
+    def _history_config(self):
+        return getattr(self._settings, "history", None) if self._settings else None
+
+    def _new_recording(self, reading: _Reading) -> Recording | None:
+        """Where the reading's audio is written as it plays (history on)."""
+        history = self._history_config()
+        if not history or not history.enabled or not history.save_audio:
+            return None
+        return new_recording(reading.backend, reading.started)
+
+    def _finish_reading(self, reading: _Reading, status: str) -> None:
+        """The reading ended (completed / stopped / error): keep it in the
+        history if it was heard and history is on. Any thread; never blocks:
+        the files are finished and indexed in a worker."""
+        with reading.lock:
+            if reading.finished:
+                return
+            reading.finished = True
+        history = self._history_config()
+        keep = bool(history and history.enabled and reading.audio_started)
+        recording = reading.recording
+
+        def _save() -> None:
+            # The engine threads write the last audio before they end.
+            for t in reading.threads:
+                if t is not threading.current_thread():
+                    t.join(timeout=3)
+            try:
+                if keep:
+                    save_reading(
+                        text=reading.text,
+                        processed_text=reading.processed,
+                        backend=reading.backend,
+                        voice_id=reading.voice_id,
+                        started=reading.started,
+                        status=status,
+                        recording=recording,
+                        save_audio=history.save_audio,
+                        save_text=history.save_text,
+                        max_entries=history.max_entries,
+                        max_age_days=history.max_age_days,
+                    )
+                elif recording:
+                    recording.discard()
+            except Exception as e:  # history must never break a reading
+                logger.error("Failed to save history: %s", e)
+            finally:
+                for path in reading.files:
+                    _unlink(path)
+
+        if keep or recording or reading.files:
+            threading.Thread(target=_save, daemon=True).start()
+
+    # ── Engines ──────────────────────────────────────────────────────
+
     def _speak_rhvoice(
-        self,
-        text: str,
-        voice_id: str,
-        rate: int,
-        pitch: int,
-        volume: int,
+        self, reading: _Reading, voice_id: str, rate: int, pitch: int, volume: int,
     ) -> bool:
-        """Speak via RHVoice-test piped into aplay (no speech-dispatcher)."""
+        """Speak via RHVoice-test; its WAV goes through us to aplay."""
         if volume <= 0:
             return True  # true mute — nothing audible
         # RHVoice rate/pitch are percentages (100 = normal); ours are -100..100.
@@ -551,37 +602,163 @@ class TTSService:
             "-o", "/dev/stdout",
         ])
         logger.debug("RHVoice direct cmd: %s | aplay", cmd)
+        return self._start_relay(
+            reading, cmd, reading.processed,
+            missing=_("RHVoice is not installed. Install the rhvoice package."),
+        )
+
+    def _speak_kokoro(
+        self, reading: _Reading, voice_id: str, rate: int, pitch: int, volume: int,
+    ) -> bool:
+        """Speak via the koko binary (biglinux-kokoro-tts package).
+
+        ``koko stream`` reads one line at a time and writes its audio (one WAV
+        stream) to stdout, which goes through us to aplay — the same bytes are
+        kept for the history. The command is built by kokoro_voice_service,
+        the same code the Voice Manager preview uses.
+        """
+        if volume <= 0:
+            return True  # true mute — nothing audible
+
+        from services.kokoro_voice_service import (
+            build_koko_command,
+            koko_problem,
+            koko_workdir,
+            kokoro_speed,
+            prepare_koko_text,
+        )
+
+        kokoro_cfg = self._settings.speech.kokoro if self._settings else None
+        blend = kokoro_cfg.voice_blend if kokoro_cfg else ""
+        problem = koko_problem(voice_id, blend)
+        if problem:
+            logger.error("Kokoro unavailable: %s", problem)
+            self._error_message = problem
+            self._error_action = "voice-manager"
+            return False
+
+        speed = kokoro_speed(rate, kokoro_cfg.emotion_preset if kokoro_cfg else "neutral")
+        cmd = build_koko_command(
+            voice_id, speed=speed, blend=blend,
+            blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
+        )
+        logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
+        text = prepare_koko_text(reading.processed)
+        if not text:
+            return True  # only punctuation: nothing to say
+        return self._start_relay(reading, cmd, text + "\n", cwd=koko_workdir())
+
+    def _start_relay(
+        self, reading: _Reading, cmd: list[str], text: str, *, cwd: str | None = None,
+        missing: str = "",
+    ) -> bool:
+        """Run an engine that writes a WAV stream to stdout, played by aplay.
+
+        The bytes go through a relay thread: to the player, and the very same
+        bytes to the history recording. Sound has started when the first
+        samples reach the player.
+        """
         try:
-            rh_proc = subprocess.Popen(
-                cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            source = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd,
             )
         except FileNotFoundError:
-            self._error_message = _("RHVoice is not installed. Install the rhvoice package.")
+            logger.error("Command not found: %s", cmd[0])
+            self._error_message = missing
             return False
         except OSError as e:
-            logger.error("Failed to start RHVoice: %s", e)
+            logger.error("Failed to start %s: %s", cmd[0], e)
             return False
         try:
-            play_proc = subprocess.Popen(
-                ["aplay", "-q"], stdin=rh_proc.stdout,
+            player = subprocess.Popen(
+                ["aplay", "-q"], stdin=subprocess.PIPE,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
         except OSError as e:
-            # Without a reader RHVoice-test would wait on its pipe forever.
-            rh_proc.kill()
-            rh_proc.wait()
+            # Without a reader the engine would wait on its pipe forever.
+            source.kill()
+            source.wait()
             self._error_message = _player_missing()
             self._error_detail = str(e)
             return False
-        finally:
-            # aplay owns the read end now; keeping our copy open leaks the fd
-            # and would keep RHVoice-test from seeing a closed pipe.
-            if rh_proc.stdout:
-                rh_proc.stdout.close()
-        threading.Thread(target=_feed_stdin, args=(rh_proc, text.encode("utf-8")), daemon=True).start()
-        self._rh_proc = rh_proc
-        self._begin_playback(play_proc, self._dispatch_gen, self._request_id)
+        reading.procs += [source, player]
+        reading.engines.append(source)
+        if reading is self._reading:
+            self._process = player
+        # Fed from a thread: koko reads one line, synthesizes it, then reads
+        # the next, so a text larger than the pipe buffer (64 KB) would block
+        # this (GTK) thread for minutes.
+        for target, args in (
+            (_feed_stdin, (source, text.encode("utf-8"))),
+            (self._read_engine_stderr, (source,)),
+            (self._relay, (reading, source, player)),
+        ):
+            t = threading.Thread(target=target, args=args, daemon=True)
+            if target == self._relay:
+                reading.threads.append(t)
+            t.start()
         return True
+
+    def _relay(self, reading: _Reading, source: subprocess.Popen, player: subprocess.Popen) -> None:
+        """Copy the engine's WAV stream to the player and to the recording."""
+        fd = source.stdout.fileno()
+        pending = b""
+        header_done = False
+        try:
+            while True:
+                data = os.read(fd, 65536)
+                if not data:
+                    break
+                if not header_done:
+                    # koko prints a line of text before the WAV header.
+                    pending += data
+                    start = pending.find(b"RIFF")
+                    if start < 0:
+                        pending = pending[-3:]
+                        continue
+                    pending = pending[start:]
+                    layout = wav_layout(pending[:4096])
+                    if layout is None and len(pending) < 4096:
+                        continue
+                    data, pending, header_done = pending, b"", True
+                    has_samples = layout is not None and len(data) > layout[1]
+                else:
+                    has_samples = True
+                try:
+                    player.stdin.write(data)
+                    player.stdin.flush()
+                except (BrokenPipeError, OSError, ValueError):
+                    break  # the player was stopped
+                if reading.recording:
+                    reading.recording.write(data)
+                if has_samples and not reading.audio_started:
+                    self._on_audio(reading)
+        except (OSError, ValueError):
+            pass
+        finally:
+            for stream in (player.stdin, source.stdout):
+                try:
+                    stream.close()
+                except (OSError, ValueError, BrokenPipeError):
+                    pass
+
+    def _read_engine_stderr(self, proc: subprocess.Popen) -> None:
+        """Keep the last lines an engine writes to stderr (error detail)."""
+        stream = proc.stderr
+        if stream is None:
+            return
+        try:
+            for raw in iter(stream.readline, b""):
+                line = raw.decode("utf-8", errors="replace").strip()
+                if line and not line.startswith(_ENGINE_NOISE):
+                    self._stderr_tail.append(line)
+        except (OSError, ValueError):
+            pass
+        finally:
+            try:
+                stream.close()
+            except OSError:
+                pass
 
     def _default_espeak_voice(self) -> str:
         """System-language espeak voice, never a silent English default."""
@@ -592,12 +769,7 @@ class TTSService:
         return lang or "pt-br"
 
     def _speak_espeak(
-        self,
-        text: str,
-        voice_id: str,
-        rate: int,
-        pitch: int,
-        volume: int,
+        self, reading: _Reading, voice_id: str, rate: int, pitch: int, volume: int,
     ) -> bool:
         """Speak via espeak-ng (native FFI, or the espeak-ng command as fallback).
 
@@ -637,110 +809,13 @@ class TTSService:
             return None
 
         self._run_synthesis(
-            text, synth, lambda path: ["aplay", "-q", path],
+            reading, synth, lambda path: ["aplay", "-q", path],
             _("espeak-ng could not read this text. Check that espeak-ng is installed."),
         )
         return True
 
-    def _run_synthesis(
-        self,
-        text: str,
-        synth: Callable[[str], str | None],
-        play_cmd: Callable[[str], list[str]],
-        fail_message: str,
-    ) -> None:
-        """Synthesize and play ``text`` in a worker thread.
-
-        ``synth(chunk)`` returns the path of a WAV file (owned by the caller
-        from then on) or None. A short text is one file, kept for the history
-        audio; a long one is streamed: chunk N+1 is synthesized while chunk N
-        plays, so sound starts after the first chunk.
-        """
-        chunks = chunk_text(text, max_chars=_STREAM_CHUNK_CHARS) if len(text) > _STREAM_CHUNK_CHARS else [text]
-        gen, req = self._dispatch_gen, self._request_id
-        if len(chunks) > 1:
-            target, args = self._stream, (chunks, synth, play_cmd, gen, req, fail_message)
-        else:
-            target, args = self._synth_once, (text, synth, play_cmd, gen, req, fail_message)
-        thread = threading.Thread(target=target, args=args, daemon=True)
-        self._bg_thread = thread
-        thread.start()
-
-    def _synth_once(self, text, synth, play_cmd, gen: int, req: int, fail_message: str) -> None:
-        path = synth(text)
-        if not self._is_current(gen):
-            if path:
-                _unlink(path)
-            return
-        if path is None:
-            self._fail(fail_message, "\n".join(self._stderr_tail))
-            return
-        try:
-            proc = subprocess.Popen(play_cmd(path), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except OSError as e:
-            _unlink(path)
-            self._fail(_player_missing(), str(e))
-            return
-        # The file lives until playback ends (the history may keep a copy).
-        self._begin_playback(proc, gen, req, path)
-
-    def _stream(self, chunks: list[str], synth, play_cmd, gen: int, req: int, fail_message: str) -> None:
-        """Stream ``chunks``: synthesize the next one while the current plays.
-
-        Each file is deleted once its player has finished, so /tmp (often RAM)
-        holds at most two chunks however long the text is.
-        """
-        played = 0
-        playing: str | None = None  # file of the chunk being played
-        play_proc: subprocess.Popen | None = None
-        cur: str | None = None
-        nxt = synth(chunks[0])
-        try:
-            for i in range(len(chunks)):
-                cur, nxt = nxt, None
-                if not self._is_current(gen):
-                    break
-                if cur is None:  # this chunk failed: try the next one
-                    nxt = synth(chunks[i + 1]) if i + 1 < len(chunks) else None
-                    continue
-                if play_proc is not None:
-                    finished = self._wait_player(play_proc, gen)
-                    _unlink(playing)
-                    playing = None
-                    if not finished:
-                        break
-                try:
-                    play_proc = subprocess.Popen(
-                        play_cmd(cur), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                    )
-                except OSError as e:
-                    self._fail(_player_missing(), str(e))
-                    return
-                playing, cur = cur, None
-                played += 1
-                if not self._begin_playback(play_proc, gen, req):
-                    break
-                if i + 1 < len(chunks):
-                    nxt = synth(chunks[i + 1])
-            if play_proc is not None:
-                self._wait_player(play_proc, gen)
-        finally:
-            for path in (playing, cur, nxt):
-                _unlink(path)
-        if self._is_current(gen) and not played:
-            self._fail(fail_message, "\n".join(self._stderr_tail))
-
-    def _wait_player(self, proc: subprocess.Popen, gen: int) -> bool:
-        """Wait for a chunk to finish playing; False if stopped meanwhile."""
-        while proc.poll() is None:
-            if not self._is_current(gen):
-                _terminate(proc)
-                return False
-            time.sleep(0.03)
-        return self._is_current(gen)
-
     def _speak_piper(
-        self, text: str, voice_id: str, rate: int, pitch: int, volume: int
+        self, reading: _Reading, voice_id: str, rate: int, pitch: int, volume: int,
     ) -> bool:
         """Speak via Piper (native ONNX engine, or the piper command as fallback).
 
@@ -784,7 +859,7 @@ class TTSService:
                          "--noise_w", f"{noise_w:.2f}", "--sentence_silence", "0.05"],
                         stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
                     )
-                    self._piper_proc = proc
+                    reading.procs.append(proc)
                     _out, err = proc.communicate(chunk.encode("utf-8"))
                     if proc.returncode == 0 and os.path.getsize(path) >= 100:
                         return path
@@ -800,164 +875,128 @@ class TTSService:
                 return ["play", "-q", path, "vol", f"{vol_factor:.2f}"]
             return ["aplay", "-q", path]
 
-        self._run_synthesis(text, synth, play_cmd, _("Piper could not read this text. Try another voice."))
+        self._run_synthesis(reading, synth, play_cmd, _("Piper could not read this text. Try another voice."))
         return True
 
-    def _speak_kokoro_koko(
-        self, text: str, voice_id: str, rate: int, pitch: int, volume: int
-    ) -> bool:
-        """Speak via the koko binary (biglinux-kokoro-tts package).
-
-        ``koko pipe`` reads the text from stdin one line at a time and streams
-        each one to the speaker as soon as it is synthesized. The command is
-        built by kokoro_voice_service, the same code the Voice Manager preview
-        uses.
-        """
-        if volume <= 0:
-            return True  # true mute — nothing audible
-
-        from services.kokoro_voice_service import (
-            KOKO_AUDIO_STARTED_MARKER,
-            build_koko_command,
-            koko_problem,
-            koko_workdir,
-            kokoro_speed,
-            prepare_koko_text,
-        )
-
-        kokoro_cfg = self._settings.speech.kokoro if self._settings else None
-        blend = kokoro_cfg.voice_blend if kokoro_cfg else ""
-        problem = koko_problem(voice_id, blend)
-        if problem:
-            logger.error("Kokoro unavailable: %s", problem)
-            self._error_message = problem
-            self._error_action = "voice-manager"
-            return False
-
-        speed = kokoro_speed(rate, kokoro_cfg.emotion_preset if kokoro_cfg else "neutral")
-        cmd = build_koko_command(
-            voice_id, speed=speed, blend=blend,
-            blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
-        )
-        logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
-        text = prepare_koko_text(text)
-        if not text:
-            return True  # only punctuation: nothing to say
-        return self._start_process(
-            cmd, text, cwd=koko_workdir(), audio_marker=KOKO_AUDIO_STARTED_MARKER,
-        )
-
-    def _start_process(
+    def _run_synthesis(
         self,
-        cmd: list[str],
-        text: str,
-        cwd: str | None = None,
-        audio_marker: str | None = None,
-    ) -> bool:
-        """Start a TTS process with text piped to stdin.
+        reading: _Reading,
+        synth: Callable[[str], str | None],
+        play_cmd: Callable[[str], list[str]],
+        fail_message: str,
+    ) -> None:
+        """Synthesize and play the reading in a worker thread.
 
-        With ``audio_marker``, the process both synthesizes and plays: its
-        stderr is read in a thread, the request moves from LOADING to SPEAKING
-        when the marker appears, and the last lines are kept as error detail.
+        ``synth(chunk)`` returns the path of a WAV file (owned by the caller
+        from then on) or None. A short text is one file; a long one is
+        streamed: chunk N+1 is synthesized while chunk N plays, so sound starts
+        after the first chunk. Each file played is added to the recording.
         """
+        text = reading.processed
+        chunks = chunk_text(text, max_chars=_STREAM_CHUNK_CHARS) if len(text) > _STREAM_CHUNK_CHARS else [text]
+        thread = threading.Thread(
+            target=self._stream, args=(reading, chunks, synth, play_cmd, fail_message), daemon=True,
+        )
+        reading.threads.append(thread)
+        thread.start()
+
+    def _stream(self, reading: _Reading, chunks: list[str], synth, play_cmd, fail_message: str) -> None:
+        """Play ``chunks`` in order, synthesizing the next one while one plays.
+
+        Each file is deleted once its player has finished, so /tmp (often RAM)
+        holds at most two chunks however long the text is.
+        """
+        gen = reading.gen
+        played = 0
+        playing: str | None = None  # file of the chunk being played
+        play_proc: subprocess.Popen | None = None
+        cur: str | None = None
+        nxt = synth(chunks[0])
         try:
-            proc = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.PIPE if audio_marker else subprocess.DEVNULL,
-                cwd=cwd,
-            )
-            if proc.stdin:
-                # Fed from a thread: `koko pipe` reads one line, synthesizes
-                # it, then reads the next, so a text larger than the pipe
-                # buffer (64 KB) would block this (GTK) thread for minutes.
-                threading.Thread(
-                    target=_feed_stdin, args=(proc, text.encode("utf-8")), daemon=True
-                ).start()
-
-            self._process = proc
-            if audio_marker and proc.stderr is not None:
-                gen = self._dispatch_gen
-                threading.Thread(
-                    target=self._read_engine_stderr,
-                    args=(proc, audio_marker, gen),
-                    daemon=True,
-                ).start()
-            else:
-                self._audio_started = True
-            return True
-
-        except FileNotFoundError:
-            logger.error("Command not found: %s", cmd[0])
-            return False
-        except OSError as e:
-            logger.error("Failed to start TTS: %s", e)
-            return False
-
-    def _read_engine_stderr(self, proc: subprocess.Popen, marker: str, gen: int) -> None:
-        """Follow a streaming engine's stderr (worker thread)."""
-        stream = proc.stderr
-        if stream is None:
-            return
-        try:
-            for raw in iter(stream.readline, b""):
-                line = raw.decode("utf-8", errors="replace").strip()
-                if not line:
+            for i in range(len(chunks)):
+                cur, nxt = nxt, None
+                if not self._is_current(gen):
+                    break
+                if cur is None:  # this chunk failed: try the next one
+                    nxt = synth(chunks[i + 1]) if i + 1 < len(chunks) else None
                     continue
-                if marker in line:
-                    if self._is_current(gen) and proc is self._process:
-                        self._mark_audio_started()
-                elif not line.startswith(_KOKO_TEXT_LINES):
-                    self._stderr_tail.append(line)
-        except (OSError, ValueError):
-            pass
+                if play_proc is not None:
+                    finished = self._wait_player(play_proc, gen)
+                    _unlink(playing)
+                    playing = None
+                    if not finished:
+                        break
+                try:
+                    play_proc = subprocess.Popen(
+                        play_cmd(cur), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    )
+                except OSError as e:
+                    if self._is_current(gen):
+                        self._fail(_player_missing(), str(e))
+                    return
+                playing, cur = cur, None
+                if not self._begin_playback(reading, play_proc):
+                    break
+                if reading.recording:
+                    reading.recording.add_wav(playing)
+                played += 1
+                if i + 1 < len(chunks):
+                    nxt = synth(chunks[i + 1])
+            if play_proc is not None:
+                self._wait_player(play_proc, gen)
         finally:
-            try:
-                stream.close()
-            except OSError:
-                pass
+            for path in (playing, cur, nxt):
+                _unlink(path)
+        if self._is_current(gen) and not played and reading is self._reading:
+            self._fail(fail_message, "\n".join(self._stderr_tail))
 
-    def _begin_playback(
-        self, proc: subprocess.Popen, gen: int, req: int, path: str | None = None,
-    ) -> bool:
-        """Track ``proc`` as the player of request ``req`` (any thread).
+    def _wait_player(self, proc: subprocess.Popen, gen: int) -> bool:
+        """Wait for a chunk to finish playing; False if stopped meanwhile."""
+        while proc.poll() is None:
+            if not self._is_current(gen):
+                _terminate(proc)
+                return False
+            time.sleep(0.03)
+        return self._is_current(gen)
 
-        ``path`` is the file it plays, deleted when playback ends. Returns
-        False (and stops the player) if the request was stopped meanwhile.
+    def _begin_playback(self, reading: _Reading, proc: subprocess.Popen) -> bool:
+        """Track ``proc`` as a player of ``reading`` (any thread).
+
+        Returns False (and stops the player) if the reading was stopped.
         """
-        if not self._is_current(gen):
+        if not self._is_current(reading.gen) or reading.finished:
             _terminate(proc)
-            _unlink(path)
             return False
-        if req != self._request_id:
-            # An earlier reading in simultaneous mode: keep it reachable by
-            # Stop/Pause without taking over the newest reading.
-            self._overlapped.append((proc, path))
-            return True
-        self._process = proc
-        if path is not None:
-            self._piper_tmp_path = path
-        # stop() may have run between the check above and the assignment: it
+        if reading is not self._reading and reading not in self._overlapped:
+            self._overlapped.append(reading)  # Stop and Pause must reach it
+        reading.procs = reading.live_procs() + [proc]
+        if reading is self._reading:
+            self._process = proc
+        # stop() may have run between the check above and the registration: it
         # bumps the generation before collecting processes, so either it saw
         # this player or this check sees the new generation.
-        if not self._is_current(gen):
+        if not self._is_current(reading.gen):
             _terminate(proc)
             return False
-        self._mark_audio_started()
+        self._on_audio(reading)
         return True
+
+    def _on_audio(self, reading: _Reading) -> None:
+        """Sound of ``reading`` is being produced."""
+        reading.audio_started = True
+        if reading is self._reading and self._is_current(reading.gen):
+            self._mark_audio_started()
 
     def _overlap_current(self) -> None:
         """Simultaneous mode: the running reading goes on beside the new one."""
-        players = [(self._process, self._piper_tmp_path), (self._rh_proc, None)]
-        self._process = self._rh_proc = self._piper_tmp_path = None
-        for proc, path in players:
-            if proc is not None and proc.poll() is None:
-                self._overlapped.append((proc, path))
-            else:
-                _unlink(path)
-        if self._audio_started and self._last_text:
-            self._record_history(None)  # it has been heard; record it now
+        reading, self._reading = self._reading, None
+        self._process = None
+        if reading is None:
+            return
+        if reading.alive():
+            self._overlapped.append(reading)
+        else:
+            self._finish_reading(reading, "completed")
 
     def _mark_audio_started(self) -> None:
         self._audio_started = True
@@ -971,11 +1010,12 @@ class TTSService:
         self._error_detail = (detail or "").strip()[-600:]
         logger.warning("TTS error: %s", message)
         logger.debug("TTS error detail: %s", self._error_detail)
+        reading = self._reading
+        if reading is not None:
+            for proc in reading.live_procs():
+                _terminate(proc)
+            self._finish_reading(reading, "error")
         self._set_state(TTSState.ERROR)
-
-    def _has_active_bg_thread(self) -> bool:
-        """Whether the synthesis worker of the current request is still alive."""
-        return self._bg_thread is not None and self._bg_thread.is_alive()
 
     def _start_watch(self) -> None:
         """Start polling for process completion."""
@@ -998,84 +1038,45 @@ class TTSService:
                 pass
             self._watch_id = 0
 
+    def _engine_failure(self, reading: _Reading) -> str:
+        """Why the reading's engine failed ("" if it did not)."""
+        codes = [p.returncode for p in (*reading.engines, *reading.procs[-1:])]
+        for rc in codes:
+            if rc is None or rc == 0:
+                continue
+            logger.warning("TTS process exited with code %d", rc)
+            if rc < 0 and -rc in {int(sig) for sig in _CRASH_SIGNALS}:
+                return _("{engine} crashed while reading the text.").format(engine=engine_name(reading.backend))
+            if rc > 0:
+                return _("{engine} stopped with an error and could not read the text.").format(
+                    engine=engine_name(reading.backend)
+                )
+        return ""
+
     def _check_process(self) -> bool:
-        """Check if the TTS process has finished."""
-        if self._overlapped:
-            still = []
-            for proc, path in self._overlapped:
-                if proc.poll() is None:
-                    still.append((proc, path))
-                else:
-                    _unlink(path)
-            self._overlapped = still
-        if self._process and self._process.poll() is not None:
-            rc = self._process.returncode
-            # Log stderr if available
-            if self._process.stderr:
-                try:
-                    stderr_data = self._process.stderr.read()
-                    if stderr_data:
-                        logger.debug(
-                            "TTS stderr: %s",
-                            stderr_data.decode(errors="replace").strip(),
-                        )
-                except Exception:
-                    pass
-            if rc != 0:
-                logger.warning("TTS process exited with code %d", rc)
-            # RHVoice-test | aplay: aplay ends cleanly on EOF even when the
-            # synthesizer failed, so check the synthesizer too.
-            rh = getattr(self, "_rh_proc", None)
-            if rc == 0 and rh is not None:
-                try:
-                    rh.wait(timeout=0.2)
-                    rc = rh.returncode or 0
-                except subprocess.TimeoutExpired:
-                    pass
-                self._rh_proc = None
-            self._process = None
-            # A positive status is the engine reporting a failure. A negative
-            # one is a signal: SIGTERM/SIGKILL come from stop/supersede (not an
-            # error), but SIGABRT & co. mean the engine itself crashed.
-            crashed = rc < 0 and -rc in {int(sig) for sig in _CRASH_SIGNALS}
-            if crashed and self._state != TTSState.ERROR:
-                self._watch_id = 0
-                self._fail(
-                    _("{engine} crashed while reading the text.").format(
-                        engine=engine_name(self._active_backend)
-                    ),
-                    "\n".join(self._stderr_tail),
-                )
-                return False
-            if rc > 0 and self._state != TTSState.ERROR:
-                self._watch_id = 0
-                self._fail(
-                    _("{engine} stopped with an error and could not read the text.").format(
-                        engine=engine_name(self._active_backend)
-                    ),
-                    "\n".join(self._stderr_tail),
-                )
-                return False
+        """Follow the readings; finish those that ended (GTK timer)."""
+        for reading in list(self._overlapped):
+            if not reading.alive():
+                self._overlapped.remove(reading)
+                self._finish_reading(reading, "completed")
 
-            # Background thread (Kokoro multi-chunk, Piper generation) may
-            # still be alive — don't set IDLE yet, keep polling
-            if self._has_active_bg_thread():
+        reading = self._reading
+        if reading is not None:
+            if reading.alive():
                 return True
-
-            tmp_path, self._piper_tmp_path = self._piper_tmp_path, None
-            if self._audio_started:
-                self._record_history(tmp_path)  # takes over the file
+            failure = "" if reading.finished else self._engine_failure(reading)
+            if failure and self._state != TTSState.ERROR:
+                self._fail(failure, "\n".join(self._stderr_tail))
             else:
-                _unlink(tmp_path)
-            self._finish_request()
-            return False  # Stop the timer
-        if self._process is None:
-            # Background thread may still be generating audio (no process yet)
-            if self._has_active_bg_thread():
-                return True  # Keep polling — generation in progress
-            self._finish_request()
-            return False
-        return True  # Keep polling
+                self._finish_reading(
+                    reading, "error" if self._state == TTSState.ERROR else "completed",
+                )
+            self._reading = None
+            self._process = None
+        if self._overlapped:
+            return True  # earlier readings still playing: still speaking
+        self._finish_request()
+        return False
 
     def _finish_request(self) -> None:
         """Playback ended: back to IDLE unless a failure is being shown."""
@@ -1124,38 +1125,6 @@ class TTSService:
             except Exception as e:
                 logger.warning("State change listener error: %s", e)
 
-    def _record_history(self, audio_path: str | None) -> None:
-        """Record the reading that was just heard, if history is enabled.
-
-        Takes over ``audio_path`` (deleted afterwards). The copy and the
-        database write run in a worker: a long reading's WAV is large.
-        """
-        history = getattr(self._settings, "history", None) if self._settings else None
-        if not history or not history.enabled or not self._last_text:
-            _unlink(audio_path)
-            return
-        entry = {
-            "text": self._last_text,
-            "backend": self._last_backend,
-            "voice_id": self._last_voice_id,
-            "save_audio": history.save_audio,
-            "save_text": history.save_text,
-            "max_entries": history.max_entries,
-            "max_age_days": history.max_age_days,
-        }
-
-        def _save() -> None:
-            try:
-                from services.history_service import save_history_entry
-
-                save_history_entry(audio_path=audio_path, **entry)
-            except Exception as e:
-                logger.error("Failed to save history: %s", e)
-            finally:
-                _unlink(audio_path)
-
-        threading.Thread(target=_save, daemon=True).start()
-
     _prewarmed_model: str = ""
 
     def prewarm(self, backend: str, voice_id: str) -> None:
@@ -1187,7 +1156,7 @@ class TTSService:
         threading.Thread(target=_load, daemon=True).start()
 
     def cleanup(self) -> None:
-        """Clean up resources on shutdown."""
+        """Stop every reading on shutdown (heard ones are kept as stopped)."""
         self._stop_watch()
-        if self.is_speaking or self._overlapped:
+        if self._readings():
             self.stop()

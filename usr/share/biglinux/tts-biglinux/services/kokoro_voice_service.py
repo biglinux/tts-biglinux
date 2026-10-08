@@ -266,8 +266,10 @@ def build_koko_command(
     """argv for koko.
 
     With ``text`` it renders that text to ``output`` (``koko text``). Without
-    it, koko streams sentences read from stdin straight to the speaker
-    (``koko pipe``), writing its scratch WAV inside :func:`koko_workdir`.
+    it, ``koko stream`` reads stdin one line at a time and writes the audio of
+    each line to stdout as one WAV stream (played by aplay through the app,
+    which also keeps it for the history). ``koko pipe`` is not used: it plays
+    by itself, so its audio could not be kept, and ignores ``-o``.
     """
     voice = koko_voice_name(voice_id)
     cmd = [
@@ -280,7 +282,7 @@ def build_koko_command(
         "-p", f"{max(0.5, min(2.0, speed)):.2f}",
     ]
     if text is None:
-        cmd += ["pipe", "-o", output or os.path.join(koko_workdir(), "pipe_output.wav")]
+        cmd += ["stream"]
     else:
         if not output:
             raise ValueError("koko text needs an output path")
@@ -288,18 +290,15 @@ def build_koko_command(
     return cmd
 
 
-# koko pipe prints this to stderr when a sentence's audio starts playing.
-KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
-
 # The Kokoro model accepts at most 510 phoneme tokens per segment. `koko pipe`
 # splits the input into sentences but does not limit a sentence's length: a
 # long sentence panics ("index out of bounds: the len is 511 but the index is
 # 550"). Portuguese yields roughly one token per character, so sentences are
 # kept well below the limit.
+KOKO_MAX_SEGMENT_CHARS = 220
+
 # A voice .pt is ~0.5 MB; anything far larger is not a voice.
 _MAX_VOICE_DOWNLOAD = 16 * 1024 * 1024
-
-KOKO_MAX_SEGMENT_CHARS = 220
 
 _RE_DOTS = re.compile(r"\.{2,}")
 _RE_PUNCT_RUN = re.compile(r"[!?…]{2,}")
