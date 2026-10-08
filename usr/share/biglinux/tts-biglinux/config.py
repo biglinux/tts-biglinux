@@ -1,5 +1,5 @@
 """
-Configuration, constants, enums and dataclasses for BigLinux TTS v4.0.0
+Configuration, constants, enums and dataclasses for BigLinux TTS.
 Single source of truth for all application settings and defaults.
 """
 
@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -17,15 +18,15 @@ logger = logging.getLogger(__name__)
 
 APP_ID = "br.com.biglinux.tts"
 APP_NAME = "BigLinux TTS"
-APP_VERSION = "4.0.0"
+APP_VERSION = "4.1.0"
 
-# Settings schema version — bump when the on-disk shape changes so future
-# releases can migrate deterministically.
+# Settings schema version, stored in settings.json: bump it (and migrate in
+# _deserialize_settings) when the meaning of a stored value changes.
 CONFIG_VERSION = 1
 APP_DEVELOPERS = [
-    "Tales A. Mendonça",
-    "Bruno Gonçalves Araujo <bigbruno@gmail.com>",
     "Rafael Ruscher <rruscher@gmail.com>",
+    "Bruno Gonçalves <bigbruno@gmail.com>",
+    "Tales A. Mendonça",
 ]
 APP_COPYRIGHT = "© 2021–2026 BigLinux contributors"
 APP_WEBSITE = "https://github.com/biglinux/tts-biglinux"
@@ -36,15 +37,6 @@ APP_ISSUE_URL = "https://github.com/biglinux/tts-biglinux/issues"
 CONFIG_DIR = Path.home() / ".config" / "biglinux-tts"
 LEGACY_CONFIG_DIR = Path.home() / ".config" / "tts-biglinux"
 SETTINGS_FILE = CONFIG_DIR / "settings.json"
-PID_FILE = Path("/tmp") / f"biglinux-tts-{Path.home().name}.pid"  # noqa: S108
-
-# Icon paths
-ICONS_DIR = Path("/usr/share/icons/hicolor/scalable/apps")
-ICON_APP = ICONS_DIR / "tts-biglinux.svg"
-
-# Locale
-LOCALE_DIR = Path("/usr/share/locale")
-DEV_LOCALE_DIR = Path(__file__).parent.parent.parent / "usr" / "share" / "locale"
 
 # ── Window Defaults ───────────────────────────────────────────────────
 
@@ -52,15 +44,6 @@ WINDOW_WIDTH_DEFAULT = 900
 WINDOW_HEIGHT_DEFAULT = 740
 WINDOW_WIDTH_MIN = 360
 WINDOW_HEIGHT_MIN = 480
-
-# ── UI Spacing ────────────────────────────────────────────────────────
-
-MARGIN_SMALL = 6
-MARGIN_DEFAULT = 12
-MARGIN_LARGE = 24
-SPACING_SMALL = 6
-SPACING_DEFAULT = 12
-SPACING_LARGE = 18
 
 # ── TTS Parameter Ranges ─────────────────────────────────────────────
 
@@ -79,10 +62,7 @@ VOLUME_MAX = 100
 VOLUME_DEFAULT = 75
 VOLUME_STEP = 5
 
-MAX_CHARS_MIN = 0  # 0 = unlimited
-MAX_CHARS_MAX = 1000000
-MAX_CHARS_DEFAULT = 0  # Unlimited by default
-MAX_CHARS_STEP = 1000
+MAX_CHARS_DEFAULT = 0  # 0 = unlimited
 
 
 # ── Enums ─────────────────────────────────────────────────────────────
@@ -91,19 +71,10 @@ MAX_CHARS_STEP = 1000
 class TTSBackend(str, Enum):
     """Available TTS backends."""
 
-    SPEECH_DISPATCHER = "speech-dispatcher"
     RHVOICE = "rhvoice"
     ESPEAK_NG = "espeak-ng"
     PIPER = "piper"
     KOKORO = "kokoro"
-
-
-class SpeakAction(str, Enum):
-    """Action when already speaking and new text requested."""
-
-    STOP_AND_SPEAK = "stop-and-speak"
-    STOP = "stop"
-    QUEUE = "queue"
 
 
 class TTSState(str, Enum):
@@ -118,30 +89,23 @@ class TTSState(str, Enum):
 # ── Dataclasses ───────────────────────────────────────────────────────
 
 
-# ── Kokoro-specific defaults ───────────────────────────────────────────
-
-KOKORO_SPEED_MIN = 0.5
-KOKORO_SPEED_MAX = 2.0
-KOKORO_SPEED_DEFAULT = 1.0
-KOKORO_SPEED_STEP = 0.05
-
-
 @dataclass
 class KokoroConfig:
     """Kokoro TTS specific parameters."""
 
-    speed: float = KOKORO_SPEED_DEFAULT
     voice_blend: str = ""  # e.g. "af_heart,af_bella" for mixing
     blend_ratio: float = 0.5  # 0.0-1.0 ratio for voice blending
     emotion_preset: str = "neutral"  # neutral, happy, calm, urgent, narrative
-    lang_code: str = "p"  # p=pt-br, a=en-us, b=en-gb, e=es, etc.
 
 
 @dataclass
 class HistoryConfig:
     """History save configuration."""
 
-    enabled: bool = False
+    # On for new installations (the History explains where it is stored).
+    # Settings saved by earlier versions keep their value: see
+    # _deserialize_settings, which never turns it on by itself.
+    enabled: bool = True
     save_audio: bool = True
     save_text: bool = True
     playback_mode: str = "interrupt"  # interrupt | queue | simultaneous
@@ -160,7 +124,6 @@ class SpeechConfig:
     volume: int = VOLUME_DEFAULT
     voice_id: str = ""
     backend: str = TTSBackend.RHVOICE.value
-    output_module: str = ""
     kokoro: KokoroConfig = field(default_factory=KokoroConfig)
 
 
@@ -181,7 +144,6 @@ class ShortcutConfig:
     """Keyboard shortcut configuration."""
 
     keybinding: str = "<Alt>v"
-    enabled: bool = True
     show_in_launcher: bool = True  # Tray enabled by default
 
 
@@ -192,7 +154,6 @@ class WindowConfig:
     width: int = WINDOW_WIDTH_DEFAULT
     height: int = WINDOW_HEIGHT_DEFAULT
     maximized: bool = False
-    tray_warning_shown: bool = False
 
 
 @dataclass
@@ -239,13 +200,11 @@ def load_settings() -> AppSettings:
 
 
 def save_settings(settings: AppSettings) -> None:
-    """Save settings to disk as JSON."""
+    """Save settings to disk as JSON (atomically: a crash never truncates it)."""
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    data = asdict(settings)
-    SETTINGS_FILE.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    tmp = SETTINGS_FILE.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(asdict(settings), indent=2, ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, SETTINGS_FILE)
     logger.debug("Settings saved to %s", SETTINGS_FILE)
 
 
@@ -281,6 +240,12 @@ def _safe_str(d: dict, key: str, default: str) -> str:
     return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
+def _backend(value: str) -> str:
+    """A known engine; anything else (e.g. the removed "speech-dispatcher") → RHVoice."""
+    known = {b.value for b in TTSBackend}
+    return value if value in known else TTSBackend.RHVOICE.value
+
+
 def _deserialize_settings(data: dict) -> AppSettings:
     """Deserialize settings dict to AppSettings dataclass.
 
@@ -300,19 +265,17 @@ def _deserialize_settings(data: dict) -> AppSettings:
         if not isinstance(kokoro_data, dict):
             kokoro_data = {}
         kokoro_cfg = KokoroConfig(
-            speed=_safe_float(kokoro_data, "speed", KOKORO_SPEED_DEFAULT),
             voice_blend=_safe_str(kokoro_data, "voice_blend", ""),
             blend_ratio=_safe_float(kokoro_data, "blend_ratio", 0.5),
             emotion_preset=_safe_str(kokoro_data, "emotion_preset", "neutral"),
-            lang_code=_safe_str(kokoro_data, "lang_code", "p"),
         )
         settings.speech = SpeechConfig(
             rate=_safe_int(s, "rate", RATE_DEFAULT),
             pitch=_safe_int(s, "pitch", PITCH_DEFAULT),
             volume=_safe_int(s, "volume", VOLUME_DEFAULT),
             voice_id=_safe_str(s, "voice_id", ""),
-            backend=_safe_str(s, "backend", TTSBackend.RHVOICE.value),
-            output_module=_safe_str(s, "output_module", "rhvoice"),
+            # 4.0 dropped the speech-dispatcher engine: its users get RHVoice.
+            backend=_backend(_safe_str(s, "backend", TTSBackend.RHVOICE.value)),
             kokoro=kokoro_cfg,
         )
 
@@ -331,7 +294,6 @@ def _deserialize_settings(data: dict) -> AppSettings:
         sc = _section("shortcut")
         settings.shortcut = ShortcutConfig(
             keybinding=_safe_str(sc, "keybinding", "<Alt>v"),
-            enabled=_safe_bool(sc, "enabled", True),
             show_in_launcher=_safe_bool(sc, "show_in_launcher", True),
         )
 
@@ -341,19 +303,19 @@ def _deserialize_settings(data: dict) -> AppSettings:
             width=_safe_int(w, "width", WINDOW_WIDTH_DEFAULT),
             height=_safe_int(w, "height", WINDOW_HEIGHT_DEFAULT),
             maximized=_safe_bool(w, "maximized", False),
-            tray_warning_shown=_safe_bool(w, "tray_warning_shown", False),
         )
 
-    if _section("history"):
-        h = _section("history")
-        settings.history = HistoryConfig(
-            enabled=_safe_bool(h, "enabled", False),
-            save_audio=_safe_bool(h, "save_audio", True),
-            save_text=_safe_bool(h, "save_text", True),
-            playback_mode=_safe_str(h, "playback_mode", "interrupt"),
-            max_entries=_safe_int(h, "max_entries", 1000),
-            max_age_days=_safe_int(h, "max_age_days", 0),
-        )
+    # Always read, even when absent: a settings file without the key comes
+    # from a version where history was off by default, so it stays off.
+    h = _section("history")
+    settings.history = HistoryConfig(
+        enabled=_safe_bool(h, "enabled", False),
+        save_audio=_safe_bool(h, "save_audio", True),
+        save_text=_safe_bool(h, "save_text", True),
+        playback_mode=_safe_str(h, "playback_mode", "interrupt"),
+        max_entries=_safe_int(h, "max_entries", 1000),
+        max_age_days=_safe_int(h, "max_age_days", 0),
+    )
 
     settings.show_welcome = _safe_bool(data, "show_welcome", True)
     settings.show_media_player = _safe_bool(data, "show_media_player", True)
@@ -364,6 +326,7 @@ def _deserialize_settings(data: dict) -> AppSettings:
 def _migrate_legacy_settings() -> AppSettings:
     """Migrate from legacy ~/.config/tts-biglinux/ format."""
     settings = AppSettings()
+    settings.history.enabled = False  # an existing user: never turned on silently
 
     def _read_legacy(filename: str, default: str) -> str:
         filepath = LEGACY_CONFIG_DIR / filename
@@ -395,8 +358,7 @@ def _migrate_legacy_settings() -> AppSettings:
         settings.speech.volume = VOLUME_DEFAULT
 
     settings.speech.voice_id = voice
-    settings.speech.backend = TTSBackend.SPEECH_DISPATCHER.value
-    settings.speech.output_module = "rhvoice"
+    settings.speech.backend = TTSBackend.RHVOICE.value
 
     logger.info(
         "Migrated legacy settings: rate=%s pitch=%s voice=%s", rate, pitch, voice

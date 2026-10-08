@@ -19,13 +19,11 @@ from pathlib import Path
 
 from config import TTSBackend
 from services.kokoro_voice_service import get_active_voices_bin, koko_workdir, kokoro_model_path
-from services.text_processor import get_system_language
-from utils.speechd_utils import try_restart_speechd
+from utils.i18n import _, language_name
 
 logger = logging.getLogger(__name__)
 
 # Global flag to avoid repeated hammering of a broken daemon in a single session
-_is_speechd_broken = False
 
 # ── Voice Metadata ───────────────────────────────────────────────────
 
@@ -39,7 +37,6 @@ class VoiceInfo:
     language: str
     language_name: str
     backend: str
-    output_module: str = ""
     gender: str = ""  # male, female, neutral
     quality: str = "standard"  # standard, neural, high
     description: str = ""
@@ -54,129 +51,9 @@ class VoiceCatalog:
     # Per selectable engine: is the program installed, and does it have voices?
     engines: dict[str, EngineAvailability] = field(default_factory=dict)
 
-    def get_by_language(self, lang_code: str) -> list[VoiceInfo]:
-        """Get voices matching a language code prefix (e.g. 'pt' matches 'pt-BR')."""
-        return [v for v in self.voices if v.language.startswith(lang_code)]
-
     def get_by_backend(self, backend: str) -> list[VoiceInfo]:
         """Get voices from a specific backend."""
         return [v for v in self.voices if v.backend == backend]
-
-    def find_voice(self, voice_id: str) -> VoiceInfo | None:
-        """Find a voice by ID."""
-        for v in self.voices:
-            if v.voice_id == voice_id:
-                return v
-        return None
-
-    def get_languages(self) -> list[tuple[str, str]]:
-        """Get list of (code, name) for all available languages, sorted."""
-        seen: dict[str, str] = {}
-        for v in self.voices:
-            code = v.language[:2]
-            if code not in seen:
-                seen[code] = v.language_name
-        return sorted(seen.items(), key=lambda x: x[1])
-
-
-# ── Language Name Mapping ────────────────────────────────────────────
-
-LANGUAGE_NAMES: dict[str, str] = {
-    "af": "Afrikaans",
-    "am": "Amharic",
-    "an": "Aragonese",
-    "ar": "Arabic",
-    "bg": "Bulgarian",
-    "bn": "Bengali",
-    "bs": "Bosnian",
-    "ca": "Catalan",
-    "cmn": "Chinese (Mandarin)",
-    "cs": "Czech",
-    "cy": "Welsh",
-    "da": "Danish",
-    "de": "German",
-    "el": "Greek",
-    "en": "English",
-    "eo": "Esperanto",
-    "es": "Spanish",
-    "et": "Estonian",
-    "eu": "Basque",
-    "fa": "Persian",
-    "fi": "Finnish",
-    "fr": "French",
-    "ga": "Irish",
-    "gd": "Scottish Gaelic",
-    "gl": "Galician",
-    "gu": "Gujarati",
-    "hak": "Hakka Chinese",
-    "he": "Hebrew",
-    "hi": "Hindi",
-    "hr": "Croatian",
-    "hu": "Hungarian",
-    "hy": "Armenian",
-    "id": "Indonesian",
-    "is": "Icelandic",
-    "it": "Italian",
-    "ja": "Japanese",
-    "jbo": "Lojban",
-    "ka": "Georgian",
-    "kk": "Kazakh",
-    "kl": "Greenlandic",
-    "kn": "Kannada",
-    "ko": "Korean",
-    "ku": "Kurdish",
-    "ky": "Kyrgyz",
-    "la": "Latin",
-    "lfn": "Lingua Franca Nova",
-    "lt": "Lithuanian",
-    "lv": "Latvian",
-    "mi": "Maori",
-    "mk": "Macedonian",
-    "ml": "Malayalam",
-    "mr": "Marathi",
-    "ms": "Malay",
-    "mt": "Maltese",
-    "my": "Burmese",
-    "nb": "Norwegian Bokmål",
-    "ne": "Nepali",
-    "nl": "Dutch",
-    "no": "Norwegian",
-    "om": "Oromo",
-    "or": "Oriya",
-    "pa": "Punjabi",
-    "pl": "Polish",
-    "pt": "Portuguese",
-    "ro": "Romanian",
-    "ru": "Russian",
-    "sd": "Sindhi",
-    "si": "Sinhala",
-    "sk": "Slovak",
-    "sl": "Slovenian",
-    "sq": "Albanian",
-    "sr": "Serbian",
-    "sv": "Swedish",
-    "sw": "Swahili",
-    "ta": "Tamil",
-    "te": "Telugu",
-    "th": "Thai",
-    "tk": "Turkmen",
-    "tn": "Setswana",
-    "tr": "Turkish",
-    "tt": "Tatar",
-    "uk": "Ukrainian",
-    "ur": "Urdu",
-    "uz": "Uzbek",
-    "vi": "Vietnamese",
-    "yue": "Cantonese",
-    "zh": "Chinese",
-}
-
-
-def _lang_name(code: str) -> str:
-    """Get human-readable language name from ISO code."""
-    short = code[:2].lower() if len(code) >= 2 else code
-    return LANGUAGE_NAMES.get(short, LANGUAGE_NAMES.get(code, code))
-
 
 # ── Voice Discovery ──────────────────────────────────────────────────
 
@@ -202,11 +79,9 @@ def _engine_installed(backend: str) -> bool:
         except ImportError:
             return _find_piper_binary() is not None
     if backend == TTSBackend.KOKORO.value:
-        from services.kokoro_voice_service import is_kokoro_installed, kokoro_backend_type
+        from services.kokoro_voice_service import is_kokoro_installed
 
-        if not is_kokoro_installed():
-            return False
-        return kokoro_backend_type() == "python" or kokoro_model_path().is_file()
+        return is_kokoro_installed() and kokoro_model_path().is_file()
     return False
 
 
@@ -228,44 +103,19 @@ def engine_availability(catalog: VoiceCatalog) -> dict[str, EngineAvailability]:
     return result
 
 
-def discover_voices(include_speechd: bool = False) -> VoiceCatalog:
-    """
-    Discover all available TTS voices from all installed backends in parallel.
+def discover_voices() -> VoiceCatalog:
+    """Discover the voices of every installed engine, in parallel.
 
-    Args:
-        include_speechd: also list speech-dispatcher voices. Off by default:
-            no selectable engine uses speech-dispatcher, and querying it
-            (``spd-say -L``) starts the daemon, which starts every installed
-            output module — some of them speak when started.
-
-    Returns:
-        VoiceCatalog with all discovered voices.
+    speech-dispatcher is never queried: ``spd-say -L`` starts the daemon,
+    which starts every installed output module, and some of them speak.
     """
-    global _is_speechd_broken
-    _is_speechd_broken = False  # Reset on each new full catalog refresh attempt
     catalog = VoiceCatalog()
 
-    def _no_spd(retrying: bool = False) -> list[VoiceInfo]:
-        return []
-
-    # Parallelize discovery across backends
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        future_spd = executor.submit(
-            _discover_spd_voices if include_speechd else _no_spd, retrying=False
-        )
+    with ThreadPoolExecutor(max_workers=4) as executor:
         future_espeak = executor.submit(_discover_espeak_voices)
         future_piper = executor.submit(_discover_piper_voices)
         future_rhvoice = executor.submit(_discover_rhvoice_voices)
         future_kokoro = executor.submit(_discover_kokoro_voices)
-
-        # 1. Gather speech-dispatcher voices
-        try:
-            spd_voices = future_spd.result()
-            catalog.voices.extend(spd_voices)
-            if spd_voices:
-                catalog.backends_available.append(TTSBackend.SPEECH_DISPATCHER.value)
-        except Exception as e:
-            logger.error("Error in speech-dispatcher discovery: %s", e)
 
         # 2. Gather espeak-ng voices
         try:
@@ -317,90 +167,27 @@ def discover_voices(include_speechd: bool = False) -> VoiceCatalog:
     return catalog
 
 
-def _discover_spd_voices(retrying: bool = False) -> list[VoiceInfo]:
-    """Discover voices available via speech-dispatcher."""
-    global _is_speechd_broken
-    voices: list[VoiceInfo] = []
+def voice_language(backend: str, voice_id: str) -> str:
+    """Language ("pt-BR", "en"…) of a configured voice; "" if unknown.
 
-    if _is_speechd_broken:
-        logger.debug("Skipping main spd discovery as daemon is marked broken")
-        return voices
+    Text rules (numbers, abbreviations, symbols) follow the voice, not the
+    system: a pt-BR desktop reading English with an English voice.
+    """
+    if backend == TTSBackend.PIPER.value:
+        code = Path(voice_id.removeprefix("piper:")).name.split("-", 1)[0]  # pt_BR-faber-medium.onnx
+        return code.replace("_", "-") if re.fullmatch(r"[a-z]{2,3}(_[A-Z]{2})?", code) else ""
+    if backend == TTSBackend.ESPEAK_NG.value:
+        return voice_id.removeprefix("espeak-")
+    if backend == TTSBackend.KOKORO.value:
+        from services.kokoro_voice_service import koko_language
 
-    # 2. Try spd-say -L for default module
-    import unicodedata
+        return koko_language(voice_id)
+    if backend == TTSBackend.RHVOICE.value:
+        for voice in _discover_rhvoice_voices():
+            if voice.voice_id.lower() == voice_id.lower():
+                return voice.language
+    return ""
 
-    def _normalize_id(s: str) -> str:
-        s = unicodedata.normalize("NFD", s)
-        s = "".join(c for c in s if unicodedata.category(c) != "Mn")
-        return s.lower()
-
-    known_ids = {_normalize_id(v.voice_id) for v in voices}
-
-    try:
-        proc = subprocess.run(
-            ["spd-say", "-L"],
-            capture_output=True,
-            text=True,
-            timeout=5,
-        )
-        if proc.returncode == 0:
-            lines = proc.stdout.strip().splitlines()
-            # If we get a ridiculous number of lines, the daemon is corrupted/flooded
-            if len(lines) > 500:
-                logger.warning("Spd-say returned %d voices (suspected flooding) — restarting daemon", len(lines))
-                if not retrying and try_restart_speechd():
-                    return _discover_spd_voices(retrying=True)
-
-                # Still flooded after restart
-                _is_speechd_broken = True
-                logger.error("Speech-dispatcher still flooded after restart. Discarding main list.")
-                return voices
-
-            sys_lang_full = get_system_language()
-            sys_lang = sys_lang_full.split("-")[0].split("_")[0]
-            
-            for line in lines:
-                line = line.strip()
-                if not line or "NAME" in line or "dummy" in line:
-                    continue
-                parts = re.split(r"\s{2,}", line)
-                if len(parts) < 2:
-                    continue
-                voice_name = parts[0].strip()
-                lang_code = parts[1].strip()
-                
-                # Double normalize check
-                norm_id = _normalize_id(voice_name)
-                if norm_id in known_ids:
-                    continue
-                
-                # Filter out generic voices that don't match system language or English
-                # This prevents showing hundreds of espeak variants for foreign languages
-                voice_lang_short = lang_code.split("-")[0].split("_")[0]
-                if voice_lang_short not in [sys_lang, "en"] and "rhvoice" not in voice_name.lower():
-                    continue
-
-                voices.append(
-                    VoiceInfo(
-                        voice_id=voice_name,
-                        name=voice_name.replace("-", " ").replace("_", " "),
-                        language=lang_code,
-                        language_name=_lang_name(lang_code),
-                        backend=TTSBackend.SPEECH_DISPATCHER.value,
-                        output_module="espeak-ng",
-                        gender=_guess_gender(voice_name),
-                        quality="standard",
-                    )
-                )
-                known_ids.add(norm_id)
-                
-                # Hard limit
-                if len(voices) > 200:
-                    break
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        logger.debug("spd-say not available")
-
-    return voices
 
 def _discover_rhvoice_voices() -> list[VoiceInfo]:
     """Discover native RHVoice voices from directory scan."""
@@ -479,9 +266,8 @@ def _discover_rhvoice_voices() -> list[VoiceInfo]:
                     voice_id=ssip_name,
                     name=display_name,
                     language=lang,
-                    language_name=_lang_name(lang[:2]),
+                    language_name=language_name(lang),
                     backend=TTSBackend.RHVOICE.value,
-                    output_module="",
                     gender=gender,
                     quality="high",
                     description="RHVoice — high quality local synthesis",
@@ -538,9 +324,8 @@ def _discover_rhvoice_from_pacman() -> list[VoiceInfo]:
                     voice_id=voice_id,
                     name=display,
                     language=lang,
-                    language_name=_lang_name(lang[:2]),
+                    language_name=language_name(lang),
                     backend=TTSBackend.RHVOICE.value,
-                    output_module="",
                     gender=gender,
                     quality="high",
                     description="RHVoice — high quality local synthesis",
@@ -594,7 +379,7 @@ def _discover_espeak_voices() -> list[VoiceInfo]:
                 voice_id=voice_id,
                 name=voice_name.replace("-", " ").replace("_", " ").title(),
                 language=lang_code,
-                language_name=_lang_name(lang_code),
+                language_name=language_name(lang_code),
                 backend=TTSBackend.ESPEAK_NG.value,
                 gender=gender,
                 quality="standard",
@@ -608,23 +393,13 @@ def _discover_kokoro_voices() -> list[VoiceInfo]:
     """Discover Kokoro TTS voices.
 
     Kokoro voices are built into the model and don't need local files.
-    We detect the koko CLI binary (from biglinux-kokoro-tts) or the
-    kokoro Python package to confirm the engine is available, then
-    return the known voice catalog.
+    The koko binary (package biglinux-kokoro-tts) confirms the engine is
+    available; the known voice catalog is returned.
     """
     voices: list[VoiceInfo] = []
 
-    # Check if Kokoro is available via the koko CLI binary or Python package
-    koko_available = shutil.which("koko") is not None
-    if not koko_available:
-        try:
-            import kokoro as _  # noqa: F401
-            koko_available = True
-        except ImportError:
-            pass
-
-    if not koko_available:
-        logger.debug("Kokoro not installed (no koko binary or kokoro Python package), skipping voice discovery")
+    if shutil.which("koko") is None:
+        logger.debug("Kokoro not installed (no koko binary), skipping voice discovery")
         return voices
 
     # Try to discover voices dynamically from koko CLI
@@ -682,9 +457,8 @@ def _discover_kokoro_voices() -> list[VoiceInfo]:
                             voice_id=f"kokoro:{vid}",
                             name=name,
                             language=lang_code,
-                            language_name=_lang_name(lang_code.split("-")[0]),
+                            language_name=language_name(lang_code),
                             backend=TTSBackend.KOKORO.value,
-                            output_module="",
                             gender=gender,
                             quality="neural",
                             description=f"Kokoro — {desc}",
@@ -767,9 +541,8 @@ def _discover_kokoro_voices() -> list[VoiceInfo]:
                     voice_id=f"kokoro:{voice_id}",
                     name=name,
                     language=lang,
-                    language_name=_lang_name(lang[:2]),
+                    language_name=language_name(lang),
                     backend=TTSBackend.KOKORO.value,
-                    output_module="",
                     gender=gender,
                     quality="neural",
                     description=f"Kokoro — {desc}",
@@ -831,10 +604,10 @@ def _discover_piper_voices() -> list[VoiceInfo]:
             voice_id = f"piper:{onnx_file}"
 
             quality_label = {
-                "x_low": "Extra Low",
-                "low": "Low",
-                "medium": "Medium",
-                "high": "High",
+                "x_low": _("Extra low quality"),
+                "low": _("Low quality"),
+                "medium": _("Medium quality"),
+                "high": _("High quality"),
             }.get(quality, quality.title())
 
             voices.append(
@@ -842,7 +615,7 @@ def _discover_piper_voices() -> list[VoiceInfo]:
                     voice_id=voice_id,
                     name=f"{speaker.title()} ({quality_label})",
                     language=lang_code,
-                    language_name=_lang_name(lang_short),
+                    language_name=language_name(lang_short),
                     backend=TTSBackend.PIPER.value,
                     quality="neural",
                     gender=_guess_gender(speaker),
@@ -930,100 +703,3 @@ def _guess_gender(name: str) -> str:
     return ""
 
 
-def get_default_voice_for_language(catalog: VoiceCatalog, lang: str) -> str:
-    """Get the best default voice for a language."""
-    lang_voices = catalog.get_by_language(lang)
-    if not lang_voices:
-        # Try English as fallback
-        lang_voices = catalog.get_by_language("en")
-    if not lang_voices:
-        return ""
-
-    # Prefer: neural > high > standard
-    quality_order = {"neural": 0, "high": 1, "standard": 2}
-    lang_voices.sort(key=lambda v: quality_order.get(v.quality, 99))
-
-    return lang_voices[0].voice_id
-
-
-def get_installed_tts_packages() -> list[dict[str, str]]:
-    """
-    Get a list of installed TTS-related packages on the system.
-    Scans for rhvoice, espeak, and piper packages.
-    """
-    packages = []
-    try:
-        proc = subprocess.run(
-            ["pacman", "-Qs", "rhvoice|espeak|piper"],
-            capture_output=True,
-            text=True,
-            timeout=5,
-        )
-        if proc.returncode == 0:
-            lines = proc.stdout.strip().splitlines()
-            # pacman -Qs output:
-            # local/name version (group)
-            #     description
-            current_pkg = None
-            for line in lines:
-                if line.startswith("local/"):
-                    parts = line.split()
-                    name = parts[0].removeprefix("local/")
-                    version = parts[1]
-                    current_pkg = {"name": name, "version": version}
-                elif line.startswith("    ") and current_pkg:
-                    current_pkg["description"] = line.strip()
-                    packages.append(current_pkg)
-                    current_pkg = None
-    except Exception as e:
-        logger.error("Failed to list installed TTS packages: %s", e)
-    
-    return packages
-def get_supported_but_missing_voices() -> list[dict[str, str]]:
-    """Detect languages that have RHVoice support installed but no voice packages."""
-    missing = []
-    lang_dir = Path("/usr/share/RHVoice/languages")
-    voice_dir = Path("/usr/share/RHVoice/voices")
-    
-    if not lang_dir.exists():
-        return []
-        
-    # Map of language support package to expected voice packages
-    recommendations = {
-        "polish": ("rhvoice-voice-magda", "Magda"),
-        "russian": ("rhvoice-voice-anna", "Anna"),
-        "ukrainian": ("rhvoice-voice-anatoliy", "Anatoliy"),
-        "czech": ("rhvoice-voice-zdenek", "Zdenek"),
-        "esperanto": ("rhvoice-voice-spomenka", "Spomenka"),
-        "spanish": ("rhvoice-voice-mateo", "Mateo"),
-    }
-    
-    for entry in lang_dir.iterdir():
-        if not entry.is_dir():
-            continue
-        lang_name = entry.name.lower()
-        
-        # Check if any voice exists for this language
-        # We look for a voice.info inside current voices or just some directory
-        found = False
-        if voice_dir.exists():
-            for v_entry in voice_dir.iterdir():
-                info_file = v_entry / "voice.info"
-                if info_file.exists():
-                    try:
-                        content = info_file.read_text().lower()
-                        if f"language={lang_name}" in content or f"language={lang_name.replace('-', ' ')}" in content:
-                            found = True
-                            break
-                    except (OSError, UnicodeError):
-                        pass
-        
-        if not found:
-            pkg, voice_name_rec = recommendations.get(lang_name, ("rhvoice-voice-*", "Any"))
-            missing.append({
-                "language": entry.name,
-                "pkg_needed": pkg,
-                "voice_example": voice_name_rec
-            })
-            
-    return missing

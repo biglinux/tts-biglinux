@@ -1,0 +1,64 @@
+name: CI
+
+# Checks only: nothing is committed or published. Runs in an Arch Linux
+# container with the official repositories, like the package build.
+on:
+  pull_request:
+  push:
+    branches: [ "**" ]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm --needed git gettext ruff python python-gobject gtk4 \
+            libadwaita python-pytest python-numpy pyside6 qt6-svg espeak-ng iso-codes
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Lint
+        run: ruff check usr/share/biglinux/tts-biglinux tests scripts
+      - name: Compile
+        run: python -m compileall -q usr/share/biglinux/tts-biglinux
+      - name: Translations
+        run: python scripts/sync_translations.py --check
+      - name: Tests
+        # Headless: GTK widget tests skip themselves without a display.
+        run: PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests
+
+  rust:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    env:
+      ORT_LIB_LOCATION: /usr/lib
+      ORT_PREFER_DYNAMIC_LINK: "1"
+    steps:
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm --needed git rust clang pkgconf alsa-lib python onnxruntime-cpu espeak-ng
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Format
+        working-directory: tts-engine
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        working-directory: tts-engine
+        run: cargo clippy --all-targets --all-features --locked -- -D warnings
+      - name: Tests
+        working-directory: tts-engine
+        run: cargo test --release --locked
+
+  pkgbuild:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm --needed base-devel git namcap
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Lint PKGBUILD
+        run: |
+          namcap pkgbuild/PKGBUILD
+          chown -R nobody pkgbuild
+          cd pkgbuild && runuser -u nobody -- makepkg --printsrcinfo

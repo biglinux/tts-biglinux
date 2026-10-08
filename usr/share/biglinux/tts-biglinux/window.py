@@ -102,7 +102,7 @@ class TTSWindow(Adw.ApplicationWindow):
         if settings.window.maximized:
             self.maximize()
 
-        self.set_title(_(APP_NAME))
+        self.set_title(APP_NAME)
 
     def _setup_content(self) -> None:
         """Two-pane layout: settings sidebar + content, with a dark controls bar.
@@ -175,7 +175,7 @@ class TTSWindow(Adw.ApplicationWindow):
         right_header.pack_start(self._sidebar_button)
         self._menu_button = self._create_menu_button()
         right_header.pack_end(self._menu_button)
-        self._window_title = Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
+        self._window_title = Adw.WindowTitle(title=APP_NAME, subtitle=_("Text narrator"))
         right_header.set_title_widget(self._window_title)
         right.add_top_bar(right_header)
 
@@ -185,7 +185,9 @@ class TTSWindow(Adw.ApplicationWindow):
 
         self._content_stack.add_named(self._main_view.content_box, "tts")
 
-        self._history_view = HistoryView()
+        self._history_view = HistoryView(self.settings)
+        self._history_view.on_read_again = self._read_again
+        self._history_view.on_enable_history = lambda: self._main_view.set_history_enabled(True)
         self._content_stack.add_named(self._history_view, "history")
         right.set_content(self._content_stack)
 
@@ -280,11 +282,9 @@ class TTSWindow(Adw.ApplicationWindow):
         self._on_bar_state_changed(self._app.tts_service.state)
 
     def show_history(self, *_args) -> None:
-        """Show the history list in the content pane (same single instance)."""
-        if not self.settings.history.enabled:
-            return
-        self._history_view.reload()
+        """Show the History (always available, even with saving turned off)."""
         self._content_stack.set_visible_child_name("history")
+        self._history_view.show()
         self._window_title.set_title(_("History"))
         self._window_title.set_subtitle("")
         self._back_button.set_visible(True)
@@ -293,7 +293,7 @@ class TTSWindow(Adw.ApplicationWindow):
     def show_main(self, *_args) -> None:
         """Back to the reading area (playback is not affected)."""
         self._content_stack.set_visible_child_name("tts")
-        self._window_title.set_title(_(APP_NAME))
+        self._window_title.set_title(APP_NAME)
         self._window_title.set_subtitle(_("Text narrator"))
         self._back_button.set_visible(False)
 
@@ -358,22 +358,23 @@ class TTSWindow(Adw.ApplicationWindow):
         self.remove_css_class("narrow-layout")
 
     def update_history_tab_visibility(self, enabled: bool) -> None:
-        """History follows the "Save history" setting (menu entry + view)."""
-        action = self.lookup_action("show-history")
-        if action is not None:
-            action.set_enabled(enabled)
-        if hasattr(self, "_menu_button"):
-            self._menu_button.set_menu_model(self._build_menu_model())
-        if not enabled and hasattr(self, "_content_stack"):
-            self.show_main()
+        """The "Save history" setting changed: the History page says whether
+        new readings are kept (the page itself stays available)."""
+        if hasattr(self, "_history_view"):
+            self._history_view.set_history_enabled(enabled)
+
+    def _read_again(self, text: str) -> None:
+        """History "Read again": the text with the current voice settings."""
+        app = self.get_application()
+        if app is not None and text:
+            app.tts_service.speak(text, **app.speak_options())
 
     def _build_menu_model(self) -> Gio.Menu:
         menu = Gio.Menu.new()
 
         # Views
         views = Gio.Menu.new()
-        if self.settings.history.enabled:
-            views.append(_("History"), "win.show-history")
+        views.append(_("History"), "win.show-history")
         menu.append_section(None, views)
 
         # Preferences
@@ -420,7 +421,6 @@ class TTSWindow(Adw.ApplicationWindow):
 
         history_action = Gio.SimpleAction.new("show-history", None)
         history_action.connect("activate", self.show_history)
-        history_action.set_enabled(self.settings.history.enabled)
         self.add_action(history_action)
 
         main_action = Gio.SimpleAction.new("show-main", None)

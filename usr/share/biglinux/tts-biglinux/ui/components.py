@@ -140,11 +140,22 @@ def create_combo_row(
     selected_index: int = 0,
     on_selected: Callable[[int], None] | None = None,
     accessible_name: str | None = None,
+    value_as_subtitle: bool = False,
 ) -> Adw.ComboRow:
-    """Create a combo row with dropdown options and tooltip on items."""
+    """Create a combo row with dropdown options and tooltip on items.
+
+    ``value_as_subtitle`` shows the selected value under the title, where it
+    can wrap, instead of beside it (narrow sidebars cut it to "P…"); the
+    description then becomes the tooltip and the accessible description.
+    """
     row = Adw.ComboRow()
     row.set_title(title)
-    if subtitle:
+    if value_as_subtitle:
+        row.set_use_subtitle(True)
+        if subtitle:
+            row.set_tooltip_text(subtitle)
+            row.update_property([Gtk.AccessibleProperty.DESCRIPTION], [subtitle])
+    elif subtitle:
         row.set_subtitle(subtitle)
 
     if options:
@@ -202,63 +213,6 @@ def create_combo_row(
     return row
 
 
-def create_spin_row(
-    title: str,
-    subtitle: str | None = None,
-    min_value: float = 0.0,
-    max_value: float = 100.0,
-    value: float = 50.0,
-    step: float = 1.0,
-    digits: int = 0,
-    on_changed: Callable[[float], None] | None = None,
-    accessible_name: str | None = None,
-) -> Adw.SpinRow:
-    """Create a spin row with numeric input."""
-    adjustment = Gtk.Adjustment(
-        value=value,
-        lower=min_value,
-        upper=max_value,
-        step_increment=step,
-        page_increment=step * 10,
-    )
-
-    row = Adw.SpinRow()
-    row.set_title(title)
-    row.set_adjustment(adjustment)
-    row.set_digits(digits)
-    if subtitle:
-        row.set_subtitle(subtitle)
-
-    # Accessibility
-    if accessible_name:
-        row.update_property([Gtk.AccessibleProperty.LABEL], [accessible_name])
-
-    if on_changed:
-        row.connect("notify::value", lambda r, _: on_changed(r.get_value()))
-
-    return row
-
-
-def create_expander_row(
-    title: str,
-    subtitle: str | None = None,
-    icon_name: str | None = None,
-    enable_switch: bool = False,
-    expanded: bool = False,
-) -> Adw.ExpanderRow:
-    """Create an expander row with optional enable switch."""
-    row = Adw.ExpanderRow()
-    row.set_title(title)
-    row.set_expanded(expanded)
-    row.set_enable_expansion(True)
-    row.set_show_enable_switch(enable_switch)
-    if subtitle:
-        row.set_subtitle(subtitle)
-    if icon_name:
-        row.set_icon_name(icon_name)
-    return row
-
-
 def create_button_row(
     label: str,
     style_class: str | None = None,
@@ -306,20 +260,6 @@ def create_icon_button(
         button.connect("clicked", lambda _: on_clicked())
 
     return button
-
-
-def create_status_page(
-    icon_name: str,
-    title: str,
-    description: str | None = None,
-) -> Adw.StatusPage:
-    """Create a status page with icon, title, and description."""
-    page = Adw.StatusPage()
-    page.set_icon_name(icon_name)
-    page.set_title(title)
-    if description:
-        page.set_description(description)
-    return page
 
 
 class ShortcutKeys(Gtk.Box):

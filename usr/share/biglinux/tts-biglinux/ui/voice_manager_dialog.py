@@ -31,78 +31,88 @@ from services.kokoro_voice_service import (
     koko_workdir,
     remove_voice as kokoro_remove_voice,
 )
-from utils.i18n import _
+from utils.i18n import _, language_with_region
 
 logger = logging.getLogger(__name__)
 
 # ── Language / Region display names ──────────────────────────────────
 
-_LANG_DISPLAY: dict[str, str] = {
-    # RHVoice languages
-    "albanian": "🇦🇱  Albanian",
-    "brazilian-portuguese": "🇧🇷  Brazilian Portuguese",
-    "croatian": "🇭🇷  Croatian",
-    "czech": "🇨🇿  Czech",
-    "english": "🇬🇧  English",
-    "esperanto": "🌍  Esperanto",
-    "georgian": "🇬🇪  Georgian",
-    "kyrgyz": "🇰🇬  Kyrgyz",
-    "macedonian": "🇲🇰  Macedonian",
-    "polish": "🇵🇱  Polish",
-    "russian": "🇷🇺  Russian",
-    "serbian": "🇷🇸  Serbian",
-    "slovak": "🇸🇰  Slovak",
-    "spanish": "🇪🇸  Spanish",
-    "tatar": "Tatar",
-    "ukrainian": "🇺🇦  Ukrainian",
-    "uzbek": "🇺🇿  Uzbek",
-    # Piper locale codes → display
-    "ar-jo": "🇯🇴  Arabic",
-    "ca-es": "🏴󠁥󠁳󠁣󠁴󠁿  Catalan",
-    "cs-cz": "🇨🇿  Czech",
-    "cy-gb": "🏴  Welsh",
-    "da-dk": "🇩🇰  Danish",
-    "de-de": "🇩🇪  German",
-    "el-gr": "🇬🇷  Greek",
-    "en-gb": "🇬🇧  English (UK)",
-    "en-us": "🇺🇸  English (US)",
-    "es-es": "🇪🇸  Spanish (Spain)",
-    "es-mx": "🇲🇽  Spanish (Mexico)",
-    "fa-ir": "🇮🇷  Persian",
-    "fi-fi": "🇫🇮  Finnish",
-    "fr-fr": "🇫🇷  French",
-    "hu-hu": "🇭🇺  Hungarian",
-    "is-is": "🇮🇸  Icelandic",
-    "it-it": "🇮🇹  Italian",
-    "ka-ge": "🇬🇪  Georgian",
-    "kk-kz": "🇰🇿  Kazakh",
-    "lb-lu": "🇱🇺  Luxembourgish",
-    "ne-np": "🇳🇵  Nepali",
-    "nl-be": "🇧🇪  Dutch (Belgium)",
-    "nl-nl": "🇳🇱  Dutch",
-    "no-no": "🇳🇴  Norwegian",
-    "pl-pl": "🇵🇱  Polish",
-    "pt-br": "🇧🇷  Portuguese (Brazil)",
-    "pt-pt": "🇵🇹  Portuguese (Portugal)",
-    "ro-ro": "🇷🇴  Romanian",
-    "ru-ru": "🇷🇺  Russian",
-    "sk-sk": "🇸🇰  Slovak",
-    "sl-si": "🇸🇮  Slovenian",
-    "sr-rs": "🇷🇸  Serbian",
-    "sv-se": "🇸🇪  Swedish",
-    "sw-cd": "🇨🇩  Swahili",
-    "tr-tr": "🇹🇷  Turkish",
-    "uk-ua": "🇺🇦  Ukrainian",
-    "vi-vn": "🇻🇳  Vietnamese",
-    "zh-cn": "🇨🇳  Chinese",
-    # Kokoro language codes not already covered by Piper
-    "es": "🇪🇸  Spanish",
-    "fr": "🇫🇷  French",
-    "it": "🇮🇹  Italian",
-    "ja": "🇯🇵  Japanese",
-    "hi": "🇮🇳  Hindi",
-    "zh": "🇨🇳  Chinese",
+# key (RHVoice language, Piper/Kokoro locale) → (flag, language[-REGION]).
+# Names come translated from the system's iso-codes (utils.i18n).
+_LANG_FLAGS: dict[str, tuple[str, str]] = {
+    "albanian": ("🇦🇱", "sq"),
+    "brazilian-portuguese": ("🇧🇷", "pt-BR"),
+    "croatian": ("🇭🇷", "hr"),
+    "czech": ("🇨🇿", "cs"),
+    "english": ("🇬🇧", "en"),
+    "esperanto": ("🌍", "eo"),
+    "georgian": ("🇬🇪", "ka"),
+    "kyrgyz": ("🇰🇬", "ky"),
+    "macedonian": ("🇲🇰", "mk"),
+    "polish": ("🇵🇱", "pl"),
+    "russian": ("🇷🇺", "ru"),
+    "serbian": ("🇷🇸", "sr"),
+    "slovak": ("🇸🇰", "sk"),
+    "spanish": ("🇪🇸", "es"),
+    "tatar": ("", "tt"),
+    "ukrainian": ("🇺🇦", "uk"),
+    "uzbek": ("🇺🇿", "uz"),
+    "ar-jo": ("🇯🇴", "ar"),
+    "ca-es": ("🏴󠁥󠁳󠁣󠁴󠁿", "ca"),
+    "cs-cz": ("🇨🇿", "cs"),
+    "cy-gb": ("🏴", "cy"),
+    "da-dk": ("🇩🇰", "da"),
+    "de-de": ("🇩🇪", "de"),
+    "el-gr": ("🇬🇷", "el"),
+    "en-gb": ("🇬🇧", "en-GB"),
+    "en-us": ("🇺🇸", "en-US"),
+    "es-es": ("🇪🇸", "es-ES"),
+    "es-mx": ("🇲🇽", "es-MX"),
+    "fa-ir": ("🇮🇷", "fa"),
+    "fi-fi": ("🇫🇮", "fi"),
+    "fr-fr": ("🇫🇷", "fr"),
+    "hu-hu": ("🇭🇺", "hu"),
+    "is-is": ("🇮🇸", "is"),
+    "it-it": ("🇮🇹", "it"),
+    "ka-ge": ("🇬🇪", "ka"),
+    "kk-kz": ("🇰🇿", "kk"),
+    "lb-lu": ("🇱🇺", "lb"),
+    "ne-np": ("🇳🇵", "ne"),
+    "nl-be": ("🇧🇪", "nl-BE"),
+    "nl-nl": ("🇳🇱", "nl"),
+    "no-no": ("🇳🇴", "no"),
+    "pl-pl": ("🇵🇱", "pl"),
+    "pt-br": ("🇧🇷", "pt-BR"),
+    "pt-pt": ("🇵🇹", "pt-PT"),
+    "ro-ro": ("🇷🇴", "ro"),
+    "ru-ru": ("🇷🇺", "ru"),
+    "sk-sk": ("🇸🇰", "sk"),
+    "sl-si": ("🇸🇮", "sl"),
+    "sr-rs": ("🇷🇸", "sr"),
+    "sv-se": ("🇸🇪", "sv"),
+    "sw-cd": ("🇨🇩", "sw"),
+    "tr-tr": ("🇹🇷", "tr"),
+    "uk-ua": ("🇺🇦", "uk"),
+    "vi-vn": ("🇻🇳", "vi"),
+    "zh-cn": ("🇨🇳", "zh"),
+    "es": ("🇪🇸", "es"),
+    "fr": ("🇫🇷", "fr"),
+    "it": ("🇮🇹", "it"),
+    "ja": ("🇯🇵", "ja"),
+    "hi": ("🇮🇳", "hi"),
+    "zh": ("🇨🇳", "zh"),
 }
+
+
+def _lang_display(key: str, default: str = "") -> str:
+    """ "🇧🇷  Portuguese (Brazil)" for a RHVoice/Piper/Kokoro language key."""
+    entry = _LANG_FLAGS.get(key.lower())
+    if entry is None:
+        return default or key
+    flag, code = entry
+    language, _sep, region = code.partition("-")
+    name = language_with_region(language, region or None)
+    return f"{flag}  {name}" if flag else name
 
 _GENDER_ICON: dict[str, str] = {
     "female": "♀",
@@ -295,7 +305,7 @@ def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
     for pkg in piper_pkgs:
         locale = pkg["pkg"].removeprefix("piper-voices-")
         pkg["voice_name"] = locale
-        pkg["display_name"] = _LANG_DISPLAY.get(locale.lower(), locale.upper())
+        pkg["display_name"] = _lang_display(locale, locale.upper())
         pkg["language"] = locale.lower()
         pkg["engine"] = "Piper"
         pkg["gender"] = ""
@@ -321,7 +331,7 @@ def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
     piper_engine_pkgs = _query_packages("piper-tts", "piper-tts")
     for pkg in piper_engine_pkgs:
         pkg["voice_name"] = "piper-tts"
-        pkg["display_name"] = "Piper TTS Engine"
+        pkg["display_name"] = _("Piper engine")
         pkg["language"] = ""
         pkg["engine"] = "Piper (Engine)"
         pkg["gender"] = ""
@@ -508,7 +518,7 @@ class VoiceManagerDialog(Adw.Dialog):
         """Show when no packages found."""
         self._clear_content()
         status = Adw.StatusPage()
-        status.set_icon_name("dialog-warning-symbolic")
+        status.set_icon_name("emblem-important-symbolic")
         status.set_title(_("No Voice Packages Found"))
         status.set_description(
             _("Could not find any TTS voice packages from pacman repositories.")
@@ -547,7 +557,7 @@ class VoiceManagerDialog(Adw.Dialog):
             str(pkg.get(k, "")) for k in ("display_name", "language", "voice_name", "pkg")
         ).lower()
         lang = pkg.get("language", "")
-        hay += " " + _LANG_DISPLAY.get(lang.lower(), lang).lower()
+        hay += " " + _lang_display(lang).lower()
         return q in hay
 
     def _rebuild_list(self) -> None:
@@ -604,7 +614,7 @@ class VoiceManagerDialog(Adw.Dialog):
             def _sort_key(p: dict[str, str]) -> tuple[str, str]:
                 lang = p.get("language", "")
                 return (
-                    _LANG_DISPLAY.get(lang.lower(), lang).lower(),
+                    _lang_display(lang).lower(),
                     p.get("display_name", "").lower(),
                 )
 
@@ -632,7 +642,7 @@ class VoiceManagerDialog(Adw.Dialog):
         # installed size once installed). Piper titles already carry the
         # language, so skip it there — but always show the size.
         lang = pkg.get("language", "")
-        lang_display = _LANG_DISPLAY.get(lang.lower(), lang.title()) if lang else ""
+        lang_display = _lang_display(lang, lang.title()) if lang else ""
         sub_parts: list[str] = []
         if (
             lang_display

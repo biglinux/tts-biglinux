@@ -35,6 +35,7 @@ SIZES = (16, 22, 24, 32, 48)
 
 MIN_OPACITY = 0.35  # faintest point of the breath (never invisible)
 PAUSED_OPACITY = 0.45  # steady dim while paused
+STEADY_OPACITY = 0.65  # reading, when the desktop asks for reduced motion
 LEVELS = 24  # distinct opacity steps between MIN_OPACITY and 1.0
 CYCLE_MS = 2400  # one full breath: bright → faint → bright
 TICK_MS = 100  # 10 updates/s: smooth enough, light on D-Bus and CPU
@@ -128,6 +129,11 @@ class Breather:
     def pause(self) -> None:
         """Paused: settle on a steady dim icon."""
         self._fade_to(PAUSED_OPACITY)
+
+    def hold(self, opacity: float) -> None:
+        """Show ``opacity`` at once, without any animation (reduced motion)."""
+        self.opacity = opacity
+        self.mode = "idle"
 
     def _fade_to(self, target: float) -> None:
         self._target = target

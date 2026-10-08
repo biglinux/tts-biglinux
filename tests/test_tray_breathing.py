@@ -46,7 +46,7 @@ def _content_box(pm: QPixmap) -> tuple[int, int, int, int]:
     return min(xs), min(ys), max(xs), max(ys)
 
 
-@pytest.mark.parametrize("dpr", [1.0, 1.25, 1.75, 2.0])
+@pytest.mark.parametrize("dpr", [1.0, 1.25, 1.5, 1.75, 2.0])
 @pytest.mark.parametrize("opacity", [tif.MIN_OPACITY, 0.6, 1.0])
 def test_frames_keep_the_original_size_and_position(icon, dpr, opacity):
     frame = tif.render_frame(icon, opacity, [dpr])
@@ -141,3 +141,10 @@ def test_idle_stop_does_not_start_a_timer():
     b = tif.Breather()
     b.stop()
     assert not b.running
+
+
+def test_reduced_motion_holds_a_steady_level():
+    b = tif.Breather()
+    b.hold(tif.STEADY_OPACITY)
+    opacity, running = b.tick()
+    assert opacity == tif.STEADY_OPACITY and not running

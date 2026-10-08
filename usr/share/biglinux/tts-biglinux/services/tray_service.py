@@ -127,7 +127,9 @@ try:
     def render_icon() -> None:
         # Drive the breathing from the speaking/paused state.
         if state["speaking"] and not state["paused"]:
-            if breather.mode != "breathing":
+            if not state.get("animate", True):
+                breather.hold(tif.STEADY_OPACITY)  # reduced motion: no breathing
+            elif breather.mode != "breathing":
                 breather.start()
         elif state["speaking"] and state["paused"]:
             breather.pause()
@@ -269,6 +271,7 @@ try:
             elif cmd == "set_speaking":
                 state["speaking"] = bool(msg.get("speaking", False))
                 state["paused"] = bool(msg.get("paused", False))
+                state["animate"] = bool(msg.get("animate", True))
                 label = msg.get("label", "")
                 idle_tip = state.get("tooltip") or tooltip
                 tray.setToolTip(label or idle_tip if state["speaking"] else idle_tip)
@@ -342,15 +345,11 @@ class TrayIcon:
         tooltip: str = "",
         icon_dark_path: str = "",   # white icon – shown on dark backgrounds
         icon_light_path: str = "",  # dark icon  – shown on light backgrounds
-        *,
-        icon_name: str = "",        # compat: ignored (theme name for GTK)
-        icon_path: str = "",        # compat: used as both dark/light fallback
     ) -> None:
         self._title = title
         self._tooltip = tooltip or title
-        # Support legacy icon_path kwarg as fallback for both paths
-        self._icon_dark_path = icon_dark_path or icon_path
-        self._icon_light_path = icon_light_path or icon_path
+        self._icon_dark_path = icon_dark_path
+        self._icon_light_path = icon_light_path
         self._proc: subprocess.Popen | None = None
         self._menu_items: list[MenuItem] = []
         self._io_watch_id: int = 0
@@ -467,13 +466,16 @@ class TrayIcon:
         label: str = "",
         *,
         paused: bool = False,
+        animate: bool = True,
     ) -> None:
         """Drive the tray icon animation and tooltip for the playback state.
 
         While ``speaking`` and not ``paused`` the icon breathes (opacity only) and
         the tooltip shows ``label``; while ``paused`` the icon holds a steady dim.
+        ``animate`` False (the desktop asks for reduced motion) holds a steady
+        level instead of breathing.
         """
-        msg: dict = {"cmd": "set_speaking", "speaking": speaking, "paused": paused}
+        msg: dict = {"cmd": "set_speaking", "speaking": speaking, "paused": paused, "animate": animate}
         if label:
             msg["label"] = label
         self._send(msg)

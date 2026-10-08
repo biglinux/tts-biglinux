@@ -45,10 +45,6 @@
     100% { opacity: 1.0; }
 }
 
-.hero-detail {
-    font-size: 0.9em;
-}
-
 .narrow-layout .hero-card {
     padding: 20px 16px 16px 16px;
 }
@@ -139,7 +135,35 @@ scale marks mark label {
 
 .history-meta {
     font-size: 12px;
-    opacity: 0.6;
+    opacity: 0.75;  /* readable small text (contrast) */
+}
+
+/* Outcome of a reading that did not complete. */
+.history-status {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.history-status.stopped {
+    background: alpha(@warning_bg_color, 0.18);
+    color: @warning_color;
+}
+
+.history-status.error {
+    background: alpha(@error_bg_color, 0.18);
+    color: @error_color;
+}
+
+.history-more {
+    padding: 0 4px;
+    min-height: 0;
+    font-size: 12px;
+}
+
+.history-toolbar flowboxchild {
+    padding: 0;
 }
 
 .history-badge {
@@ -148,7 +172,9 @@ scale marks mark label {
     padding: 2px 10px;
     border-radius: 12px;
     background: alpha(@accent_bg_color, 0.15);
-    color: @accent_fg_color;
+    /* accent_color is the accent tuned for text on the window background
+       (readable in light and dark); accent_fg_color is for solid accent. */
+    color: @accent_color;
 }
 
 /* ── Audio Player ────────────────────────────────────────────────── */

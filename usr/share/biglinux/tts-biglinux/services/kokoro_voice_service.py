@@ -133,41 +133,9 @@ _CATALOG_BY_ID: dict[str, KokoroVoiceEntry] = {v.voice_id: v for v in KOKORO_CAT
 
 # ── Public API ───────────────────────────────────────────────────────
 
-def _python_kokoro_available() -> bool:
-    """True if the Python ``kokoro`` package is importable.
-
-    Uses find_spec instead of importing: ``import kokoro`` pulls in PyTorch,
-    which takes seconds and must never run just to answer "is it installed?".
-    """
-    import importlib.util
-
-    try:
-        return importlib.util.find_spec("kokoro") is not None
-    except (ImportError, ValueError):
-        return False
-
-
 def is_kokoro_installed() -> bool:
-    """Check if Kokoro TTS is available (Python library OR koko binary)."""
-    if _python_kokoro_available():
-        return True
-    # Fallback: check for koko binary (biglinux-kokoro-tts package)
+    """Whether the koko engine (package biglinux-kokoro-tts) is installed."""
     return shutil.which("koko") is not None
-
-
-def kokoro_backend_type() -> str:
-    """Return which Kokoro backend is available.
-
-    Returns:
-        'python' if kokoro Python library is installed,
-        'koko' if koko binary is available,
-        'none' if neither.
-    """
-    if _python_kokoro_available():
-        return "python"
-    if shutil.which("koko") is not None:
-        return "koko"
-    return "none"
 
 
 # ── koko command line (shared by playback and the Voice Manager preview) ──
@@ -298,8 +266,10 @@ def build_koko_command(
     """argv for koko.
 
     With ``text`` it renders that text to ``output`` (``koko text``). Without
-    it, koko streams sentences read from stdin straight to the speaker
-    (``koko pipe``), writing its scratch WAV inside :func:`koko_workdir`.
+    it, ``koko stream`` reads stdin one line at a time and writes the audio of
+    each line to stdout as one WAV stream (played by aplay through the app,
+    which also keeps it for the history). ``koko pipe`` is not used: it plays
+    by itself, so its audio could not be kept, and ignores ``-o``.
     """
     voice = koko_voice_name(voice_id)
     cmd = [
@@ -312,7 +282,7 @@ def build_koko_command(
         "-p", f"{max(0.5, min(2.0, speed)):.2f}",
     ]
     if text is None:
-        cmd += ["pipe", "-o", output or os.path.join(koko_workdir(), "pipe_output.wav")]
+        cmd += ["stream"]
     else:
         if not output:
             raise ValueError("koko text needs an output path")
@@ -320,15 +290,15 @@ def build_koko_command(
     return cmd
 
 
-# koko pipe prints this to stderr when a sentence's audio starts playing.
-KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
-
 # The Kokoro model accepts at most 510 phoneme tokens per segment. `koko pipe`
 # splits the input into sentences but does not limit a sentence's length: a
 # long sentence panics ("index out of bounds: the len is 511 but the index is
 # 550"). Portuguese yields roughly one token per character, so sentences are
 # kept well below the limit.
 KOKO_MAX_SEGMENT_CHARS = 220
+
+# A voice .pt is ~0.5 MB; anything far larger is not a voice.
+_MAX_VOICE_DOWNLOAD = 16 * 1024 * 1024
 
 _RE_DOTS = re.compile(r"\.{2,}")
 _RE_PUNCT_RUN = re.compile(r"[!?…]{2,}")
@@ -407,15 +377,7 @@ def prepare_koko_text(text: str, limit: int = KOKO_MAX_SEGMENT_CHARS) -> str:
 
 
 def get_installed_voice_ids() -> set[str]:
-    """Return set of voice IDs available.
-
-    - Python kokoro library: all catalog voices (downloads on demand).
-    - koko binary: only voices present in voices.bin.
-    """
-    backend = kokoro_backend_type()
-    if backend == "python":
-        return {v.voice_id for v in KOKORO_CATALOG}
-    # koko binary or detection-only: read from voices.bin
+    """IDs of the voices present in the active voices.bin."""
     voices_bin = _active_voices_bin()
     if not voices_bin.exists():
         return set()
@@ -508,6 +470,8 @@ def download_voice(
                     total = int(resp.headers.get("Content-Length", 0) or 0)
                 except (TypeError, ValueError):
                     total = 0
+                if total > _MAX_VOICE_DOWNLOAD:
+                    return False, _("The voice file is larger than expected.")
                 buf = bytearray()
                 cancelled = False
                 while True:
@@ -518,6 +482,8 @@ def download_voice(
                     if not chunk:
                         break
                     buf += chunk
+                    if len(buf) > _MAX_VOICE_DOWNLOAD:
+                        return False, _("The voice file is larger than expected.")
                     if progress_cb:
                         try:
                             progress_cb(len(buf), total)
@@ -527,12 +493,12 @@ def download_voice(
                     return False, "cancelled"
                 if total and len(buf) != total:
                     # Connection dropped mid-file: never convert a partial file.
-                    last_err = f"incomplete download ({len(buf)} of {total} bytes)"
+                    last_err = _("incomplete download ({received} of {total} bytes)").format(received=len(buf), total=total)
                     buf = bytearray()
                 pt_data = bytes(buf)
             if pt_data:
                 break
-            last_err = last_err or "empty response"
+            last_err = last_err or _("empty response")
         except (URLError, OSError, TimeoutError) as e:
             last_err = str(e)
             if attempt < 2:
@@ -635,9 +601,12 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
                 break
         if data_entry is None:
             raise KeyError(f"No tensor data entry found in {voice_id}.pt")
+        expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * _VOICE_ITEMSIZE
+        # Checked before decompressing: a bad archive never fills the memory.
+        if z.getinfo(data_entry).file_size != expected_size:
+            raise ValueError(f"Unexpected data size for {voice_id}")
         raw = z.read(data_entry)
 
-    expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * _VOICE_ITEMSIZE
     if len(raw) != expected_size:
         raise ValueError(
             f"Unexpected data size for {voice_id}: {len(raw)} (expected {expected_size})"
