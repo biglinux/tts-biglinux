@@ -142,108 +142,45 @@ fn phonemes_to_ids(
     ids
 }
 
-/// Manual NFD for IPA characters espeak-ng produces.
+/// Precomposed vowels espeak-ng emits → (base letter, combining mark).
+/// Piper's phoneme maps use the decomposed (NFD) form.
+const NFD_VOWELS: &[(char, char, char)] = &[
+    ('\u{00E3}', 'a', '\u{0303}'),
+    ('\u{1EBD}', 'e', '\u{0303}'),
+    ('\u{0129}', 'i', '\u{0303}'),
+    ('\u{00F5}', 'o', '\u{0303}'),
+    ('\u{0169}', 'u', '\u{0303}'),
+    ('\u{00E1}', 'a', '\u{0301}'),
+    ('\u{00E9}', 'e', '\u{0301}'),
+    ('\u{00ED}', 'i', '\u{0301}'),
+    ('\u{00F3}', 'o', '\u{0301}'),
+    ('\u{00FA}', 'u', '\u{0301}'),
+    ('\u{00FD}', 'y', '\u{0301}'),
+    ('\u{00E0}', 'a', '\u{0300}'),
+    ('\u{00E8}', 'e', '\u{0300}'),
+    ('\u{00EC}', 'i', '\u{0300}'),
+    ('\u{00F2}', 'o', '\u{0300}'),
+    ('\u{00F9}', 'u', '\u{0300}'),
+    ('\u{00E4}', 'a', '\u{0308}'),
+    ('\u{00F6}', 'o', '\u{0308}'),
+    ('\u{00FC}', 'u', '\u{0308}'),
+    ('\u{00E2}', 'a', '\u{0302}'),
+    ('\u{00EA}', 'e', '\u{0302}'),
+    ('\u{00EE}', 'i', '\u{0302}'),
+    ('\u{00F4}', 'o', '\u{0302}'),
+    ('\u{00FB}', 'u', '\u{0302}'),
+];
+
+/// NFD for the IPA characters espeak-ng produces.
 fn unicode_normalization_nfd(s: &str) -> String {
     let mut result = String::with_capacity(s.len() * 2);
     for ch in s.chars() {
-        match ch {
-            '\u{00E3}' => {
-                result.push('a');
-                result.push('\u{0303}');
+        match NFD_VOWELS.iter().find(|&&(c, _, _)| c == ch) {
+            Some(&(_, base, mark)) => {
+                result.push(base);
+                result.push(mark);
             }
-            '\u{1EBD}' => {
-                result.push('e');
-                result.push('\u{0303}');
-            }
-            '\u{0129}' => {
-                result.push('i');
-                result.push('\u{0303}');
-            }
-            '\u{00F5}' => {
-                result.push('o');
-                result.push('\u{0303}');
-            }
-            '\u{0169}' => {
-                result.push('u');
-                result.push('\u{0303}');
-            }
-            '\u{00E1}' => {
-                result.push('a');
-                result.push('\u{0301}');
-            }
-            '\u{00E9}' => {
-                result.push('e');
-                result.push('\u{0301}');
-            }
-            '\u{00ED}' => {
-                result.push('i');
-                result.push('\u{0301}');
-            }
-            '\u{00F3}' => {
-                result.push('o');
-                result.push('\u{0301}');
-            }
-            '\u{00FA}' => {
-                result.push('u');
-                result.push('\u{0301}');
-            }
-            '\u{00FD}' => {
-                result.push('y');
-                result.push('\u{0301}');
-            }
-            '\u{00E0}' => {
-                result.push('a');
-                result.push('\u{0300}');
-            }
-            '\u{00E8}' => {
-                result.push('e');
-                result.push('\u{0300}');
-            }
-            '\u{00EC}' => {
-                result.push('i');
-                result.push('\u{0300}');
-            }
-            '\u{00F2}' => {
-                result.push('o');
-                result.push('\u{0300}');
-            }
-            '\u{00F9}' => {
-                result.push('u');
-                result.push('\u{0300}');
-            }
-            '\u{00E4}' => {
-                result.push('a');
-                result.push('\u{0308}');
-            }
-            '\u{00F6}' => {
-                result.push('o');
-                result.push('\u{0308}');
-            }
-            '\u{00FC}' => {
-                result.push('u');
-                result.push('\u{0308}');
-            }
-            '\u{00E2}' => {
-                result.push('a');
-                result.push('\u{0302}');
-            }
-            '\u{00EA}' => {
-                result.push('e');
-                result.push('\u{0302}');
-            }
-            '\u{00EE}' => {
-                result.push('i');
-                result.push('\u{0302}');
-            }
-            '\u{00F4}' => {
-                result.push('o');
-                result.push('\u{0302}');
-            }
-            '\u{00FB}' => {
-                result.push('u');
-                result.push('\u{0302}');
-            }
-            _ => result.push(ch),
+            None => result.push(ch),
         }
     }
     result
@@ -401,4 +338,17 @@ pub fn speak(
     }
     crate::audio::play_wav(wav)?;
     Ok(true)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn nfd_decomposes_espeak_vowels_and_keeps_the_rest() {
+        assert_eq!(unicode_normalization_nfd("ã"), "a\u{0303}");
+        assert_eq!(unicode_normalization_nfd("võ"), "vo\u{0303}");
+        assert_eq!(unicode_normalization_nfd("ʃɐ̃w"), "ʃɐ̃w");
+        assert_eq!(unicode_normalization_nfd("ü à"), "u\u{0308} a\u{0300}");
+    }
 }

@@ -213,7 +213,12 @@ pub fn synthesize(text: &str, voice: &str, rate: i32, pitch: i32, volume: i32) -
         }
     }
 
-    let samples = SAMPLE_BUFFER.lock().map(|b| b.clone()).unwrap_or_default();
+    // Take the samples out: the buffer must not keep the largest synthesis
+    // allocated for the life of the process.
+    let samples = SAMPLE_BUFFER
+        .lock()
+        .map(|mut b| std::mem::take(&mut *b))
+        .unwrap_or_default();
     if samples.is_empty() {
         return Ok(Vec::new());
     }
@@ -302,20 +307,6 @@ pub fn cancel() -> Result<()> {
         return Err(TtsError::Espeak(err));
     }
     Ok(())
-}
-
-/// Get the sample rate espeak-ng was initialized with.
-#[allow(dead_code)]
-pub fn sample_rate() -> Result<i32> {
-    ensure_init_public()?;
-    let &rate = INIT_RESULT
-        .get()
-        .ok_or_else(|| TtsError::EspeakInit("not initialized".into()))?;
-    if rate > 0 {
-        Ok(rate)
-    } else {
-        Err(TtsError::EspeakInit("not initialized".into()))
-    }
 }
 
 #[cfg(test)]
