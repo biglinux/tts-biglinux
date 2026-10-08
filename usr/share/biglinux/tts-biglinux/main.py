@@ -4,10 +4,17 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 
 from config import APP_VERSION
 from utils.i18n import _
+
+# The native engine (tts_engine.so) is architecture-dependent, so the package
+# installs it in /usr/lib. Appended: a source checkout's own build wins.
+NATIVE_ENGINE_DIR = "/usr/lib/tts-biglinux"
+if os.path.isdir(NATIVE_ENGINE_DIR):
+    sys.path.append(NATIVE_ENGINE_DIR)
 
 
 def main() -> None:

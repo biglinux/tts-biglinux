@@ -102,7 +102,7 @@ class TTSWindow(Adw.ApplicationWindow):
         if settings.window.maximized:
             self.maximize()
 
-        self.set_title(_(APP_NAME))
+        self.set_title(APP_NAME)
 
     def _setup_content(self) -> None:
         """Two-pane layout: settings sidebar + content, with a dark controls bar.
@@ -175,7 +175,7 @@ class TTSWindow(Adw.ApplicationWindow):
         right_header.pack_start(self._sidebar_button)
         self._menu_button = self._create_menu_button()
         right_header.pack_end(self._menu_button)
-        self._window_title = Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
+        self._window_title = Adw.WindowTitle(title=APP_NAME, subtitle=_("Text narrator"))
         right_header.set_title_widget(self._window_title)
         right.add_top_bar(right_header)
 
@@ -293,7 +293,7 @@ class TTSWindow(Adw.ApplicationWindow):
     def show_main(self, *_args) -> None:
         """Back to the reading area (playback is not affected)."""
         self._content_stack.set_visible_child_name("tts")
-        self._window_title.set_title(_(APP_NAME))
+        self._window_title.set_title(APP_NAME)
         self._window_title.set_subtitle(_("Text narrator"))
         self._back_button.set_visible(False)
 

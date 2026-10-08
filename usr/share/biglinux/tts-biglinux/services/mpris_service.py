@@ -242,20 +242,8 @@ class MprisService:
         return False
 
     def _replay(self) -> bool:
-        """Play/PlayPause when idle → re-read the last spoken text."""
-        tts = self._app.tts_service
-        text = getattr(tts, "_last_spoken_text", "")
-        if text:
-            speech = self._app.settings.speech
-            tts.speak(
-                text,
-                rate=speech.rate,
-                pitch=speech.pitch,
-                volume=speech.volume,
-                backend=speech.backend,
-                output_module=speech.output_module,
-                voice_id=speech.voice_id,
-            )
+        """Play/PlayPause when idle → re-read the last text."""
+        self._app.replay_last()
         return False
 
     def _on_get_property(self, _conn, _sender, _path, iface, prop) -> GLib.Variant:

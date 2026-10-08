@@ -282,7 +282,7 @@ def register(accel: str) -> ShortcutStatus:
         if status.registered is False and not status.conflicts and kde_active_keys() is None:
             # KGlobalAccel not reachable over D-Bus: fall back to the config
             # file + reparse path (older Plasma).
-            DesktopIntegrationService.update_khotkeys(accel)
+            DesktopIntegrationService.write_kde_shortcut_config(accel)
             status.message = _("The shortcut was saved, but the desktop could not confirm it yet.")
         return status
     try:

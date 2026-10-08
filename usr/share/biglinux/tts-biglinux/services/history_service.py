@@ -12,10 +12,10 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # Timestamp format used for history entry ids / on-disk file base names.
-# Microsecond resolution (%f) guarantees uniqueness: two entries generated in
-# the same second no longer collide and overwrite each other's files.
+# Microsecond resolution (%f): two entries saved in the same second must not
+# share file names.
 TIMESTAMP_FMT = "%Y-%m-%d_%H-%M-%S-%f"
-# Legacy second-resolution format (pre-fix entries) — still parsed for display.
+# Second-resolution format of entries saved by older versions (still parsed).
 LEGACY_TIMESTAMP_FMT = "%Y-%m-%d_%H-%M-%S"
 
 # XDG Music directory detection
@@ -54,9 +54,13 @@ def get_history_dir() -> Path:
 
 
 def ensure_history_dir() -> Path:
-    """Ensure the history directory exists and return its path."""
+    """Ensure the history directory exists (private: 0700) and return it."""
     history_dir = get_history_dir()
     history_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        history_dir.chmod(0o700)  # what was read aloud is personal
+    except OSError as e:
+        logger.debug("Could not restrict %s: %s", history_dir, e)
     return history_dir
 
 
@@ -78,8 +82,11 @@ def save_history_entry(
         backend: TTS backend used
         voice_id: Voice ID used
         save_audio: Whether to copy the audio file
-        save_text: Whether to save the text
+        save_text: Whether to keep the text (off: an audio-only entry)
     """
+    audio_ok = bool(save_audio and audio_path and os.path.isfile(audio_path))
+    if not save_text and not audio_ok:
+        return  # nothing to keep
     try:
         history_dir = ensure_history_dir()
         timestamp = datetime.now().strftime(TIMESTAMP_FMT)
@@ -92,7 +99,7 @@ def save_history_entry(
             text_file.write_text(text, encoding="utf-8")
 
         # Copy audio
-        if save_audio and audio_path and os.path.isfile(audio_path):
+        if audio_ok:
             audio_ext = Path(audio_path).suffix or ".wav"
             audio_dest = history_dir / f"{base_name}{audio_ext}"
             shutil.copy2(audio_path, audio_dest)
@@ -106,9 +113,9 @@ def save_history_entry(
             ts=timestamp,
             backend=backend,
             voice_id=voice_id,
-            text=text,
-            text_preview=text[:200],
-            has_audio=save_audio and audio_path is not None,
+            text=text if save_text else "",
+            text_preview=text[:200] if save_text else "",
+            has_audio=audio_ok,
             entry_id=entry_id,
         )
         logger.debug("History saved: %s", base_name)

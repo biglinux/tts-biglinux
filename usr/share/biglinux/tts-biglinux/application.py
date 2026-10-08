@@ -9,7 +9,7 @@ Handles application lifecycle, services, and global actions.
 from __future__ import annotations
 
 import logging
-import subprocess
+import signal
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -31,7 +31,6 @@ from config import (
 )
 from resources import load_css
 from services.settings_service import SettingsService
-from services.desktop_integration_service import DesktopIntegrationService
 from services.tray_service import MenuItem, TrayIcon
 from services.tts_service import TTSService
 from utils.i18n import _
@@ -62,7 +61,7 @@ class TTSApplication(Adw.Application):
             0,
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
-            "Speak selected text",
+            _("Read the selected text aloud"),
             None,
         )
 
@@ -126,10 +125,13 @@ class TTSApplication(Adw.Application):
 
     def _on_startup(self, app: Adw.Application) -> None:
         """Application startup — load CSS and create actions."""
+        # Logout / kill: quit cleanly so no player keeps speaking orphaned.
+        for signum in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
+            GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signum, self._on_signal)
         logger.debug("Application startup")
         load_css()
         self._create_actions()
-        GLib.set_application_name(_(APP_NAME))
+        GLib.set_application_name(APP_NAME)
         Gtk.Window.set_default_icon_name("tts-biglinux")
         self._setup_tray_icon()
         # Registration talks to the desktop over D-Bus/CLI tools: never on the
@@ -170,6 +172,11 @@ class TTSApplication(Adw.Application):
         else:
             self.activate()
         return 0
+
+    def _on_signal(self) -> bool:
+        logger.info("Termination signal: quitting")
+        self.quit()
+        return GLib.SOURCE_REMOVE
 
     def _on_shutdown(self, app: Adw.Application) -> None:
         """Application shutdown — cleanup resources."""
@@ -237,11 +244,10 @@ class TTSApplication(Adw.Application):
                 icon_fallback = str(dp / "tts-biglinux-symbolic.svg")
 
         self._tray = TrayIcon(
-            title=_(APP_NAME),
+            title=APP_NAME,
             tooltip=self._tray_tooltip(),
-            icon_dark_path=icon_dark,
-            icon_light_path=icon_light,
-            icon_path=icon_fallback,
+            icon_dark_path=icon_dark or icon_fallback,
+            icon_light_path=icon_light or icon_fallback,
         )
         self._tray.on_activate = self._on_tray_speak
         self._tray.on_player = self._on_tray_player
@@ -425,7 +431,7 @@ class TTSApplication(Adw.Application):
                         APP_NAME,  # app_name
                         self._notif_id,  # replaces_id (0 = new)
                         icon,  # icon
-                        summary or _(APP_NAME),  # summary
+                        summary or APP_NAME,  # summary
                         safe_body,  # body
                         [],  # actions
                         {},  # hints
@@ -505,7 +511,7 @@ class TTSApplication(Adw.Application):
             return False
 
         def _capture_and_speak() -> None:
-            result = get_selected_text(self.settings.text.max_chars)
+            result = get_selected_text()
             logger.debug("Tray speak: captured %d chars (%s)", len(result.text), result.error or "ok")
             if not result.text:
                 GLib.idle_add(_no_text, result.error)
@@ -514,23 +520,7 @@ class TTSApplication(Adw.Application):
             raw_text = result.text
             logger.debug("Tray speak: raw text length=%d, mode=%s", len(raw_text), mode)
 
-            speech = self.settings.speech
-            text_cfg = self.settings.text
-
-            speak_params = dict(
-                text=raw_text,
-                rate=speech.rate,
-                pitch=speech.pitch,
-                volume=speech.volume,
-                backend=speech.backend,
-                output_module=speech.output_module,
-                voice_id=speech.voice_id,
-                expand_abbreviations=text_cfg.expand_abbreviations,
-                process_special_chars=text_cfg.process_special_chars,
-                process_urls=text_cfg.process_urls,
-                strip_formatting=text_cfg.strip_formatting,
-                normalize_numbers=text_cfg.normalize_numbers,
-            )
+            speak_params = dict(text=raw_text, **self.speak_options())
 
             def _do_speak() -> bool:
                 if mode == "queue" and tts.is_speaking:
@@ -550,6 +540,31 @@ class TTSApplication(Adw.Application):
             GLib.idle_add(_do_speak)
 
         threading.Thread(target=_capture_and_speak, daemon=True).start()
+
+    def speak_options(self) -> dict:
+        """Voice and text settings for TTSService.speak(), for every entry point."""
+        from services.voice_manager import voice_language
+
+        speech, text = self.settings.speech, self.settings.text
+        return dict(
+            rate=speech.rate,
+            pitch=speech.pitch,
+            volume=speech.volume,
+            backend=speech.backend,
+            voice_id=speech.voice_id,
+            language=voice_language(speech.backend, speech.voice_id) or None,
+            expand_abbreviations=text.expand_abbreviations,
+            process_special_chars=text.process_special_chars,
+            process_urls=text.process_urls,
+            strip_formatting=text.strip_formatting,
+            normalize_numbers=text.normalize_numbers,
+            max_chars=text.max_chars,
+        )
+
+    def replay_last(self) -> bool:
+        """Read the last text again with the current settings (media Play key)."""
+        text = self.tts_service.last_text
+        return bool(text) and self.tts_service.speak(text, **self.speak_options())
 
     # Tray menu item IDs
     _TRAY_READ = 1
@@ -619,7 +634,9 @@ class TTSApplication(Adw.Application):
         speaking = bool(tts and tts.is_speaking)
         paused = bool(tts and tts.is_paused)
         label = (_("Paused") if paused else _("Playing…")) if speaking else ""
-        self._tray.set_speaking(speaking, label, paused=paused)
+        settings = Gtk.Settings.get_default()
+        animate = settings is None or settings.get_property("gtk-enable-animations")
+        self._tray.set_speaking(speaking, label, paused=paused, animate=animate)
         self._tray.set_menu(self._build_tray_menu())
 
     def _on_tray_player(self, action: str) -> None:
@@ -685,7 +702,7 @@ class TTSApplication(Adw.Application):
     def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         """Show about dialog."""
         about = Adw.AboutDialog.new()
-        about.set_application_name(_(APP_NAME))
+        about.set_application_name(APP_NAME)
         about.set_application_icon("tts-biglinux")
         about.set_developer_name(_("BigLinux Team"))
         about.set_version(APP_VERSION)
@@ -747,8 +764,6 @@ class TTSApplication(Adw.Application):
         self._notify_shortcut()
 
         def _work() -> None:
-            if DesktopIntegrationService.detect_desktop_environment() == "kde":
-                self._disable_legacy_khotkeys()
             try:
                 status = shortcut_service.register(accel)
             except Exception as e:
@@ -783,52 +798,3 @@ class TTSApplication(Adw.Application):
         if shortcut and self.shortcut_status.registered is not False:
             return _("Select text and press {shortcut} to hear it").format(shortcut=shortcut)
         return _("Text-to-speech assistant")
-
-    @staticmethod
-    def _disable_legacy_khotkeys() -> None:
-        """Disable legacy khotkeys binding if still active.
-
-        On Plasma 6, the khotkeys module is typically not loaded. This method
-        checks if it is and, if so, asks kded to unload it to prevent the
-        hardcoded Alt+V from /usr/share/khotkeys/ttsbiglinux.khotkeys from
-        interfering with the configurable shortcut.
-        """
-
-        # Check if khotkeys module is loaded in kded6
-        try:
-            result = subprocess.run(
-                [
-                    "qdbus6",
-                    "org.kde.kded6",
-                    "/kded",
-                    "org.kde.kded6.loadedModules",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=3,
-            )
-            if "khotkeys" not in result.stdout:
-                return  # module not loaded, nothing to do
-        except (OSError, subprocess.TimeoutExpired):
-            return
-
-        # khotkeys is loaded — try to tell it to reload so it picks up
-        # the disabled version of ttsbiglinux.khotkeys
-        logger.info("khotkeys module is loaded, requesting reload")
-        try:
-            subprocess.run(
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kded6",
-                    "/modules/khotkeys",
-                    "org.kde.khotkeys.reread_configuration",
-                ],
-                timeout=3,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass

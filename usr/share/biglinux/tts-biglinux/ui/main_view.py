@@ -59,7 +59,7 @@ from ui.components import (
     set_state_pill,
 )
 from utils.async_utils import run_in_thread
-from utils.i18n import N_, _
+from utils.i18n import _
 
 if TYPE_CHECKING:
     from config import AppSettings
@@ -305,7 +305,7 @@ class MainView(Adw.NavigationPage):
         # Shortcut problems (not registered / conflict) and the way out.
         self._hero_shortcut_note = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self._hero_shortcut_note.set_halign(Gtk.Align.CENTER)
-        self._hero_shortcut_icon = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
+        self._hero_shortcut_icon = Gtk.Image.new_from_icon_name("emblem-important-symbolic")
         self._hero_shortcut_icon.add_css_class("warning")
         self._hero_shortcut_note.append(self._hero_shortcut_icon)
         self._hero_shortcut_label = Gtk.Label()
@@ -403,6 +403,7 @@ class MainView(Adw.NavigationPage):
             selected_index=current_idx,
             on_selected=self._on_backend_selected,
             accessible_name=_("Select TTS engine"),
+            value_as_subtitle=True,
         )
         group.add(self._backend_combo)
 
@@ -435,6 +436,7 @@ class MainView(Adw.NavigationPage):
             options=[_("Detecting installed voices...")],
             on_selected=self._on_voice_selected,
             accessible_name=_("Select TTS voice"),
+            value_as_subtitle=True,
         )
         # Add refresh button as suffix
         refresh_btn = create_icon_button(
@@ -533,6 +535,7 @@ class MainView(Adw.NavigationPage):
             selected_index=emotion_idx,
             on_selected=self._on_kokoro_emotion_selected,
             accessible_name=_("Select expression style"),
+            value_as_subtitle=True,
         )
         self._kokoro_emotion_combo.set_visible(is_kokoro)
         group.add(self._kokoro_emotion_combo)
@@ -548,6 +551,7 @@ class MainView(Adw.NavigationPage):
             selected_index=0,
             on_selected=self._on_kokoro_blend_selected,
             accessible_name=_("Select blend voice"),
+            value_as_subtitle=True,
         )
         self._kokoro_blend_combo.set_visible(is_kokoro)
         group.add(self._kokoro_blend_combo)
@@ -555,29 +559,6 @@ class MainView(Adw.NavigationPage):
         return group
 
     # ── Backend Section ──────────────────────────────────────────────
-
-    def _build_backend_section(self) -> Adw.PreferencesGroup:
-        """Build voice management section."""
-        group = create_preferences_group(
-            title=_("Voice Management"),
-            description=_("Install or manage voice packages"),
-        )
-
-        # Voice Manager row
-        voice_mgr_row = Adw.ActionRow()
-        voice_mgr_row.set_title(_("Voice Manager"))
-        voice_mgr_row.set_subtitle(_("Install or remove voice packages"))
-        voice_mgr_row.set_icon_name("audio-speakers-symbolic")
-        voice_mgr_row.set_activatable(True)
-        voice_mgr_row.connect("activated", lambda *_: self._on_open_voice_manager())
-
-        arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
-        arrow.set_valign(Gtk.Align.CENTER)
-        arrow.add_css_class("dim-label")
-        voice_mgr_row.add_suffix(arrow)
-        group.add(voice_mgr_row)
-
-        return group
 
     # ── Text Processing Section ──────────────────────────────────────
 
@@ -669,7 +650,7 @@ class MainView(Adw.NavigationPage):
                 "Select text anywhere and press the shortcut to read aloud. Press again to stop."
             )
         )
-        shortcut_row.set_icon_name("preferences-desktop-keyboard-shortcuts-symbolic")
+        shortcut_row.set_icon_name("input-keyboard-symbolic")
         self._shortcut_row = shortcut_row
 
         # Current keys + whether the desktop confirmed them.
@@ -700,7 +681,7 @@ class MainView(Adw.NavigationPage):
             on_toggled=self._on_launcher_toggle,
             accessible_name=_("Show system tray icon"),
         )
-        launcher_row.set_icon_name("view-pin-symbolic")
+        launcher_row.set_icon_name("tts-biglinux-symbolic")
         group.add(launcher_row)
 
         # ── History save ──
@@ -1010,7 +991,7 @@ class MainView(Adw.NavigationPage):
 
     def _on_refresh_voices(self) -> None:
         """Manually trigger voice discovery."""
-        self._voice_combo.set_subtitle(_("Refreshing voices..."))
+        self._voice_combo.set_tooltip_text(_("Refreshing voices..."))
         run_in_thread(discover_voices, on_done=self._on_voices_discovered)
         self._on_toast(_("Refreshing voice list…"), 2)
 
@@ -1023,7 +1004,6 @@ class MainView(Adw.NavigationPage):
             "piper": "Piper",
             "espeak-ng": "espeak-ng",
             "kokoro": "Kokoro",
-            "speech-dispatcher": self._settings.speech.output_module.lower()
         }
         engine_filter = engine_map.get(backend.lower())
         
@@ -1056,7 +1036,7 @@ class MainView(Adw.NavigationPage):
         logger.info("Voices discovered: %d voices in catalog", len(catalog.voices))
 
         if not catalog.voices:
-            self._voice_combo.set_subtitle(
+            self._voice_combo.set_tooltip_text(
                 _("No voices found — install rhvoice or espeak-ng")
             )
             self._voice_combo.set_model(Gtk.StringList.new([_("No voices available")]))
@@ -1104,11 +1084,6 @@ class MainView(Adw.NavigationPage):
                 self._settings.speech.backend, current_backend,
             )
 
-        # For speech-dispatcher, show ALL output modules (rhvoice + espeak-ng)
-        # so the user always sees every installed voice regardless of the
-        # previously saved output_module.  The correct module is set when the
-        # user picks a voice (see _on_voice_selected).
-
         if not filtered:
             # No voices for selected backend
             self._voice_list = []
@@ -1116,7 +1091,7 @@ class MainView(Adw.NavigationPage):
                 self._voice_combo.set_model(
                     Gtk.StringList.new([_("No voices available for this engine")])
                 )
-                self._voice_combo.set_subtitle(
+                self._voice_combo.set_tooltip_text(
                     _("Install {engine} voices first").format(engine=engine_name(current_backend))
                 )
                 self._test_button.set_sensitive(False)
@@ -1145,8 +1120,8 @@ class MainView(Adw.NavigationPage):
         with self._guard_ui():
             model = Gtk.StringList.new(display_names)
             self._voice_combo.set_model(model)
-            status_msg = _("{count} voices available").format(count=len(display_names))
-            self._voice_combo.set_subtitle(status_msg)
+            status_msg = _("Voices available: {count}").format(count=len(display_names))
+            self._voice_combo.set_tooltip_text(status_msg)
 
             # Select current voice (accent-insensitive match)
             current_voice_id = self._settings.speech.voice_id
@@ -1207,7 +1182,6 @@ class MainView(Adw.NavigationPage):
             voice = self._voice_list[index]
             self._settings.speech.voice_id = voice.voice_id
             self._settings.speech.backend = voice.backend
-            self._settings.speech.output_module = voice.output_module
             self._settings_service.save(self._settings)
             logger.debug("Voice selected: %s (%s)", voice.name, voice.voice_id)
             # Prewarm the newly-selected model (no audio) for a warm first Alt+V.
@@ -1288,7 +1262,7 @@ class MainView(Adw.NavigationPage):
 
         # If no voices in catalog, or switching to native RHVoice for first time
         if backend == TTSBackend.RHVOICE.value:
-            self._voice_combo.set_subtitle(_("Searching for voices..."))
+            self._voice_combo.set_tooltip_text(_("Searching for voices..."))
             run_in_thread(
                 discover_voices,
                 on_done=self._on_voices_discovered,
@@ -1309,7 +1283,7 @@ class MainView(Adw.NavigationPage):
             elif backend == TTSBackend.PIPER.value:
                 # If Piper is selected but no voices are found, try discovering again
                 # before asking to install (it might have been just installed)
-                self._voice_combo.set_subtitle(_("Checking for Piper voices..."))
+                self._voice_combo.set_tooltip_text(_("Checking for Piper voices..."))
                 run_in_thread(
                     discover_voices,
                     on_done=lambda cat: self._on_piper_discovery_retry(cat),
@@ -1317,7 +1291,7 @@ class MainView(Adw.NavigationPage):
                 return
             elif backend == TTSBackend.KOKORO.value:
                 # Kokoro installed but no voices — re-discover
-                self._voice_combo.set_subtitle(_("Checking for Kokoro voices..."))
+                self._voice_combo.set_tooltip_text(_("Checking for Kokoro voices..."))
                 run_in_thread(
                     discover_voices,
                     on_done=self._on_voices_discovered,
@@ -1478,7 +1452,13 @@ class MainView(Adw.NavigationPage):
             window.start_install_progress()
 
         def _threaded() -> None:
-            result = worker()
+            try:
+                result = worker()
+            except Exception as e:  # never leave the progress bar running
+                from services.package_installer import InstallResult
+
+                logger.exception("Package installation crashed")
+                result = InstallResult(False, _("The installation failed."), str(e))
 
             def _finish() -> bool:
                 if window is not None and hasattr(window, "stop_install_progress"):
@@ -1559,10 +1539,6 @@ class MainView(Adw.NavigationPage):
         self._settings.text.process_urls = active
         self._settings_service.save()
 
-    def _on_max_chars_changed(self, value: float) -> None:
-        self._settings.text.max_chars = int(value)
-        self._settings_service.save(self._settings)
-
     def _on_max_chars_selected(self, idx: int) -> None:
         """Handle character limit combo selection."""
         if self._updating_ui:
@@ -1572,10 +1548,6 @@ class MainView(Adw.NavigationPage):
             self._settings_service.save()
 
     # ── Test Voice ───────────────────────────────────────────────────
-
-    def trigger_speak(self) -> None:
-        """Public entry point for the window's bottom controls bar (speak/stop)."""
-        self._on_test_voice()
 
     def current_voice_label(self) -> str:
         """Human-readable name of the currently selected voice (for the bar)."""
@@ -1609,28 +1581,16 @@ class MainView(Adw.NavigationPage):
             test_volume = 10
 
         logger.info(
-            "Test voice: backend=%s, voice_id=%s, volume=%d, text=%r",
+            "Test voice: backend=%s, voice_id=%s, volume=%d",
             voice.backend if voice else settings.backend,
             voice.voice_id if voice else settings.voice_id,
             test_volume,
-            phrase[:60],
         )
-
-        success = self._tts.speak(
-            phrase,
-            voice=voice,
-            rate=settings.rate,
-            pitch=settings.pitch,
-            volume=test_volume,
-            backend=settings.backend,
-            output_module=settings.output_module,
-            voice_id=settings.voice_id,
-            expand_abbreviations=self._settings.text.expand_abbreviations,
-            process_special_chars=self._settings.text.process_special_chars,
-            process_urls=self._settings.text.process_urls,
-            strip_formatting=self._settings.text.strip_formatting,
-            normalize_numbers=self._settings.text.normalize_numbers,
-        )
+        win = self._root_window()
+        app = win.get_application() if win is not None else None
+        options = app.speak_options() if hasattr(app, "speak_options") else {}
+        options["volume"] = test_volume
+        success = self._tts.speak(phrase, voice=voice, **options)
         # A failure is shown on the card (with its reason and a way out).
         if not success:
             logger.info("Test voice failed: %s", self._tts.last_error)
@@ -1700,7 +1660,7 @@ class MainView(Adw.NavigationPage):
         elif state == TTSState.ERROR:
             badge.set_visible_child_name("icon")
             badge.add_css_class("error")
-            self._hero_icon.set_from_icon_name("dialog-warning-symbolic")
+            self._hero_icon.set_from_icon_name("emblem-important-symbolic")
             title = _("Could not read the text")
             subtitle = self._tts.last_error or _("The speech engine reported a problem.")
         elif stopped:
@@ -1791,12 +1751,14 @@ class MainView(Adw.NavigationPage):
         if win is not None and hasattr(win, "refresh_status"):
             win.refresh_status()
 
-    _ENGINE_INSTALL_HINTS = {
-        TTSBackend.RHVOICE.value: N_("Not installed. Install the rhvoice package and a voice."),
-        TTSBackend.ESPEAK_NG.value: N_("Not installed. Install the espeak-ng package."),
-        TTSBackend.PIPER.value: N_("Not installed. Install Piper from the TTS Backend list."),
-        TTSBackend.KOKORO.value: N_("Not installed. Install the biglinux-kokoro-tts package."),
-    }
+    @staticmethod
+    def _engine_install_hint(backend: str) -> str:
+        return {
+            TTSBackend.RHVOICE.value: _("Not installed. Install the rhvoice package and a voice."),
+            TTSBackend.ESPEAK_NG.value: _("Not installed. Install the espeak-ng package."),
+            TTSBackend.PIPER.value: _("Not installed. Install Piper from the TTS Backend list."),
+            TTSBackend.KOKORO.value: _("Not installed. Install the biglinux-kokoro-tts package."),
+        }.get(backend, _("Not installed"))
 
     def _refresh_engine_status(self) -> None:
         """Engine rows: installed / voices, plus the selected engine's activity."""
@@ -1813,14 +1775,14 @@ class MainView(Adw.NavigationPage):
                 text, kind, sub = _("Checking…"), "", ""
             elif avail == EngineAvailability.NOT_INSTALLED:
                 text, kind = _("Not installed"), "warning"
-                sub = _(self._ENGINE_INSTALL_HINTS[backend])
+                sub = self._engine_install_hint(backend)
             elif avail == EngineAvailability.NO_VOICES:
                 text, kind = _("No voices"), "warning"
                 sub = _("Installed, but no voice is available. Open the Voice Manager.")
             else:
                 count = len(catalog.get_by_backend(backend)) if catalog else 0
                 text, kind = _("Ready"), "ready"
-                sub = _("{count} voices installed").format(count=count)
+                sub = _("Voices installed: {count}").format(count=count)
             if backend == active and avail == EngineAvailability.READY:
                 if state == TTSState.LOADING:
                     text, kind = _("Loading"), "busy"

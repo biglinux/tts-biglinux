@@ -88,6 +88,12 @@ def _show_in_file_manager(file_path: Path | None) -> None:
             pass
 
 
+
+def _voice_label(voice_id: str) -> str:
+    """ "kokoro:pf_dora" → "pf_dora", "piper:/…/pt_BR-faber-medium.onnx" → "pt_BR-faber-medium"."""
+    name = voice_id.split(":", 1)[-1].removeprefix("espeak-")
+    return Path(name).name.removesuffix(".onnx") if "/" in name else name
+
 class HistoryEntryRow(Gtk.ListBoxRow):
     """A single history entry card with text, metadata, and player."""
 
@@ -161,7 +167,8 @@ class HistoryEntryRow(Gtk.ListBoxRow):
 
         voice_id = entry.get("voice_id", "")
         if voice_id:
-            voice_label = Gtk.Label(label=voice_id)
+            voice_label = Gtk.Label(label=_voice_label(voice_id))
+            voice_label.set_tooltip_text(voice_id)
             voice_label.add_css_class("history-meta")
             voice_label.set_ellipsize(Pango.EllipsizeMode.END)
             voice_label.set_max_width_chars(20)
@@ -170,7 +177,7 @@ class HistoryEntryRow(Gtk.ListBoxRow):
         timestamp = entry.get("timestamp", "")
         if timestamp:
             dt = _parse_timestamp(timestamp)
-            time_str = dt.strftime("%d/%m/%Y %H:%M") if dt else timestamp
+            time_str = dt.strftime("%x %H:%M") if dt else timestamp  # locale date order
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)
@@ -314,7 +321,7 @@ class HistoryGridCard(Gtk.FlowBoxChild):
         timestamp = entry.get("timestamp", "")
         if timestamp:
             dt = _parse_timestamp(timestamp)
-            time_str = dt.strftime("%d/%m %H:%M") if dt else timestamp
+            time_str = dt.strftime("%x %H:%M") if dt else timestamp
             time_label = Gtk.Label(label=time_str)
             time_label.add_css_class("history-meta")
             time_label.set_hexpand(True)
@@ -459,7 +466,7 @@ class HistoryView(Adw.NavigationPage):
         toolbar.append(self._view_toggle)
 
         # Selection mode toggle
-        self._select_toggle = Gtk.ToggleButton(icon_name="selection-mode-symbolic")
+        self._select_toggle = Gtk.ToggleButton(icon_name="edit-select-all-symbolic")
         self._select_toggle.add_css_class("flat")
         self._select_toggle.set_tooltip_text(_("Select items"))
         self._select_toggle.connect("toggled", self._on_select_toggle)
@@ -632,7 +639,7 @@ class HistoryView(Adw.NavigationPage):
         self._content_stack.set_visible_child_name("grid" if self._grid_mode else "list")
 
         self._build_cancel = False
-        self._build_queue = list(reversed(self._all_entries))  # newest first
+        self._build_queue = list(self._all_entries)  # the database returns newest first
         self._build_index = 0
         GLib.idle_add(self._build_batch)
 
@@ -669,7 +676,7 @@ class HistoryView(Adw.NavigationPage):
     def _on_view_toggle(self, btn: Gtk.ToggleButton) -> None:
         self._grid_mode = btn.get_active()
         btn.set_icon_name(
-            "view-list-symbolic" if self._grid_mode else "view-grid-symbolic"
+            "format-justify-fill-symbolic" if self._grid_mode else "view-grid-symbolic"
         )
         # Rebuild the now-active view lazily (only one view is materialized).
         if self._all_entries:

@@ -57,19 +57,15 @@ class WelcomeDialog(Adw.Dialog):
         header.append(icon)
 
         title = Gtk.Label()
+        welcome = _("Welcome to BigLinux TTS")
         title.set_markup(
-            "<span size='xx-large' weight='bold'>"
-            f"{GLib.markup_escape_text(_('Welcome to BigLinux TTS'))}"
-            "</span>"
+            f"<span size='xx-large' weight='bold'>{GLib.markup_escape_text(welcome)}</span>"
         )
         header.append(title)
 
         subtitle = Gtk.Label()
-        subtitle.set_markup(
-            "<span size='large'>"
-            f"{GLib.markup_escape_text(_('Your text-to-speech assistant'))}"
-            "</span>"
-        )
+        tagline = _("Your text-to-speech assistant")
+        subtitle.set_markup(f"<span size='large'>{GLib.markup_escape_text(tagline)}</span>")
         subtitle.add_css_class("dim-label")
         header.append(subtitle)
 
@@ -83,7 +79,7 @@ class WelcomeDialog(Adw.Dialog):
                     "RHVoice, espeak-ng, Piper and Kokoro\n"
                     "with automatic voice discovery"
                 ),
-                "globe-symbolic",
+                "preferences-desktop-locale-symbolic",
                 _("Multilingual Support"),
                 _("Voices in dozens of languages\nincluding Portuguese (Brazil)"),
             ),
@@ -106,7 +102,7 @@ class WelcomeDialog(Adw.Dialog):
                 _("Install new voices and engines\ndirectly from the interface"),
             ),
             (
-                "audio-x-generic-symbolic",
+                "audio-speakers-symbolic",
                 _("Neural Voices"),
                 _(
                     "Install Piper or Kokoro voices for natural,\n"
@@ -147,11 +143,10 @@ class WelcomeDialog(Adw.Dialog):
         content.append(grid)
 
         shortcuts_label = Gtk.Label()
-        shortcuts_label.set_markup(
-            "<span size='small'>"
-            f"{GLib.markup_escape_text(_('Tip: Press {key} to read selected text from any application.').format(key=self._shortcut_display()))}"
-            "</span>"
+        tip = _("Tip: Press {key} to read selected text from any application.").format(
+            key=self._shortcut_display()
         )
+        shortcuts_label.set_markup(f"<span size='small'>{GLib.markup_escape_text(tip)}</span>")
         shortcuts_label.add_css_class("dim-label")
         shortcuts_label.set_margin_top(12)
         content.append(shortcuts_label)
@@ -251,7 +246,3 @@ class WelcomeDialog(Adw.Dialog):
 
     def _on_closed(self, _dialog: Adw.Dialog) -> None:
         self._save_preferences()
-
-
-# Keep the old import name available to downstream integrations.
-WelcomeWindow = WelcomeDialog

@@ -6,9 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MAIN_PY="${SCRIPT_DIR}/../share/biglinux/tts-biglinux/main.py"
 
 if [[ -f "$MAIN_PY" && -d "${SCRIPT_DIR}/../../.git" ]]; then
-    cd "${SCRIPT_DIR}/../share/biglinux/tts-biglinux/"
-    exec -a biglinux-tts python main.py "$@"
+    cd "${SCRIPT_DIR}/../share/biglinux/tts-biglinux/" || exit 1
+    exec -a biglinux-tts /usr/bin/python3 main.py "$@"
 fi
 
-cd /usr/share/biglinux/tts-biglinux/
-exec -a biglinux-tts python main.py "$@"
+cd /usr/share/biglinux/tts-biglinux/ || exit 1
+exec -a biglinux-tts /usr/bin/python3 main.py "$@"

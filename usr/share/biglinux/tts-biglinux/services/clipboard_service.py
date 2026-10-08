@@ -31,7 +31,7 @@ def is_wayland() -> bool:
     )
 
 
-def get_selected_text(max_chars: int = 10000) -> ClipboardResult:
+def get_selected_text(max_chars: int = 0) -> ClipboardResult:
     """
     Capture the currently selected (primary selection) text.
 
@@ -39,7 +39,7 @@ def get_selected_text(max_chars: int = 10000) -> ClipboardResult:
     Supports both Wayland and X11.
 
     Args:
-        max_chars: Maximum characters to return (safety limit).
+        max_chars: Maximum characters to return (0 = all; the reading limit is applied by TTSService.speak).
 
     Returns:
         ClipboardResult with text, success flag, and error message.

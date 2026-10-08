@@ -45,10 +45,6 @@
     100% { opacity: 1.0; }
 }
 
-.hero-detail {
-    font-size: 0.9em;
-}
-
 .narrow-layout .hero-card {
     padding: 20px 16px 16px 16px;
 }
@@ -148,7 +144,9 @@ scale marks mark label {
     padding: 2px 10px;
     border-radius: 12px;
     background: alpha(@accent_bg_color, 0.15);
-    color: @accent_fg_color;
+    /* accent_color is the accent tuned for text on the window background
+       (readable in light and dark); accent_fg_color is for solid accent. */
+    color: @accent_color;
 }
 
 /* ── Audio Player ────────────────────────────────────────────────── */

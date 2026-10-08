@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import logging
 import sqlite3
+from collections.abc import Iterator
+from contextlib import contextmanager
 import time
 import uuid
 from datetime import datetime
@@ -45,15 +47,26 @@ def get_db_path() -> Path:
     return get_history_dir() / "history.db"
 
 
-def _connect() -> sqlite3.Connection:
+@contextmanager
+def _connect() -> Iterator[sqlite3.Connection]:
+    """A connection that commits (or rolls back) and is always closed.
+
+    sqlite3's own ``with conn`` only ends the transaction: the connection,
+    and its db/-wal/-shm file descriptors, would stay open until garbage
+    collection — one leak per saved reading.
+    """
     path = get_db_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(path))
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA synchronous=NORMAL")
-    conn.executescript(_SCHEMA)
-    return conn
+    try:
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        conn.executescript(_SCHEMA)
+        with conn:
+            yield conn
+    finally:
+        conn.close()
 
 
 def _ts_to_epoch(ts: str) -> float:
