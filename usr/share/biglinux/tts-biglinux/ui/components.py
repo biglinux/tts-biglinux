@@ -337,6 +337,9 @@ class ShortcutKeys(Gtk.Box):
         )
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.CENTER)
+        # Key combinations read modifier-first in every locale (Ctrl+C), so
+        # keep this group left-to-right even in RTL layouts.
+        self.set_direction(Gtk.TextDirection.LTR)
         if large:
             self.add_css_class("keycap-large")
         self._accel = None

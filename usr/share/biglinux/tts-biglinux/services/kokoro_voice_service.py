@@ -21,8 +21,6 @@ from typing import NamedTuple
 from urllib.request import Request, urlopen
 from urllib.error import URLError
 
-import numpy as np
-
 from utils.i18n import _
 
 logger = logging.getLogger(__name__)
@@ -40,9 +38,10 @@ USER_VOICES_BIN = USER_VOICES_DIR / "voices.bin"
 HF_REPO = "hexgrad/Kokoro-82M"
 HF_BASE_URL = f"https://huggingface.co/{HF_REPO}/resolve/main/voices"
 
-# Shape of each Kokoro voice style vector
+# Shape of each Kokoro voice style vector (float32). numpy is imported only
+# when a voice is converted: it is not needed to start the app or to speak.
 _VOICE_SHAPE = (510, 1, 256)
-_VOICE_DTYPE = np.float32
+_VOICE_ITEMSIZE = 4
 
 
 # ── Voice catalog ────────────────────────────────────────────────────
@@ -543,6 +542,8 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
     The .pt file is a ZIP containing a data/0 entry with raw float32 tensor data.
     The internal directory name varies per file, so we search for */data/0.
     """
+    import numpy as np
+
     with zipfile.ZipFile(io.BytesIO(pt_data), "r") as z:
         # Find the raw tensor data entry (pattern: {name}/data/0)
         data_entry = None
@@ -554,13 +555,13 @@ def _pt_to_npy(pt_data: bytes, voice_id: str) -> bytes:
             raise KeyError(f"No tensor data entry found in {voice_id}.pt")
         raw = z.read(data_entry)
 
-    expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * np.dtype(_VOICE_DTYPE).itemsize
+    expected_size = _VOICE_SHAPE[0] * _VOICE_SHAPE[1] * _VOICE_SHAPE[2] * _VOICE_ITEMSIZE
     if len(raw) != expected_size:
         raise ValueError(
             f"Unexpected data size for {voice_id}: {len(raw)} (expected {expected_size})"
         )
 
-    arr = np.frombuffer(raw, dtype=_VOICE_DTYPE).reshape(_VOICE_SHAPE)
+    arr = np.frombuffer(raw, dtype=np.float32).reshape(_VOICE_SHAPE)
     if not np.isfinite(arr).all():
         raise ValueError(f"{voice_id} contains invalid values")
     buf = io.BytesIO()

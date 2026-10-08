@@ -1790,3 +1790,8 @@ msgstr "Sobre o BigLinux TTS"
 #, python-brace-format
 msgid  "Select text and press {key} to read it aloud"
 msgstr "Selecione um texto e pressione {key} para ouvi-lo"
+
+#
+# File: tts-biglinux/window.py, line: 160
+msgid  "Show settings"
+msgstr "Mostrar configurações"

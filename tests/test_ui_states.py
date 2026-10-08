@@ -9,7 +9,7 @@ import pytest
 gi = pytest.importorskip("gi")
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, GLib, Gtk  # noqa: E402
+from gi.repository import Adw, Gtk  # noqa: E402
 
 if not Gtk.init_check():
     pytest.skip("no display for GTK", allow_module_level=True)
@@ -152,3 +152,14 @@ def _children(widget):
     while child is not None:
         yield child
         child = child.get_next_sibling()
+
+
+def test_sidebar_is_shown_in_wide_windows_and_collapses_when_narrow():
+    """Regression: binding the toggle hid the sidebar at startup."""
+    window = importlib.import_module("window")
+    split, button = window.create_sidebar_split()
+    assert split.get_show_sidebar()  # wide window: sidebar visible
+    button.set_active(False)  # narrow window, settings closed
+    assert not split.get_show_sidebar()
+    split.set_show_sidebar(True)  # e.g. swipe / breakpoint unapply
+    assert button.get_active()

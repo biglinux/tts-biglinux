@@ -154,7 +154,21 @@ class MprisService:
             "Metadata": self._metadata_variant(),
         })
 
+    def set_paused(self, paused: bool) -> None:
+        """Reflect a real pause/resume (the position stops while paused)."""
+        if paused and self._status == "Playing":
+            self._paused_pos = self._position_us()
+            self._status = "Paused"
+        elif not paused and self._status == "Paused":
+            self._start = time.monotonic() - getattr(self, "_paused_pos", 0) / 1_000_000
+            self._status = "Playing"
+        else:
+            return
+        self._emit_properties({"PlaybackStatus": GLib.Variant("s", self._status)})
+
     def _position_us(self) -> int:
+        if self._status == "Paused":
+            return getattr(self, "_paused_pos", 0)
         if self._status != "Playing":
             return 0
         pos = int((time.monotonic() - self._start) * 1_000_000)
@@ -207,11 +221,25 @@ class MprisService:
         if method == "Stop":
             GLib.idle_add(tts.stop)
         elif method in ("Pause", "PlayPause") and self._status == "Playing":
-            GLib.idle_add(tts.stop)
-        elif method in ("Play", "PlayPause") and self._status != "Playing":
+            GLib.idle_add(self._pause)  # a real pause: resumes where it was
+        elif method in ("Play", "PlayPause") and self._status == "Paused":
+            GLib.idle_add(self._resume)
+        elif method in ("Play", "PlayPause") and self._status == "Stopped":
             GLib.idle_add(self._replay)
         # Next/Previous/Seek/SetPosition: no-ops for TTS.
         invocation.return_value(None)
+
+    def _pause(self) -> bool:
+        if self._app.tts_service.pause():
+            self.set_paused(True)
+            self._app.refresh_playback_controls()
+        return False
+
+    def _resume(self) -> bool:
+        if self._app.tts_service.resume():
+            self.set_paused(False)
+            self._app.refresh_playback_controls()
+        return False
 
     def _replay(self) -> bool:
         """Play/PlayPause when idle → re-read the last spoken text."""

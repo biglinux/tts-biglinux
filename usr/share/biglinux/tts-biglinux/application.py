@@ -604,6 +604,13 @@ class TTSApplication(Adw.Application):
             MenuItem(self._TRAY_QUIT, _("Quit"), self._on_tray_quit),
         ]
 
+    def refresh_playback_controls(self) -> None:
+        """Tray + MPRIS after a pause/resume (state itself stays SPEAKING)."""
+        self._refresh_tray_playback()
+        tts = self._tts_service
+        if self._mpris is not None and tts is not None and tts.is_speaking:
+            self._mpris.set_paused(tts.is_paused)
+
     def _refresh_tray_playback(self) -> None:
         """Sync the tray icon animation, tooltip and menu with playback state."""
         if self._tray is None:
@@ -631,7 +638,7 @@ class TTSApplication(Adw.Application):
                 tts.pause()
             elif action == "resume":
                 tts.resume()
-            self._refresh_tray_playback()
+            self.refresh_playback_controls()
             return False
 
         GLib.idle_add(_run)

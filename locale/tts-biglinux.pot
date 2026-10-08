@@ -1822,3 +1822,8 @@ msgstr ""
 #, python-brace-format
 msgid  "Select text and press {key} to read it aloud"
 msgstr ""
+
+#
+# File: tts-biglinux/window.py, line: 160
+msgid  "Show settings"
+msgstr ""

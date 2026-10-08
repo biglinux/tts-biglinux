@@ -16,7 +16,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, Gio, GLib, Gtk, Pango
+from gi.repository import Adw, Gio, GLib, GObject, Gtk, Pango
 
 from config import (
     APP_NAME,
@@ -34,6 +34,28 @@ if TYPE_CHECKING:
     from config import TTSState
 
 logger = logging.getLogger(__name__)
+
+
+def create_sidebar_split() -> tuple[Adw.OverlaySplitView, Gtk.ToggleButton]:
+    """Sidebar/content split plus the header toggle used when it collapses."""
+    split = Adw.OverlaySplitView()
+    split.set_vexpand(True)
+    split.set_min_sidebar_width(280)
+    split.set_max_sidebar_width(340)
+    split.set_sidebar_width_fraction(0.34)
+
+    button = Gtk.ToggleButton(icon_name="sidebar-show-symbolic")
+    button.set_tooltip_text(_("Settings"))
+    button.update_property([Gtk.AccessibleProperty.LABEL], [_("Show settings")])
+    button.set_visible(False)  # only while collapsed (breakpoint setter)
+    # Starts active: SYNC_CREATE copies this to show-sidebar, and wide
+    # windows must show the sidebar.
+    button.set_active(True)
+    button.bind_property(
+        "active", split, "show-sidebar",
+        GObject.BindingFlags.BIDIRECTIONAL | GObject.BindingFlags.SYNC_CREATE,
+    )
+    return split, button
 
 
 class TTSWindow(Adw.ApplicationWindow):
@@ -100,18 +122,15 @@ class TTSWindow(Adw.ApplicationWindow):
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        split = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
-        split.set_position(320)
-        split.set_vexpand(True)
-        split.set_shrink_start_child(False)
-        split.set_shrink_end_child(False)
-        split.set_resize_start_child(False)
+        # Sidebar + content. Below 600sp the sidebar collapses and opens over
+        # the content from a header button (the window minimum is 360 px; two
+        # fixed columns would not fit and the content would be cut off).
+        split, self._sidebar_button = create_sidebar_split()
         self._split = split
 
         # ── LEFT: settings sidebar (own header with app icon + title) ──
         left = Adw.ToolbarView()
         left.add_css_class("sidebar")
-        left.set_size_request(280, -1)
         self._left_pane = left
 
         # Minimal sidebar header — no title/icon/window-controls (those live on
@@ -137,7 +156,6 @@ class TTSWindow(Adw.ApplicationWindow):
 
         # ── RIGHT: main content (own header with history toggle + menu) ──
         right = Adw.ToolbarView()
-        right.set_size_request(340, -1)
 
         right_header = Adw.HeaderBar()
         # No start title-buttons here (that's where the decoration puts the app
@@ -153,6 +171,8 @@ class TTSWindow(Adw.ApplicationWindow):
         self._back_button.set_action_name("win.show-main")
         self._back_button.set_visible(False)
         right_header.pack_start(self._back_button)
+        # Narrow windows: show/hide the settings sidebar.
+        right_header.pack_start(self._sidebar_button)
         self._menu_button = self._create_menu_button()
         right_header.pack_end(self._menu_button)
         self._window_title = Adw.WindowTitle(title=_(APP_NAME), subtitle=_("Text narrator"))
@@ -169,8 +189,8 @@ class TTSWindow(Adw.ApplicationWindow):
         self._content_stack.add_named(self._history_view, "history")
         right.set_content(self._content_stack)
 
-        split.set_start_child(left)
-        split.set_end_child(right)
+        split.set_sidebar(left)
+        split.set_content(right)
         root.append(split)
 
         # ── BOTTOM: dark controls bar (persistent player) ──
@@ -321,20 +341,20 @@ class TTSWindow(Adw.ApplicationWindow):
         bp_narrow = Adw.Breakpoint.new(
             Adw.BreakpointCondition.parse("max-width: 600sp")
         )
+        bp_narrow.add_setter(self._split, "collapsed", True)
+        bp_narrow.add_setter(self._sidebar_button, "visible", True)
         bp_narrow.connect("apply", self._on_narrow_apply)
         bp_narrow.connect("unapply", self._on_narrow_unapply)
         self.add_breakpoint(bp_narrow)
 
     def _on_narrow_apply(self, _bp: Adw.Breakpoint) -> None:
-        """Narrow: give the content more room (the split stays draggable)."""
-        if hasattr(self, "_split"):
-            self._split.set_position(220)
+        """Narrow: content first; settings open over it from the header."""
+        self._sidebar_button.set_active(False)
         self.add_css_class("narrow-layout")
 
     def _on_narrow_unapply(self, _bp: Adw.Breakpoint) -> None:
-        """Wide: restore the sidebar width."""
-        if hasattr(self, "_split"):
-            self._split.set_position(320)
+        """Wide: sidebar always shown next to the content."""
+        self._split.set_show_sidebar(True)
         self.remove_css_class("narrow-layout")
 
     def update_history_tab_visibility(self, enabled: bool) -> None:
