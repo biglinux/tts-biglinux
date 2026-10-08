@@ -1373,6 +1373,12 @@ msgid  "{engine} stopped with an error and could not read the text."
 msgstr "O {engine} parou com um erro e não conseguiu ler o texto."
 
 #
+# File: tts-biglinux/services/tts_service.py, line: 1630
+#, python-brace-format
+msgid  "{engine} crashed while reading the text."
+msgstr "O {engine} travou durante a leitura do texto."
+
+#
 # File: tts-biglinux/ui/components.py, line: 359
 msgid  "No shortcut"
 msgstr "Sem atalho"

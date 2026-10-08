@@ -152,6 +152,12 @@ msgid   "{engine} stopped with an error and could not read the text."
 msgstr  ""
 
 #
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/tts_service.py, line: 1630
+#, python-brace-format
+msgid   "{engine} crashed while reading the text."
+msgstr  ""
+
+#
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/shortcut_service.py, line: 120
 msgid   "This key combination is not valid."
 msgstr  ""
