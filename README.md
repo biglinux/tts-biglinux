@@ -17,7 +17,7 @@
   <img src="https://img.shields.io/badge/Python-3.10+-yellow.svg" alt="Python">
   <img src="https://img.shields.io/badge/engines-4-red.svg" alt="4 TTS engines">
   <img src="https://img.shields.io/badge/languages-30-lightgrey.svg" alt="30 languages">
-  <img src="https://img.shields.io/badge/tests-222-success.svg" alt="222 tests">
+  <img src="https://img.shields.io/badge/tests-262-success.svg" alt="262 tests">
 </p>
 
 ---
@@ -126,7 +126,7 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 - **System tray icon** — breathes (opacity only) while reading; left-click speaks or stops, right-click offers Pause/Play and Stop while reading, plus Read text, Settings and Quit; the tooltip shows the current shortcut
 - **Notifications** — what is being read, and a clear message when something fails or nothing is selected
 - **Built-in voice test** — text field to type and hear with the current voice settings
-- **Optional history** — every reading that was heard, whatever the engine, is kept and can be replayed (main menu → History, Ctrl+H)
+- **History** — every reading that was heard, with its audio, whatever the engine (main menu → History, Ctrl+H; see [History](#reading-history))
 - **Silent start** — opening the app never speaks and never starts speech-dispatcher
 - **Long texts** — read to the end with any character limit, including *Unlimited*: espeak-ng and Piper stream sentence chunks, Kokoro reads line by line
 
@@ -137,6 +137,26 @@ BigLinux TTS was born from a practical need: making text-to-speech accessible an
 - **Volume** — scale from 0 (mute) to 100 (max)
 - **Voice selection** — list filtered by engine: "Name — Language · Neural / High quality"
 - **Kokoro** — expression presets (neutral, happy, calm, urgent, narrative) and blending with a second voice
+
+### Reading History
+
+Main menu → **History** (Ctrl+H) is always available, also with saving turned off (old readings stay). Saving is on for new installations; settings from earlier versions keep their choice. Advanced options: *Save history*, *Keep the audio*, *Keep the text*, *Keep at most* (100 … 5000 or unlimited).
+
+- **What is kept** for each reading that was actually heard: the text as given and as processed, engine, voice, date and time, duration, outcome (*completed*, *stopped* by the user, or *error* after sound started), and the audio
+- **The audio is the audio that was played**, not a second synthesis:
+
+| Engine | How the audio is kept |
+|--------|-----------------------|
+| RHVoice | `RHVoice-test` writes WAV to stdout; the app passes it to `aplay` and writes the same bytes to the history file |
+| Kokoro | `koko stream` writes one WAV stream to stdout; same relay as RHVoice (koko's own `pipe` mode plays by itself and could not be kept) |
+| espeak-ng, Piper | each WAV chunk is appended to the history file when it starts playing (long texts: one file for the whole reading) |
+| Speech Dispatcher | not a selectable engine since 4.0: speech-dispatcher plays on its own, so its audio could only be captured from the sound server — which this app never does |
+
+- A stopped reading keeps the audio up to the stop (at most a fraction of a second not heard, still in the player's buffer)
+- **The page**: cards with the text (expandable), engine, voice, date, duration and outcome; player; copy, *Read again* with the current voice, *Save audio as…*, open the folder, delete. Search (text, voice, engine, date), filters (all dates, today, yesterday, last 7 days; engine), newest or oldest first, list or grid, multiple selection (save to a folder, delete). New readings appear by themselves; pages of 50 load as you scroll
+- **Safe deleting**: one entry can be undone for 5 seconds; a selection asks first; files go to the **Trash** (restored files come back as entries on the next start)
+- **Recovery**, at every start, off the main thread: entries are rebuilt from the files when the index is damaged (the damaged file is kept as `history.db.damaged-…`), files without an entry come back, a recording interrupted by a crash is finished and kept, durations of older entries are filled in, a legacy `history.json` is migrated once. Nothing saved is ever deleted by the recovery
+- Saving runs in a worker: it never delays the start of speech (first audio measured equal with history on and off) and a failure (full disk, no permission) never stops a reading
 
 ### Voice Manager
 
@@ -430,7 +450,7 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
 | Path | Content |
 |------|---------|
 | `~/.config/biglinux-tts/settings.json` | All app settings (JSON) |
-| `~/Music/tts-biglinux/` | Reading history (`history.db`, SQLite) and saved audio, when enabled — a private folder (mode 0700) |
+| `~/Music/tts-biglinux/` (XDG Music folder) | Reading history: `<time>_<engine>.wav` / `.txt` per reading and the `history.db` index (SQLite) — a private folder (mode 0700) |
 | `~/.local/share/biglinux-tts/kokoro-voices/voices.bin` | Kokoro voices downloaded by the user (system base voices + downloads) |
 | `$XDG_RUNTIME_DIR/biglinux-tts/koko/` | Kokoro scratch audio (private, temporary) |
 | `~/.local/share/applications/biglinux-tts-speak.desktop` | Launcher bound to the global shortcut |
@@ -470,7 +490,7 @@ biglinux-tts-speak      # What Alt+V runs: biglinux-tts --speak
     "maximized": false
   },
   "history": {
-    "enabled": false,
+    "enabled": true,
     "save_audio": true,
     "save_text": true,
     "playback_mode": "interrupt",
@@ -641,12 +661,14 @@ python3 scripts/sync_translations.py --check
 python3 scripts/benchmark_tts.py
 ```
 
-222 Python tests and 4 Rust tests cover, among others:
+262 Python tests and 4 Rust tests cover, among others:
 
 | Area | Tests |
 |------|-------|
 | Request lifecycle | `test_tts_lifecycle.py` — a fake `koko` process: LOADING → SPEAKING → IDLE, sticky errors, crashes reported, stop while loading, huge texts never block |
-| Streaming, history, simultaneous | `test_tts_streaming.py` — every chunk played in order, at most two chunk files, Stop mid-stream, history for RHVoice/espeak-ng/Kokoro, nothing recorded when off or stopped, Stop reaches simultaneous readings |
+| Streaming and history | `test_tts_streaming.py` — chunks in order, at most two chunk files, Stop mid-stream; every engine records text and the audio played (exact duration), long streamed readings keep all chunks, stopped/error outcomes, nothing when not heard or off, simultaneous and sequential readings as separate entries, no permission never breaks a reading |
+| History recovery | `test_history_recovery.py` — restart, orphan files, damaged index rebuilt, crash recordings, missing audio, legacy JSON once, schema upgrade, Trash, filters/search/paging, no overwrite, unwritable folder |
+| History page and entry points | `test_history_view.py` (cards, filters, paging, empty states, saving off, live refresh, Undo, confirmation, menu), `test_entry_points_history.py` (shortcut/tray, media Play key, queue mode) |
 | Text | `test_text_rules.py`, `test_text_numbers.py`, `test_special_chars.py`, `test_chunking.py`, `test_koko_text.py` |
 | Translations | `test_i18n.py` — parser, GNU language precedence, real catalogs, every string extractable by `xgettext`, complete Portuguese catalogs |
 | Interface | `test_ui_states.py` — card states, shortcut keys and conflicts, engine status, saved voice kept, sidebar |
