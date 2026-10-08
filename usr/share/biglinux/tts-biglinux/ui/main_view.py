@@ -685,15 +685,47 @@ class MainView(Adw.NavigationPage):
         group.add(launcher_row)
 
         # ── History save ──
+        from services.history_service import display_history_dir
+
+        history = self._settings.history
         history_row, self._history_switch_widget = create_action_row_with_switch(
             title=_("Save history"),
-            subtitle=_("Save spoken text and audio to ~/Music/tts-biglinux"),
-            active=self._settings.history.enabled,
+            subtitle=_("Keep what you listen to, only on this computer, in {folder}").format(
+                folder=GLib.markup_escape_text(display_history_dir())
+            ),
+            active=history.enabled,
             on_toggled=self._on_history_toggle,
             accessible_name=_("Save speech history"),
         )
         history_row.set_icon_name("document-save-symbolic")
         group.add(history_row)
+
+        self._history_audio_row, self._history_audio_switch = create_action_row_with_switch(
+            title=_("Keep the audio"),
+            subtitle=_("Listen to each reading again, with the same voice"),
+            active=history.save_audio,
+            on_toggled=lambda active: self._on_history_option("save_audio", active),
+            accessible_name=_("Keep the audio of each reading"),
+        )
+        group.add(self._history_audio_row)
+        self._history_text_row, self._history_text_switch = create_action_row_with_switch(
+            title=_("Keep the text"),
+            subtitle=_("Search, copy and read again what was read"),
+            active=history.save_text,
+            on_toggled=lambda active: self._on_history_option("save_text", active),
+            accessible_name=_("Keep the text of each reading"),
+        )
+        group.add(self._history_text_row)
+        self._retention_values = [100, 500, 1000, 5000, 0]
+        self._history_limit_row = Adw.ComboRow()
+        self._history_limit_row.set_title(_("Keep at most"))
+        self._history_limit_row.set_subtitle(_("The oldest readings are deleted beyond this number"))
+        self._history_limit_row.set_model(Gtk.StringList.new(["100", "500", "1000", "5000", _("Unlimited")]))
+        limit = history.max_entries if history.max_entries in self._retention_values else 1000
+        self._history_limit_row.set_selected(self._retention_values.index(limit))
+        self._history_limit_row.connect("notify::selected", self._on_history_limit_changed)
+        group.add(self._history_limit_row)
+        self._sync_history_rows()
 
         # ── Playback mode for history player ──
         playback_row = Adw.ComboRow()
@@ -910,24 +942,60 @@ class MainView(Adw.NavigationPage):
             self._on_toast(_("Tray icon disabled"), 2)
 
     def _on_history_toggle(self, active: bool) -> None:
-        """Enable/disable speech history saving."""
+        """The "Save history" switch."""
         if self._updating_ui:
             return
+        self.set_history_enabled(active)
+        self._on_toast(
+            _("History saving enabled") if active
+            else _("History saving disabled. Saved readings are kept."), 3,
+        )
+
+    def set_history_enabled(self, active: bool) -> None:
+        """Turn saving on/off (Advanced options or the History page).
+
+        Turning it off only stops saving new readings: the History stays
+        available and nothing saved is deleted.
+        """
         self._settings.history.enabled = active
         self._settings_service.save()
-
         if active:
-            # Ensure directory exists
             from services.history_service import ensure_history_dir
-            ensure_history_dir()
-            self._on_toast(_("History saving enabled"), 2)
-        else:
-            self._on_toast(_("History saving disabled"), 2)
 
-        # Notify window to show/hide history tab
+            try:
+                ensure_history_dir()
+            except OSError as e:
+                logger.warning("History folder unavailable: %s", e)
+        switch = getattr(self, "_history_switch_widget", None)
+        if switch is not None and switch.get_active() != active:
+            self._updating_ui = True
+            try:
+                switch.set_active(active)
+            finally:
+                self._updating_ui = False
+        self._sync_history_rows()
         window = self._root_window()
         if hasattr(window, "update_history_tab_visibility"):
             window.update_history_tab_visibility(active)
+
+    def _sync_history_rows(self) -> None:
+        enabled = self._settings.history.enabled
+        for name in ("_history_audio_row", "_history_text_row", "_history_limit_row"):
+            row = getattr(self, name, None)
+            if row is not None:
+                row.set_sensitive(enabled)
+
+    def _on_history_option(self, name: str, active: bool) -> None:
+        if self._updating_ui:
+            return
+        setattr(self._settings.history, name, active)
+        self._settings_service.save()
+
+    def _on_history_limit_changed(self, row: Adw.ComboRow, _pspec) -> None:
+        if self._updating_ui:
+            return
+        self._settings.history.max_entries = self._retention_values[row.get_selected()]
+        self._settings_service.save()
 
     def _on_playback_mode_changed(self, combo: Adw.ComboRow, _pspec: object) -> None:
         """Handle audio playback mode selection."""
@@ -1873,8 +1941,15 @@ class MainView(Adw.NavigationPage):
                 self._settings.shortcut.show_in_launcher
             )
 
-            # History toggle
-            self._history_switch_widget.set_active(self._settings.history.enabled)
+            # History toggles
+            history = self._settings.history
+            self._history_switch_widget.set_active(history.enabled)
+            if hasattr(self, "_history_audio_switch"):
+                self._history_audio_switch.set_active(history.save_audio)
+                self._history_text_switch.set_active(history.save_text)
+                limit = history.max_entries if history.max_entries in self._retention_values else 1000
+                self._history_limit_row.set_selected(self._retention_values.index(limit))
+            self._sync_history_rows()
 
             # Kokoro controls — visible only when Kokoro is selected
             is_kokoro = current_backend == TTSBackend.KOKORO.value

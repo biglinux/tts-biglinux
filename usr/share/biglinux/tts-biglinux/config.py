@@ -102,7 +102,10 @@ class KokoroConfig:
 class HistoryConfig:
     """History save configuration."""
 
-    enabled: bool = False
+    # On for new installations (the History explains where it is stored).
+    # Settings saved by earlier versions keep their value: see
+    # _deserialize_settings, which never turns it on by itself.
+    enabled: bool = True
     save_audio: bool = True
     save_text: bool = True
     playback_mode: str = "interrupt"  # interrupt | queue | simultaneous
@@ -302,16 +305,17 @@ def _deserialize_settings(data: dict) -> AppSettings:
             maximized=_safe_bool(w, "maximized", False),
         )
 
-    if _section("history"):
-        h = _section("history")
-        settings.history = HistoryConfig(
-            enabled=_safe_bool(h, "enabled", False),
-            save_audio=_safe_bool(h, "save_audio", True),
-            save_text=_safe_bool(h, "save_text", True),
-            playback_mode=_safe_str(h, "playback_mode", "interrupt"),
-            max_entries=_safe_int(h, "max_entries", 1000),
-            max_age_days=_safe_int(h, "max_age_days", 0),
-        )
+    # Always read, even when absent: a settings file without the key comes
+    # from a version where history was off by default, so it stays off.
+    h = _section("history")
+    settings.history = HistoryConfig(
+        enabled=_safe_bool(h, "enabled", False),
+        save_audio=_safe_bool(h, "save_audio", True),
+        save_text=_safe_bool(h, "save_text", True),
+        playback_mode=_safe_str(h, "playback_mode", "interrupt"),
+        max_entries=_safe_int(h, "max_entries", 1000),
+        max_age_days=_safe_int(h, "max_age_days", 0),
+    )
 
     settings.show_welcome = _safe_bool(data, "show_welcome", True)
     settings.show_media_player = _safe_bool(data, "show_media_player", True)
@@ -322,6 +326,7 @@ def _deserialize_settings(data: dict) -> AppSettings:
 def _migrate_legacy_settings() -> AppSettings:
     """Migrate from legacy ~/.config/tts-biglinux/ format."""
     settings = AppSettings()
+    settings.history.enabled = False  # an existing user: never turned on silently
 
     def _read_legacy(filename: str, default: str) -> str:
         filepath = LEGACY_CONFIG_DIR / filename
