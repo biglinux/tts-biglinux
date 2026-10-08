@@ -1207,7 +1207,7 @@ msgstr "The speech engine reported a problem."
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1786
-# File: tts-biglinux/tests/test_ui_states.py, line: 84
+# File: tts-biglinux/tests/test_ui_states.py, line: 86
 msgid "Stopped"
 msgstr "Stopped"
 
@@ -1220,7 +1220,7 @@ msgstr "Reading was stopped."
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1791
-# File: tts-biglinux/tests/test_ui_states.py, line: 57
+# File: tts-biglinux/tests/test_ui_states.py, line: 59
 msgid "Ready to speak"
 msgstr "Ready to speak"
 
@@ -1261,7 +1261,7 @@ msgstr "Shortcut changed to {keys}"
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1891
-# File: tts-biglinux/tests/test_ui_states.py, line: 128
+# File: tts-biglinux/tests/test_ui_states.py, line: 130
 msgid "Not installed"
 msgstr "Not installed"
 
@@ -1269,7 +1269,7 @@ msgstr "Not installed"
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1894
-# File: tts-biglinux/tests/test_ui_states.py, line: 129
+# File: tts-biglinux/tests/test_ui_states.py, line: 131
 msgid "No voices"
 msgstr "No voices"
 
@@ -1282,7 +1282,7 @@ msgstr "Installed, but no voice is available. Open the Voice Manager."
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1898
-# File: tts-biglinux/tests/test_ui_states.py, line: 130
+# File: tts-biglinux/tests/test_ui_states.py, line: 132
 msgid "Ready"
 msgstr "Ready"
 
@@ -1296,7 +1296,7 @@ msgstr "{count} voices installed"
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1902
-# File: tts-biglinux/tests/test_ui_states.py, line: 133
+# File: tts-biglinux/tests/test_ui_states.py, line: 135
 msgid "Loading"
 msgstr "Loading"
 

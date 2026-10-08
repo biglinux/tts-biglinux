@@ -1202,7 +1202,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1786
-# File: tts-biglinux/tests/test_ui_states.py, line: 84
+# File: tts-biglinux/tests/test_ui_states.py, line: 86
 msgid   "Stopped"
 msgstr  ""
 
@@ -1215,7 +1215,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1791
-# File: tts-biglinux/tests/test_ui_states.py, line: 57
+# File: tts-biglinux/tests/test_ui_states.py, line: 59
 msgid   "Ready to speak"
 msgstr  ""
 
@@ -1256,7 +1256,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1891
-# File: tts-biglinux/tests/test_ui_states.py, line: 128
+# File: tts-biglinux/tests/test_ui_states.py, line: 130
 msgid   "Not installed"
 msgstr  ""
 
@@ -1264,7 +1264,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1894
-# File: tts-biglinux/tests/test_ui_states.py, line: 129
+# File: tts-biglinux/tests/test_ui_states.py, line: 131
 msgid   "No voices"
 msgstr  ""
 
@@ -1277,7 +1277,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1898
-# File: tts-biglinux/tests/test_ui_states.py, line: 130
+# File: tts-biglinux/tests/test_ui_states.py, line: 132
 msgid   "Ready"
 msgstr  ""
 
@@ -1291,7 +1291,7 @@ msgstr  ""
 # #-#-#-#-#  tts-biglinux.pot (tts-biglinux)  #-#-#-#-#
 #
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1902
-# File: tts-biglinux/tests/test_ui_states.py, line: 133
+# File: tts-biglinux/tests/test_ui_states.py, line: 135
 msgid   "Loading"
 msgstr  ""
 
