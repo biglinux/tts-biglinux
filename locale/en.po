@@ -150,6 +150,12 @@ msgid "Failed to remove voice: {error}"
 msgstr "Failed to remove voice: {error}"
 
 #
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/desktop_integration_service.py, line: 297
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/desktop_integration_service.py, line: 361
+msgid "Read or stop the selected text"
+msgstr "Read or stop the selected text"
+
+#
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/package_installer.py, line: 93
 msgid "The installation was cancelled: the administrator password was not confirmed."
 msgstr "The installation was cancelled: the administrator password was not confirmed."
