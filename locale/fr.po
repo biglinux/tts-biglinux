@@ -1303,3 +1303,10 @@ msgstr "Cela retournera tous les ajustements à leurs valeurs par défaut origin
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Restaurer"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "Les paquets marqués AUR ne sont pas dans vos dépôts : ils proviennent de l'Arch User Repository, sont maintenus par la communauté et sont compilés sur cet ordinateur, ce qui prend plus de temps."
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} n'a pas pu être compilé depuis l'AUR. Consultez les détails."

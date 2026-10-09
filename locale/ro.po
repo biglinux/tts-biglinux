@@ -1295,3 +1295,10 @@ msgstr "Aceasta va readuce toate ajustările la valorile implicite originale."
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Restabilește"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "Pachetele marcate cu AUR nu se află în depozitele tale: provin din Arch User Repository, sunt întreținute de comunitate și sunt compilate pe acest calculator, ceea ce durează mai mult."
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} nu a putut fi compilat din AUR. Vezi detaliile."

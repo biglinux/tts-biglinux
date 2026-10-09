@@ -1295,3 +1295,10 @@ msgstr "See taastab kõik kohandused algsete vaikeseadeteni."
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Taasta"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "AUR-iga märgitud pakette pole teie hoidlates: need pärinevad Arch User Repositoryst, neid haldab kogukond ja need ehitatakse selles arvutis, mis võtab kauem aega."
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Paketti {packages} ei õnnestunud AUR-ist ehitada. Vaadake üksikasju."
