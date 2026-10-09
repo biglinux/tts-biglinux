@@ -2106,3 +2106,8 @@ msgstr  ""
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 465
 msgid   "Restore"
 msgstr  ""
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/services/desktop_integration_service.py, line: 297
+msgid   "Read or stop the selected text"
+msgstr  ""

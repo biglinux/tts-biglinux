@@ -17,6 +17,8 @@ def en(text: str, **kw) -> str:
 # ── The voice's language decides, not the system's ────────────────────
 
 def test_english_voice_on_a_portuguese_system(monkeypatch):
+    monkeypatch.delenv("LC_ALL", raising=False)  # builders: LC_ALL=C
+    monkeypatch.delenv("LC_MESSAGES", raising=False)
     monkeypatch.setenv("LANG", "pt_BR.UTF-8")
     out = en("Mail john@example.com, 50% off at 5 p.m. with Dr. Jones")
     assert "arroba" not in out and "cinquenta" not in out and "doutor" not in out
