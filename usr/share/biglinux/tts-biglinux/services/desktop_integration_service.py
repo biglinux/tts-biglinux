@@ -293,6 +293,8 @@ class DesktopIntegrationService:
 
         exec_path = DesktopIntegrationService._exec_path_for_speak()
         # Name/GenericName are what the desktop's shortcut settings list.
+        # (_() outside the f-string: xgettext does not look inside f-strings.)
+        generic_name = _("Read or stop the selected text")
         content = f"""[Desktop Entry]
 Type=Application
 Exec={exec_path}
@@ -302,7 +304,7 @@ StartupNotify=false
 NoDisplay=true
 X-KDE-Shortcuts={kde_key}
 Name=BigLinux TTS
-GenericName={_("Read or stop the selected text")}
+GenericName={generic_name}
 """
         desktop_dst.parent.mkdir(parents=True, exist_ok=True)
         desktop_dst.write_text(content, encoding="utf-8")
@@ -356,7 +358,8 @@ GenericName={_("Read or stop the selected text")}
                         if group_prefix == "services":
                             val = kde_shortcut
                         else:
-                            val = f"{kde_shortcut},{kde_shortcut},{_('Read or stop the selected text')}"
+                            name = _("Read or stop the selected text")
+                            val = f"{kde_shortcut},{kde_shortcut},{name}"
                         subprocess.run(cmd + [val], timeout=2, check=False)
                     else:
                         subprocess.run(cmd + ["--delete"], timeout=2, check=False)

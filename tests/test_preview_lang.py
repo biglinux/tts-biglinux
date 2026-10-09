@@ -16,6 +16,13 @@ except Exception as e:  # pragma: no cover
     pytest.skip(f"GTK unavailable headless: {e}", allow_module_level=True)
 
 
+@pytest.fixture(autouse=True)
+def _only_lang(monkeypatch):
+    # LC_ALL/LC_MESSAGES win over LANG: builders run with LC_ALL=C.
+    monkeypatch.delenv("LC_ALL", raising=False)
+    monkeypatch.delenv("LC_MESSAGES", raising=False)
+
+
 def test_espeak_voice_for_pt(monkeypatch):
     monkeypatch.setenv("LANG", "pt_BR.UTF-8")
     assert VoiceManagerDialog._espeak_voice_for_lang("pt_BR") == "pt-br"

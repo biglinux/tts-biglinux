@@ -151,6 +151,11 @@ def test_every_translated_string_is_a_literal_xgettext_can_extract():
                     arg = node.args[0] if node.args else None
                     if not (isinstance(arg, ast.Constant) and isinstance(arg.value, str)):
                         bad.append(f"{path.relative_to(APP)}:{node.lineno} _(non-literal)")
+            # Nor does it look inside f-strings: f"{_('x')}" is lost too.
+            if isinstance(node, ast.JoinedStr):
+                for inner in ast.walk(node):
+                    if isinstance(inner, ast.Call) and isinstance(inner.func, ast.Name) and inner.func.id == "_":
+                        bad.append(f"{path.relative_to(APP)}:{inner.lineno} _() inside an f-string")
     assert not bad, bad
 
 
