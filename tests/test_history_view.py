@@ -188,3 +188,43 @@ def test_history_is_always_in_the_main_menu(monkeypatch):
         for j in range(section.get_n_items()):
             labels.append(section.get_item_attribute_value(j, "label", None).get_string())
     assert hv._("History") in labels
+
+
+def _child_boxes(flowbox):
+    boxes, child = [], flowbox.get_first_child()
+    while child:
+        ok, rect = child.compute_bounds(flowbox)
+        boxes.append((round(rect.get_x()), round(rect.get_y()), round(rect.get_width())))
+        child = child.get_next_sibling()
+    return boxes
+
+
+def test_grid_puts_cards_side_by_side_in_equal_columns(page, tmp_path):
+    view, _settings, window = page
+    window.set_default_size(1000, 700)
+    for i in range(4):
+        _add("Um texto bem mais longo, para ocupar várias linhas no cartão. " * (i + 1), tmp=tmp_path)
+    _loaded(view)
+    view._view_toggle.set_active(True)
+    _pump(lambda: len(_child_boxes(view._grid)) == 4 and _child_boxes(view._grid)[1][0] > 0)
+    boxes = _child_boxes(view._grid)
+    assert view._grid.get_visible() and not view._list.get_visible()
+    assert boxes[0][1] == boxes[1][1] and boxes[1][0] > boxes[0][0]  # same row, side by side
+    assert abs(boxes[0][2] - boxes[1][2]) <= 2  # whatever the text length
+    assert view._clamp.get_maximum_size() > 760  # the grid may use the window's width
+    view._view_toggle.set_active(False)
+    _pump(lambda: view._list.get_first_child() is not None)
+    assert view._list.get_visible() and not view._grid.get_visible()
+    assert view._clamp.get_maximum_size() == 760
+
+
+def test_grid_is_one_column_on_a_narrow_window(page, tmp_path):
+    view, _settings, window = page
+    window.set_default_size(400, 700)
+    for i in range(2):
+        _add(f"Leitura {i}.", tmp=tmp_path)
+    _loaded(view)
+    view._view_toggle.set_active(True)
+    _pump(lambda: len(_child_boxes(view._grid)) == 2 and _child_boxes(view._grid)[1][1] > 0)
+    first, second = _child_boxes(view._grid)
+    assert second[1] > first[1] and second[0] == first[0]  # one under the other
