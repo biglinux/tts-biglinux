@@ -2,13 +2,21 @@ name: CI
 
 # Checks only: nothing is committed or published. Runs in an Arch Linux
 # container with the official repositories, like the package build.
+# A branch with a pull request is checked once, by the pull_request event
+# (push alone would run the same commit twice). main is checked on push.
 on:
   pull_request:
   push:
-    branches: [ "**" ]
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+# A newer commit on the same pull request or branch replaces the run in progress.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   python:
