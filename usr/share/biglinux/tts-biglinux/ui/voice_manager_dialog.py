@@ -180,6 +180,7 @@ def _query_packages(search_term: str, prefix: str) -> list[dict[str, str]]:
             capture_output=True,
             text=True,
             timeout=10,
+            env={**os.environ, "LC_ALL": "C"},  # "[installed]" in every language
         )
         if proc.returncode != 0:
             return packages
@@ -200,7 +201,7 @@ def _query_packages(search_term: str, prefix: str) -> list[dict[str, str]]:
                 continue
             pkg_name = m.group(1)
             version = m.group(2)
-            installed = "[instalado]" in header or "[installed]" in header
+            installed = "[installed]" in header
 
             if not pkg_name.startswith(prefix):
                 continue
@@ -275,6 +276,21 @@ def _annotate_sizes(data: dict[str, list[dict[str, str]]]) -> None:
             by_name[name]["size"] = sz
 
 
+def _one_per_spelling(pkgs: list[dict[str, str]]) -> list[dict[str, str]]:
+    """One row per package whatever its spelling: BigLinux stable has
+    piper-voices-pt-br, testing piper-voices-pt-BR, and both ship the same
+    files (installing the second would fail). The installed one wins, then
+    the lower-case spelling (stable, AUR)."""
+    best: dict[str, dict[str, str]] = {}
+    for p in pkgs:
+        key = p["pkg"].lower()
+        cur = best.get(key)
+        rank = (p.get("installed") == "yes", p["pkg"] == key)
+        if cur is None or rank > (cur.get("installed") == "yes", cur["pkg"] == key):
+            best[key] = p
+    return [p for p in pkgs if best[p["pkg"].lower()] is p]
+
+
 def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
     """Query pacman for all voice packages across all engines.
 
@@ -301,7 +317,7 @@ def _query_all_voice_packages() -> dict[str, list[dict[str, str]]]:
     # ── Piper voices ──
     piper_pkgs = _query_packages("piper-voices-", "piper-voices-")
     # Filter out "piper-voices-common"
-    piper_pkgs = [p for p in piper_pkgs if p["pkg"] != "piper-voices-common"]
+    piper_pkgs = _one_per_spelling([p for p in piper_pkgs if p["pkg"] != "piper-voices-common"])
     for pkg in piper_pkgs:
         locale = pkg["pkg"].removeprefix("piper-voices-")
         pkg["voice_name"] = locale

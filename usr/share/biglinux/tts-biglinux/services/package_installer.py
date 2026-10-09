@@ -12,14 +12,22 @@ Used by the "install Piper / Kokoro" prompts. Rules:
   translated explanation, and the raw ``error:`` lines as technical detail.
   (The old code showed the last stderr line, which was often a harmless
   warning such as "espeak-ng-1.52.0-1 is up to date -- skipping".)
+- A package may be spelled two ways: BigLinux stable has
+  ``piper-voices-pt-br``, testing ``piper-voices-pt-BR``. resolve() tries both
+  (an installed spelling first: both ship the same files), and the AUR only
+  as a last resort, through pamac (or paru/yay) as the person, never root.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import re
+import shutil
 import subprocess
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -28,6 +36,8 @@ from utils.i18n import _
 logger = logging.getLogger(__name__)
 
 PACMAN_LOCK = Path("/var/lib/pacman/db.lck")
+PAMAC_CONF = Path("/etc/pamac.conf")
+AUR_RPC = "https://aur.archlinux.org/rpc/v5/info"
 _SAFE_PKG = re.compile(r"^[A-Za-z0-9@._+-]+$")
 _C_ENV = {**os.environ, "LC_ALL": "C", "LANG": "C"}
 
@@ -72,6 +82,80 @@ def query(name: str) -> PackageInfo:
         repository=fields.get("Repository", ""),
         download_size=fields.get("Download Size", ""),
     )
+
+
+@dataclass
+class Resolution:
+    """How a wanted package can be had."""
+    wanted: str
+    name: str = ""  # the spelling to install (or the one installed)
+    source: str = ""  # "installed" | "repo" | "aur" | "" (nowhere)
+
+
+def name_variants(name: str) -> list[str]:
+    """The spellings to look for, lower case first ("piper-voices-pt-BR" →
+    ["piper-voices-pt-br", "piper-voices-pt-BR"]): BigLinux stable and the
+    AUR use lower case."""
+    return list(dict.fromkeys([name.lower(), name]))
+
+
+def aur_helper() -> list[str] | None:
+    """argv prefix that builds and installs AUR packages, or None.
+
+    pamac (BigLinux's own) when its AUR support is on; otherwise paru or
+    yay, which ask for the password through pkexec (no terminal here).
+    """
+    if shutil.which("pamac") and _pamac_aur_enabled():
+        return ["pamac", "build", "--no-confirm"]
+    if shutil.which("paru"):
+        return ["paru", "-S", "--aur", "--needed", "--noconfirm", "--skipreview", "--sudo", "pkexec"]
+    if shutil.which("yay"):
+        return ["yay", "-S", "--aur", "--needed", "--noconfirm",
+                "--answerdiff", "None", "--answerclean", "None", "--sudo", "pkexec"]
+    return None
+
+
+def _pamac_aur_enabled() -> bool:
+    try:
+        lines = PAMAC_CONF.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return False
+    return any(line.split("#", 1)[0].strip() == "EnableAUR" for line in lines)
+
+
+def aur_names(names: list[str], timeout: float = 10.0) -> dict[str, str]:
+    """Which of ``names`` exist in the AUR (case-insensitive): lower-case
+    name → the AUR's spelling. Empty when the AUR cannot be reached."""
+    names = [n for n in names if _SAFE_PKG.match(n)]
+    if not names:
+        return {}
+    query = urllib.parse.urlencode([("arg[]", n) for n in names])
+    try:
+        with urllib.request.urlopen(f"{AUR_RPC}?{query}", timeout=timeout) as resp:
+            data = json.load(resp)
+    except (OSError, ValueError) as e:
+        logger.debug("AUR query failed: %s", e)
+        return {}
+    return {r["Name"].lower(): r["Name"] for r in data.get("results", []) if r.get("Name")}
+
+
+def resolve(packages: list[str], *, allow_aur: bool = True) -> list[Resolution]:
+    """Find each package under either spelling: installed, then in the
+    repositories, then (last resort) in the AUR if a helper can build it."""
+    result: list[Resolution] = []
+    for wanted in packages:
+        variants = name_variants(wanted)
+        found = next((Resolution(wanted, v, "installed") for v in variants if is_installed(v)), None)
+        if found is None:
+            found = next((Resolution(wanted, v, "repo") for v in variants if query(v).available), None)
+        result.append(found or Resolution(wanted))
+    missing = [r for r in result if not r.source]
+    if missing and allow_aur and aur_helper():
+        in_aur = aur_names([r.wanted for r in missing])
+        for r in missing:
+            if r.wanted.lower() in in_aur:
+                r.name, r.source = in_aur[r.wanted.lower()], "aur"
+    return result
 
 
 def is_installed(name: str) -> bool:
@@ -140,4 +224,50 @@ def install(packages: list[str], timeout: int = 1800) -> InstallResult:
     return result
 
 
-__all__ = ["InstallResult", "PackageInfo", "explain_failure", "install", "is_installed", "query"]
+def install_aur(packages: list[str], timeout: int = 3600) -> InstallResult:
+    """Build and install AUR packages as the person (blocking: worker thread).
+
+    Never as root: AUR helpers refuse it, and a PKGBUILD must not run as
+    root. The helper asks for the password itself (polkit) to install.
+    """
+    # No "--" (pamac does not take it): a name can never start with "-".
+    packages = [p for p in packages if _SAFE_PKG.match(p) and not p.startswith("-")]
+    if not packages:
+        return InstallResult(False, _("Nothing to install."))
+    helper = aur_helper()
+    if helper is None:
+        return InstallResult(False, _("{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again.").format(
+            packages=", ".join(packages)), missing=packages)
+    if PACMAN_LOCK.exists():
+        return InstallResult(
+            False,
+            _("Another program is installing or updating packages. Wait for it to finish and try again."),
+        )
+    try:
+        proc = subprocess.run(
+            [*helper, *packages],
+            capture_output=True, text=True, timeout=timeout, env=_C_ENV, stdin=subprocess.DEVNULL,
+        )
+    except FileNotFoundError:
+        return InstallResult(False, _("{packages} could not be built from the AUR. See the details.").format(
+            packages=", ".join(packages)), helper[0])
+    except subprocess.TimeoutExpired:
+        return InstallResult(False, _("The installation took too long and was stopped."))
+    if proc.returncode == 0:
+        return InstallResult(True)
+    output = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    lines = [ln.strip() for ln in output.splitlines() if ln.strip()]
+    errors = [ln for ln in lines if ln.lower().startswith(("error", "==> error"))]
+    detail = "\n".join(errors or lines[-8:])
+    if "unable to lock database" in output.lower():
+        message = _("Another program is installing or updating packages. Wait for it to finish and try again.")
+    else:
+        message = _("{packages} could not be built from the AUR. See the details.").format(packages=", ".join(packages))
+    logger.warning("AUR install failed (%d): %s", proc.returncode, detail)
+    return InstallResult(False, message, detail)
+
+
+__all__ = [
+    "InstallResult", "PackageInfo", "Resolution", "aur_helper", "aur_names", "explain_failure",
+    "install", "install_aur", "is_installed", "name_variants", "query", "resolve",
+]

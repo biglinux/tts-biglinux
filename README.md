@@ -337,10 +337,19 @@ sudo pacman -S rhvoice-voice-evgeniy-eng
 
 # BigLinux repositories only:
 sudo pacman -S biglinux-kokoro-tts   # Kokoro neural voices
-sudo pacman -S piper-voices-pt-BR    # Brazilian Portuguese Piper voices
+sudo pacman -S piper-voices-pt-br    # Brazilian Portuguese Piper voices (stable)
+sudo pacman -S piper-voices-pt-BR    # the same voices, as named in biglinux-testing
 ```
 
 Piper voices can also be downloaded in the Voice Manager.
+
+The Piper voice packages are spelled differently in BigLinux stable
+(`piper-voices-pt-br`) and testing (`piper-voices-pt-BR`); both ship the same
+files, so only one can be installed. When Piper is selected, the app looks
+for both spellings and never offers the second one if either is installed.
+Only when neither is in the repositories does it fall back to the AUR. It
+builds the AUR package as you, never as root, with `pamac build` when pamac's
+AUR support is on, or with `paru`/`yay`, and it says so before installing.
 
 ### Uninstall
 
@@ -406,7 +415,7 @@ All from the official Arch/Manjaro repositories.
 | `rhvoice-voice-evgeniy-eng` | official | RHVoice English voice |
 | `xclip` | official | X11 selection capture when `xsel` is missing |
 | `biglinux-kokoro-tts` | BigLinux | Kokoro neural voices (`koko`, model, base voices) |
-| `piper-voices-pt-BR` | BigLinux | Brazilian Portuguese Piper voices, preinstalled |
+| `piper-voices-pt-br` | BigLinux | Brazilian Portuguese Piper voices, preinstalled (`piper-voices-pt-BR` in testing) |
 | `piper-tts-bin` | BigLinux | Piper command-line fallback (the native engine needs only voices) |
 | `rhvoice-brazilian-portuguese-complementary-dict-biglinux` | BigLinux | Extra pronunciation dictionary for RHVoice |
 
@@ -755,7 +764,7 @@ The engines and libraries it uses keep their own licenses, among them:
 | espeak-ng, RHVoice | GPL-3.0-or-later |
 | RHVoice voice Letícia F123 | CC-BY-SA-4.0 |
 | Kokoro model (`biglinux-kokoro-tts`) | Apache-2.0 |
-| Piper voices (`piper-voices-pt-BR`) | MIT |
+| Piper voices (`piper-voices-pt-br`) | MIT |
 | ONNX Runtime | MIT |
 | GTK 4, libadwaita, PyGObject, GStreamer | LGPL-2.1-or-later |
 | PySide6 / Qt 6 | LGPL-3.0 (or GPL-3.0) |

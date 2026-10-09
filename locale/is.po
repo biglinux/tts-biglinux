@@ -1295,3 +1295,10 @@ msgstr "Þetta mun færa allar stillingar til baka í upprunaleg sjálfgildi."
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Endurstilla"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "Pakkar merktir AUR eru ekki í hugbúnaðarsöfnunum þínum: þeir koma úr Arch User Repository, samfélagið viðheldur þeim og þeir eru byggðir á þessari tölvu, sem tekur lengri tíma."
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Ekki tókst að byggja {packages} úr AUR. Sjá nánar."
