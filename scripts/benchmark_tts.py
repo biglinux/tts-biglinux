@@ -4,8 +4,8 @@
 Measures synthesis TTFA (time to first audio *bytes*), total synth time, and
 real-time factor (RTF = synth_time / audio_duration). Outputs JSON.
 
-Usage:
-    ORT_LIB_LOCATION=/usr/lib python3 scripts/benchmark_tts.py [--model PATH]
+Usage (after `cargo build --release` in tts-engine/):
+    python3 scripts/benchmark_tts.py [--model PATH]
 """
 from __future__ import annotations
 
@@ -16,8 +16,13 @@ import sys
 import time
 from pathlib import Path
 
-ENGINE_DIR = Path(__file__).resolve().parent.parent / "tts-engine" / "target" / "release"
-sys.path.insert(0, str(ENGINE_DIR))
+# A source checkout links tts_engine.so into the app directory; the package
+# installs it in /usr/lib/tts-biglinux.
+ROOT = Path(__file__).resolve().parent.parent
+for engine_dir in (ROOT / "usr/share/biglinux/tts-biglinux", Path("/usr/lib/tts-biglinux")):
+    if (engine_dir / "tts_engine.so").exists():
+        sys.path.insert(0, str(engine_dir))
+        break
 
 TEXTS = {
     10: "Bom dia.",

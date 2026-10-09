@@ -1,14 +1,13 @@
 #!/bin/bash
-# BigLinux TTS — Speak selected text (CLI)
-# This is a compatibility wrapper for older shortcuts.
-# The actual logic has been fully ported to the Python application.
+# BigLinux TTS — read (or stop reading) the selected text.
+# The command the global shortcut runs; it hands over to the running app.
 
 # Detect dev environment: if this script lives in a git repo, use its main.py
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MAIN_PY="${SCRIPT_DIR}/../share/biglinux/tts-biglinux/main.py"
 
 if [[ -f "$MAIN_PY" && -d "${SCRIPT_DIR}/../../.git" ]]; then
-    exec python "${MAIN_PY}" --speak "$@"
+    exec /usr/bin/python3 "${MAIN_PY}" --speak "$@"
 fi
 
 exec /usr/bin/biglinux-tts --speak "$@"

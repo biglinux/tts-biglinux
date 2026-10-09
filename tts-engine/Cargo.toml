@@ -1,6 +1,11 @@
 [package]
 name = "tts-engine"
-version = "4.0.0"
+version = "4.1.0"
+authors = [
+    "Rafael Ruscher <rruscher@gmail.com>",
+    "Bruno Gonçalves <bigbruno@gmail.com>",
+    "Tales A. Mendonça <talesam@gmail.com>",
+]
 edition = "2024"
 rust-version = "1.85"
 description = "Native TTS engine for BigLinux — espeak-ng, Piper ONNX, PipeWire audio"

@@ -1,67 +1,31 @@
-"""TTSService request lifecycle with a real subprocess standing in for koko.
+"""TTSService request lifecycle with real subprocesses standing in for koko.
 
-A tiny shell script mimics koko's stderr protocol, so the process start, the
-stderr reader thread, the LOADING → SPEAKING switch and the exit-status
-handling all run for real — only the synthesizer itself is fake (no audio).
+The fake programs (tests/fake_engines.py) speak koko pipe's protocol (audio
+file and stderr), so process start, the stdin feeder, the stderr reader, the
+LOADING → SPEAKING switch and the exit-status handling all run for real —
+only the synthesizer is fake (no sound).
 """
 import importlib
-import os
-import shutil
-import stat
-import tempfile
 import time
-from pathlib import Path
 
 import pytest
+
+from fake_engines import use_fakes
 
 ts = importlib.import_module("services.tts_service")
 kvs = importlib.import_module("services.kokoro_voice_service")
 config = importlib.import_module("config")
 TTSState = config.TTSState
 
-FAKE_OK = """#!/bin/sh
-cat >/dev/null
-echo "MANUAL LANGUAGE MODE: Using specified language: pt-br" >&2
-sleep 0.3
-echo "Streaming audio for this segment..." >&2
-sleep 0.3
-exit 0
-"""
 
-FAKE_FAIL = """#!/bin/sh
-cat >/dev/null
-echo "Error: Os { code: 13, kind: PermissionDenied, message: \\"Permission denied\\" }" >&2
-exit 1
-"""
+@pytest.fixture
+def fakes(tmp_path, monkeypatch):
+    use_fakes(monkeypatch, tmp_path)
+    return tmp_path
 
 
-def _fake_koko(tmp_path, monkeypatch, script):
-    # /tmp may be mounted noexec: keep the fake executable inside the tree
-    # (tests/tmp/ is git-ignored) and remove it afterwards.
-    base = Path(__file__).resolve().parent / "tmp"
-    base.mkdir(exist_ok=True)
-    bindir = Path(tempfile.mkdtemp(dir=base))
-    monkeypatch.setattr(kvs, "_test_cleanup", bindir, raising=False)
-    import atexit
-
-    atexit.register(shutil.rmtree, bindir, True)
-    koko = bindir / "koko"
-    koko.write_text(script)
-    koko.chmod(koko.stat().st_mode | stat.S_IEXEC)
-    model = tmp_path / "model.onnx"
-    model.write_bytes(b"x")
-    voices = tmp_path / "voices.bin"
-    voices.write_bytes(b"x")
-    monkeypatch.setenv("PATH", f"{bindir}:{os.environ['PATH']}")
-    monkeypatch.setenv("KOKO_MODEL_PATH", str(model))
-    monkeypatch.setenv("XDG_RUNTIME_DIR", str(tmp_path))
-    monkeypatch.setattr(kvs, "_koko_workdir_cache", None)
-    monkeypatch.setattr(kvs, "get_active_voices_bin", lambda: voices)
-    monkeypatch.setattr(kvs, "get_installed_voice_ids", lambda: {"pm_alex", "pf_dora"})
-
-
-def _speak(svc):
-    return svc.speak("Olá, mundo.", backend="kokoro", voice_id="kokoro:pm_alex", volume=50)
+def _speak(svc, text="Olá, mundo."):
+    return svc.speak(text, backend="kokoro", voice_id="kokoro:pm_alex", volume=50)
 
 
 def _pump():
@@ -72,7 +36,7 @@ def _pump():
         pass
 
 
-def _run_watch(svc, timeout=5.0):
+def _run_watch(svc, timeout=10.0):
     """Drive the process watch and the main loop like GTK would."""
     end = time.monotonic() + timeout
     while time.monotonic() < end:
@@ -80,22 +44,23 @@ def _run_watch(svc, timeout=5.0):
         if svc._check_process() is False:
             _pump()
             return
-        time.sleep(0.05)
+        time.sleep(0.02)
     raise AssertionError("request did not finish")
 
 
-def test_kokoro_loads_then_speaks_then_returns_to_idle(tmp_path, monkeypatch):
-    _fake_koko(tmp_path, monkeypatch, FAKE_OK)
+def test_kokoro_loads_then_speaks_then_returns_to_idle(fakes, monkeypatch):
+    monkeypatch.setenv("KOKO_MODE", "slow")  # the model "loads" for 1 s
+    monkeypatch.setenv("APLAY_SECONDS", "0.5")
     svc = ts.TTSService()
     seen = []
     svc.add_on_state_changed(seen.append)
     assert _speak(svc)
     assert svc.state is TTSState.LOADING  # no sound yet: the model is loading
     assert svc.is_speaking  # the shortcut can still cancel it
-    end = time.monotonic() + 3
+    end = time.monotonic() + 5
     while svc.state is TTSState.LOADING and time.monotonic() < end:
         time.sleep(0.02)
-    assert svc.state is TTSState.SPEAKING  # koko said audio started
+    assert svc.state is TTSState.SPEAKING  # the first samples reached the player
     _pump()
     _run_watch(svc)
     assert svc.state is TTSState.IDLE
@@ -103,8 +68,8 @@ def test_kokoro_loads_then_speaks_then_returns_to_idle(tmp_path, monkeypatch):
     assert svc.last_error == ""
 
 
-def test_engine_failure_is_reported_and_stays_visible(tmp_path, monkeypatch):
-    _fake_koko(tmp_path, monkeypatch, FAKE_FAIL)
+def test_engine_failure_is_reported_and_stays_visible(fakes, monkeypatch):
+    monkeypatch.setenv("KOKO_MODE", "fail")
     svc = ts.TTSService()
     assert _speak(svc)
     _run_watch(svc)
@@ -119,8 +84,7 @@ def test_engine_failure_is_reported_and_stays_visible(tmp_path, monkeypatch):
     assert svc.state is TTSState.IDLE and svc.last_error == ""
 
 
-def test_missing_kokoro_voice_fails_with_a_fix(tmp_path, monkeypatch):
-    _fake_koko(tmp_path, monkeypatch, FAKE_OK)
+def test_missing_kokoro_voice_fails_with_a_fix(fakes, monkeypatch):
     monkeypatch.setattr(kvs, "get_installed_voice_ids", lambda: {"pf_dora"})
     svc = ts.TTSService()
     assert not _speak(svc)
@@ -129,19 +93,20 @@ def test_missing_kokoro_voice_fails_with_a_fix(tmp_path, monkeypatch):
     assert svc._process is None  # koko never started (it would pick another voice)
 
 
-def test_stop_while_loading_cancels_without_error(tmp_path, monkeypatch):
-    _fake_koko(tmp_path, monkeypatch, FAKE_OK)
+def test_stop_while_loading_cancels_without_error(fakes, monkeypatch):
+    monkeypatch.setenv("KOKO_MODE", "slow")
     svc = ts.TTSService()
     assert _speak(svc)
-    proc = svc._process
+    procs = list(svc._reading.procs)
     svc.stop()
     assert svc.state is TTSState.IDLE and svc.stopped_by_user
-    proc.wait(timeout=2)
-    assert proc.returncode != 0  # killed, and that is not reported as a failure
+    for proc in procs:
+        proc.wait(timeout=2)
+    assert any(p.returncode != 0 for p in procs)  # killed: not a failure
     assert svc.last_error == ""
 
 
-def test_stop_does_not_wake_speech_dispatcher(tmp_path, monkeypatch):
+def test_stop_does_not_wake_speech_dispatcher(monkeypatch):
     calls = []
     real_run = ts.subprocess.run
 
@@ -194,42 +159,28 @@ def test_preview_and_playback_share_the_koko_command(tmp_path, monkeypatch):
     play = kvs.build_koko_command("kokoro:pm_alex", speed=1.0)
     preview = kvs.build_koko_command("kokoro:pm_alex", speed=1.0, text="Oi", output=str(tmp_path / "p.wav"))
     # Same model, voices, language and voice up to the subcommand.
-    assert play[: play.index("pipe")] == preview[: preview.index("text")]
+    # koko pipe, never koko stream: stream mixes log lines into its audio.
+    assert play[-3:] == ["pipe", "-o", str(tmp_path / "biglinux-tts" / "koko" / "pipe_output.wav")]
+    assert play[:-3] == preview[: preview.index("text")]
     assert play[play.index("-l") + 1] == "pt-br"
     assert preview[-2:] == ["--", "Oi"]  # text after "--": "-5 graus" is not an option
 
 
-FAKE_RECORD = """#!/bin/sh
-cat > "$KOKO_STDIN_COPY"
-echo "Streaming audio for this segment..." >&2
-exit 0
-"""
-
-
-def test_koko_receives_prepared_text(tmp_path, monkeypatch):
-    _fake_koko(tmp_path, monkeypatch, FAKE_RECORD)
-    copy = tmp_path / "stdin.txt"
+def test_koko_receives_prepared_text(fakes, monkeypatch):
+    copy = fakes / "stdin.txt"
     monkeypatch.setenv("KOKO_STDIN_COPY", str(copy))
     svc = ts.TTSService()
     assert svc.speak("Espere... sério?! Sim.", backend="kokoro", voice_id="kokoro:pm_alex", volume=50,
                      expand_abbreviations=False, normalize_numbers=False)
     _run_watch(svc)
     assert svc.state is TTSState.IDLE
-    assert copy.read_text() == "Espere…\nsério?\nSim."
+    assert copy.read_text() == "Espere…\nsério?\nSim.\n"
 
 
-FAKE_ABORT = """#!/bin/sh
-cat >/dev/null
-echo "Application panic: panicked at kokorox/src/tts/koko.rs:1160:40:" >&2
-echo "index out of bounds: the len is 511 but the index is 550" >&2
-kill -ABRT $$
-"""
-
-
-def test_engine_crash_is_an_error_not_a_silent_stop(tmp_path, monkeypatch):
+def test_engine_crash_is_an_error_not_a_silent_stop(fakes, monkeypatch):
     # A Rust panic aborts koko with SIGABRT (exit -6). That used to be taken
     # for a stop and the request ended silently.
-    _fake_koko(tmp_path, monkeypatch, FAKE_ABORT)
+    monkeypatch.setenv("KOKO_MODE", "abort")
     svc = ts.TTSService()
     assert _speak(svc)
     _run_watch(svc)
@@ -238,19 +189,12 @@ def test_engine_crash_is_an_error_not_a_silent_stop(tmp_path, monkeypatch):
     assert "panicked" in svc.last_error_detail
 
 
-FAKE_SLOW_READER = """#!/bin/sh
-sleep 1
-cat > "$KOKO_STDIN_COPY"
-echo "Streaming audio for this segment..." >&2
-exit 0
-"""
-
-
-def test_large_text_does_not_block_the_caller(tmp_path, monkeypatch):
+def test_large_text_does_not_block_the_caller(fakes, monkeypatch):
     # koko reads stdin one line at a time while it synthesizes; a text larger
     # than the pipe buffer must not block speak() (the GTK thread).
-    _fake_koko(tmp_path, monkeypatch, FAKE_SLOW_READER)
-    copy = tmp_path / "stdin.txt"
+    monkeypatch.setenv("KOKO_MODE", "slow")
+    monkeypatch.setenv("KOKO_PLAY_SECONDS", "0")
+    copy = fakes / "stdin.txt"
     monkeypatch.setenv("KOKO_STDIN_COPY", str(copy))
     sentence = "Esta é uma frase de teste para um texto muito grande. "
     text = sentence * 6000  # ~330 KB, far above the 64 KB pipe buffer
@@ -259,7 +203,20 @@ def test_large_text_does_not_block_the_caller(tmp_path, monkeypatch):
     assert svc.speak(text, backend="kokoro", voice_id="kokoro:pm_alex", volume=50,
                      expand_abbreviations=False, normalize_numbers=False)
     assert time.monotonic() - start < 0.8  # returned before koko read anything
-    _run_watch(svc, timeout=30)
+    _run_watch(svc, timeout=60)
     assert svc.state is TTSState.IDLE
     received = copy.read_text()
     assert received.count("Esta é uma frase de teste") == 6000  # nothing lost
+
+
+def test_koko_is_started_in_its_private_workdir(fakes, monkeypatch):
+    svc = ts.TTSService()
+    assert _speak(svc)
+    source = svc._reading.engines[0]
+    output = source.args[-1]
+    assert source.args[-3:-1] == ["pipe", "-o"]
+    # Its own scratch file (no history here): simultaneous readings never share one.
+    assert output == str(fakes / "biglinux-tts" / "koko" / f"pipe-{svc._reading.id}.wav")
+    _run_watch(svc)
+    assert kvs.koko_workdir() == str(fakes / "biglinux-tts" / "koko")
+    assert not __import__("os").path.exists(output)  # deleted at the end

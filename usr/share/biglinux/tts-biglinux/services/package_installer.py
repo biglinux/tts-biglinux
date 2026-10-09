@@ -129,6 +129,9 @@ def install(packages: list[str], timeout: int = 1800) -> InstallResult:
         return InstallResult(False, _("pkexec is not installed (package polkit)."))
     except subprocess.TimeoutExpired:
         return InstallResult(False, _("The installation took too long and was stopped."))
+    except PermissionError as e:
+        # On timeout subprocess kills pkexec; a root child refuses (EPERM).
+        return InstallResult(False, _("The installation took too long and was stopped."), str(e))
     if proc.returncode == 0:
         return InstallResult(True)
     output = (proc.stdout or "") + "\n" + (proc.stderr or "")

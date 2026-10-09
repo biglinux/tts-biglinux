@@ -125,6 +125,11 @@ class AudioPlayerWidget(Gtk.Box):
 
         self.append(seek_box)
 
+    def set_duration_hint(self, seconds: float) -> None:
+        """Show the known duration before the first play (from the history)."""
+        if seconds > 0 and self._duration_ns <= 0:
+            self._total_label.set_label(_format_time(int(seconds * Gst.SECOND)))
+
     # ── Playback Controls ────────────────────────────────────────
 
     def _on_play_pause(self, _btn: Gtk.Button) -> None:

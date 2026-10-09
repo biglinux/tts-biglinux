@@ -118,7 +118,14 @@ fn speak_piper(
 ) -> PyResult<bool> {
     let (text, model_path) = (text.to_owned(), model_path.to_owned());
     py.allow_threads(move || {
-        backends::piper::speak(&text, &model_path, length_scale, noise_scale, noise_w, volume)
+        backends::piper::speak(
+            &text,
+            &model_path,
+            length_scale,
+            noise_scale,
+            noise_w,
+            volume,
+        )
     })
     .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
 }
@@ -141,7 +148,14 @@ fn synthesize_piper<'py>(
     let (text, model_path) = (text.to_owned(), model_path.to_owned());
     let wav = py
         .allow_threads(move || {
-            backends::piper::synthesize(&text, &model_path, length_scale, noise_scale, noise_w, volume)
+            backends::piper::synthesize(
+                &text,
+                &model_path,
+                length_scale,
+                noise_scale,
+                noise_w,
+                volume,
+            )
         })
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?;
     Ok(pyo3::types::PyBytes::new(py, &wav))

@@ -94,3 +94,25 @@ def test_migrate_from_json(db):
     assert (db / "history.json.migrated").exists()
     # idempotent-ish: migrating again (file gone) does nothing
     assert hdb.migrate_from_json(jf) == 0
+
+
+def test_connections_are_closed(tmp_path, monkeypatch):
+    """Each save must release the db/-wal/-shm file descriptors."""
+    import os
+
+    hs = importlib.import_module("services.history_service")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", tmp_path)
+
+    def open_db_fds():
+        n = 0
+        for fd in os.listdir("/proc/self/fd"):
+            try:
+                n += str(tmp_path) in os.readlink(f"/proc/self/fd/{fd}")
+            except OSError:
+                pass
+        return n
+
+    for i in range(10):
+        hs.save_history_entry(text=f"t{i}", audio_path=None, backend="rhvoice", voice_id="v")
+        hs.load_history_entries()
+    assert open_db_fds() == 0

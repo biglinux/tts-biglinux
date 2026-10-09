@@ -30,3 +30,33 @@ def test_retention_on_save(tmp_path, monkeypatch):
             save_audio=False, save_text=True, max_entries=3,
         )
     assert hs.count_history_entries() == 3
+
+
+def test_newest_entry_comes_first(tmp_path, monkeypatch):
+    hs = importlib.import_module("services.history_service")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", tmp_path)
+    for i in range(3):
+        hs.save_history_entry(text=f"t{i}", audio_path=None, backend="rhvoice", voice_id="v")
+    assert [e["text_preview"] for e in hs.load_history_entries()] == ["t2", "t1", "t0"]
+
+
+def test_text_is_not_kept_when_save_text_is_off(tmp_path, monkeypatch):
+    hs = importlib.import_module("services.history_service")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", tmp_path)
+    from fake_engines import text_wav
+
+    wav = tmp_path / "a.wav"
+    text_wav(wav, "audio")
+    hs.save_history_entry(text="segredo", audio_path=str(wav), backend="espeak-ng",
+                          voice_id="v", save_audio=True, save_text=False)
+    hs.save_history_entry(text="nada a guardar", audio_path=None, backend="rhvoice",
+                          voice_id="v", save_audio=True, save_text=False)
+    entries = hs.load_history_entries()
+    assert len(entries) == 1 and entries[0]["text_preview"] == "" and entries[0]["has_audio"]
+    assert not list((tmp_path / "tts-biglinux").glob("*.txt"))
+
+
+def test_history_folder_is_private(tmp_path, monkeypatch):
+    hs = importlib.import_module("services.history_service")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", tmp_path)
+    assert (hs.ensure_history_dir().stat().st_mode & 0o777) == 0o700
