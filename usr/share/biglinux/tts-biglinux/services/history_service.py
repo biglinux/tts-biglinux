@@ -133,15 +133,21 @@ def _notify() -> None:
 
 def wav_layout(head: bytes) -> tuple[int, int] | None:
     """(byte rate, offset of the data payload) of a WAV header, or None."""
+    fmt = _wav_format(head)
+    return (fmt[0], fmt[2]) if fmt else None
+
+
+def _wav_format(head: bytes) -> tuple[int, int, int] | None:
+    """(byte rate, block align, data offset) of a WAV header, or None."""
     if len(head) < 12 or head[:4] != b"RIFF" or head[8:12] != b"WAVE":
         return None
-    pos, byte_rate = 12, 0
+    pos, byte_rate, align = 12, 0, 1
     while pos + 8 <= len(head):
         chunk, size = head[pos:pos + 4], struct.unpack("<I", head[pos + 4:pos + 8])[0]
-        if chunk == b"fmt " and pos + 20 <= len(head):
-            byte_rate = struct.unpack("<I", head[pos + 16:pos + 20])[0]
+        if chunk == b"fmt " and pos + 22 <= len(head):
+            byte_rate, align = struct.unpack("<IH", head[pos + 16:pos + 22])
         if chunk == b"data":
-            return (byte_rate, pos + 8) if byte_rate else None
+            return (byte_rate, max(1, align), pos + 8) if byte_rate else None
         pos += 8 + size + (size & 1)
     return None
 
@@ -158,18 +164,28 @@ def wav_duration(path: Path) -> float:
         return 0.0
 
 
-def finalize_wav(path: Path) -> float:
+def finalize_wav(path: Path, max_seconds: float | None = None) -> float:
     """Write the real sizes into a WAV whose header says "unknown" (streamed
-    audio) and return its duration in seconds (0 if it holds no audio)."""
+    audio) and return its duration in seconds (0 if it holds no audio).
+
+    ``max_seconds`` cuts the audio there: engines synthesize ahead of what is
+    heard, so a stopped reading keeps only what was played.
+    """
     try:
         with open(path, "r+b") as f:
             head = f.read(4096)
-            layout = wav_layout(head)
-            if not layout:
+            fmt = _wav_format(head)
+            if not fmt:
                 return 0.0
-            byte_rate, data_off = layout
+            byte_rate, align, data_off = fmt
             size = os.fstat(f.fileno()).st_size
             data_len = max(0, size - data_off)
+            data_len -= data_len % align  # a partial sample at the end
+            if max_seconds is not None:
+                data_len = min(data_len, int(max_seconds * byte_rate) // align * align)
+            if data_off + data_len < size:
+                f.truncate(data_off + data_len)
+                size = data_off + data_len
             f.seek(4)
             f.write(struct.pack("<I", min(size - 8, 0xFFFFFFFF)))
             f.seek(data_off - 4)
@@ -189,9 +205,10 @@ class Recording:
     :meth:`close` further audio is ignored.
     """
 
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, external: bool = False) -> None:
+        """``external``: the engine writes ``path`` itself (Kokoro's -o)."""
         self.path = path
-        self._file = open(path, "wb")  # noqa: SIM115 — closed in close()
+        self._file = None if external else open(path, "wb")  # noqa: SIM115 — closed in close()
         self._lock = threading.Lock()
         self._closed = False
         self._has_header = False
@@ -228,29 +245,34 @@ class Recording:
                 logger.warning("History recording stopped: %s", e)
                 self.failed = True
 
-    def close(self) -> float:
+    def close(self, max_seconds: float | None = None) -> float:
         """Finish the file; returns the duration (0: no usable audio)."""
         with self._lock:
             if not self._closed:
                 self._closed = True
                 try:
-                    self._file.close()
+                    if self._file is not None:
+                        self._file.close()
                 except OSError:
                     self.failed = True
-        if self.failed:
+        if self.failed or not self.path.exists():
             return 0.0
-        return finalize_wav(self.path)
+        return finalize_wav(self.path, max_seconds)
 
     def discard(self) -> None:
         self.close()
         _remove(self.path)
 
 
-def new_recording(backend: str, started: float) -> Recording | None:
-    """A recording for a reading that starts now, or None if impossible."""
+def new_recording(backend: str, started: float, *, external: bool = False) -> Recording | None:
+    """A recording for a reading that starts now, or None if impossible.
+
+    ``external``: the engine writes the file itself (its path is
+    ``recording.path``).
+    """
     try:
         d = ensure_history_dir()
-        return Recording(d / f".rec-{new_timestamp(started)}_{backend}.wav.part")
+        return Recording(d / f".rec-{new_timestamp(started)}_{backend}.wav.part", external=external)
     except OSError as e:
         logger.warning("History audio cannot be recorded in %s: %s", get_history_dir(), e)
         return None
@@ -280,6 +302,7 @@ def save_reading(
     processed_text: str = "",
     status: str = "completed",
     recording: Recording | None = None,
+    heard_seconds: float | None = None,
     save_audio: bool = True,
     save_text: bool = True,
     max_entries: int = 0,
@@ -287,11 +310,12 @@ def save_reading(
 ) -> dict | None:
     """Store one reading. Returns the new entry, or None if nothing was kept.
 
+    ``heard_seconds`` (a stopped reading) cuts the audio to what was played.
     Blocking (file and database work): call it from a worker thread.
     """
     from services import history_db
 
-    duration = recording.close() if recording else 0.0
+    duration = recording.close(heard_seconds) if recording else 0.0
     # A reading stopped at its very first samples leaves a useless file.
     keep_audio = bool(recording and save_audio and duration >= MIN_AUDIO_SECONDS)
     if recording and not keep_audio:

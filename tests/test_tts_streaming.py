@@ -178,6 +178,55 @@ def test_kokoro_history_audio_is_exactly_what_was_played(fakes):
     assert entry["duration"] == pytest.approx(0.3, abs=0.001)
 
 
+def test_kokoro_history_audio_is_valid_float_audio(fakes):
+    # koko stream mixed its log lines into the audio: the samples were
+    # garbage (huge values, NaN) and nothing was heard. koko pipe -o writes
+    # clean audio; the history keeps that file, with its header fixed.
+    import struct
+
+    svc = ts.TTSService(settings=_settings())
+    assert svc.speak("Uma frase. Outra frase.", backend="kokoro", voice_id="kokoro:pf_dora", volume=50)
+    _run_watch(svc)
+    [entry] = _entries()
+    data = hs.audio_path(entry).read_bytes()
+    assert data[:4] == b"RIFF" and struct.unpack("<I", data[4:8])[0] == len(data) - 8
+    assert struct.unpack("<H", data[20:22])[0] == 3  # float32, as koko writes it
+    assert struct.unpack("<I", data[40:44])[0] == len(data) - 44
+    samples = struct.unpack(f"<{(len(data) - 44) // 4}f", data[44:])
+    assert samples and all(abs(v) <= 1.0 for v in samples)
+
+
+def test_stopped_kokoro_keeps_only_what_was_heard(fakes, monkeypatch):
+    # koko synthesizes ahead of playback: its file holds more than was heard.
+    monkeypatch.setenv("KOKO_PLAY_SECONDS", "0.5")
+    svc = ts.TTSService(settings=_settings())
+    text = " ".join(f"Frase {i}." for i in range(8))
+    assert svc.speak(text, backend="kokoro", voice_id="kokoro:pf_dora", volume=50)
+    assert _pump_until(lambda: svc.state is TTSState.SPEAKING)
+    time.sleep(0.3)
+    svc.stop()
+    [entry] = _entries()
+    assert entry["status"] == "stopped"
+    assert 0.2 <= entry["duration"] <= 0.5
+    assert abs(wav_seconds(hs.audio_path(entry)) - entry["duration"]) < 0.01
+
+
+def test_paused_time_is_not_counted_as_heard(fakes, monkeypatch):
+    monkeypatch.setenv("KOKO_PLAY_SECONDS", "0.5")
+    svc = ts.TTSService(settings=_settings())
+    text = " ".join(f"Frase {i}." for i in range(8))
+    assert svc.speak(text, backend="kokoro", voice_id="kokoro:pf_dora", volume=50)
+    assert _pump_until(lambda: svc.state is TTSState.SPEAKING)
+    time.sleep(0.2)
+    assert svc.pause()
+    time.sleep(0.6)
+    assert svc.resume()
+    time.sleep(0.1)
+    svc.stop()
+    [entry] = _entries()
+    assert 0.2 <= entry["duration"] <= 0.45  # ~0.3 s heard, not ~0.9 s
+
+
 def test_long_streamed_reading_keeps_all_its_chunks(fakes):
     svc = ts.TTSService(settings=_settings())
     text = " ".join(f"Frase número {i} de um texto bem longo para o teste." for i in range(40))
@@ -295,6 +344,7 @@ def test_history_folder_without_permission_never_breaks_reading(fakes, monkeypat
 @pytest.mark.parametrize(("backend", "voice"), [("rhvoice", "x"), ("kokoro", "kokoro:pf_dora")])
 def test_pause_freezes_and_resume_finishes_the_reading(fakes, monkeypatch, backend, voice):
     monkeypatch.setenv("APLAY_SECONDS", "0.6")
+    monkeypatch.setenv("KOKO_PLAY_SECONDS", "0.6")
     svc = ts.TTSService(settings=_settings())
     assert svc.speak("Frase pausada.", backend=backend, voice_id=voice, volume=50)
     assert _pump_until(lambda: svc.state is TTSState.SPEAKING)
