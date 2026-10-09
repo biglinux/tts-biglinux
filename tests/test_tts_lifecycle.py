@@ -1,9 +1,9 @@
 """TTSService request lifecycle with real subprocesses standing in for koko.
 
-The fake programs (tests/fake_engines.py) speak koko's stdout/stderr protocol,
-so process start, the stdin feeder, the stderr reader, the audio relay to the
-player, the LOADING → SPEAKING switch and the exit-status handling all run for
-real — only the synthesizer is fake (no sound).
+The fake programs (tests/fake_engines.py) speak koko pipe's protocol (audio
+file and stderr), so process start, the stdin feeder, the stderr reader, the
+LOADING → SPEAKING switch and the exit-status handling all run for real —
+only the synthesizer is fake (no sound).
 """
 import importlib
 import time
@@ -159,8 +159,9 @@ def test_preview_and_playback_share_the_koko_command(tmp_path, monkeypatch):
     play = kvs.build_koko_command("kokoro:pm_alex", speed=1.0)
     preview = kvs.build_koko_command("kokoro:pm_alex", speed=1.0, text="Oi", output=str(tmp_path / "p.wav"))
     # Same model, voices, language and voice up to the subcommand.
-    assert play[-1] == "stream"
-    assert play[:-1] == preview[: preview.index("text")]
+    # koko pipe, never koko stream: stream mixes log lines into its audio.
+    assert play[-3:] == ["pipe", "-o", str(tmp_path / "biglinux-tts" / "koko" / "pipe_output.wav")]
+    assert play[:-3] == preview[: preview.index("text")]
     assert play[play.index("-l") + 1] == "pt-br"
     assert preview[-2:] == ["--", "Oi"]  # text after "--": "-5 graus" is not an option
 
@@ -192,6 +193,7 @@ def test_large_text_does_not_block_the_caller(fakes, monkeypatch):
     # koko reads stdin one line at a time while it synthesizes; a text larger
     # than the pipe buffer must not block speak() (the GTK thread).
     monkeypatch.setenv("KOKO_MODE", "slow")
+    monkeypatch.setenv("KOKO_PLAY_SECONDS", "0")
     copy = fakes / "stdin.txt"
     monkeypatch.setenv("KOKO_STDIN_COPY", str(copy))
     sentence = "Esta é uma frase de teste para um texto muito grande. "
@@ -211,6 +213,10 @@ def test_koko_is_started_in_its_private_workdir(fakes, monkeypatch):
     svc = ts.TTSService()
     assert _speak(svc)
     source = svc._reading.engines[0]
-    assert source.args[-1] == "stream"
+    output = source.args[-1]
+    assert source.args[-3:-1] == ["pipe", "-o"]
+    # Its own scratch file (no history here): simultaneous readings never share one.
+    assert output == str(fakes / "biglinux-tts" / "koko" / f"pipe-{svc._reading.id}.wav")
     _run_watch(svc)
     assert kvs.koko_workdir() == str(fakes / "biglinux-tts" / "koko")
+    assert not __import__("os").path.exists(output)  # deleted at the end

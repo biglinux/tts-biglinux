@@ -4,7 +4,7 @@ version = "4.1.0"
 authors = [
     "Rafael Ruscher <rruscher@gmail.com>",
     "Bruno Gonçalves <bigbruno@gmail.com>",
-    "Tales A. Mendonça",
+    "Tales A. Mendonça <talesam@gmail.com>",
 ]
 edition = "2024"
 rust-version = "1.85"

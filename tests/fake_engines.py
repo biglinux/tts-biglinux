@@ -1,9 +1,10 @@
 """Fake engine programs for the tests: real processes, no sound.
 
-- ``koko``: like ``koko stream`` — a line of text, then one WAV stream
-  (header with "unknown" sizes, float32 24 kHz) with audio for every line
-  read from stdin. ``KOKO_MODE``: ok | fail | abort | slow; ``KOKO_STDIN_COPY``
-  saves what it read.
+- ``koko``: like ``koko pipe -o FILE`` — reads stdin one line at a time,
+  appends the line's audio to FILE (float32 24 kHz WAV, header sizes never
+  filled in), says "Streaming audio" on stderr and "plays" it:
+  ``$KOKO_PLAY_SECONDS`` per line (default 0.1; 0 = no wait, 0.1 s of audio). ``KOKO_MODE``: ok | fail | abort | slow;
+  ``KOKO_STDIN_COPY`` saves what it read.
 - ``RHVoice-test``: reads stdin, writes a 16-bit WAV to stdout.
 - ``aplay``: reads a WAV from stdin or from its file argument, appends what it
   played to ``$PLAYLOG`` (missing files are logged as "missing …"), and takes
@@ -28,15 +29,11 @@ PY = sys.executable
 
 KOKO = f"""#!{PY}
 import os, struct, sys, time
+args = sys.argv[1:]
 mode = os.environ.get("KOKO_MODE", "ok")
+play = float(os.environ.get("KOKO_PLAY_SECONDS", "0.1"))
 if mode == "slow":
     time.sleep(1)
-data = sys.stdin.buffer.read()
-copy = os.environ.get("KOKO_STDIN_COPY")
-if copy:
-    open(copy, "wb").write(data)
-out = sys.stdout.buffer
-out.write(b'voice styles loaded: ["pf_dora"]\\n')
 if mode == "fail":
     sys.stderr.write("Error: Os {{ code: 13, kind: PermissionDenied, message: \\"Permission denied\\" }}\\n")
     sys.exit(1)
@@ -44,14 +41,23 @@ if mode == "abort":
     sys.stderr.write("Application panic: panicked at kokorox/src/tts/koko.rs:1160:40:\\n")
     sys.stderr.flush()
     os.kill(os.getpid(), 6)
-header = b"RIFF" + struct.pack("<I", 0xFFFFFFFF) + b"WAVEfmt " + struct.pack("<IHHIIHH", 16, 3, 1, 24000, 96000, 4, 32)
-out.write(header + b"data" + struct.pack("<I", 0xFFFFFFFF))
-for line in data.decode().splitlines():
-    if line.strip():
-        out.write(struct.pack("<f", 0.1) * 2400)  # 0.1 s per line
+assert args[-3:-1] == ["pipe", "-o"], args
+copy = os.environ.get("KOKO_STDIN_COPY")
+copy = open(copy, "wb") if copy else None
+out = open(args[-1], "wb")
+out.write(b"RIFF" + struct.pack("<I", 0) + b"WAVEfmt " + struct.pack("<IHHIIHH", 16, 3, 1, 24000, 96000, 4, 32))
+out.write(b"data" + struct.pack("<I", 0))
+out.flush()
+for raw in iter(sys.stdin.buffer.readline, b""):
+    if copy:
+        copy.write(raw)
+        copy.flush()
+    if raw.strip():
+        out.write(struct.pack("<f", 0.1) * int(24000 * (play or 0.1)))  # written before it plays
         out.flush()
-        sys.stderr.write("Audio written to stdout. Ready for another line of text.\\n")
+        sys.stderr.write("Streaming audio for this segment...\\n")
         sys.stderr.flush()
+        time.sleep(play)  # koko pipe plays each line itself
 """
 
 RHVOICE = f"""#!{PY}

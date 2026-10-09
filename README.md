@@ -767,7 +767,7 @@ The engines and libraries it uses keep their own licenses, among them:
 
 - **Rafael Ruscher** <rruscher@gmail.com>
 - **Bruno Gonçalves** <bigbruno@gmail.com>
-- **Tales A. Mendonça**
+- **Tales A. Mendonça** <talesam@gmail.com>
 
 ---
 

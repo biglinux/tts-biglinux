@@ -1,13 +1,13 @@
 # Maintainer: Bruno Gonçalves <bigbruno@gmail.com>
 # Contributor: Rafael Ruscher <rruscher@gmail.com>
-# Contributor: Tales A. Mendonça
+# Contributor: Tales A. Mendonça <talesam@gmail.com>
 
 pkgname=tts-biglinux
 # Releases before 4.1.0 used date versions (26.10.08-1606 > 4.1.0 for
 # vercmp); the epoch makes 4.1.0 an upgrade over them. Never remove it.
 epoch=1
 pkgver=4.1.0
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 license=('GPL-3.0-or-later')
 url="https://github.com/biglinux/tts-biglinux"

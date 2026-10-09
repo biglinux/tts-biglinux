@@ -29,5 +29,17 @@ def test_pkgbuild_keeps_the_epoch():
 
 
 def test_authors():
-    names = [d.split(" <")[0] for d in cfg.APP_DEVELOPERS]
-    assert names == ["Rafael Ruscher", "Bruno Gonçalves", "Tales A. Mendonça"]
+    authors = [
+        "Rafael Ruscher <rruscher@gmail.com>",
+        "Bruno Gonçalves <bigbruno@gmail.com>",
+        "Tales A. Mendonça <talesam@gmail.com>",
+    ]
+    assert cfg.APP_DEVELOPERS == authors
+    cargo = _read("tts-engine/Cargo.toml")
+    readme = _read("README.md")
+    pkgbuild = _read("pkgbuild/PKGBUILD")
+    for author in authors:
+        name, email = author[:-1].split(" <")
+        assert f'"{author}"' in cargo
+        assert f"- **{name}** <{email}>" in readme
+        assert re.search(rf"^# (Maintainer|Contributor): {re.escape(author)}$", pkgbuild, re.M)

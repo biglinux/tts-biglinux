@@ -61,7 +61,9 @@ _STREAM_CHUNK_CHARS = 600
 _ENGINE_NOISE = (
     "CALLING PHONEMIZE ON:", "phonemes:", "voice styles loaded", "Entering streaming mode",
     "Audio written to stdout", "shape_style", "MANUAL LANGUAGE MODE", "Processing segment",
-    "WARNING: Character", "TOKENIZE:",
+    "WARNING: Character", "TOKENIZE:", "Language detection confidence", "Detected language",
+    "Using manually specified language", "Using standard voices file", "Manual language mode",
+    "Processing chunk with language", "All text processed",
 )
 
 # Backends that synthesize before any sound is heard: their requests start in
@@ -211,6 +213,8 @@ class _Reading:
     files: list[str] = field(default_factory=list)  # temporary files, removed at the end
     threads: list[threading.Thread] = field(default_factory=list)
     audio_started: bool = False
+    audio_started_at: float = 0.0  # monotonic; with paused_for: how much was heard
+    paused_for: float = 0.0
     finished: bool = False
     lock: threading.Lock = field(default_factory=threading.Lock)
 
@@ -221,6 +225,13 @@ class _Reading:
 
     def live_procs(self) -> list[subprocess.Popen]:
         return [p for p in self.procs if p.poll() is None]
+
+    def heard(self, now: float, paused_since: float | None) -> float | None:
+        """Seconds of audio played so far (None if no sound yet)."""
+        if not self.audio_started:
+            return None
+        paused = self.paused_for + (now - paused_since if paused_since else 0.0)
+        return max(0.0, now - self.audio_started_at - paused)
 
 
 class TTSService:
@@ -249,6 +260,7 @@ class TTSService:
         # stopped process keeps poll()==None, so the state stays SPEAKING and
         # playback freezes and resumes in place.
         self._paused: bool = False
+        self._paused_since: float | None = None  # monotonic
         # Why the last request failed: a translated sentence that says how to
         # fix it, plus optional technical detail (engine stderr). Kept until
         # the next speak()/stop() so the UI can show it.
@@ -331,6 +343,7 @@ class TTSService:
             except (ProcessLookupError, OSError):
                 pass
         self._paused = True
+        self._paused_since = time.monotonic()
         logger.debug("Speech paused")
         return True
 
@@ -343,7 +356,12 @@ class TTSService:
                 p.send_signal(signal.SIGCONT)
             except (ProcessLookupError, OSError):
                 pass
+        if self._paused_since is not None:
+            elapsed = time.monotonic() - self._paused_since
+            for reading in self._readings():
+                reading.paused_for += elapsed
         self._paused = False
+        self._paused_since = None
         logger.debug("Speech resumed")
         return True
 
@@ -489,6 +507,8 @@ class TTSService:
         self._error_detail = ""
 
         readings = self._readings()
+        now, paused_since = time.monotonic(), self._paused_since if self._paused else None
+        heard = {reading.id: reading.heard(now, paused_since) for reading in readings}
         self._reading = None
         self._overlapped = []
         self._process = None
@@ -501,6 +521,7 @@ class TTSService:
                 except (ProcessLookupError, OSError):
                     pass
             self._paused = False
+        self._paused_since = None
         # stop() may run on the GTK main thread: the reap is bounded and short
         # (aplay, RHVoice-test, piper and koko die at once). Workers see the new
         # generation and exit at their next check; they are not joined here.
@@ -513,7 +534,7 @@ class TTSService:
             except (ProcessLookupError, OSError):
                 pass
         for reading in readings:
-            self._finish_reading(reading, "stopped")
+            self._finish_reading(reading, "stopped", heard[reading.id])
 
         self._stopped_by_user = was_busy
         self._set_state(TTSState.IDLE)
@@ -538,9 +559,11 @@ class TTSService:
         history = self._history_config()
         if not history or not history.enabled or not history.save_audio:
             return None
-        return new_recording(reading.backend, reading.started)
+        # koko writes its audio file itself (-o): straight into the history.
+        external = reading.backend == TTSBackend.KOKORO.value
+        return new_recording(reading.backend, reading.started, external=external)
 
-    def _finish_reading(self, reading: _Reading, status: str) -> None:
+    def _finish_reading(self, reading: _Reading, status: str, heard: float | None = None) -> None:
         """The reading ended (completed / stopped / error): keep it in the
         history if it was heard and history is on. Any thread; never blocks:
         the files are finished and indexed in a worker."""
@@ -567,6 +590,7 @@ class TTSService:
                         started=reading.started,
                         status=status,
                         recording=recording,
+                        heard_seconds=heard,
                         save_audio=history.save_audio,
                         save_text=history.save_text,
                         max_entries=history.max_entries,
@@ -612,15 +636,19 @@ class TTSService:
     ) -> bool:
         """Speak via the koko binary (biglinux-kokoro-tts package).
 
-        ``koko stream`` reads one line at a time and writes its audio (one WAV
-        stream) to stdout, which goes through us to aplay — the same bytes are
-        kept for the history. The command is built by kokoro_voice_service,
-        the same code the Voice Manager preview uses.
+        ``koko pipe`` reads one line at a time and plays each one as soon as it
+        is synthesized; it says "Streaming audio" on stderr when sound starts.
+        With ``-o`` it also writes all the audio it plays to that WAV file:
+        the history recording itself, or a private scratch file.
+        (``koko stream`` is not usable: it mixes log lines into the audio on
+        stdout.) The command comes from kokoro_voice_service, shared with the
+        Voice Manager preview.
         """
         if volume <= 0:
             return True  # true mute — nothing audible
 
         from services.kokoro_voice_service import (
+            KOKO_AUDIO_STARTED_MARKER,
             build_koko_command,
             koko_problem,
             koko_workdir,
@@ -637,16 +665,42 @@ class TTSService:
             self._error_action = "voice-manager"
             return False
 
-        speed = kokoro_speed(rate, kokoro_cfg.emotion_preset if kokoro_cfg else "neutral")
-        cmd = build_koko_command(
-            voice_id, speed=speed, blend=blend,
-            blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
-        )
-        logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
         text = prepare_koko_text(reading.processed)
         if not text:
             return True  # only punctuation: nothing to say
-        return self._start_relay(reading, cmd, text + "\n", cwd=koko_workdir())
+        workdir = koko_workdir()
+        if reading.recording is not None:
+            output = str(reading.recording.path)
+        else:
+            output = os.path.join(workdir, f"pipe-{reading.id}.wav")  # unique: simultaneous readings
+            reading.files.append(output)
+        speed = kokoro_speed(rate, kokoro_cfg.emotion_preset if kokoro_cfg else "neutral")
+        cmd = build_koko_command(
+            voice_id, speed=speed, blend=blend, output=output,
+            blend_ratio=kokoro_cfg.blend_ratio if kokoro_cfg else 0.5,
+        )
+        logger.info("Kokoro (koko binary): voice=%s, lang=%s, speed=%.2f", cmd[cmd.index("-s") + 1], cmd[cmd.index("-l") + 1], speed)
+        try:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, cwd=workdir,
+            )
+        except OSError as e:
+            logger.error("Failed to start koko: %s", e)
+            return False
+        reading.procs.append(proc)
+        reading.engines.append(proc)
+        if reading is self._reading:
+            self._process = proc
+        # Fed from a thread: koko reads one line, synthesizes it, then reads
+        # the next, so a text larger than the pipe buffer (64 KB) would block
+        # this (GTK) thread for minutes.
+        threading.Thread(target=_feed_stdin, args=(proc, (text + "\n").encode("utf-8")), daemon=True).start()
+        reader = threading.Thread(
+            target=self._read_engine_stderr, args=(proc, reading, KOKO_AUDIO_STARTED_MARKER), daemon=True,
+        )
+        reading.threads.append(reader)
+        reader.start()
+        return True
 
     def _start_relay(
         self, reading: _Reading, cmd: list[str], text: str, *, cwd: str | None = None,
@@ -742,15 +796,21 @@ class TTSService:
                 except (OSError, ValueError, BrokenPipeError):
                     pass
 
-    def _read_engine_stderr(self, proc: subprocess.Popen) -> None:
-        """Keep the last lines an engine writes to stderr (error detail)."""
+    def _read_engine_stderr(
+        self, proc: subprocess.Popen, reading: _Reading | None = None, marker: str = "",
+    ) -> None:
+        """Keep the last lines an engine writes to stderr (error detail);
+        ``marker`` in a line means the reading's sound has started."""
         stream = proc.stderr
         if stream is None:
             return
         try:
             for raw in iter(stream.readline, b""):
                 line = raw.decode("utf-8", errors="replace").strip()
-                if line and not line.startswith(_ENGINE_NOISE):
+                if marker and reading is not None and marker in line:
+                    if not reading.audio_started:
+                        self._on_audio(reading)
+                elif line and not line.startswith(_ENGINE_NOISE):
                     self._stderr_tail.append(line)
         except (OSError, ValueError):
             pass
@@ -983,6 +1043,8 @@ class TTSService:
 
     def _on_audio(self, reading: _Reading) -> None:
         """Sound of ``reading`` is being produced."""
+        if not reading.audio_started:
+            reading.audio_started_at = time.monotonic()
         reading.audio_started = True
         if reading is self._reading and self._is_current(reading.gen):
             self._mark_audio_started()

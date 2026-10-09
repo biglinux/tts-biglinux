@@ -266,10 +266,10 @@ def build_koko_command(
     """argv for koko.
 
     With ``text`` it renders that text to ``output`` (``koko text``). Without
-    it, ``koko stream`` reads stdin one line at a time and writes the audio of
-    each line to stdout as one WAV stream (played by aplay through the app,
-    which also keeps it for the history). ``koko pipe`` is not used: it plays
-    by itself, so its audio could not be kept, and ignores ``-o``.
+    it, ``koko pipe`` reads stdin one line at a time and plays each line as
+    soon as it is synthesized, writing everything it plays to ``output`` (a
+    WAV file growing as it goes; default: the scratch file in koko_workdir).
+    ``koko stream`` is not used: it mixes log lines into the audio on stdout.
     """
     voice = koko_voice_name(voice_id)
     cmd = [
@@ -282,13 +282,16 @@ def build_koko_command(
         "-p", f"{max(0.5, min(2.0, speed)):.2f}",
     ]
     if text is None:
-        cmd += ["stream"]
+        cmd += ["pipe", "-o", output or os.path.join(koko_workdir(), "pipe_output.wav")]
     else:
         if not output:
             raise ValueError("koko text needs an output path")
         cmd += ["text", "-o", output, "--", text]
     return cmd
 
+
+# koko pipe prints this to stderr when a sentence's audio starts playing.
+KOKO_AUDIO_STARTED_MARKER = "Streaming audio"
 
 # The Kokoro model accepts at most 510 phoneme tokens per segment. `koko pipe`
 # splits the input into sentences but does not limit a sentence's length: a
