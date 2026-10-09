@@ -26,7 +26,7 @@ CONFIG_VERSION = 1
 APP_DEVELOPERS = [
     "Rafael Ruscher <rruscher@gmail.com>",
     "Bruno Gonçalves <bigbruno@gmail.com>",
-    "Tales A. Mendonça",
+    "Tales A. Mendonça <talesam@gmail.com>",
 ]
 APP_COPYRIGHT = "© 2021–2026 BigLinux contributors"
 APP_WEBSITE = "https://github.com/biglinux/tts-biglinux"
