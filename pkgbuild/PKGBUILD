@@ -7,7 +7,7 @@ pkgname=tts-biglinux
 # vercmp); the epoch makes 4.1.0 an upgrade over them. Never remove it.
 epoch=1
 pkgver=4.1.0
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 license=('GPL-3.0-or-later')
 url="https://github.com/biglinux/tts-biglinux"
