@@ -327,18 +327,17 @@ def test_readings_in_sequence_each_have_an_entry(fakes):
 
 
 def test_history_folder_without_permission_never_breaks_reading(fakes, monkeypatch):
-    locked = fakes / "locked"  # read-only Music folder: no history folder possible
-    locked.mkdir()
-    locked.chmod(0o500)
-    monkeypatch.setattr(hs, "_MUSIC_DIR", locked)
-    try:
-        svc = ts.TTSService(settings=_settings())
-        assert svc.speak("Ainda assim leio.", backend="rhvoice", voice_id="x", volume=50)
-        _run_watch(svc)
-        assert svc.state is TTSState.IDLE  # the reading itself is fine
-        assert played(fakes)
-    finally:
-        locked.chmod(0o700)
+    # No history folder possible: its parent is a file (root-proof, unlike a
+    # read-only folder — CI runs as root).
+    blocker = fakes / "blocker"
+    blocker.write_text("")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", blocker / "Music")
+    svc = ts.TTSService(settings=_settings())
+    assert svc.speak("Ainda assim leio.", backend="rhvoice", voice_id="x", volume=50)
+    _run_watch(svc)
+    assert svc.state is TTSState.IDLE  # the reading itself is fine
+    assert played(fakes)
+    assert not hs.get_history_dir().exists()
 
 
 @pytest.mark.parametrize(("backend", "voice"), [("rhvoice", "x"), ("kokoro", "kokoro:pf_dora")])

@@ -153,17 +153,14 @@ def test_save_never_overwrites_an_existing_entry(hdir, tmp_path):
 
 
 def test_unwritable_folder_is_reported_not_raised(tmp_path, monkeypatch):
-    # The Music folder is read-only: the history folder cannot be created.
-    locked = tmp_path / "locked"
-    locked.mkdir()
-    locked.chmod(0o500)
-    monkeypatch.setattr(hs, "_MUSIC_DIR", locked)
-    try:
-        assert hs.save_reading(text="x", backend="rhvoice", voice_id="v") is None
-        assert hs.new_recording("rhvoice", time.time()) is None
-        assert hs.repair_history()["error"] == ""  # nothing to repair, no crash
-    finally:
-        locked.chmod(0o700)
+    # The history folder cannot be created. (Its parent is a file, not a
+    # read-only folder: CI runs as root, and root ignores permissions.)
+    blocker = tmp_path / "blocker"
+    blocker.write_text("")
+    monkeypatch.setattr(hs, "_MUSIC_DIR", blocker / "Music")
+    assert hs.save_reading(text="x", backend="rhvoice", voice_id="v") is None
+    assert hs.new_recording("rhvoice", time.time()) is None
+    assert hs.repair_history()["error"] == ""  # nothing to repair, no crash
 
 
 def test_durations_of_older_entries_are_filled_in(hdir, tmp_path):
