@@ -88,6 +88,12 @@ def _show_in_file_manager(file_path: Path | None) -> None:
 
 # ── One entry ─────────────────────────────────────────────────────────
 
+# Grid: card text width (characters) and how wide the page may get.
+_GRID_TEXT_CHARS = 22
+_LIST_WIDTH = 760
+_GRID_WIDTH = 1280
+
+
 class HistoryCard(Gtk.Box):
     """A history entry: text, details, player and actions."""
 
@@ -117,6 +123,12 @@ class HistoryCard(Gtk.Box):
         self._text.set_ellipsize(Pango.EllipsizeMode.END)
         self._text.set_selectable(True)
         self._text.add_css_class("history-text-preview")
+        if view._grid_mode:
+            # A wrapping label asks for its whole text on one line: a fixed
+            # width lets several cards fit side by side, in equal columns.
+            self.add_css_class("grid")
+            self._text.set_width_chars(_GRID_TEXT_CHARS)
+            self._text.set_max_width_chars(_GRID_TEXT_CHARS)
         if not text:
             self._text.add_css_class("dim-label")
         text_box.append(self._text)
@@ -406,9 +418,12 @@ class HistoryView(Adw.NavigationPage):
         self._list.update_property([Gtk.AccessibleProperty.LABEL], [_("History entries")])
         self._grid = Gtk.FlowBox()
         self._grid.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._grid.set_homogeneous(True)
+        # Not homogeneous: each row is as tall as its own tallest card (one
+        # expanded text must not stretch every card of the page).
+        self._grid.set_homogeneous(False)
+        self._grid.set_valign(Gtk.Align.START)
         self._grid.set_min_children_per_line(1)
-        self._grid.set_max_children_per_line(3)
+        self._grid.set_max_children_per_line(4)
         self._grid.set_column_spacing(8)
         self._grid.set_row_spacing(8)
         self._grid.set_visible(False)
@@ -424,7 +439,7 @@ class HistoryView(Adw.NavigationPage):
         self._more_spinner.set_visible(False)
         content.append(self._more_spinner)
         self._clamp = Adw.Clamp()
-        self._clamp.set_maximum_size(760)
+        self._clamp.set_maximum_size(_LIST_WIDTH)
         self._clamp.set_child(content)
         self._scroll = Gtk.ScrolledWindow()
         self._scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -659,6 +674,7 @@ class HistoryView(Adw.NavigationPage):
         self._grid_mode = button.get_active()
         self._list.set_visible(not self._grid_mode)
         self._grid.set_visible(self._grid_mode)
+        self._clamp.set_maximum_size(_GRID_WIDTH if self._grid_mode else _LIST_WIDTH)
         button.set_tooltip_text(_("Show as list") if self._grid_mode else _("Show as grid"))
         button.set_icon_name("format-justify-fill-symbolic" if self._grid_mode else "view-grid-symbolic")
         self.reload()
