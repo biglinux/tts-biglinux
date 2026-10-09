@@ -7,7 +7,7 @@ pkgname=tts-biglinux
 # vercmp); the epoch makes 4.1.0 an upgrade over them. Never remove it.
 epoch=1
 pkgver=4.1.0
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 license=('GPL-3.0-or-later')
 url="https://github.com/biglinux/tts-biglinux"
@@ -56,7 +56,7 @@ optdepends=(
     'rhvoice-voice-evgeniy-eng: RHVoice English male voice'
     'xclip: selection capture on X11 when xsel is not available'
     'biglinux-kokoro-tts: Kokoro neural voices (BigLinux repository)'
-    'piper-voices-pt-BR: Brazilian Portuguese Piper voices, preinstalled (BigLinux repository)'
+    'piper-voices-pt-br: Brazilian Portuguese Piper voices, preinstalled (BigLinux repository; piper-voices-pt-BR in testing)'
     'piper-tts-bin: Piper command-line fallback (BigLinux repository; the native engine needs only voices)'
     'rhvoice-brazilian-portuguese-complementary-dict-biglinux: extra pronunciation dictionary for RHVoice (BigLinux repository)'
 )

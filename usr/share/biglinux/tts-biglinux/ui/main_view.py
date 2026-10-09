@@ -1398,39 +1398,48 @@ class MainView(Adw.NavigationPage):
             if self._catalog:
                 self._on_voices_discovered(self._catalog)
 
-    def _piper_package_plan(self) -> tuple[list[str], list[str]]:
-        """Piper packages to install and those not in the repositories (worker)."""
+    def _piper_package_plan(self) -> list:
+        """Where each Piper package can come from (worker).
+
+        Each package under either spelling (BigLinux stable has
+        piper-voices-pt-br, testing piper-voices-pt-BR), the AUR last.
+        """
         from services import package_installer
 
         lang = get_system_language()
         wanted = ["piper-tts-bin", self._PIPER_VOICE_PACKAGES.get(lang, "piper-voices-en-US")]
         if "piper-voices-pt-BR" not in wanted:
             wanted.append("piper-voices-pt-BR")  # BigLinux default language
-        available, missing = [], []
-        for name in wanted:
-            (available if package_installer.query(name).available else missing).append(name)
-        return available, missing
+        return package_installer.resolve(wanted)
 
     def _ask_install_piper(self) -> None:
         """Offer to install Piper — only the packages that really exist."""
         run_in_thread(self._piper_package_plan, on_done=self._show_piper_install_dialog)
 
-    def _show_piper_install_dialog(self, plan: tuple[list[str], list[str]]) -> None:
-        available, missing = plan
-        voices = [p for p in available if p.startswith("piper-voices-")]
-        if not voices:
+    def _show_piper_install_dialog(self, plan: list) -> None:
+        voices = [r for r in plan if r.wanted.startswith("piper-voices-")]
+        if not any(r.source for r in voices):
             dialog = Adw.AlertDialog.new(
                 _("Piper is not available"),
                 _("No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again.").format(
-                    packages=", ".join(p for p in missing if p.startswith("piper-voices-"))
+                    packages=", ".join(r.wanted for r in voices)
                 ),
             )
             dialog.add_response("ok", _("OK"))
             dialog.connect("response", lambda *_a: self._revert_to_rhvoice())
             dialog.present(self._root_window())
             return
+        repo = [r.name for r in plan if r.source == "repo"]
+        aur = [r.name for r in plan if r.source == "aur"]
+        if not repo and not aur:  # everything is installed already
+            from services.package_installer import InstallResult
+
+            self._on_piper_installed(InstallResult(True))
+            return
         body = _("Piper provides natural neural voices. These packages will be installed:") + "\n"
-        body += "\n".join(f"• {name}" for name in available)
+        body += "\n".join([f"• {name}" for name in repo] + [f"• {name} (AUR)" for name in aur])
+        if aur:
+            body += "\n\n" + _("Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer.")
         body += "\n\n" + _("This requires administrator permissions.")
         dialog = Adw.AlertDialog.new(_("Install Piper Neural TTS?"), body)
         dialog.add_response("cancel", _("Cancel"))
@@ -1439,16 +1448,22 @@ class MainView(Adw.NavigationPage):
         dialog.set_default_response("install")
         dialog.set_close_response("cancel")
 
+        def _install():
+            from services import package_installer
+
+            result = package_installer.install(repo) if repo else package_installer.InstallResult(True)
+            if result.ok and aur:
+                result = package_installer.install_aur(aur)
+            return result
+
         def _on_response(_d, response: str) -> None:
             if response != "install":
                 self._revert_to_rhvoice()
                 return
-            from services import package_installer
-
             self._run_install_with_progress(
                 title=_("Installing Piper TTS"),
                 status_text=_("Downloading and installing packages…"),
-                worker=lambda: package_installer.install(available),
+                worker=_install,
                 on_done=self._on_piper_installed,
             )
 

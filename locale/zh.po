@@ -1295,3 +1295,10 @@ msgstr "这将把所有调整恢复为原始默认值。"
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "恢复"
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "标记为 AUR 的软件包不在您的软件源中：它们来自 Arch User Repository，由社区维护，并在此计算机上构建，耗时更长。"
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "无法从 AUR 构建 {packages}。请查看详细信息。"

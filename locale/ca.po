@@ -1677,3 +1677,12 @@ msgstr "Això retornarà tots els ajustaments als seus valors originals per defe
 #: usr/share/biglinux/tts-biglinux/window.py:465
 msgid "Restore"
 msgstr "Restaura"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1442
+msgid "Packages marked AUR are not in your repositories: they come from the Arch User Repository, are maintained by the community and are built on this computer, which takes longer."
+msgstr "Els paquets marcats amb AUR no són als vostres repositoris: provenen de l'Arch User Repository, els manté la comunitat i es compilen en aquest ordinador, cosa que triga més."
+
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:252
+#: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "No s'ha pogut compilar {packages} des de l'AUR. Vegeu els detalls."
