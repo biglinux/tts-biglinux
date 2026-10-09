@@ -16,9 +16,19 @@ on:
 permissions:
   contents: write
 
+# One run per branch at a time: each one commits and pushes translations.
+concurrency:
+  group: translate-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
+    # Only in the biglinux organization: forks have neither the translation
+    # keys nor the builder token, and the translation step would hang until
+    # GitHub's 6-hour limit.
+    if: github.repository_owner == 'biglinux'
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
