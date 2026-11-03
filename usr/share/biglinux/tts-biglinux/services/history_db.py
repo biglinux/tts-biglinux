@@ -362,34 +362,44 @@ def migrate_from_json(json_path: Path) -> int:
     except (json.JSONDecodeError, OSError):
         return 0
 
-    known = known_keys()
     migrated = 0
     with _connect() as conn:
-        for e in data:
-            if not isinstance(e, dict):
-                continue
-            ts = str(e.get("timestamp", ""))
-            backend = str(e.get("backend", ""))
-            if not ts or (ts, backend) in known:
-                continue
-            preview = str(e.get("text_preview", ""))
-            conn.execute(
-                "INSERT INTO entries "
-                "(id, ts, backend, voice_id, text, text_preview, has_audio, created_at) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    str(e.get("id") or uuid.uuid4().hex),
-                    ts,
-                    backend,
-                    str(e.get("voice_id", "")),
-                    str(e.get("text", "")) or preview,
-                    preview,
-                    1 if e.get("has_audio") else 0,
-                    ts_to_epoch(ts),
-                ),
-            )
-            known.add((ts, backend))
-            migrated += 1
+        # Two starts may migrate at the same moment: the check for rows
+        # already indexed and the inserts must be one write transaction,
+        # or both see "not indexed yet" and both insert.
+        conn.isolation_level = None
+        conn.execute("BEGIN IMMEDIATE")
+        try:
+            known = {(r[0], r[1] or "") for r in conn.execute("SELECT ts, backend FROM entries")}
+            for e in data:
+                if not isinstance(e, dict):
+                    continue
+                ts = str(e.get("timestamp", ""))
+                backend = str(e.get("backend", ""))
+                if not ts or (ts, backend) in known:
+                    continue
+                preview = str(e.get("text_preview", ""))
+                conn.execute(
+                    "INSERT INTO entries "
+                    "(id, ts, backend, voice_id, text, text_preview, has_audio, created_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (
+                        str(e.get("id") or uuid.uuid4().hex),
+                        ts,
+                        backend,
+                        str(e.get("voice_id", "")),
+                        str(e.get("text", "")) or preview,
+                        preview,
+                        1 if e.get("has_audio") else 0,
+                        ts_to_epoch(ts),
+                    ),
+                )
+                known.add((ts, backend))
+                migrated += 1
+            conn.execute("COMMIT")
+        except BaseException:
+            conn.execute("ROLLBACK")
+            raise
     try:
         json_path.rename(json_path.with_suffix(".json.migrated"))
     except OSError:

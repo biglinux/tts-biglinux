@@ -2131,3 +2131,17 @@ msgstr "This will return all adjustments to their original defaults."
 # File: tts-biglinux/usr/share/biglinux/tts-biglinux/window.py, line: 465
 msgid "Restore"
 msgstr "Restore"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/audio_player.py, line: 134
+msgid "Playback position"
+msgstr "Playback position"
+
+#
+# File: tts-biglinux/usr/share/biglinux/tts-biglinux/ui/main_view.py, line: 1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro voices do not support this setting."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro voices only follow Mute. Use the system volume to change how loud they are."

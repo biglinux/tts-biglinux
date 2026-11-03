@@ -100,22 +100,23 @@ class DesktopIntegrationService:
             pass
 
         # Method 2: Plasma 6/5 reparseConfiguration
-        for cmd in ["qdbus6", "qdbus"]:
-            try:
-                subprocess.run(
-                    [
-                        cmd,
-                        "org.kde.kglobalaccel",
-                        "/kglobalaccel",
-                        "org.kde.KGlobalAccel.reparseConfiguration",
-                    ],
-                    timeout=3,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
+        try:
+            subprocess.run(
+                [
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.reparseConfiguration",
+                ],
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
 
         # Method 3: also notify KGlobalSettings (Legacy)
         try:
@@ -151,46 +152,20 @@ class DesktopIntegrationService:
             ("biglinux-tts-speak.desktop", "AmdRender"),
         ]
         for comp, action in zombies:
-            for dbus_cmd in [
-                ["qdbus6"],
-                ["qdbus"],
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                ],
-            ]:
-                try:
-                    if "dbus-send" in dbus_cmd:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                f"string:{comp}",
-                                f"string:{action}",
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                    else:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "org.kde.kglobalaccel",
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                comp,
-                                action,
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                except Exception:
-                    pass
+            try:
+                subprocess.run(
+                    [
+                        "dbus-send", "--session", "--type=method_call",
+                        "--dest=org.kde.kglobalaccel", "/kglobalaccel",
+                        "org.kde.KGlobalAccel.unregister",
+                        f"string:{comp}", f"string:{action}",
+                    ],
+                    timeout=1,
+                    stderr=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
 
     @staticmethod
     def unregister_shortcut_from_memory() -> None:
@@ -251,8 +226,13 @@ class DesktopIntegrationService:
         the press to our launcher, so the shortcut silently fails when the app
         is not already running. ``Component.cleanUp`` drops each zombie so the
         live ``biglinux-tts-speak.desktop`` component owns the key alone.
+
+        kglobalacceld also loads every launcher in ~/.local/share/kglobalaccel/
+        at each login (System Settings copies one there when a shortcut is added
+        by hand), so old copies of ours are deleted too — otherwise the zombies
+        come back with their default Alt+V before the app ever starts.
         """
-        import shutil
+        DesktopIntegrationService.remove_stale_kde_launchers()
 
         # D-Bus object-path names (dots/dashes → underscores) of components
         # historically used for the speak shortcut. Never touch ``keep``.
@@ -261,28 +241,82 @@ class DesktopIntegrationService:
             "tts_speak_desktop",
             "br_com_biglinux_tts_desktop",
         ]
-        qdbus = next((c for c in ("qdbus6", "qdbus") if shutil.which(c)), None)
-        if not qdbus:
+        # Over D-Bus directly (no qdbus: it is not installed everywhere).
+        try:
+            from gi.repository import Gio
+
+            bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        except Exception as e:
+            logger.debug("No session bus for the shortcut cleanup: %s", e)
             return
         for name in stale:
             if name == keep:
                 continue
             try:
-                subprocess.run(
-                    [
-                        qdbus,
-                        "org.kde.kglobalaccel",
-                        f"/component/{name}",
-                        "org.kde.kglobalaccel.Component.cleanUp",
-                    ],
-                    timeout=3,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+                bus.call_sync(
+                    "org.kde.kglobalaccel", f"/component/{name}",
+                    "org.kde.kglobalaccel.Component", "cleanUp",
+                    None, None, Gio.DBusCallFlags.NONE, 3000, None,
                 )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
+            except Exception:
+                pass  # not registered (the usual case)
         logger.debug("Purged stale KDE shortcut components (kept %s)", keep)
+
+    # Launchers older versions (or System Settings) left in the kglobalaccel
+    # data dir; each one is a separate component claiming the speak shortcut.
+    _STALE_KDE_LAUNCHERS = ("bigtts.desktop", "tts-speak.desktop", "br.com.biglinux.tts.desktop")
+
+    @staticmethod
+    def _kde_launcher_dir() -> Path:
+        return Path.home() / ".local" / "share" / "kglobalaccel"
+
+    @staticmethod
+    def _runs_this_app(command: str) -> bool:
+        """The Exec program (not an argument) is one of our launchers."""
+        import shlex
+
+        try:
+            argv = shlex.split(command)
+        except ValueError:
+            return False
+        return bool(argv) and Path(argv[0]).name in ("biglinux-tts", "biglinux-tts-speak")
+
+    @staticmethod
+    def _main_exec(text: str) -> str:
+        """Exec of the [Desktop Entry] group (actions have their own Exec)."""
+        group = ""
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith("[") and line.endswith("]"):
+                group = line
+            elif group == "[Desktop Entry]" and line.startswith("Exec="):
+                return line[5:]
+        return ""
+
+    @classmethod
+    def remove_stale_kde_launchers(cls) -> list[Path]:
+        """Delete our old launchers from ~/.local/share/kglobalaccel/.
+
+        Only files whose Exec runs this app are removed, so a user's own
+        launcher that happens to share a name is left alone.
+        """
+        removed = []
+        for name in cls._STALE_KDE_LAUNCHERS:
+            path = cls._kde_launcher_dir() / name
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            if not cls._runs_this_app(cls._main_exec(text)):
+                continue
+            try:
+                path.unlink()
+            except OSError as e:
+                logger.warning("Could not remove stale shortcut launcher %s: %s", path, e)
+                continue
+            removed.append(path)
+            logger.info("Removed stale shortcut launcher %s", path)
+        return removed
 
     @staticmethod
     def ensure_desktop_file(kde_key: str) -> Path:
@@ -308,6 +342,14 @@ GenericName={generic_name}
 """
         desktop_dst.parent.mkdir(parents=True, exist_ok=True)
         desktop_dst.write_text(content, encoding="utf-8")
+        # kglobalacceld looks in its own data dir before applications/, so a
+        # copy there (made by System Settings) would keep an old Exec/default.
+        kde_copy = DesktopIntegrationService._kde_launcher_dir() / desktop_dst.name
+        if kde_copy.is_file():
+            try:
+                kde_copy.write_text(content, encoding="utf-8")
+            except OSError as e:
+                logger.warning("Could not update %s: %s", kde_copy, e)
         return desktop_dst
 
     @classmethod
@@ -526,40 +568,61 @@ GenericName={generic_name}
         channel = "xfce4-keyboard-shortcuts"
         prop_path = f"/commands/custom/{xfce_accel}"
 
-        # First, remove any previous biglinux-tts binding
+        def is_ours(command: str) -> bool:
+            # The speak launcher only — not a user's own binding that opens
+            # the app window (/usr/bin/biglinux-tts).
+            return command.strip().split("/")[-1] == "biglinux-tts-speak"
+
         try:
             result = subprocess.run(
                 ["xfconf-query", "-c", channel, "-l", "-v"],
                 capture_output=True, text=True, timeout=5,
             )
-            if result.returncode == 0:
-                for line in result.stdout.splitlines():
-                    if "biglinux-tts" in line:
-                        parts = line.split(None, 1)
-                        if parts:
-                            old_prop = parts[0]
-                            subprocess.run(
-                                ["xfconf-query", "-c", channel, "-p", old_prop, "-r"],
-                                timeout=3, check=False,
-                            )
-        except (OSError, subprocess.TimeoutExpired):
-            pass
-
-        # Register the new binding
-        try:
-            subprocess.run(
-                [
-                    "xfconf-query", "-c", channel,
-                    "-p", prop_path,
-                    "-n", "-t", "string", "-s", exec_path,
-                ],
-                timeout=5, check=True,
-            )
-            logger.info("XFCE shortcut registered: %s → %s", xfce_accel, exec_path)
-            return True
-        except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
-            logger.error("Failed to register XFCE shortcut: %s", e)
+        except (OSError, subprocess.TimeoutExpired) as e:
+            logger.error("Failed to read XFCE shortcuts: %s", e)
             return False
+        if result.returncode != 0:
+            # Without the list, another command on the key could be overwritten.
+            logger.error("Failed to read XFCE shortcuts (xfconf-query exit %d)", result.returncode)
+            return False
+        bindings = {}
+        for line in result.stdout.splitlines():
+            parts = line.split(None, 1)
+            if len(parts) == 2 and parts[0].startswith("/commands/custom/"):
+                bindings[parts[0]] = parts[1].strip()
+
+        current = bindings.get(prop_path)
+        if current is not None and current != exec_path and not is_ours(current):
+            logger.warning("XFCE shortcut %s is already used by %s", xfce_accel, current)
+            return False
+
+        # Set the new binding first, then drop our old ones: an app that quits
+        # in between never leaves the user without a shortcut. Already right:
+        # nothing is written (no churn at every start).
+        if current != exec_path:
+            try:
+                subprocess.run(
+                    [
+                        "xfconf-query", "-c", channel,
+                        "-p", prop_path,
+                        "-n", "-t", "string", "-s", exec_path,
+                    ],
+                    timeout=5, check=True,
+                )
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to register XFCE shortcut: %s", e)
+                return False
+        for prop, command in bindings.items():
+            if prop != prop_path and is_ours(command):
+                try:
+                    subprocess.run(
+                        ["xfconf-query", "-c", channel, "-p", prop, "-r"],
+                        timeout=3, check=False,
+                    )
+                except (OSError, subprocess.TimeoutExpired):
+                    pass
+        logger.info("XFCE shortcut registered: %s → %s", xfce_accel, exec_path)
+        return True
 
     @classmethod
     def register_cinnamon_shortcut(cls, accel: str, exec_path: str) -> bool:
@@ -676,7 +739,8 @@ GenericName={generic_name}
             return cls.register_xfce_shortcut(accel, exec_path)
         elif de == "cinnamon":
             return cls.register_cinnamon_shortcut(accel, exec_path)
-        else:
-            # Unknown DE — try GNOME gsettings as fallback (many DEs are GNOME-based)
-            logger.info("Unknown DE '%s', trying GNOME gsettings as fallback", de)
-            return cls.register_gnome_shortcut(accel, exec_path)
+        # Unknown desktop: writing GNOME's gsettings could "succeed" with no
+        # daemon listening, and the app would promise a shortcut that never
+        # fires. The user adds it in the desktop's own keyboard settings.
+        logger.info("Unknown desktop '%s': shortcut must be added by hand", de)
+        return False

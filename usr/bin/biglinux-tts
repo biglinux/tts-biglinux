@@ -1,14 +1,18 @@
 #!/bin/bash
 # BigLinux TTS — GUI Launcher
 
+# -s: ignore ~/.local site-packages. A `pip install --user` that drops a
+# top-level utils.py there (hermes-agent does) used to shadow the app's own
+# modules; the app needs only system packages.
+
 # Detect dev environment: if launched from git repo, use repo's main.py
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MAIN_PY="${SCRIPT_DIR}/../share/biglinux/tts-biglinux/main.py"
 
 if [[ -f "$MAIN_PY" && -d "${SCRIPT_DIR}/../../.git" ]]; then
     cd "${SCRIPT_DIR}/../share/biglinux/tts-biglinux/" || exit 1
-    exec -a biglinux-tts /usr/bin/python3 main.py "$@"
+    exec -a biglinux-tts /usr/bin/python3 -s main.py "$@"
 fi
 
 cd /usr/share/biglinux/tts-biglinux/ || exit 1
-exec -a biglinux-tts /usr/bin/python3 main.py "$@"
+exec -a biglinux-tts /usr/bin/python3 -s main.py "$@"

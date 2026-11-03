@@ -29,6 +29,15 @@ def create_preferences_group(
     return group
 
 
+def set_row_icon(row: Adw.ActionRow, icon_name: str) -> Gtk.Image:
+    """Leading icon for a row (Adw.ActionRow.set_icon_name is deprecated)."""
+    icon = Gtk.Image.new_from_icon_name(icon_name)
+    icon.set_valign(Gtk.Align.CENTER)
+    icon.set_accessible_role(Gtk.AccessibleRole.PRESENTATION)
+    row.add_prefix(icon)
+    return icon
+
+
 def create_action_row_with_switch(
     title: str,
     subtitle: str | None = None,

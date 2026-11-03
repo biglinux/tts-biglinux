@@ -1302,3 +1302,15 @@ msgstr "AUR로 표시된 패키지는 저장소에 없습니다. Arch User Repos
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "AUR에서 {packages}을(를) 빌드할 수 없습니다. 세부 정보를 확인하세요."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "재생 위치"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro 음성은 이 설정을 지원하지 않습니다."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro 음성은 '음소거'만 따릅니다. 소리 크기는 시스템 볼륨으로 바꾸세요."

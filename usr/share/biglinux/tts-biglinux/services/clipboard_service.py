@@ -72,7 +72,7 @@ def _get_text_x11(max_chars: int) -> ClipboardResult:
     """Capture text on X11 via xsel or xclip."""
     # Try xsel first
     if shutil.which("xsel"):
-        for args in [["xsel", "--primary", "-o"], ["xsel", "-o"]]:
+        for args in [["xsel", "--primary", "-o"], ["xsel", "--clipboard", "-o"]]:
             result = _run_capture(args, max_chars)
             if result.success and result.text:
                 return result

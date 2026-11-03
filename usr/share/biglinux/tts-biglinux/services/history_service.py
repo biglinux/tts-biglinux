@@ -20,6 +20,7 @@ import os
 import re
 import shutil
 import struct
+import tempfile
 import threading
 import time
 import uuid
@@ -53,17 +54,17 @@ def _get_music_dir() -> Path:
     if _MUSIC_DIR is not None:
         return _MUSIC_DIR
 
+    # GLib reads ~/.config/user-dirs.dirs itself ("Músicas", "Musik"…): no
+    # xdg-user-dir program needed.
     try:
-        import subprocess
+        from gi.repository import GLib
 
-        proc = subprocess.run(
-            ["xdg-user-dir", "MUSIC"], capture_output=True, text=True, timeout=3,
-        )
-        if proc.returncode == 0 and proc.stdout.strip():
-            _MUSIC_DIR = Path(proc.stdout.strip())
-            return _MUSIC_DIR
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        music = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
+    except Exception:
+        music = None
+    if music:
+        _MUSIC_DIR = Path(music)
+        return _MUSIC_DIR
 
     _MUSIC_DIR = Path.home() / "Music"
     return _MUSIC_DIR
@@ -477,11 +478,35 @@ def export_audio(entry: dict, destination: str) -> bool:
     path = audio_path(entry)
     if path is None:
         return False
+    # Copied next to the destination, then renamed: an export cut short
+    # (error, app quit) never leaves a truncated file under the chosen name.
+    temporary = None
+    # A symlink is followed (like a plain copy would), not replaced.
+    destination = os.path.realpath(destination)
     try:
-        shutil.copyfile(path, destination)
+        fd, temporary = tempfile.mkstemp(
+            dir=os.path.dirname(destination) or ".",
+            prefix=f".{os.path.basename(destination)}.",
+            suffix=".part",
+        )
+        os.close(fd)
+        shutil.copyfile(path, temporary)
+        # mkstemp makes it 0600: an existing file keeps its own permissions
+        # (never widened), a new one gets the recording's.
+        shutil.copymode(destination if os.path.exists(destination) else path, temporary)
+        try:  # and keeps its group (best effort: needs membership)
+            os.chown(temporary, -1, os.stat(destination).st_gid)
+        except OSError:
+            pass
+        os.replace(temporary, destination)
         return True
     except OSError as e:
         logger.warning("Could not export %s: %s", path, e)
+        if temporary is not None:
+            try:
+                os.unlink(temporary)
+            except OSError:
+                pass
         return False
 
 

@@ -1302,3 +1302,15 @@ msgstr "AUR-iga märgitud pakette pole teie hoidlates: need pärinevad Arch User
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "Paketti {packages} ei õnnestunud AUR-ist ehitada. Vaadake üksikasju."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Esitamise asukoht"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro hääled seda seadet ei toeta."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro hääled järgivad ainult valikut „Vaigista“. Valjuse muutmiseks kasutage süsteemi helitugevust."

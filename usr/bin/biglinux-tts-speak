@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MAIN_PY="${SCRIPT_DIR}/../share/biglinux/tts-biglinux/main.py"
 
 if [[ -f "$MAIN_PY" && -d "${SCRIPT_DIR}/../../.git" ]]; then
-    exec /usr/bin/python3 "${MAIN_PY}" --speak "$@"
+    exec /usr/bin/python3 -s "${MAIN_PY}" --speak "$@"
 fi
 
 exec /usr/bin/biglinux-tts --speak "$@"

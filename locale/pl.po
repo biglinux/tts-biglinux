@@ -1302,3 +1302,15 @@ msgstr "Pakiety oznaczone jako AUR nie znajdują się w Twoich repozytoriach: po
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "Nie udało się zbudować {packages} z AUR. Zobacz szczegóły."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Pozycja odtwarzania"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Głosy Kokoro nie obsługują tego ustawienia."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Głosy Kokoro uwzględniają tylko „Wyciszenie”. Głośność zmienisz w ustawieniach głośności systemu."

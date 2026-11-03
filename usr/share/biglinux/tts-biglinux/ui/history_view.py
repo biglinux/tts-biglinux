@@ -36,6 +36,9 @@ logger = logging.getLogger(__name__)
 
 PAGE_SIZE = 50
 _UNDO_SECONDS = 5
+# FileManager1 may have to be started (D-Bus activation): wait this long
+# before opening the folder instead (the default wait is 25 s).
+_FILE_MANAGER_TIMEOUT_MS = 10000
 
 def _engine_label(backend: str) -> str:
     return engine_name(backend) if backend else _("Unknown")
@@ -65,25 +68,44 @@ def _spinner() -> Gtk.Widget:
     return Adw.Spinner() if hasattr(Adw, "Spinner") else Gtk.Spinner(spinning=True)
 
 
-def _show_in_file_manager(file_path: Path | None) -> None:
-    """Show the file in the file manager (FileManager1 D-Bus, or xdg-open)."""
-    target = file_path or history_service.get_history_dir()
+def _open_folder(target: Path) -> None:
+    folder = target.parent if target.is_file() else target
     try:
-        proxy = Gio.DBusProxy.new_for_bus_sync(
-            Gio.BusType.SESSION, Gio.DBusProxyFlags.NONE, None,
-            "org.freedesktop.FileManager1", "/org/freedesktop/FileManager1",
-            "org.freedesktop.FileManager1", None,
-        )
-        proxy.call_sync(
-            "ShowItems", GLib.Variant("(ass)", ([target.as_uri()], "")),
-            Gio.DBusCallFlags.NONE, -1, None,
-        )
-    except Exception:
-        folder = target.parent if target.is_file() else target
+        subprocess.Popen(["xdg-open", str(folder)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except OSError:
+        pass
+
+
+def _show_in_file_manager(file_path: Path | None) -> None:
+    """Show the file in the file manager (FileManager1 D-Bus, or xdg-open).
+
+    Asynchronous: the window must not freeze while the file manager starts
+    (or while D-Bus waits for one that never answers).
+    """
+    target = file_path or history_service.get_history_dir()
+
+    def shown(conn: Gio.DBusConnection, result: Gio.AsyncResult) -> None:
         try:
-            subprocess.Popen(["xdg-open", str(folder)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except FileNotFoundError:
-            pass
+            conn.call_finish(result)
+        except GLib.Error as e:
+            logger.debug("FileManager1.ShowItems failed: %s", e.message)
+            _open_folder(target)
+
+    def got_bus(_source, result: Gio.AsyncResult) -> None:
+        try:
+            conn = Gio.bus_get_finish(result)
+        except GLib.Error as e:
+            logger.debug("No session bus: %s", e.message)
+            _open_folder(target)
+            return
+        conn.call(
+            "org.freedesktop.FileManager1", "/org/freedesktop/FileManager1",
+            "org.freedesktop.FileManager1", "ShowItems",
+            GLib.Variant("(ass)", ([target.as_uri()], "")), None,
+            Gio.DBusCallFlags.NONE, _FILE_MANAGER_TIMEOUT_MS, None, shown,
+        )
+
+    Gio.bus_get(Gio.BusType.SESSION, None, got_bus)
 
 
 # ── One entry ─────────────────────────────────────────────────────────
@@ -262,8 +284,13 @@ class HistoryCard(Gtk.Box):
                 file = d.save_finish(result)
             except GLib.Error:
                 return  # cancelled
-            ok = history_service.export_audio(self.entry, file.get_path())
-            self._view.toast(_("Audio saved") if ok else _("Could not save the audio"))
+            entry, destination, view = self.entry, file.get_path(), self._view
+
+            def work() -> None:  # a long reading is a big file: not on the main thread
+                ok = history_service.export_audio(entry, destination)
+                GLib.idle_add(view.toast, _("Audio saved") if ok else _("Could not save the audio"))
+
+            threading.Thread(target=work, daemon=True).start()
 
         dialog.save(self.get_root(), None, done)
 
@@ -355,7 +382,7 @@ class HistoryView(Adw.NavigationPage):
         self._engine = Gtk.DropDown.new(self._engine_model, None)
         self._engine.set_tooltip_text(_("Filter by engine"))
         self._engine.update_property([Gtk.AccessibleProperty.LABEL], [_("Filter by engine")])
-        self._engine.connect("notify::selected", lambda *_a: self.reload())
+        self._engine_handler = self._engine.connect("notify::selected", lambda *_a: self.reload())
         bar.append(self._engine)
 
         tools = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
@@ -548,15 +575,24 @@ class HistoryView(Adw.NavigationPage):
         self._more_spinner.set_visible(False)
         if backends is not None:
             self._set_backends(backends)
+            if serial != self._query_serial:
+                return False  # the engine filter changed: a new first page is loading
         if total is not None:
             self._total = total
         for entry in rows:
-            if entry["id"] not in self._pending_delete:
+            pending = self._pending_delete.get(entry["id"])
+            if pending is None:
                 self._add_card(entry)
+            elif pending not in self._cards:
+                # Deleted, Undo still possible, and the list was reloaded
+                # meanwhile: keep it here, hidden, so Undo can bring it back.
+                card = self._add_card(entry)
+                card.get_parent().set_visible(False)
+                self._pending_delete[entry["id"]] = card
         self._offset += len(rows)
         if error:
             self._show_empty(error)
-        elif not self._cards:
+        elif not self._visible_cards():
             self._show_empty()
         else:
             self._stack.set_visible_child_name("content")
@@ -564,15 +600,31 @@ class HistoryView(Adw.NavigationPage):
         return False
 
     def _set_backends(self, backends: list[str]) -> None:
+        """New engine list for the filter, keeping the chosen engine.
+
+        Changing the model moves the selection: notify::selected must not
+        reload the page in the middle of _on_page (every card came twice).
+        Only when the chosen engine is gone does the filter change — then
+        the page is reloaded once, on purpose.
+        """
         if backends == self._backends:
             return
         current = self._filters().get("backend")
         self._backends = backends
-        self._engine_model.splice(1, self._engine_model.get_n_items() - 1, [_engine_label(b) for b in backends])
-        if current in backends:
-            self._engine.set_selected(backends.index(current) + 1)
+        self._engine.handler_block(self._engine_handler)
+        try:
+            self._engine_model.splice(1, self._engine_model.get_n_items() - 1,
+                                      [_engine_label(b) for b in backends])
+            self._engine.set_selected(backends.index(current) + 1 if current in backends else 0)
+        finally:
+            self._engine.handler_unblock(self._engine_handler)
+        if current and current not in backends:
+            self.reload()
 
-    def _add_card(self, entry: dict) -> None:
+    def _visible_cards(self) -> list[HistoryCard]:
+        return [c for c in self._cards if self._pending_delete.get(c.entry["id"]) is not c]
+
+    def _add_card(self, entry: dict) -> HistoryCard:
         card = HistoryCard(entry, self)
         self._cards.append(card)
         if self._grid_mode:
@@ -582,6 +634,7 @@ class HistoryView(Adw.NavigationPage):
             row.set_activatable(False)
             row.set_child(card)
             self._list.append(row)
+        return card
 
     def _clear(self) -> None:
         for card in self._cards:
@@ -708,18 +761,23 @@ class HistoryView(Adw.NavigationPage):
         card.cleanup()
         if card in self._cards:
             self._cards.remove(card)
-        parent = card.get_parent()
-        if isinstance(parent, Gtk.ListBoxRow):
-            self._list.remove(parent)
-        elif isinstance(parent, Gtk.FlowBoxChild):
-            self._grid.remove(parent)
+        # A reload already took the card out of the list: removing its old
+        # row again would be a Gtk-WARNING (not a child).
+        holder = card.get_parent()
+        if isinstance(holder, Gtk.ListBoxRow) and holder.get_parent() is self._list:
+            self._list.remove(holder)
+        elif isinstance(holder, Gtk.FlowBoxChild) and holder.get_parent() is self._grid:
+            self._grid.remove(holder)
 
     def delete_with_undo(self, card: HistoryCard) -> None:
-        """Hide the entry now; delete it when the Undo toast goes away."""
+        """Hide the entry now; delete it when the Undo toast goes away.
+
+        The list may be reloaded meanwhile (a new reading, a filter): the
+        entry's current card is looked up in _pending_delete each time.
+        """
         entry_id = card.entry["id"]
         self._pending_delete[entry_id] = card
-        holder = card.get_parent()
-        holder.set_visible(False)
+        card.get_parent().set_visible(False)
         toast = Adw.Toast.new(_("Reading deleted"))
         toast.set_button_label(_("Undo"))
         toast.set_timeout(_UNDO_SECONDS)
@@ -727,16 +785,22 @@ class HistoryView(Adw.NavigationPage):
 
         def undo(_t) -> None:
             undone["value"] = True
-            self._pending_delete.pop(entry_id, None)
-            holder.set_visible(True)
+            current = self._pending_delete.pop(entry_id, None)
+            if current is not None and current in self._cards and current.get_parent() is not None:
+                current.get_parent().set_visible(True)
+                if self._stack.get_visible_child_name() == "empty":
+                    self._stack.set_visible_child_name("content")
+            else:
+                self.reload()  # not on the page now: the entry still exists
 
         def dismissed(_t) -> None:
             if undone["value"]:
                 return
-            self._pending_delete.pop(entry_id, None)
-            self._remove_card(card)
+            current = self._pending_delete.pop(entry_id, None)
+            if current is not None:
+                self._remove_card(current)
             threading.Thread(target=history_service.delete_entries, args=([entry_id],), daemon=True).start()
-            if not self._cards:
+            if not self._visible_cards():
                 self._show_empty()
 
         toast.connect("button-clicked", undo)
