@@ -234,6 +234,10 @@ class _Reading:
         return max(0.0, now - self.audio_started_at - paused)
 
 
+# Seconds espeak-ng may spend on one chunk (time paused excluded).
+_ESPEAK_SYNTH_TIMEOUT = 120.0
+
+
 class TTSService:
     """Speak/stop lifecycle for every backend."""
 
@@ -880,9 +884,22 @@ class TTSService:
                 reading.procs.append(proc)  # Stop must reach it
                 if not self._is_current(reading.gen):
                     proc.kill()  # stopped while it was starting
-                # No timeout: a paused reading freezes it too (SIGSTOP), and
-                # Stop now reaches it.
-                _out, err = proc.communicate(chunk.encode("utf-8"))
+                # Bounded, but time spent paused (SIGSTOP'd with the reading)
+                # does not count: a long pause must not kill it.
+                data, budget = chunk.encode("utf-8"), _ESPEAK_SYNTH_TIMEOUT
+                while True:
+                    try:
+                        _out, err = proc.communicate(data, timeout=1.0)
+                        break
+                    except subprocess.TimeoutExpired:
+                        data = None  # already being fed: never send it twice
+                        if not self._paused:
+                            budget -= 1.0
+                        if budget <= 0:
+                            proc.kill()
+                            _out, err = proc.communicate()
+                            self._stderr_tail.append("espeak-ng took too long and was stopped")
+                            break
                 if proc.returncode == 0 and os.path.getsize(path) > 100:
                     return path
                 if proc.returncode >= 0:  # not killed by Stop

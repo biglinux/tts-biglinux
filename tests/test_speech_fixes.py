@@ -190,6 +190,28 @@ def test_stop_kills_the_espeak_ng_command(fakes, monkeypatch):
     assert time.monotonic() - started < 3
 
 
+def test_a_hung_espeak_ng_is_stopped_but_a_pause_is_not_counted(fakes, monkeypatch):
+    install(make_bin_dir_on_path(monkeypatch), "espeak-ng", ESPEAK_HANG)
+    monkeypatch.setattr(ts, "_get_tts_engine", lambda: None)
+    monkeypatch.setattr(ts, "_ESPEAK_SYNTH_TIMEOUT", 2.0)
+    svc = ts.TTSService()
+    assert svc.speak("Texto qualquer.", backend="espeak-ng", voice_id="espeak-pt-br", volume=50)
+    reading = svc._reading
+    assert _until(lambda: reading.live_procs(), 3)
+    espeak = reading.live_procs()[0]
+
+    svc._paused = True  # time paused does not count
+    time.sleep(3.2)
+    assert espeak.poll() is None
+    svc._paused = False
+
+    assert espeak.wait(timeout=5) is not None  # then the 2 s budget runs out
+    reading.threads[0].join(timeout=3)
+    assert not reading.threads[0].is_alive()
+    assert any("too long" in line for line in svc._stderr_tail)
+    svc.stop()
+
+
 def make_bin_dir_on_path(monkeypatch) -> Path:
     import os
 

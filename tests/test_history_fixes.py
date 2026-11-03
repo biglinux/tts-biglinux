@@ -450,3 +450,34 @@ def test_player_controls_have_accessible_names(monkeypatch):
     assert labels[player._play_btn] == _("Play")
     player.cleanup()
     ap.AudioPlayerWidget._active_player = None
+
+
+def test_export_never_leaves_a_truncated_file(tmp_path, monkeypatch):
+    import shutil as _shutil
+
+    from services import history_service as hs
+
+    src = tmp_path / "a.wav"
+    src.write_bytes(b"RIFF" + b"x" * 1000)
+    src.chmod(0o644)
+    dest = tmp_path / "out" / "saved.wav"
+    dest.parent.mkdir()
+    dest.write_bytes(b"old")
+    monkeypatch.setattr(hs, "audio_path", lambda entry: src)
+
+    def broken_copy(a, b):
+        pathlib_b = type(src)(b)
+        pathlib_b.write_bytes(b"RI")  # cut short
+        raise OSError("disk full")
+
+    real_copy = _shutil.copyfile
+    monkeypatch.setattr(_shutil, "copyfile", broken_copy)
+    assert hs.export_audio({}, str(dest)) is False
+    assert dest.read_bytes() == b"old"
+    assert [p.name for p in dest.parent.iterdir()] == ["saved.wav"]
+
+    # (not monkeypatch.undo(): it would also undo conftest's user-data guards)
+    monkeypatch.setattr(_shutil, "copyfile", real_copy)
+    assert hs.export_audio({}, str(dest)) is True
+    assert dest.read_bytes() == src.read_bytes()
+    assert dest.stat().st_mode & 0o777 == 0o644

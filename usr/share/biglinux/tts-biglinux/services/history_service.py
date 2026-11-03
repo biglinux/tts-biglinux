@@ -20,6 +20,7 @@ import os
 import re
 import shutil
 import struct
+import tempfile
 import threading
 import time
 import uuid
@@ -477,11 +478,27 @@ def export_audio(entry: dict, destination: str) -> bool:
     path = audio_path(entry)
     if path is None:
         return False
+    # Copied next to the destination, then renamed: an export cut short
+    # (error, app quit) never leaves a truncated file under the chosen name.
+    temporary = None
     try:
-        shutil.copyfile(path, destination)
+        fd, temporary = tempfile.mkstemp(
+            dir=os.path.dirname(destination) or ".",
+            prefix=f".{os.path.basename(destination)}.",
+            suffix=".part",
+        )
+        os.close(fd)
+        shutil.copyfile(path, temporary)
+        shutil.copymode(path, temporary)  # mkstemp makes it 0600
+        os.replace(temporary, destination)
         return True
     except OSError as e:
         logger.warning("Could not export %s: %s", path, e)
+        if temporary is not None:
+            try:
+                os.unlink(temporary)
+            except OSError:
+                pass
         return False
 
 
