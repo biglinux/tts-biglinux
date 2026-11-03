@@ -42,6 +42,17 @@ class AudioPlayerWidget(Gtk.Box):
     @classmethod
     def set_playback_mode(cls, mode: str) -> None:
         cls._playback_mode = mode
+        if mode != "queue":
+            cls._queue.clear()  # nothing may start by itself in other modes
+
+    @classmethod
+    def _play_next_queued(cls) -> None:
+        """Queue mode: start the next waiting player (skips released ones)."""
+        while cls._queue:
+            nxt = cls._queue.pop(0)
+            if nxt._pipeline is not None:
+                nxt._on_play_pause(None)
+                return
 
     def __init__(self, audio_path: str) -> None:
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -57,6 +68,8 @@ class AudioPlayerWidget(Gtk.Box):
         # eagerly for every history entry created thousands of playbin pipelines
         # up front and froze the History view with large histories.
         self._pipeline: Gst.Element | None = None
+        self._bus: Gst.Bus | None = None
+        self._bus_handlers: list[int] = []
 
         self._build_ui()
 
@@ -70,9 +83,14 @@ class AudioPlayerWidget(Gtk.Box):
         pipeline.set_property("uri", Path(self._audio_path).as_uri())
         bus = pipeline.get_bus()
         bus.add_signal_watch()
-        bus.connect("message::eos", self._on_eos)
-        bus.connect("message::error", self._on_error)
-        bus.connect("message::state-changed", self._on_state_changed)
+        # The watch keeps the bus (and, through these handlers, this widget)
+        # alive until cleanup() removes it.
+        self._bus = bus
+        self._bus_handlers = [
+            bus.connect("message::eos", self._on_eos),
+            bus.connect("message::error", self._on_error),
+            bus.connect("message::state-changed", self._on_state_changed),
+        ]
         self._pipeline = pipeline
         return True
 
@@ -86,7 +104,7 @@ class AudioPlayerWidget(Gtk.Box):
         self._play_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
         self._play_btn.add_css_class("flat")
         self._play_btn.add_css_class("circular")
-        self._play_btn.set_tooltip_text(_("Play"))
+        self._set_play_label(_("Play"))
         self._play_btn.connect("clicked", self._on_play_pause)
         seek_box.append(self._play_btn)
 
@@ -95,6 +113,7 @@ class AudioPlayerWidget(Gtk.Box):
         self._stop_btn.add_css_class("flat")
         self._stop_btn.add_css_class("circular")
         self._stop_btn.set_tooltip_text(_("Stop"))
+        self._stop_btn.update_property([Gtk.AccessibleProperty.LABEL], [_("Stop")])
         self._stop_btn.set_sensitive(False)
         self._stop_btn.connect("clicked", self._on_stop)
         seek_box.append(self._stop_btn)
@@ -112,6 +131,7 @@ class AudioPlayerWidget(Gtk.Box):
         self._seek_scale.set_draw_value(False)
         self._seek_scale.set_hexpand(True)
         self._seek_scale.add_css_class("player-seek")
+        self._seek_scale.update_property([Gtk.AccessibleProperty.LABEL], [_("Playback position")])
         self._seek_scale.connect(
             "change-value", self._on_seek_change
         )
@@ -124,6 +144,11 @@ class AudioPlayerWidget(Gtk.Box):
         seek_box.append(self._total_label)
 
         self.append(seek_box)
+
+    def _set_play_label(self, text: str) -> None:
+        """Tooltip and accessible name of the play/pause button."""
+        self._play_btn.set_tooltip_text(text)
+        self._play_btn.update_property([Gtk.AccessibleProperty.LABEL], [text])
 
     def set_duration_hint(self, seconds: float) -> None:
         """Show the known duration before the first play (from the history)."""
@@ -141,7 +166,7 @@ class AudioPlayerWidget(Gtk.Box):
             self._pipeline.set_state(Gst.State.PAUSED)
             self._playing = False
             self._play_btn.set_icon_name("media-playback-start-symbolic")
-            self._play_btn.set_tooltip_text(_("Play"))
+            self._set_play_label(_("Play"))
             return
 
         mode = AudioPlayerWidget._playback_mode
@@ -159,12 +184,16 @@ class AudioPlayerWidget(Gtk.Box):
                     AudioPlayerWidget._queue.append(self)
                 return
             AudioPlayerWidget._active_player = self
+            # Started (by a click or by the queue): it must not play again
+            # when the queue reaches its old place.
+            if self in AudioPlayerWidget._queue:
+                AudioPlayerWidget._queue.remove(self)
         # simultaneous: just play, no stop
 
         self._pipeline.set_state(Gst.State.PLAYING)
         self._playing = True
         self._play_btn.set_icon_name("media-playback-pause-symbolic")
-        self._play_btn.set_tooltip_text(_("Pause"))
+        self._set_play_label(_("Pause"))
         self._stop_btn.set_sensitive(True)
         self._start_poll()
 
@@ -178,12 +207,17 @@ class AudioPlayerWidget(Gtk.Box):
         self._pipeline.set_state(Gst.State.NULL)
         self._playing = False
         self._play_btn.set_icon_name("media-playback-start-symbolic")
-        self._play_btn.set_tooltip_text(_("Play"))
+        self._set_play_label(_("Play"))
         self._stop_btn.set_sensitive(False)
         self._seek_scale.set_value(0)
         self._elapsed_label.set_label("00:00")
+        if self in AudioPlayerWidget._queue:
+            AudioPlayerWidget._queue.remove(self)
         if AudioPlayerWidget._active_player is self:
             AudioPlayerWidget._active_player = None
+            # Queue mode: the end, an error or Stop all hand over to the next.
+            if AudioPlayerWidget._playback_mode == "queue":
+                AudioPlayerWidget._play_next_queued()
 
     def _on_seek_change(
         self,
@@ -207,18 +241,18 @@ class AudioPlayerWidget(Gtk.Box):
     def _on_eos(self, _bus: Gst.Bus, _msg: Gst.Message) -> None:
         GLib.idle_add(self._on_eos_idle)
 
-    def _on_eos_idle(self) -> None:
-        self._force_stop()
-        # Queue mode: play next queued item
-        if AudioPlayerWidget._queue:
-            nxt = AudioPlayerWidget._queue.pop(0)
-            if nxt._pipeline:
-                nxt._on_play_pause(None)
+    def _on_eos_idle(self) -> bool:
+        self._force_stop()  # queue mode: also starts the next one
+        return False
 
     def _on_error(self, _bus: Gst.Bus, msg: Gst.Message) -> None:
         err, debug = msg.parse_error()
         logger.error("GStreamer error: %s (%s)", err.message, debug)
-        GLib.idle_add(self._force_stop)
+        GLib.idle_add(self._on_error_idle)
+
+    def _on_error_idle(self) -> bool:
+        self._force_stop()
+        return False
 
     def _on_state_changed(
         self, _bus: Gst.Bus, msg: Gst.Message
@@ -271,6 +305,12 @@ class AudioPlayerWidget(Gtk.Box):
     def cleanup(self) -> None:
         """Release GStreamer resources."""
         self._stop_poll()
+        if self._bus is not None:
+            for handler in self._bus_handlers:
+                self._bus.disconnect(handler)
+            self._bus.remove_signal_watch()
+            self._bus = None
+            self._bus_handlers = []
         if self._pipeline:
             self._pipeline.set_state(Gst.State.NULL)
             self._pipeline = None

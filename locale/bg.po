@@ -1302,3 +1302,11 @@ msgstr "Пакетите, отбелязани с AUR, не са във ваши
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} не можа да бъде компилиран от AUR. Вижте подробностите."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Позиция на възпроизвеждане"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Гласовете Kokoro не поддържат тази настройка."

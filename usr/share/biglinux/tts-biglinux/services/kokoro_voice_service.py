@@ -304,8 +304,22 @@ KOKO_MAX_SEGMENT_CHARS = 220
 _MAX_VOICE_DOWNLOAD = 16 * 1024 * 1024
 
 _RE_DOTS = re.compile(r"\.{2,}")
-_RE_PUNCT_RUN = re.compile(r"[!?…]{2,}")
+# Two or more sentence signs in a row ("?!", "Fim.!", "etc….") — also when
+# closing quotes or brackets sit between them ('"Pare!".', "(Ok!).").
+_CLOSERS = "\"'”’»)]}"
+_RE_PUNCT_RUN = re.compile(r"[.!?…](?:[\"'”’»)\]}]*[.!?…])+")
 _RE_SENTENCE_END = re.compile(r"(?<=[.!?…;:])\s+")
+
+
+def _one_sign(match: re.Match) -> str:
+    """A run of sentence signs → its closers, then one sign (koko ends the
+    sentence there, with nothing left after it)."""
+    run = match.group()
+    closers = "".join(ch for ch in run if ch in _CLOSERS)
+    for sign in "?!…":
+        if sign in run:
+            return closers + sign
+    return closers + "."
 
 
 def _split_long(sentence: str, limit: int) -> list[str]:
@@ -351,18 +365,18 @@ def prepare_koko_text(text: str, limit: int = KOKO_MAX_SEGMENT_CHARS) -> str:
     """Text ``koko pipe`` can read to the end: one sentence per line.
 
     - ASCII ellipses ("..." / "....") become "…", and runs of sentence
-      punctuation ("?!", "!!!", "?…") become one sign: koko cuts a sentence at
-      each sign and exits with ``SendError`` on the punctuation-only piece
-      left in between ("Wait... this", "Really?! No").
+      punctuation ("?!", "!!!", "?…", "Fim.!", "etc….") become one sign,
+      also when closing quotes or brackets split the run ('"Pare!".' →
+      '"Pare"!'): koko cuts a sentence at each sign and exits with
+      ``SendError`` on the punctuation-only piece left in between
+      ("Wait... this", "Really?! No").
     - Sentences longer than ``limit`` are split into shorter ones (see
       KOKO_MAX_SEGMENT_CHARS); each piece ends with punctuation so koko
       treats it as its own segment.
     - Segments without any letter or digit (only punctuation) are dropped.
     """
     text = _RE_DOTS.sub("…", text)
-    text = _RE_PUNCT_RUN.sub(
-        lambda m: "?" if "?" in m.group() else ("!" if "!" in m.group() else "…"), text
-    )
+    text = _RE_PUNCT_RUN.sub(_one_sign, text)
     lines: list[str] = []
     for paragraph in text.splitlines():
         for sentence in _RE_SENTENCE_END.split(paragraph.strip()):

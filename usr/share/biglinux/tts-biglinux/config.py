@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import os
 from dataclasses import asdict, dataclass, field
 from enum import Enum
@@ -187,8 +188,16 @@ def load_settings() -> AppSettings:
             settings = _deserialize_settings(data)
             logger.debug("Settings loaded from %s", SETTINGS_FILE)
             return settings
-        except (json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError):
-            logger.warning("Corrupt settings file, using defaults")
+        except (OSError, OverflowError, json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError) as e:
+            # Keep the broken file for the user (the next save replaces it),
+            # and an existing user's History is never switched on by itself.
+            logger.warning("Corrupt settings file (%s), using defaults", e)
+            try:
+                os.replace(SETTINGS_FILE, SETTINGS_FILE.with_suffix(".json.corrupt"))
+            except OSError:
+                pass
+            settings.history.enabled = False
+            return settings
 
     # Try migrating legacy settings
     if LEGACY_CONFIG_DIR.exists():
@@ -212,15 +221,16 @@ def _safe_int(d: dict, key: str, default: int) -> int:
     """Coerce d[key] to int, falling back to default on any bad value."""
     try:
         return int(d.get(key, default))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):  # OverflowError: Infinity
         return default
 
 
 def _safe_float(d: dict, key: str, default: float) -> float:
     try:
-        return float(d.get(key, default))
+        value = float(d.get(key, default))
     except (ValueError, TypeError):
         return default
+    return value if math.isfinite(value) else default
 
 
 def _safe_bool(d: dict, key: str, default: bool) -> bool:

@@ -63,6 +63,9 @@ class TTSApplication(Adw.Application):
             application_id=APP_ID,
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
         )
+        # Linger a little after the last reading: an Alt+V pressed meanwhile
+        # reuses this instance instead of racing a quitting one.
+        self.set_inactivity_timeout(10000)
 
         # Register --speak option for GApplication command line handling
         self.add_main_option(
@@ -271,6 +274,7 @@ class TTSApplication(Adw.Application):
         )
         self._tray.on_activate = self._on_tray_speak
         self._tray.on_player = self._on_tray_player
+        self._tray.on_exit = self._on_tray_lost
         self._tray.set_menu(self._build_tray_menu())
         self._tray.register()
         # Keep app alive when all windows are closed
@@ -291,6 +295,15 @@ class TTSApplication(Adw.Application):
         """
         self._tray_revert_id = 0
         self._refresh_tray_playback()
+        return False
+
+    def _speak_next_queued(self) -> bool:
+        """Start the next queued reading; skip ones that turn out empty."""
+        while self._speech_queue:
+            if self.tts_service.speak(**self._speech_queue.pop(0)):
+                return False
+        # Nothing started, so no IDLE will come to release the hold.
+        self._release_speak_hold()
         return False
 
     def _release_speak_hold(self) -> None:
@@ -383,8 +396,7 @@ class TTSApplication(Adw.Application):
                 self._speech_queue.clear()
             # Process speech queue (queue mode)
             if self._speech_queue:
-                params = self._speech_queue.pop(0)
-                GLib.idle_add(lambda p=params: self.tts_service.speak(**p) and False)
+                GLib.idle_add(self._speak_next_queued)
                 return
             self._release_speak_hold()
             if not self._notif_id:
@@ -697,6 +709,22 @@ class TTSApplication(Adw.Application):
         if self._tray is not None:
             return
         self._setup_tray_icon()
+
+    def _on_tray_lost(self) -> bool:
+        """The tray helper ended on its own (no tray host, crash).
+
+        Without an icon a window hidden "to the tray" could never be reached
+        again: drop the tray, so closing the window quits as usual.
+        """
+        if self._tray is None:
+            return False
+        self._tray.unregister()
+        self._tray = None
+        self.release()
+        if self._window is not None and not self._window.get_visible():
+            self._window.destroy()
+            self._window = None
+        return False
 
     def disable_tray(self) -> None:
         """Disable the system tray icon (called from settings toggle)."""

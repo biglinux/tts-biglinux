@@ -1302,3 +1302,11 @@ msgstr "Balíčky označené AUR nejsou ve vašich repozitářích: pocházejí 
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} se nepodařilo sestavit z AUR. Podívejte se na podrobnosti."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Pozice přehrávání"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Hlasy Kokoro toto nastavení nepodporují."

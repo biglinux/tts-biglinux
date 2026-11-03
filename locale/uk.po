@@ -1302,3 +1302,11 @@ msgstr "Пакунки з позначкою AUR відсутні у ваших 
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "Не вдалося зібрати {packages} з AUR. Перегляньте подробиці."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Позиція відтворення"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Голоси Kokoro не підтримують цей параметр."

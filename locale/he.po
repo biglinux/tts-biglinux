@@ -1302,3 +1302,11 @@ msgstr "חבילות המסומנות ב-AUR אינן במאגרים שלך: ה�
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "לא ניתן היה לבנות את {packages} מ-AUR. ראו את הפרטים."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "מיקום ההשמעה"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "קולות Kokoro אינם תומכים בהגדרה זו."

@@ -1302,3 +1302,11 @@ msgstr "Paket märkta med AUR finns inte i dina förråd: de kommer från Arch U
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} kunde inte byggas från AUR. Se detaljerna."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Uppspelningsposition"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro-röster stöder inte den här inställningen."

@@ -1302,3 +1302,11 @@ msgstr "Az AUR jelölésű csomagok nincsenek a tárolóidban: az Arch User Repo
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "A(z) {packages} nem fordítható le az AUR-ból. Lásd a részleteket."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Lejátszási pozíció"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "A Kokoro hangok nem támogatják ezt a beállítást."

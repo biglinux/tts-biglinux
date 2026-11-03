@@ -86,6 +86,17 @@ try:
     app.setDesktopFileName("br.com.biglinux.tts")
     app.setQuitOnLastWindowClosed(False)
 
+    # No tray host (GNOME without AppIndicator, or the panel not up yet at
+    # login): wait a little for one, then give up so the app knows.
+    import time
+    deadline = time.monotonic() + 15
+    while not QSystemTrayIcon.isSystemTrayAvailable():
+        if time.monotonic() > deadline:
+            send({"event": "error", "message": "No system tray on this desktop. Tray icon is disabled."})
+            sys.exit(2)
+        app.processEvents()
+        time.sleep(0.5)
+
     state = {"speaking": False, "paused": False}
 
     def is_dark_theme() -> bool:
@@ -358,6 +369,8 @@ class TrayIcon:
         self.on_activate: Callable[[], None] | None = None
         # on_player(action) where action is "play" or "stop"
         self.on_player: Callable[[str], None] | None = None
+        # on_exit() runs when the helper ends on its own (crash, no tray host)
+        self.on_exit: Callable[[], None] | None = None
 
     def set_menu(self, items: list[MenuItem]) -> None:
         """Set the context menu items."""
@@ -485,11 +498,17 @@ class TrayIcon:
         self, channel: GLib.IOChannel, condition: GLib.IOCondition
     ) -> bool:
         """Handle output from the helper subprocess."""
+        # Read first: the helper's last line (its error) comes with the HUP.
+        self._read_child_lines(channel)
         if condition & GLib.IOCondition.HUP:
             logger.warning("Tray helper subprocess ended")
             self._io_watch_id = 0
+            if self.on_exit:
+                GLib.idle_add(self.on_exit)
             return False
+        return True
 
+    def _read_child_lines(self, channel: GLib.IOChannel) -> None:
         try:
             while True:
                 status, line, _length, _term = channel.read_line()
@@ -524,5 +543,3 @@ class TrayIcon:
                     logger.debug("Tray helper: %s", msg.get('message'))
         except Exception as e:
             logger.warning("Error reading tray helper: %s", e)
-
-        return True

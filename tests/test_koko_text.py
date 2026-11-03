@@ -7,6 +7,7 @@ Real failures reproduced with koko (kokorox v0.2.2):
   ("index out of bounds: the len is 511 but the index is 550").
 """
 import importlib
+import re
 
 import pytest
 
@@ -29,6 +30,28 @@ def test_no_punctuation_runs_reach_koko(raw):
     for line in out.splitlines():
         assert any(ch.isalnum() for ch in line)  # no punctuation-only segment
     assert _words(out) == _words(raw)  # nothing is lost
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("Fim.!", "Fim!"), ("Ok.? Sim.", "Ok?\nSim."), ("Isso!. Não.", "Isso!\nNão."),
+     ('Ele disse "Pare!". Parei.', 'Ele disse "Pare"!\nParei.'), ("Etc…. Fim.", "Etc…\nFim."),
+     ("(Ok!). Sim.", "(Ok)!\nSim."), ("Ele disse “fim.”. Ok.", "Ele disse “fim”.\nOk.")],
+)
+def test_mixed_sign_runs_become_one_sign(raw, expected):
+    # Runs that mix "." with !?… — or are split by closing quotes/brackets —
+    # left a punctuation-only piece that crashed koko.
+    out = prep(raw)
+    assert out == expected
+    for line in out.splitlines():
+        pieces = re.split(r"[.!?…]", line)
+        assert pieces[-1] == ""  # the sentence ends at its sign
+        assert all(any(ch.isalnum() for ch in p) for p in pieces[:-1])
+    assert re.findall(r"\w+", out) == re.findall(r"\w+", raw)  # nothing is lost
+
+
+def test_decimals_and_single_signs_are_kept():
+    assert prep("Custa 3.5 mil. Versão 1.2!") == "Custa 3.5 mil.\nVersão 1.2!"
 
 
 def test_punctuation_only_text_says_nothing():

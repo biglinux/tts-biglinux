@@ -1310,3 +1310,11 @@ msgstr "Les paquets marqués AUR ne sont pas dans vos dépôts : ils proviennent
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} n'a pas pu être compilé depuis l'AUR. Consultez les détails."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Position de lecture"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Les voix Kokoro ne prennent pas en charge ce réglage."

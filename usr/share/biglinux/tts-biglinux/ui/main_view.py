@@ -507,6 +507,7 @@ class MainView(Adw.NavigationPage):
             title_size_group=title_sg,
         )
         group.add(self._volume_row)
+        self._update_kokoro_unsupported_sliders(self._settings.speech.backend)
 
         # ── Kokoro-specific controls (visible only when Kokoro is active) ──
         is_kokoro = self._settings.speech.backend == TTSBackend.KOKORO.value
@@ -729,7 +730,7 @@ class MainView(Adw.NavigationPage):
         self._sync_history_rows()
 
         # ── Playback mode for history player ──
-        playback_row = Adw.ComboRow()
+        playback_row = self._playback_row = Adw.ComboRow()
         playback_row.set_title(_("Audio playback mode"))
         playback_row.set_subtitle(_("Behavior when playing multiple audios or speech"))
         set_row_icon(playback_row, "media-playback-start-symbolic")
@@ -1282,6 +1283,25 @@ class MainView(Adw.NavigationPage):
         if sub_lbl is not None:
             sub_lbl.set_label(subtitle)
             sub_lbl.set_visible(bool(subtitle))
+        self._update_kokoro_unsupported_sliders(backend)
+
+    def _update_kokoro_unsupported_sliders(self, backend: str) -> None:
+        """Kokoro (koko pipe) plays the audio itself and has no pitch or volume
+        option: those sliders would do nothing, so they are made insensitive.
+
+        Volume 0 (mute) is still honored by Kokoro: a muted volume slider stays
+        usable, so the person can never be locked in silence.
+        """
+        is_kokoro = backend == TTSBackend.KOKORO.value
+        tip = _("Kokoro voices do not support this setting.")
+        pitch_scale = getattr(self, "_pitch_scale", None)
+        if pitch_scale is not None:
+            pitch_scale.set_sensitive(not is_kokoro)
+            self._pitch_row.set_tooltip_text(tip if is_kokoro else None)
+        volume_scale = getattr(self, "_volume_scale", None)
+        if volume_scale is not None:
+            volume_scale.set_sensitive(not is_kokoro or self._settings.speech.volume <= 0)
+            self._volume_row.set_tooltip_text(tip if is_kokoro else None)
 
     def _on_pitch_changed(self, value: float) -> None:
         """Handle pitch change."""
@@ -1909,6 +1929,21 @@ class MainView(Adw.NavigationPage):
             if hasattr(app, "disable_tray"):
                 app.disable_tray()
 
+        # Also guarded above: the history player mode and the media player.
+        from ui.audio_player import AudioPlayerWidget
+
+        mode = self._settings.history.playback_mode
+        AudioPlayerWidget.set_playback_mode(mode)
+        modes = ["interrupt", "queue", "simultaneous"]
+        with self._guard_ui():
+            self._playback_row.set_selected(modes.index(mode) if mode in modes else 0)
+            self._media_switch_widget.set_active(self._settings.show_media_player)
+        if self._settings.show_media_player:
+            if hasattr(app, "enable_media_player"):
+                app.enable_media_player()
+        elif hasattr(app, "disable_media_player"):
+            app.disable_media_player()
+
         self._on_toast(_("Settings restored to defaults"), 3)
 
     def _update_ui_from_settings(self) -> None:
@@ -1966,6 +2001,8 @@ class MainView(Adw.NavigationPage):
                 limit = history.max_entries if history.max_entries in self._retention_values else 1000
                 self._history_limit_row.set_selected(self._retention_values.index(limit))
             self._sync_history_rows()
+
+            self._update_pitch_row_for_backend(current_backend)
 
             # Kokoro controls — visible only when Kokoro is selected
             is_kokoro = current_backend == TTSBackend.KOKORO.value
