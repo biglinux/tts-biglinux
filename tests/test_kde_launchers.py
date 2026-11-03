@@ -85,3 +85,14 @@ def test_only_the_program_counts_not_an_argument(home):
 
     assert DIS.remove_stale_kde_launchers() == []
     assert other.exists()
+
+
+def test_a_desktop_action_running_us_does_not_count(home):
+    other = _kga(home) / "bigtts.desktop"
+    other.write_text(
+        "[Desktop Entry]\nType=Application\nExec=someone-elses-app\n\n"
+        "[Desktop Action Read]\nExec=biglinux-tts --speak\n"
+    )
+
+    assert DIS.remove_stale_kde_launchers() == []
+    assert other.exists()

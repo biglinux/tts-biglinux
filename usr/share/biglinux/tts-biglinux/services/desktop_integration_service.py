@@ -310,6 +310,18 @@ class DesktopIntegrationService:
             return False
         return bool(argv) and Path(argv[0]).name in ("biglinux-tts", "biglinux-tts-speak")
 
+    @staticmethod
+    def _main_exec(text: str) -> str:
+        """Exec of the [Desktop Entry] group (actions have their own Exec)."""
+        group = ""
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith("[") and line.endswith("]"):
+                group = line
+            elif group == "[Desktop Entry]" and line.startswith("Exec="):
+                return line[5:]
+        return ""
+
     @classmethod
     def remove_stale_kde_launchers(cls) -> list[Path]:
         """Delete our old launchers from ~/.local/share/kglobalaccel/.
@@ -324,8 +336,7 @@ class DesktopIntegrationService:
                 text = path.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
-            execs = [line[5:] for line in text.splitlines() if line.startswith("Exec=")]
-            if not any(cls._runs_this_app(command) for command in execs):
+            if not cls._runs_this_app(cls._main_exec(text)):
                 continue
             try:
                 path.unlink()

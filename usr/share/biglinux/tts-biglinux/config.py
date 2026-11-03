@@ -175,20 +175,33 @@ class AppSettings:
 # ── Settings Persistence ──────────────────────────────────────────────
 
 
+# Set when settings.json exists but cannot be read (permissions, a folder in
+# its place): the file may be fine, so this run never writes over it.
+_save_blocked = False
+
+
 def load_settings() -> AppSettings:
     """Load settings from disk, with legacy migration and defaults."""
+    global _save_blocked
     settings = AppSettings()
 
     # Try loading current settings
     if SETTINGS_FILE.exists():
         try:
-            data = json.loads(SETTINGS_FILE.read_text(encoding="utf-8"))
+            raw = SETTINGS_FILE.read_bytes()
+        except OSError as e:
+            logger.warning("Cannot read %s (%s): using defaults, not saving", SETTINGS_FILE, e)
+            _save_blocked = True
+            settings.history.enabled = False
+            return settings
+        try:
+            data = json.loads(raw.decode("utf-8"))  # bad UTF-8: ValueError
             if not isinstance(data, dict):
                 raise TypeError("settings root is not an object")
             settings = _deserialize_settings(data)
             logger.debug("Settings loaded from %s", SETTINGS_FILE)
             return settings
-        except (OSError, OverflowError, json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError) as e:
+        except (OverflowError, json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError) as e:
             # Keep the broken file for the user (the next save replaces it),
             # and an existing user's History is never switched on by itself.
             logger.warning("Corrupt settings file (%s), using defaults", e)
@@ -215,6 +228,9 @@ def load_settings() -> AppSettings:
 
 def save_settings(settings: AppSettings) -> None:
     """Save settings to disk as JSON (atomically: a crash never truncates it)."""
+    if _save_blocked:
+        logger.warning("Settings not saved: %s could not be read at start", SETTINGS_FILE)
+        return
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     tmp = SETTINGS_FILE.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(asdict(settings), indent=2, ensure_ascii=False), encoding="utf-8")

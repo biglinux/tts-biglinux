@@ -44,9 +44,43 @@ def test_huge_float_falls_back_for_that_key_only():
     assert s.speech.volume == 42
 
 
-def test_unreadable_settings_do_not_crash():
-    config.SETTINGS_FILE.mkdir(parents=True)  # a directory: read_text raises OSError
+def test_unreadable_settings_do_not_crash(monkeypatch):
+    monkeypatch.setattr(config, "_save_blocked", False)
+    config.SETTINGS_FILE.mkdir(parents=True)  # a directory: reading raises OSError
     assert isinstance(config.load_settings(), config.AppSettings)
+
+
+def test_a_read_error_never_replaces_valid_settings(monkeypatch):
+    """Permissions, not corruption: the file is kept and never written over."""
+    monkeypatch.setattr(config, "_save_blocked", False)
+    config.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    config.SETTINGS_FILE.write_text('{"show_welcome": false}')
+    path_type = type(config.SETTINGS_FILE)
+    real_read = path_type.read_bytes
+
+    def read_bytes(self):
+        if self == config.SETTINGS_FILE:
+            raise PermissionError(13, "Permission denied")
+        return real_read(self)
+
+    monkeypatch.setattr(path_type, "read_bytes", read_bytes)
+
+    s = config.load_settings()
+    config.save_settings(s)
+
+    assert s.history.enabled is False
+    assert config.SETTINGS_FILE.read_text() == '{"show_welcome": false}'
+    assert not config.SETTINGS_FILE.with_suffix(".json.corrupt").exists()
+
+
+def test_bad_utf8_is_treated_as_corrupt(monkeypatch):
+    monkeypatch.setattr(config, "_save_blocked", False)
+    config.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    config.SETTINGS_FILE.write_bytes(b"\xff\xfe{")
+
+    config.load_settings()
+
+    assert config.SETTINGS_FILE.with_suffix(".json.corrupt").exists()
 
 
 def test_restore_defaults_keeps_the_shared_object():
