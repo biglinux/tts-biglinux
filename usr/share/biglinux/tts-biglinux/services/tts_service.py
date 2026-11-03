@@ -1108,9 +1108,9 @@ class TTSService:
             now = time.monotonic()
             reading.audio_started_at = now
             paused_since = self._paused_since if self._paused else None
-            if paused_since is not None:
-                # Paused before any sound: only the pause from now on counts.
-                reading.paused_for -= now - paused_since
+            # Pauses before any sound are not heard time: forget them; if
+            # still paused, only the pause from now on will count.
+            reading.paused_for = -(now - paused_since) if paused_since is not None else 0.0
         reading.audio_started = True
         if reading is self._reading and self._is_current(reading.gen):
             self._mark_audio_started()

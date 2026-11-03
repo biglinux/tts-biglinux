@@ -481,3 +481,25 @@ def test_export_never_leaves_a_truncated_file(tmp_path, monkeypatch):
     assert hs.export_audio({}, str(dest)) is True
     assert dest.read_bytes() == src.read_bytes()
     assert dest.stat().st_mode & 0o777 == 0o644
+
+
+def test_export_keeps_an_existing_files_permissions_and_follows_links(tmp_path, monkeypatch):
+    import os
+
+    from services import history_service as hs
+
+    src = tmp_path / "a.wav"
+    src.write_bytes(b"RIFF" + b"y" * 100)
+    src.chmod(0o644)
+    monkeypatch.setattr(hs, "audio_path", lambda entry: src)
+
+    private = tmp_path / "private.wav"
+    private.write_bytes(b"old")
+    private.chmod(0o600)
+    assert hs.export_audio({}, str(private))
+    assert private.stat().st_mode & 0o777 == 0o600  # never widened
+
+    link = tmp_path / "link.wav"
+    os.symlink(private, link)
+    assert hs.export_audio({}, str(link))
+    assert link.is_symlink() and private.read_bytes() == src.read_bytes()

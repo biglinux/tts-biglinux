@@ -481,6 +481,8 @@ def export_audio(entry: dict, destination: str) -> bool:
     # Copied next to the destination, then renamed: an export cut short
     # (error, app quit) never leaves a truncated file under the chosen name.
     temporary = None
+    # A symlink is followed (like a plain copy would), not replaced.
+    destination = os.path.realpath(destination)
     try:
         fd, temporary = tempfile.mkstemp(
             dir=os.path.dirname(destination) or ".",
@@ -489,7 +491,9 @@ def export_audio(entry: dict, destination: str) -> bool:
         )
         os.close(fd)
         shutil.copyfile(path, temporary)
-        shutil.copymode(path, temporary)  # mkstemp makes it 0600
+        # mkstemp makes it 0600: an existing file keeps its own permissions
+        # (never widened), a new one gets the recording's.
+        shutil.copymode(destination if os.path.exists(destination) else path, temporary)
         os.replace(temporary, destination)
         return True
     except OSError as e:

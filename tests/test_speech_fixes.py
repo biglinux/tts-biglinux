@@ -165,6 +165,15 @@ def test_pause_state_is_cleared_when_the_request_ends(fakes):
     assert svc.pause()  # a stale pause never blocks the next one
 
 
+def test_a_pause_that_ended_before_any_sound_is_forgotten(fakes):
+    svc = ts.TTSService()
+    reading = _reading(svc, "Texto")
+    reading.paused_for = 0.8  # paused and resumed while the voice loaded
+    svc._on_audio(reading)
+    later = reading.audio_started_at + 0.5
+    assert abs(reading.heard(later, None) - 0.5) < 1e-6  # not 0.0
+
+
 # ── 6. Stop reaches the espeak-ng command ────────────────────────────
 
 ESPEAK_HANG = f"""#!{sys.executable}
