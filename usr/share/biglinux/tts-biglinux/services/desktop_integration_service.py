@@ -299,6 +299,17 @@ class DesktopIntegrationService:
     def _kde_launcher_dir() -> Path:
         return Path.home() / ".local" / "share" / "kglobalaccel"
 
+    @staticmethod
+    def _runs_this_app(command: str) -> bool:
+        """The Exec program (not an argument) is one of our launchers."""
+        import shlex
+
+        try:
+            argv = shlex.split(command)
+        except ValueError:
+            return False
+        return bool(argv) and Path(argv[0]).name in ("biglinux-tts", "biglinux-tts-speak")
+
     @classmethod
     def remove_stale_kde_launchers(cls) -> list[Path]:
         """Delete our old launchers from ~/.local/share/kglobalaccel/.
@@ -313,8 +324,8 @@ class DesktopIntegrationService:
                 text = path.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
-            execs = [line for line in text.splitlines() if line.startswith("Exec=")]
-            if not any("biglinux-tts" in line for line in execs):
+            execs = [line[5:] for line in text.splitlines() if line.startswith("Exec=")]
+            if not any(cls._runs_this_app(command) for command in execs):
                 continue
             try:
                 path.unlink()
@@ -588,34 +599,37 @@ GenericName={generic_name}
         except (OSError, subprocess.TimeoutExpired) as e:
             logger.error("Failed to read XFCE shortcuts: %s", e)
             return False
+        if result.returncode != 0:
+            # Without the list, another command on the key could be overwritten.
+            logger.error("Failed to read XFCE shortcuts (xfconf-query exit %d)", result.returncode)
+            return False
         bindings = {}
-        if result.returncode == 0:
-            for line in result.stdout.splitlines():
-                parts = line.split(None, 1)
-                if len(parts) == 2 and parts[0].startswith("/commands/custom/"):
-                    bindings[parts[0]] = parts[1].strip()
+        for line in result.stdout.splitlines():
+            parts = line.split(None, 1)
+            if len(parts) == 2 and parts[0].startswith("/commands/custom/"):
+                bindings[parts[0]] = parts[1].strip()
 
         current = bindings.get(prop_path)
-        if current == exec_path:
-            return True  # already right: no churn at every start
-        if current is not None and not is_ours(current):
+        if current is not None and current != exec_path and not is_ours(current):
             logger.warning("XFCE shortcut %s is already used by %s", xfce_accel, current)
             return False
 
         # Set the new binding first, then drop our old ones: an app that quits
-        # in between never leaves the user without a shortcut.
-        try:
-            subprocess.run(
-                [
-                    "xfconf-query", "-c", channel,
-                    "-p", prop_path,
-                    "-n", "-t", "string", "-s", exec_path,
-                ],
-                timeout=5, check=True,
-            )
-        except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
-            logger.error("Failed to register XFCE shortcut: %s", e)
-            return False
+        # in between never leaves the user without a shortcut. Already right:
+        # nothing is written (no churn at every start).
+        if current != exec_path:
+            try:
+                subprocess.run(
+                    [
+                        "xfconf-query", "-c", channel,
+                        "-p", prop_path,
+                        "-n", "-t", "string", "-s", exec_path,
+                    ],
+                    timeout=5, check=True,
+                )
+            except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
+                logger.error("Failed to register XFCE shortcut: %s", e)
+                return False
         for prop, command in bindings.items():
             if prop != prop_path and is_ours(command):
                 try:

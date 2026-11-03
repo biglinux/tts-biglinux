@@ -285,24 +285,20 @@ def test_no_piper_voices_without_any_piper_engine(tmp_path, monkeypatch):
     assert vm._discover_piper_voices() == []
 
 
-# ── 3. Kokoro: pitch and volume sliders are insensitive ──────────────
+# ── 3. Kokoro: pitch slider insensitive, volume only mutes ───────────
 
 
-@pytest.mark.parametrize(("backend", "volume", "pitch_ok", "volume_ok"), [
-    ("kokoro", 75, False, False),
-    ("kokoro", 0, False, True),  # muted: the slider stays usable to unmute
-    ("piper", 75, True, True),
-    ("rhvoice", 75, True, True),
-])
-def test_kokoro_disables_the_sliders_it_ignores(backend, volume, pitch_ok, volume_ok):
+@pytest.mark.parametrize("backend", ["kokoro", "piper", "rhvoice"])
+def test_kokoro_disables_pitch_and_explains_volume(backend):
     mv = importlib.import_module("ui.main_view")
     view = SimpleNamespace(
         _pitch_scale=mock.Mock(), _pitch_row=mock.Mock(),
         _volume_scale=mock.Mock(), _volume_row=mock.Mock(),
-        _settings=SimpleNamespace(speech=SimpleNamespace(volume=volume)),
     )
     mv.MainView._update_kokoro_unsupported_sliders(view, backend)
-    view._pitch_scale.set_sensitive.assert_called_with(pitch_ok)
-    view._volume_scale.set_sensitive.assert_called_with(volume_ok)
-    tip = view._pitch_row.set_tooltip_text.call_args.args[0]
-    assert (tip is None) == (backend != "kokoro")
+    view._pitch_scale.set_sensitive.assert_called_with(backend != "kokoro")
+    # Volume stays usable everywhere: Kokoro honors mute (0).
+    view._volume_scale.set_sensitive.assert_not_called()
+    for row in (view._pitch_row, view._volume_row):
+        tip = row.set_tooltip_text.call_args.args[0]
+        assert (tip is None) == (backend != "kokoro")

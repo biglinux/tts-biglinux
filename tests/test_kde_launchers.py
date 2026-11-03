@@ -77,3 +77,11 @@ def test_kglobalaccel_copy_follows_the_configured_key(home):
 def test_no_kglobalaccel_copy_is_created(home):
     DIS.ensure_desktop_file("Alt+V")
     assert not (_kga(home) / "biglinux-tts-speak.desktop").exists()
+
+
+def test_only_the_program_counts_not_an_argument(home):
+    other = _kga(home) / "bigtts.desktop"
+    other.write_text("[Desktop Entry]\nType=Application\nExec=echo biglinux-tts\n")
+
+    assert DIS.remove_stale_kde_launchers() == []
+    assert other.exists()

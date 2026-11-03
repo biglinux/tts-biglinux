@@ -1310,3 +1310,7 @@ msgstr "Poziția redării"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Vocile Kokoro nu acceptă această setare."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Vocile Kokoro respectă doar „Mut”. Folosiți volumul sistemului pentru a schimba cât de tare vorbesc."

@@ -82,3 +82,11 @@ def test_word_longer_than_the_limit_is_cut():
 
 def test_ordinary_text_is_kept():
     assert prep("Olá, tudo bem? Sim.") == "Olá, tudo bem?\nSim."
+
+
+def test_closers_after_the_last_sign_are_kept_before_it():
+    # A period after a closing quote/bracket would leave '".' or ').' for koko.
+    assert prep('Ele disse ("Pare!".)') == 'Ele disse ("Pare")!'
+    assert prep('Ele disse "Pare!"') == 'Ele disse "Pare"!'
+    assert prep("(Ok!)") == "(Ok)!"
+    assert prep('Olá "mundo"') == 'Olá "mundo".'

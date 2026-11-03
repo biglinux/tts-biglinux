@@ -192,8 +192,13 @@ def load_settings() -> AppSettings:
             # Keep the broken file for the user (the next save replaces it),
             # and an existing user's History is never switched on by itself.
             logger.warning("Corrupt settings file (%s), using defaults", e)
+            backup = SETTINGS_FILE.with_suffix(".json.corrupt")
+            n = 1
+            while backup.exists():  # never overwrite an earlier copy
+                backup = SETTINGS_FILE.with_suffix(f".json.corrupt.{n}")
+                n += 1
             try:
-                os.replace(SETTINGS_FILE, SETTINGS_FILE.with_suffix(".json.corrupt"))
+                os.replace(SETTINGS_FILE, backup)
             except OSError:
                 pass
             settings.history.enabled = False
@@ -228,7 +233,7 @@ def _safe_int(d: dict, key: str, default: int) -> int:
 def _safe_float(d: dict, key: str, default: float) -> float:
     try:
         value = float(d.get(key, default))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):  # OverflowError: 10**400
         return default
     return value if math.isfinite(value) else default
 

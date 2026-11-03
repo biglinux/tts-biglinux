@@ -1318,3 +1318,7 @@ msgstr "Wiedergabeposition"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Kokoro-Stimmen unterstützen diese Einstellung nicht."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro-Stimmen beachten nur „Stumm“. Ändern Sie die Lautstärke über die Systemlautstärke."

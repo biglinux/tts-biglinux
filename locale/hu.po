@@ -1310,3 +1310,7 @@ msgstr "Lejátszási pozíció"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "A Kokoro hangok nem támogatják ezt a beállítást."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "A Kokoro hangok csak a „Némítás” beállítást követik. A hangerőt a rendszer hangerejével módosíthatja."

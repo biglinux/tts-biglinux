@@ -1,5 +1,6 @@
 """Startup and desktop-integration regressions (review of 2026-11-02)."""
 import subprocess
+from pathlib import Path
 from types import SimpleNamespace
 
 import config
@@ -22,6 +23,25 @@ def test_corrupt_settings_are_kept_and_history_stays_off():
 
     assert s.history.enabled is False
     assert config.SETTINGS_FILE.with_suffix(".json.corrupt").read_text() == "{not json"
+
+
+def test_an_earlier_corrupt_copy_is_never_overwritten():
+    config.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    first = config.SETTINGS_FILE.with_suffix(".json.corrupt")
+    first.write_text("first")
+    config.SETTINGS_FILE.write_text("second")
+
+    config.load_settings()
+
+    assert first.read_text() == "first"
+    assert config.SETTINGS_FILE.with_suffix(".json.corrupt.1").read_text() == "second"
+
+
+def test_huge_float_falls_back_for_that_key_only():
+    s = config._deserialize_settings({
+        "speech": {"volume": 42, "kokoro": {"blend_ratio": 10**400}},
+    })
+    assert s.speech.volume == 42
 
 
 def test_unreadable_settings_do_not_crash():
@@ -56,15 +76,16 @@ def test_unknown_desktop_does_not_claim_a_shortcut(monkeypatch):
 
 
 class FakeXfconf:
-    def __init__(self, bindings):
+    def __init__(self, bindings, list_status=0):
         self.bindings = dict(bindings)
         self.calls = []
+        self.list_status = list_status
 
     def run(self, args, **kwargs):
         self.calls.append(args)
         if "-l" in args:
             out = "".join(f"{k}  {v}\n" for k, v in self.bindings.items())
-            return SimpleNamespace(returncode=0, stdout=out)
+            return SimpleNamespace(returncode=self.list_status, stdout=out)
         prop = args[args.index("-p") + 1]
         if "-r" in args:
             self.bindings.pop(prop, None)
@@ -73,8 +94,8 @@ class FakeXfconf:
         return SimpleNamespace(returncode=0, stdout="")
 
 
-def _xfce(monkeypatch, bindings):
-    fake = FakeXfconf(bindings)
+def _xfce(monkeypatch, bindings, list_status=0):
+    fake = FakeXfconf(bindings, list_status)
     monkeypatch.setattr(subprocess, "run", fake.run)
     monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/" + name)
     return fake
@@ -115,6 +136,24 @@ def test_xfce_already_right_writes_nothing(monkeypatch):
 
     assert DIS.register_xfce_shortcut("<Alt>v", "/usr/bin/biglinux-tts-speak")
     assert all("-l" in c for c in fake.calls)
+
+
+def test_xfce_unreadable_list_writes_nothing(monkeypatch):
+    fake = _xfce(monkeypatch, {"/commands/custom/<Alt>v": "xfce4-terminal"}, list_status=1)
+
+    assert DIS.register_xfce_shortcut("<Alt>v", "/usr/bin/biglinux-tts-speak") is False
+    assert all("-l" in c for c in fake.calls)
+
+
+def test_xfce_already_right_still_drops_old_bindings(monkeypatch):
+    fake = _xfce(monkeypatch, {
+        "/commands/custom/<Alt>v": "/usr/bin/biglinux-tts-speak",
+        "/commands/custom/<Alt>s": "/usr/bin/biglinux-tts-speak",
+    })
+
+    assert DIS.register_xfce_shortcut("<Alt>v", "/usr/bin/biglinux-tts-speak")
+    assert fake.bindings == {"/commands/custom/<Alt>v": "/usr/bin/biglinux-tts-speak"}
+    assert not any("-n" in c for c in fake.calls)
 
 
 # ── selection capture on X11 ────────────────────────────────────────
@@ -163,3 +202,29 @@ def test_tray_helper_error_is_read_and_reported_on_exit(caplog):
     assert keep is False
     assert "No system tray" in caplog.text
     assert exits == [1]
+
+
+def test_tray_helper_obeys_quit_while_waiting_for_a_tray(tmp_path):
+    """No tray host yet: "quit" (the tray switched off) still ends it at once."""
+    import os
+    import sys
+    import time
+
+    import pytest
+
+    pytest.importorskip("PySide6.QtWidgets")
+    from services.tray_service import _HELPER_SCRIPT
+
+    env = dict(os.environ, QT_QPA_PLATFORM="offscreen")  # no tray host there
+    proc = subprocess.Popen(
+        [sys.executable, "-s", "-c", _HELPER_SCRIPT, "t", "t", "", "", str(
+            Path(config.__file__).parent / "services" / "tray_icon_frames.py")],
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=env,
+    )
+    time.sleep(1.5)
+    assert proc.poll() is None  # still waiting for a tray
+    t0 = time.monotonic()
+    proc.stdin.write(b'{"cmd": "quit"}\n')
+    proc.stdin.flush()
+    assert proc.wait(timeout=5) == 0
+    assert time.monotonic() - t0 < 2

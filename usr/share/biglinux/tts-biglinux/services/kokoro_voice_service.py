@@ -307,7 +307,7 @@ _RE_DOTS = re.compile(r"\.{2,}")
 # Two or more sentence signs in a row ("?!", "Fim.!", "etc….") — also when
 # closing quotes or brackets sit between them ('"Pare!".', "(Ok!).").
 _CLOSERS = "\"'”’»)]}"
-_RE_PUNCT_RUN = re.compile(r"[.!?…](?:[\"'”’»)\]}]*[.!?…])+")
+_RE_PUNCT_RUN = re.compile(r"[.!?…](?:[\"'”’»)\]}]*[.!?…])+[\"'”’»)\]}]*")
 _RE_SENTENCE_END = re.compile(r"(?<=[.!?…;:])\s+")
 
 
@@ -387,7 +387,12 @@ def prepare_koko_text(text: str, limit: int = KOKO_MAX_SEGMENT_CHARS) -> str:
                 piece = piece.strip().rstrip(",")
                 if not any(ch.isalnum() for ch in piece):
                     continue
-                if piece[-1] not in ".!?…;:":
+                core = piece.rstrip(_CLOSERS)
+                if core[-1] in ".!?…;:":
+                    # 'disse "Pare!"' → 'disse "Pare"!': a period after the
+                    # quote would leave the piece '".' for koko.
+                    piece = core[:-1] + piece[len(core):] + core[-1]
+                else:
                     piece += "."
                 lines.append(piece)
     return "\n".join(lines)

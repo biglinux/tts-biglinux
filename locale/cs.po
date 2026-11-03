@@ -1310,3 +1310,7 @@ msgstr "Pozice přehrávání"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Hlasy Kokoro toto nastavení nepodporují."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Hlasy Kokoro respektují jen „Ztlumit“. Hlasitost změníte v systémovém nastavení hlasitosti."

@@ -1318,3 +1318,7 @@ msgstr "Posición de reproducción"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Las voces Kokoro no admiten este ajuste."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Las voces Kokoro solo respetan «Silencio». Use el volumen del sistema para cambiar su intensidad."

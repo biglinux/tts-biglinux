@@ -88,9 +88,21 @@ try:
 
     # No tray host (GNOME without AppIndicator, or the panel not up yet at
     # login): wait a little for one, then give up so the app knows.
+    # The parent's commands are kept (and "quit" obeyed) meanwhile: it waits
+    # for us to exit when the tray is switched off.
     import time
+    stdin_fd = sys.stdin.fileno()
+    os.set_blocking(stdin_fd, False)
+    early_input = bytearray()
     deadline = time.monotonic() + 15
     while not QSystemTrayIcon.isSystemTrayAvailable():
+        try:
+            chunk = os.read(stdin_fd, 65536)
+            if not chunk or b'"quit"' in chunk:
+                sys.exit(0)  # parent gone, or tray switched off
+            early_input.extend(chunk)
+        except BlockingIOError:
+            pass
         if time.monotonic() > deadline:
             send({"event": "error", "message": "No system tray on this desktop. Tray icon is disabled."})
             sys.exit(2)
@@ -238,9 +250,7 @@ try:
     # all into TextIOWrapper's buffer, select() then reports the fd idle, and
     # the remaining lines sit unprocessed until the NEXT message — which made
     # the menu lag exactly one update behind.
-    stdin_fd = sys.stdin.fileno()
-    os.set_blocking(stdin_fd, False)
-    inbuf = bytearray()
+    inbuf = early_input
 
     def read_lines():
         while True:

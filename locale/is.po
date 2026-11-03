@@ -1310,3 +1310,7 @@ msgstr "Staða spilunar"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Kokoro-raddir styðja ekki þessa stillingu."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro-raddir fara aðeins eftir „Hljóðlaust“. Notaðu hljóðstyrk kerfisins til að breyta hversu hátt þær tala."

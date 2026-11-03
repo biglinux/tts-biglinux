@@ -1310,3 +1310,7 @@ msgstr "Afspilningsposition"
 #: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
 msgid "Kokoro voices do not support this setting."
 msgstr "Kokoro-stemmer understøtter ikke denne indstilling."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro-stemmer følger kun »Lydløs«. Brug systemets lydstyrke til at ændre, hvor højt de taler."
