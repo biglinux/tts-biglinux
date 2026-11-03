@@ -234,6 +234,10 @@ class _Reading:
         return max(0.0, now - self.audio_started_at - paused)
 
 
+# Seconds espeak-ng may spend on one chunk (time paused excluded).
+_ESPEAK_SYNTH_TIMEOUT = 120.0
+
+
 class TTSService:
     """Speak/stop lifecycle for every backend."""
 
@@ -261,6 +265,10 @@ class TTSService:
         # playback freezes and resumes in place.
         self._paused: bool = False
         self._paused_since: float | None = None  # monotonic
+        # Serializes pause()/resume() with workers that start a player while
+        # paused (_begin_playback): a new player is never left running, nor
+        # frozen after a resume.
+        self._pause_lock = threading.Lock()
         # Why the last request failed: a translated sentence that says how to
         # fix it, plus optional technical detail (engine stderr). Kept until
         # the next speak()/stop() so the UI can show it.
@@ -331,37 +339,41 @@ class TTSService:
         return [p for r in self._readings() for p in r.live_procs()]
 
     def pause(self) -> bool:
-        """Freeze playback in place (SIGSTOP). Returns True if it paused."""
-        if self._paused or not self.is_speaking:
-            return False
-        procs = self._audio_procs()
-        if not procs:
-            return False
-        for p in procs:
-            try:
-                p.send_signal(signal.SIGSTOP)
-            except (ProcessLookupError, OSError):
-                pass
-        self._paused = True
-        self._paused_since = time.monotonic()
+        """Freeze playback in place (SIGSTOP). Returns True if it paused.
+
+        Works even when no process is live at this instant (the voice is
+        still loading, or the next chunk is being synthesized): players
+        started while paused are frozen as soon as they start.
+        """
+        with self._pause_lock:
+            if self._paused or not self.is_speaking or not self._readings():
+                return False
+            self._paused = True
+            self._paused_since = time.monotonic()
+            for p in self._audio_procs():
+                try:
+                    p.send_signal(signal.SIGSTOP)
+                except (ProcessLookupError, OSError):
+                    pass
         logger.debug("Speech paused")
         return True
 
     def resume(self) -> bool:
         """Resume playback from where it was paused (SIGCONT)."""
-        if not self._paused:
-            return False
-        for p in self._audio_procs():
-            try:
-                p.send_signal(signal.SIGCONT)
-            except (ProcessLookupError, OSError):
-                pass
-        if self._paused_since is not None:
-            elapsed = time.monotonic() - self._paused_since
-            for reading in self._readings():
-                reading.paused_for += elapsed
-        self._paused = False
-        self._paused_since = None
+        with self._pause_lock:
+            if not self._paused:
+                return False
+            self._paused = False
+            for p in self._audio_procs():
+                try:
+                    p.send_signal(signal.SIGCONT)
+                except (ProcessLookupError, OSError):
+                    pass
+            if self._paused_since is not None:
+                elapsed = time.monotonic() - self._paused_since
+                for reading in self._readings():
+                    reading.paused_for += elapsed
+            self._paused_since = None
         logger.debug("Speech resumed")
         return True
 
@@ -428,6 +440,9 @@ class TTSService:
             # No sleep here: speak() may run on the GTK main thread.
             self.stop()
         else:
+            # A paused reading goes on beside the new one: continue it first,
+            # or its SIGSTOP'd processes would be frozen for ever.
+            self.resume()
             self._overlap_current()
 
         if voice:
@@ -475,7 +490,6 @@ class TTSService:
             success = False
 
         if success:
-            self._paused = False
             self._stopped_by_user = False
             self._last_spoken_text = processed
             self._last_text = text
@@ -514,14 +528,15 @@ class TTSService:
         self._process = None
         procs = [p for r in readings for p in r.live_procs()]
         # A SIGSTOP'd process ignores SIGTERM until continued.
-        if self._paused:
-            for p in procs:
-                try:
-                    p.send_signal(signal.SIGCONT)
-                except (ProcessLookupError, OSError):
-                    pass
-            self._paused = False
-        self._paused_since = None
+        with self._pause_lock:
+            if self._paused:
+                for p in procs:
+                    try:
+                        p.send_signal(signal.SIGCONT)
+                    except (ProcessLookupError, OSError):
+                        pass
+                self._paused = False
+            self._paused_since = None
         # stop() may run on the GTK main thread: the reap is bounded and short
         # (aplay, RHVoice-test, piper and koko die at once). Workers see the new
         # generation and exit at their next check; they are not joined here.
@@ -531,6 +546,10 @@ class TTSService:
                 proc.wait(timeout=0.5)
             except subprocess.TimeoutExpired:
                 proc.kill()
+                try:
+                    proc.wait(timeout=0.2)  # reap it: no zombie left behind
+                except subprocess.TimeoutExpired:
+                    pass
             except (ProcessLookupError, OSError):
                 pass
         for reading in readings:
@@ -857,14 +876,40 @@ class TTSService:
             # and no 128 KiB argument limit.
             cmd = ["espeak-ng", "-v", voice, "-s", str(wpm), "-p", str(esp_pitch),
                    "-a", str(esp_vol), "-w", path, "--stdin"]
+            proc = None
             try:
-                proc = subprocess.run(cmd, input=chunk.encode("utf-8"), capture_output=True, timeout=120)
+                proc = subprocess.Popen(
+                    cmd, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                )
+                reading.procs.append(proc)  # Stop must reach it
+                if not self._is_current(reading.gen):
+                    proc.kill()  # stopped while it was starting
+                # Bounded, but time spent paused (SIGSTOP'd with the reading)
+                # does not count: a long pause must not kill it.
+                data, budget = chunk.encode("utf-8"), _ESPEAK_SYNTH_TIMEOUT
+                while True:
+                    try:
+                        _out, err = proc.communicate(data, timeout=1.0)
+                        break
+                    except subprocess.TimeoutExpired:
+                        data = None  # already being fed: never send it twice
+                        if not self._paused:
+                            budget -= 1.0
+                        if budget <= 0:
+                            proc.kill()
+                            _out, err = proc.communicate()
+                            self._stderr_tail.append("espeak-ng took too long and was stopped")
+                            break
                 if proc.returncode == 0 and os.path.getsize(path) > 100:
                     return path
-                self._stderr_tail.append(proc.stderr.decode(errors="replace").strip())
-            except (OSError, subprocess.TimeoutExpired) as e:
+                if proc.returncode >= 0:  # not killed by Stop
+                    self._stderr_tail.append(err.decode(errors="replace").strip())
+            except OSError as e:
                 logger.error("espeak-ng failed: %s", e)
                 self._stderr_tail.append(str(e))
+                if proc is not None and proc.poll() is None:
+                    proc.kill()
+                    proc.wait()
             _unlink(path)
             return None
 
@@ -894,6 +939,9 @@ class TTSService:
         length_scale, noise_scale, noise_w = piper_length_scale(rate), piper_noise_scale(pitch), 0.8
         engine = _get_tts_engine()
         piper_bin: str | None = None
+        # Files written by the piper command: unlike the native engine, it
+        # does not apply the volume, so they are played through sox.
+        from_cli: set[str] = set()
 
         def synth(chunk: str) -> str | None:
             nonlocal piper_bin
@@ -922,6 +970,7 @@ class TTSService:
                     reading.procs.append(proc)
                     _out, err = proc.communicate(chunk.encode("utf-8"))
                     if proc.returncode == 0 and os.path.getsize(path) >= 100:
+                        from_cli.add(path)
                         return path
                     if proc.returncode > 0:
                         self._stderr_tail.append(err.decode(errors="replace").strip()[-300:])
@@ -931,8 +980,10 @@ class TTSService:
             return None
 
         def play_cmd(path: str) -> list[str]:
-            if not engine and vol_factor != 1.0 and shutil.which("play"):
-                return ["play", "-q", path, "vol", f"{vol_factor:.2f}"]
+            if path in from_cli:
+                from_cli.discard(path)
+                if vol_factor != 1.0 and shutil.which("play"):
+                    return ["play", "-q", path, "vol", f"{vol_factor:.2f}"]
             return ["aplay", "-q", path]
 
         self._run_synthesis(reading, synth, play_cmd, _("Piper could not read this text. Try another voice."))
@@ -1038,13 +1089,31 @@ class TTSService:
         if not self._is_current(reading.gen):
             _terminate(proc)
             return False
+        # Paused meanwhile (e.g. while this chunk was synthesized): the new
+        # player waits frozen like the others. Under the lock, so a resume()
+        # either comes after this (and continues the registered player) or
+        # before it (and the player just plays).
+        with self._pause_lock:
+            if self._paused:
+                try:
+                    proc.send_signal(signal.SIGSTOP)
+                except (ProcessLookupError, OSError):
+                    pass
         self._on_audio(reading)
         return True
 
     def _on_audio(self, reading: _Reading) -> None:
         """Sound of ``reading`` is being produced."""
         if not reading.audio_started:
-            reading.audio_started_at = time.monotonic()
+            # Under the lock: a resume() in between would add its pause after
+            # this reset and count time that was not heard.
+            with self._pause_lock:
+                now = time.monotonic()
+                reading.audio_started_at = now
+                paused_since = self._paused_since if self._paused else None
+                # Pauses before any sound are not heard time: forget them; if
+                # still paused, only the pause from now on will count.
+                reading.paused_for = -(now - paused_since) if paused_since is not None else 0.0
         reading.audio_started = True
         if reading is self._reading and self._is_current(reading.gen):
             self._mark_audio_started()
@@ -1143,6 +1212,9 @@ class TTSService:
     def _finish_request(self) -> None:
         """Playback ended: back to IDLE unless a failure is being shown."""
         self._watch_id = 0
+        with self._pause_lock:  # nothing is left to pause or resume
+            self._paused = False
+            self._paused_since = None
         if self._state != TTSState.ERROR:
             self._set_state(TTSState.IDLE)
 

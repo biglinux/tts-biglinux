@@ -7,6 +7,7 @@ Wraps config.py load/save with debounced persistence and migration.
 from __future__ import annotations
 
 import logging
+from dataclasses import fields
 
 from config import AppSettings, load_settings, save_settings
 from utils.async_utils import Debouncer
@@ -44,8 +45,15 @@ class SettingsService:
         self._do_save()
 
     def reset_to_defaults(self) -> AppSettings:
-        """Reset all settings to defaults."""
-        self._settings = AppSettings()
+        """Reset all settings to defaults.
+
+        In place: the TTS service, the History and the app hold this same
+        object, and must see the defaults too (e.g. History switched off).
+        """
+        defaults = AppSettings()
+        current = self.get()
+        for f in fields(AppSettings):
+            setattr(current, f.name, getattr(defaults, f.name))
         self.save_now()
         logger.info("Settings reset to defaults")
         return self._settings

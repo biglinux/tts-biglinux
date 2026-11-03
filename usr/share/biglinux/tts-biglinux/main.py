@@ -52,6 +52,15 @@ def main() -> None:
 
     gi.require_version("Gtk", "4.0")
     gi.require_version("Adw", "1")
+    from gi.repository import Gtk
+
+    # Plasma writes gtk-application-prefer-dark-theme=true to GTK's
+    # settings.ini; libadwaita warns about it at every start. The dark style
+    # still follows the desktop (AdwStyleManager reads the portal).
+    if Gtk.init_check():
+        gtk_settings = Gtk.Settings.get_default()
+        if gtk_settings is not None and gtk_settings.props.gtk_application_prefer_dark_theme:
+            gtk_settings.props.gtk_application_prefer_dark_theme = False
 
     from application import TTSApplication
 

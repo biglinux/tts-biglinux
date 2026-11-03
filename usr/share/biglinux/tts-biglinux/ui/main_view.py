@@ -507,6 +507,7 @@ class MainView(Adw.NavigationPage):
             title_size_group=title_sg,
         )
         group.add(self._volume_row)
+        self._update_kokoro_unsupported_sliders(self._settings.speech.backend)
 
         # ── Kokoro-specific controls (visible only when Kokoro is active) ──
         is_kokoro = self._settings.speech.backend == TTSBackend.KOKORO.value
@@ -729,7 +730,7 @@ class MainView(Adw.NavigationPage):
         self._sync_history_rows()
 
         # ── Playback mode for history player ──
-        playback_row = Adw.ComboRow()
+        playback_row = self._playback_row = Adw.ComboRow()
         playback_row.set_title(_("Audio playback mode"))
         playback_row.set_subtitle(_("Behavior when playing multiple audios or speech"))
         set_row_icon(playback_row, "media-playback-start-symbolic")
@@ -1133,6 +1134,10 @@ class MainView(Adw.NavigationPage):
                 current_backend = catalog.backends_available[0]
 
             filtered = catalog.get_by_backend(current_backend)
+            logger.info(
+                "Auto-switched backend from %s to %s (no voices for original)",
+                self._settings.speech.backend, current_backend,
+            )
             self._settings.speech.backend = current_backend
             self._settings_service.save(self._settings)
 
@@ -1147,11 +1152,7 @@ class MainView(Adw.NavigationPage):
                 self._backend_combo.set_selected(
                     backend_idx_map.get(current_backend, 0)
                 )
-
-            logger.info(
-                "Auto-switched backend from %s to %s (no voices for original)",
-                self._settings.speech.backend, current_backend,
-            )
+            self._refresh_backend_controls(current_backend)
 
         if not filtered:
             # No voices for selected backend
@@ -1282,6 +1283,28 @@ class MainView(Adw.NavigationPage):
         if sub_lbl is not None:
             sub_lbl.set_label(subtitle)
             sub_lbl.set_visible(bool(subtitle))
+        self._update_kokoro_unsupported_sliders(backend)
+
+    def _update_kokoro_unsupported_sliders(self, backend: str) -> None:
+        """Kokoro (koko pipe) plays the audio itself and has no pitch or volume
+        option: the pitch slider would do nothing, so it is made insensitive.
+
+        The volume slider stays usable — Kokoro honors 0 (mute) — and its
+        tooltip says that only mute applies.
+        """
+        is_kokoro = backend == TTSBackend.KOKORO.value
+        pitch_scale = getattr(self, "_pitch_scale", None)
+        if pitch_scale is not None:
+            pitch_scale.set_sensitive(not is_kokoro)
+            self._pitch_row.set_tooltip_text(
+                _("Kokoro voices do not support this setting.") if is_kokoro else None
+            )
+        if getattr(self, "_volume_row", None) is not None:
+            # Kept usable: Kokoro honors mute (0), just not the level between.
+            self._volume_row.set_tooltip_text(
+                _("Kokoro voices only follow Mute. Use the system volume to change how loud they are.")
+                if is_kokoro else None
+            )
 
     def _on_pitch_changed(self, value: float) -> None:
         """Handle pitch change."""
@@ -1292,6 +1315,19 @@ class MainView(Adw.NavigationPage):
         """Handle volume change."""
         self._settings.speech.volume = int(value)
         self._settings_service.save(self._settings)
+
+    def _refresh_backend_controls(self, backend: str) -> None:
+        """Kokoro-only combos, pitch row and sliders for ``backend``.
+
+        Also after an automatic switch (no voices, cancelled installation),
+        which does not go through _on_backend_selected.
+        """
+        is_kokoro = backend == TTSBackend.KOKORO.value
+        self._kokoro_emotion_combo.set_visible(is_kokoro)
+        self._kokoro_blend_combo.set_visible(is_kokoro)
+        if is_kokoro:
+            self._populate_kokoro_blend_combo()
+        self._update_pitch_row_for_backend(backend)
 
     def _on_backend_selected(self, index: int) -> None:
         """Handle backend selection."""
@@ -1306,19 +1342,12 @@ class MainView(Adw.NavigationPage):
         backend = backend_map.get(index, TTSBackend.RHVOICE.value)
         logger.debug("Backend selected: index=%d → %s", index, backend)
 
-        # Show Kokoro-specific controls only for Kokoro engine
-        is_kokoro = backend == TTSBackend.KOKORO.value
-        self._kokoro_emotion_combo.set_visible(is_kokoro)
-        self._kokoro_blend_combo.set_visible(is_kokoro)
-        if is_kokoro:
-            self._populate_kokoro_blend_combo()
-
         # Stop any active speech before switching
         self._tts.stop()
 
         self._settings.speech.backend = backend
         self._settings_service.save(self._settings)
-        self._update_pitch_row_for_backend(backend)
+        self._refresh_backend_controls(backend)
         # Prewarm the new backend's model (no audio) so the first Alt+V is warm.
         self._tts.prewarm(backend, self._settings.speech.voice_id)
 
@@ -1396,6 +1425,7 @@ class MainView(Adw.NavigationPage):
             self._settings.speech.backend = TTSBackend.RHVOICE.value
             self._settings_service.save(self._settings)
             self._backend_combo.set_selected(0)
+            self._refresh_backend_controls(TTSBackend.RHVOICE.value)
             if self._catalog:
                 self._on_voices_discovered(self._catalog)
 
@@ -1909,6 +1939,21 @@ class MainView(Adw.NavigationPage):
             if hasattr(app, "disable_tray"):
                 app.disable_tray()
 
+        # Also guarded above: the history player mode and the media player.
+        from ui.audio_player import AudioPlayerWidget
+
+        mode = self._settings.history.playback_mode
+        AudioPlayerWidget.set_playback_mode(mode)
+        modes = ["interrupt", "queue", "simultaneous"]
+        with self._guard_ui():
+            self._playback_row.set_selected(modes.index(mode) if mode in modes else 0)
+            self._media_switch_widget.set_active(self._settings.show_media_player)
+        if self._settings.show_media_player:
+            if hasattr(app, "enable_media_player"):
+                app.enable_media_player()
+        elif hasattr(app, "disable_media_player"):
+            app.disable_media_player()
+
         self._on_toast(_("Settings restored to defaults"), 3)
 
     def _update_ui_from_settings(self) -> None:
@@ -1966,6 +2011,8 @@ class MainView(Adw.NavigationPage):
                 limit = history.max_entries if history.max_entries in self._retention_values else 1000
                 self._history_limit_row.set_selected(self._retention_values.index(limit))
             self._sync_history_rows()
+
+            self._update_pitch_row_for_backend(current_backend)
 
             # Kokoro controls — visible only when Kokoro is selected
             is_kokoro = current_backend == TTSBackend.KOKORO.value

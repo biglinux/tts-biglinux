@@ -1302,3 +1302,15 @@ msgstr "标记为 AUR 的软件包不在您的软件源中：它们来自 Arch U
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "无法从 AUR 构建 {packages}。请查看详细信息。"
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "播放位置"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro 语音不支持此设置。"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro 语音只遵循“静音”。请使用系统音量调整说话的音量。"

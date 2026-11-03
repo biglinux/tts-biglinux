@@ -1686,3 +1686,15 @@ msgstr "Els paquets marcats amb AUR no són als vostres repositoris: provenen de
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "No s'ha pogut compilar {packages} des de l'AUR. Vegeu els detalls."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Posició de la reproducció"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Les veus Kokoro no admeten aquest ajust."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Les veus Kokoro només segueixen «Silencia». Feu servir el volum del sistema per canviar-ne la intensitat."

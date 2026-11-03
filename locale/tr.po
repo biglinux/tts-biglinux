@@ -1302,3 +1302,15 @@ msgstr "AUR olarak işaretlenen paketler depolarınızda yok: Arch User Reposito
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} AUR'dan derlenemedi. Ayrıntılara bakın."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Oynatma konumu"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Kokoro sesleri bu ayarı desteklemiyor."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Kokoro sesleri yalnızca “Sessiz” ayarına uyar. Ses düzeyini değiştirmek için sistem sesini kullanın."

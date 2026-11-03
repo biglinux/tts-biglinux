@@ -113,11 +113,11 @@ def validate(accel: str) -> str:
     application (typing "v" would read text), so one of them is required —
     except for function keys, which apps rarely use for text input.
     """
-    from gi.repository import Gdk
-
-    key, mods = _parse(accel)
+    key, mods = _parse(accel)  # first: it pins the Gdk version
     if not key:
         return _("This key combination is not valid.")
+    from gi.repository import Gdk
+
     name = Gdk.keyval_name(key) or ""
     is_function_key = name.startswith("F") and name[1:].isdigit()
     strong = Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK | Gdk.ModifierType.SUPER_MASK
@@ -128,11 +128,11 @@ def validate(accel: str) -> str:
 
 def to_qt_key(accel: str) -> int:
     """GTK accelerator → Qt key code (as KGlobalAccel stores keys); 0 if unknown."""
-    from gi.repository import Gdk
-
-    key, mods = _parse(accel)
+    key, mods = _parse(accel)  # first: it pins the Gdk version
     if not key:
         return 0
+    from gi.repository import Gdk
+
     name = Gdk.keyval_name(key) or ""
     if name in _QT_NAMED_KEYS:
         code = _QT_NAMED_KEYS[name]

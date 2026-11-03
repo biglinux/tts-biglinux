@@ -1302,3 +1302,15 @@ msgstr "Pachetele marcate cu AUR nu se află în depozitele tale: provin din Arc
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "{packages} nu a putut fi compilat din AUR. Vezi detaliile."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Poziția redării"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Vocile Kokoro nu acceptă această setare."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Vocile Kokoro respectă doar „Mut”. Folosiți volumul sistemului pentru a schimba cât de tare vorbesc."

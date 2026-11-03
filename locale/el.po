@@ -1304,3 +1304,15 @@ msgstr "Τα πακέτα με την ένδειξη AUR δεν βρίσκοντ
 #: usr/share/biglinux/tts-biglinux/services/package_installer.py:265
 msgid "{packages} could not be built from the AUR. See the details."
 msgstr "Δεν ήταν δυνατή η μεταγλώττιση του {packages} από το AUR. Δείτε τις λεπτομέρειες."
+
+#: usr/share/biglinux/tts-biglinux/ui/audio_player.py:134
+msgid "Playback position"
+msgstr "Θέση αναπαραγωγής"
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1296
+msgid "Kokoro voices do not support this setting."
+msgstr "Οι φωνές Kokoro δεν υποστηρίζουν αυτή τη ρύθμιση."
+
+#: usr/share/biglinux/tts-biglinux/ui/main_view.py:1305
+msgid "Kokoro voices only follow Mute. Use the system volume to change how loud they are."
+msgstr "Οι φωνές Kokoro ακολουθούν μόνο τη «Σίγαση». Χρησιμοποιήστε την ένταση του συστήματος για να αλλάξετε πόσο δυνατά μιλούν."

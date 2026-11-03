@@ -559,14 +559,15 @@ def _discover_piper_voices() -> list[VoiceInfo]:
 
     BigLinux packages install voices to:
       /usr/share/piper-voices/{lang}/{lang_REGION}/{speaker}/{quality}/{lang_REGION}-{speaker}-{quality}.onnx
-    The binary is /usr/bin/piper-tts (package: piper-tts-bin).
+    They are spoken by the native engine (tts_engine module) or, as a
+    fallback, by the binary /usr/bin/piper-tts (package: piper-tts-bin).
     """
     voices: list[VoiceInfo] = []
 
-    # Check if piper-tts binary exists
-    piper_bin = _find_piper_binary()
-    if not piper_bin:
-        logger.debug("Piper TTS binary not found")
+    # The native engine (tts_engine module) speaks Piper voices without the
+    # piper binary: either one is enough.
+    if not _engine_installed(TTSBackend.PIPER.value):
+        logger.debug("Neither the native engine nor the piper binary was found")
         return voices
 
     search_dirs = [
