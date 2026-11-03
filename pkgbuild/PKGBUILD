@@ -36,10 +36,11 @@ depends=(
     # Default voice engine, ready out of the box (Brazilian Portuguese)
     'rhvoice'
     'rhvoice-voice-leticia-f123'
-    'speech-dispatcher'         # python speechd module; legacy speech-dispatcher voices
     # Selected-text capture
     'wl-clipboard'              # Wayland (wl-paste); also provided by wl-clipboard-rs
     'xsel'                      # X11
+    # Desktop
+    'xdg-utils'                 # xdg-open: History "Open file location" fallback
     # System tray icon (enabled by default) and media controls
     'pyside6'
     'qt6-svg'                   # the tray icons are SVG
@@ -48,6 +49,7 @@ makedepends=(
     'git'
     'rust>=1.85'
     'cargo'
+    'pkgconf'                   # alsa-sys finds alsa-lib through pkg-config
 )
 checkdepends=(
     'python-pytest'
@@ -59,6 +61,7 @@ optdepends=(
     'piper-voices-pt-br: Brazilian Portuguese Piper voices, preinstalled (BigLinux repository; piper-voices-pt-BR in testing)'
     'piper-tts-bin: Piper command-line fallback (BigLinux repository; the native engine needs only voices)'
     'rhvoice-brazilian-portuguese-complementary-dict-biglinux: extra pronunciation dictionary for RHVoice (BigLinux repository)'
+    'paru: build Piper packages from the AUR when they are not in your repositories (or yay, or pamac with AUR enabled)'
 )
 # TTS_BIGLINUX_SOURCE builds another repository or branch, e.g. a checkout
 # not published yet:  TTS_BIGLINUX_SOURCE="file://$PWD/..#branch=my-branch" makepkg -si

@@ -100,22 +100,23 @@ class DesktopIntegrationService:
             pass
 
         # Method 2: Plasma 6/5 reparseConfiguration
-        for cmd in ["qdbus6", "qdbus"]:
-            try:
-                subprocess.run(
-                    [
-                        cmd,
-                        "org.kde.kglobalaccel",
-                        "/kglobalaccel",
-                        "org.kde.KGlobalAccel.reparseConfiguration",
-                    ],
-                    timeout=3,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
+        try:
+            subprocess.run(
+                [
+                    "dbus-send",
+                    "--session",
+                    "--type=method_call",
+                    "--dest=org.kde.kglobalaccel",
+                    "/kglobalaccel",
+                    "org.kde.KGlobalAccel.reparseConfiguration",
+                ],
+                timeout=3,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
 
         # Method 3: also notify KGlobalSettings (Legacy)
         try:
@@ -151,46 +152,20 @@ class DesktopIntegrationService:
             ("biglinux-tts-speak.desktop", "AmdRender"),
         ]
         for comp, action in zombies:
-            for dbus_cmd in [
-                ["qdbus6"],
-                ["qdbus"],
-                [
-                    "dbus-send",
-                    "--session",
-                    "--type=method_call",
-                    "--dest=org.kde.kglobalaccel",
-                ],
-            ]:
-                try:
-                    if "dbus-send" in dbus_cmd:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                f"string:{comp}",
-                                f"string:{action}",
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                    else:
-                        subprocess.run(
-                            dbus_cmd
-                            + [
-                                "org.kde.kglobalaccel",
-                                "/kglobalaccel",
-                                "org.kde.KGlobalAccel.unregister",
-                                comp,
-                                action,
-                            ],
-                            timeout=1,
-                            stderr=subprocess.DEVNULL,
-                            stdout=subprocess.DEVNULL,
-                        )
-                except Exception:
-                    pass
+            try:
+                subprocess.run(
+                    [
+                        "dbus-send", "--session", "--type=method_call",
+                        "--dest=org.kde.kglobalaccel", "/kglobalaccel",
+                        "org.kde.KGlobalAccel.unregister",
+                        f"string:{comp}", f"string:{action}",
+                    ],
+                    timeout=1,
+                    stderr=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
 
     @staticmethod
     def unregister_shortcut_from_memory() -> None:
@@ -257,8 +232,6 @@ class DesktopIntegrationService:
         by hand), so old copies of ours are deleted too — otherwise the zombies
         come back with their default Alt+V before the app ever starts.
         """
-        import shutil
-
         DesktopIntegrationService.remove_stale_kde_launchers()
 
         # D-Bus object-path names (dots/dashes → underscores) of components
@@ -268,27 +241,25 @@ class DesktopIntegrationService:
             "tts_speak_desktop",
             "br_com_biglinux_tts_desktop",
         ]
-        qdbus = next((c for c in ("qdbus6", "qdbus") if shutil.which(c)), None)
-        if not qdbus:
+        # Over D-Bus directly (no qdbus: it is not installed everywhere).
+        try:
+            from gi.repository import Gio
+
+            bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        except Exception as e:
+            logger.debug("No session bus for the shortcut cleanup: %s", e)
             return
         for name in stale:
             if name == keep:
                 continue
             try:
-                subprocess.run(
-                    [
-                        qdbus,
-                        "org.kde.kglobalaccel",
-                        f"/component/{name}",
-                        "org.kde.kglobalaccel.Component.cleanUp",
-                    ],
-                    timeout=3,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+                bus.call_sync(
+                    "org.kde.kglobalaccel", f"/component/{name}",
+                    "org.kde.kglobalaccel.Component", "cleanUp",
+                    None, None, Gio.DBusCallFlags.NONE, 3000, None,
                 )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
+            except Exception:
+                pass  # not registered (the usual case)
         logger.debug("Purged stale KDE shortcut components (kept %s)", keep)
 
     # Launchers older versions (or System Settings) left in the kglobalaccel

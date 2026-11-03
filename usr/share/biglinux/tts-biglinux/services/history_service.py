@@ -54,17 +54,17 @@ def _get_music_dir() -> Path:
     if _MUSIC_DIR is not None:
         return _MUSIC_DIR
 
+    # GLib reads ~/.config/user-dirs.dirs itself ("Músicas", "Musik"…): no
+    # xdg-user-dir program needed.
     try:
-        import subprocess
+        from gi.repository import GLib
 
-        proc = subprocess.run(
-            ["xdg-user-dir", "MUSIC"], capture_output=True, text=True, timeout=3,
-        )
-        if proc.returncode == 0 and proc.stdout.strip():
-            _MUSIC_DIR = Path(proc.stdout.strip())
-            return _MUSIC_DIR
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        music = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
+    except Exception:
+        music = None
+    if music:
+        _MUSIC_DIR = Path(music)
+        return _MUSIC_DIR
 
     _MUSIC_DIR = Path.home() / "Music"
     return _MUSIC_DIR
