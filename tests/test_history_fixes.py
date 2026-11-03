@@ -501,5 +501,6 @@ def test_export_keeps_an_existing_files_permissions_and_follows_links(tmp_path, 
 
     link = tmp_path / "link.wav"
     os.symlink(private, link)
+    private.write_bytes(b"stale")  # so the check proves the target was refreshed
     assert hs.export_audio({}, str(link))
     assert link.is_symlink() and private.read_bytes() == src.read_bytes()

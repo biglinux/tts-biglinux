@@ -494,6 +494,10 @@ def export_audio(entry: dict, destination: str) -> bool:
         # mkstemp makes it 0600: an existing file keeps its own permissions
         # (never widened), a new one gets the recording's.
         shutil.copymode(destination if os.path.exists(destination) else path, temporary)
+        try:  # and keeps its group (best effort: needs membership)
+            os.chown(temporary, -1, os.stat(destination).st_gid)
+        except OSError:
+            pass
         os.replace(temporary, destination)
         return True
     except OSError as e:

@@ -1105,12 +1105,15 @@ class TTSService:
     def _on_audio(self, reading: _Reading) -> None:
         """Sound of ``reading`` is being produced."""
         if not reading.audio_started:
-            now = time.monotonic()
-            reading.audio_started_at = now
-            paused_since = self._paused_since if self._paused else None
-            # Pauses before any sound are not heard time: forget them; if
-            # still paused, only the pause from now on will count.
-            reading.paused_for = -(now - paused_since) if paused_since is not None else 0.0
+            # Under the lock: a resume() in between would add its pause after
+            # this reset and count time that was not heard.
+            with self._pause_lock:
+                now = time.monotonic()
+                reading.audio_started_at = now
+                paused_since = self._paused_since if self._paused else None
+                # Pauses before any sound are not heard time: forget them; if
+                # still paused, only the pause from now on will count.
+                reading.paused_for = -(now - paused_since) if paused_since is not None else 0.0
         reading.audio_started = True
         if reading is self._reading and self._is_current(reading.gen):
             self._mark_audio_started()
