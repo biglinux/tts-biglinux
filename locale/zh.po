@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux 文本转语音 — 朗读所选文本"
+msgid "Piper engine"
+msgstr "Piper 引擎"
 
-msgid "Enable debug logging"
-msgstr "启用调试日志"
+msgid "Voice Manager"
+msgstr "语音管理器"
 
-msgid "Settings"
-msgstr "设置"
+msgid "Search voices by name or language…"
+msgstr "按名称或语言搜索语音…"
 
-msgid "Show settings"
-msgstr "显示设置"
-
-msgid "Back"
-msgstr "返回"
-
-msgid "Text narrator"
-msgstr "文本朗读器"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "快捷键未激活 — 请打开高级选项进行修复"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "选择文本并按 {key} 即可朗读"
-
-msgid "History"
-msgstr "历史"
-
-msgid "Loading voice…"
-msgstr "正在加载语音…"
-
-msgid "Speaking…"
-msgstr "正在朗读…"
-
-msgid "Could not read the text"
-msgstr "无法朗读文本"
-
-msgid "Show tray icon"
-msgstr "显示托盘图标"
-
-msgid "Restore Defaults…"
-msgstr "恢复默认设置…"
-
-msgid "Welcome"
-msgstr "欢迎"
-
-msgid "About BigLinux TTS"
-msgstr "关于 BigLinux TTS"
-
-msgid "Quit"
-msgstr "退出"
-
-msgid "Main menu"
-msgstr "主菜单"
-
-msgid "Restore settings?"
-msgstr "恢复设置？"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "这将把所有调整恢复为原始默认值。"
+msgid "Loading available voices…"
+msgstr "加载可用语音…"
 
 msgid "Cancel"
 msgstr "取消"
 
-msgid "Restore"
-msgstr "恢复"
+msgid "No Voice Packages Found"
+msgstr "未找到语音包"
 
-msgid "This key combination is not valid."
-msgstr "此组合键无效。"
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "无法从pacman软件库中找到任何TTS语音包。"
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "请将 Ctrl、Alt 或 Super 与其他键组合使用，以免影响正常输入。"
+msgid "High quality offline voices"
+msgstr "高质量离线语音"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "桌面不支持此组合键。"
+msgid "Neural network voices — natural sounding"
+msgstr "神经网络语音 - 自然听起来"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} 已被以下项目占用：{names}。请选择其他快捷键。"
+msgid "Lightweight multi-language synthesizer"
+msgstr "轻量级多语言合成器"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "桌面未接受该快捷键。KDE 全局快捷键服务是否正在运行？"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "桌面未确认新的快捷键。"
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "快捷键已保存，但桌面尚未确认。"
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "无法在此桌面上注册快捷键。请在系统键盘设置中使用命令 biglinux-tts-speak 添加。"
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "安装已取消：未确认管理员密码。"
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "神经文本转语音 - 高质量多语言语音 (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "您的软件源中没有 {packages}。请更新系统（sudo pacman -Syu）后重试。"
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "另一个程序正在安装或更新软件包。请等待其完成后重试。"
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "无法下载软件包。请检查网络连接后重试。"
+msgid "Install {name}"
+msgstr "安装{name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} 与已安装的文件或软件包冲突。请查看详情。"
+msgid "Remove {name}"
+msgstr "移除 {name}"
+
+msgid "Installed"
+msgstr "已安装"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "磁盘可用空间不足，无法安装 {packages}。"
+msgid "Remove {name}?"
+msgstr "删除 {name}？"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "该语音将无法再用于朗读。您可以稍后重新安装。"
+
+msgid "Remove"
+msgstr "移除"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "无法安装 {packages}。请查看详情。"
-
-msgid "Nothing to install."
-msgstr "没有需要安装的内容。"
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "未安装 pkexec（polkit 软件包）。"
-
-msgid "The installation took too long and was stopped."
-msgstr "安装耗时过长，已被停止。"
+msgid "Downloading {name}…"
+msgstr "正在下载 {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "无法从 AUR 构建 {packages}。请查看详细信息。"
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "正在下载 {name}… {done} / {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "朗读或停止所选文本"
+msgid "Operation timed out"
+msgstr "操作超时"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "未安装 Kokoro。请安装 biglinux-kokoro-tts 软件包。"
+msgid "pkexec or pacman not found"
+msgstr "未找到 pkexec 或 pacman"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "缺少 Kokoro 语音模型。请重新安装 biglinux-kokoro-tts 软件包。"
+msgid "Download cancelled"
+msgstr "下载已取消"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "未找到 Kokoro 语音。请打开语音管理器下载语音。"
+msgid "Failed"
+msgstr "失败"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "此 Kokoro 语音未安装。请打开语音管理器下载。"
+msgid "Removal Failed"
+msgstr "删除失败"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "未知语音：{voice_id}"
+msgid "Unknown error"
+msgstr "未知错误"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "无效的语音 ID：{voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "语音文件大于预期。"
+msgid "OK"
+msgstr "确定"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "下载不完整（已接收 {received} / {total} 字节）"
+msgid "Play a sample of {name}"
+msgstr "播放 {name} 的示例"
 
-msgid "empty response"
-msgstr "空响应"
+msgid "Stop the sample"
+msgstr "停止示例"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "无法下载语音。请检查网络连接后重试。（{error}）"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "下载的语音文件已损坏。请重试。（{error}）"
+msgid "The sample could not be played."
+msgstr "无法播放示例。"
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "磁盘空间不足，无法安装语音（需要 {size} MB）。"
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "无法创建用户语音目录：{error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "添加语音失败：{error}"
-
-msgid "Cannot remove base voice"
-msgstr "无法删除基础语音"
-
-msgid "No user voices installed"
-msgstr "未安装用户语音"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "删除语音失败：{error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "无法播放音频。请检查是否已安装 alsa-utils（aplay）。"
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} 无法启动。请检查是否已安装。"
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "未安装 RHVoice。请安装 rhvoice 软件包。"
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng 无法朗读此文本。请检查是否已安装 espeak-ng。"
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "所选的 Piper 语音未安装。请在语音管理器中选择其他语音。"
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper 无法朗读此文本。请尝试其他语音。"
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} 在朗读文本时崩溃。"
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} 因错误停止，无法朗读文本。"
-
-msgid "Extra low quality"
-msgstr "极低质量"
-
-msgid "Low quality"
-msgstr "低质量"
-
-msgid "Medium quality"
-msgstr "中等质量"
-
-msgid "High quality"
-msgstr "高质量"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language}（{region}）"
-
-msgid "Read the selected text aloud"
-msgstr "朗读所选文本"
-
-msgid "Could not read the text."
-msgstr "无法朗读文本。"
-
-msgid "Reading text"
-msgstr "正在朗读文本"
-
-msgid "Playing…"
-msgstr "正在播放…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "请安装 wl-clipboard（Wayland）或 xclip（X11），以便朗读所选文本。"
-
-msgid "Select some text first, then press the shortcut."
-msgstr "请先选择一些文本，然后按快捷键。"
-
-msgid "No text selected"
-msgstr "未选择文本"
-
-msgid "Read text"
-msgstr "请阅读文本"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "无法播放示例：未安装 {program}。"
 
 msgid "Play"
 msgstr "播放"
 
-msgid "Pause"
-msgstr "暂停"
-
 msgid "Stop"
 msgstr "停止"
 
-msgid "Paused"
-msgstr "已暂停"
-
-msgid "BigLinux Team"
-msgstr "BigLinux 团队"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS 使用本地语音、全局快捷键和精确的播放控制，将所选或输入的文本转换为语音。"
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS 于 2021 年作为网页工具起步，后发展为原生 GTK4 应用程序，拥有多种语音引擎、语音管理和 Rust 音频引擎。"
-
-msgid "Could not register the shortcut."
-msgstr "无法注册快捷键。"
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "选择文本并按 {shortcut} 即可收听"
-
-msgid "Text-to-speech assistant"
-msgstr "文本转语音助手"
-
 msgid "Playback position"
 msgstr "播放位置"
+
+msgid "Pause"
+msgstr "暂停"
+
+msgid "Unknown"
+msgstr "未知"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "今天 {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "昨天 {time}"
+
+msgid "Select this reading"
+msgstr "选择此朗读"
+
+msgid "(text not kept)"
+msgstr "（未保留文本）"
+
+msgid "Show more"
+msgstr "显示更多"
+
+msgid "Copy text"
+msgstr "复制文本"
+
+msgid "Read again with the current voice"
+msgstr "用当前语音重新朗读"
+
+msgid "More actions"
+msgstr "更多操作"
+
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Reading stopped before the end"
+msgstr "朗读在结束前停止"
+
+msgid "The engine failed during this reading"
+msgstr "引擎在此次朗读中出错"
+
+msgid "Audio not kept for this reading"
+msgstr "此次朗读未保留音频"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} 朗读，{when}"
+
+msgid "Save audio as…"
+msgstr "音频另存为…"
+
+msgid "Open file location"
+msgstr "打开文件位置"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Show less"
+msgstr "显示更少"
+
+msgid "Text copied"
+msgstr "文本已复制"
+
+msgid "Save audio as"
+msgstr "音频另存为"
+
+msgid "Audio saved"
+msgstr "音频已保存"
+
+msgid "Could not save the audio"
+msgstr "无法保存音频"
+
+msgid "History"
+msgstr "历史"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "保存已关闭：新的朗读不会被保留。"
+
+msgid "Turn On"
+msgstr "开启"
+
+msgid "Search text, voice, engine or date…"
+msgstr "搜索文本、语音、引擎或日期…"
+
+msgid "All dates"
+msgstr "所有日期"
+
+msgid "Today"
+msgstr "今天"
+
+msgid "Yesterday"
+msgstr "昨天"
+
+msgid "Last 7 days"
+msgstr "最近 7 天"
+
+msgid "Filter by date"
+msgstr "按日期筛选"
+
+msgid "All engines"
+msgstr "所有引擎"
+
+msgid "Filter by engine"
+msgstr "按引擎筛选"
+
+msgid "Newest first"
+msgstr "最新优先"
+
+msgid "Sort order"
+msgstr "排序方式"
+
+msgid "Show as grid"
+msgstr "以网格显示"
+
+msgid "Select readings"
+msgstr "选择朗读记录"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Deselect All"
+msgstr "取消全选"
+
+msgid "Save the selected readings to a folder"
+msgstr "将所选朗读记录保存到文件夹"
+
+msgid "Save selected"
+msgstr "保存所选"
+
+msgid "Delete selected"
+msgstr "删除所选项"
+
+msgid "History entries"
+msgstr "历史条目"
+
+msgid "The history could not be read"
+msgstr "无法读取历史记录"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "请检查文件夹 {folder} 的权限。"
+
+msgid "No readings found"
+msgstr "未找到朗读记录"
+
+msgid "Try other words or another date or engine."
+msgstr "请尝试其他词语、其他日期或引擎。"
+
+msgid "Clear Filters"
+msgstr "清除筛选"
+
+msgid "No readings yet"
+msgstr "暂无朗读记录"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "您收听的所有内容都会连同音频显示在这里。仅存储在本计算机的 {folder} 中。"
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "保存已关闭。开启后可连同音频保留您收听的内容——仅保存在本计算机的 {folder} 中。"
+
+msgid "Turn On History"
+msgstr "开启历史记录"
+
+msgid "Oldest first"
+msgstr "最早优先"
+
+msgid "Show as list"
+msgstr "以列表显示"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "已选择：{count}"
+
+msgid "Reading deleted"
+msgstr "朗读记录已删除"
+
+msgid "Undo"
+msgstr "撤销"
+
+msgid "Delete the selected readings?"
+msgstr "删除所选朗读记录？"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "朗读记录：{count}。其音频和文本文件将被移到回收站。"
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "已移到回收站：{count}"
+
+msgid "Save the selected readings"
+msgstr "保存所选朗读记录"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "已保存到 {folder}：{count}"
+
+msgid "No shortcut"
+msgstr "无快捷键"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "快捷键：{keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "请先安装 {engine} 语音"
 msgid "Neural"
 msgstr "神经网络"
 
+msgid "High quality"
+msgstr "高质量"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "可用语音：{count}"
@@ -707,9 +731,6 @@ msgstr "Piper 不可用"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "在您的软件源中未找到 Piper 语音软件包（{packages}）。请更新系统（sudo pacman -Syu）后重试。"
-
-msgid "OK"
-msgstr "确定"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper 提供自然的神经网络语音。将安装以下软件包："
@@ -769,12 +790,18 @@ msgstr "输入一些文本进行测试"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "音量为零 - 正在增加到测试的最小值"
 
+msgid "Loading voice…"
+msgstr "正在加载语音…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "正在准备 {voice}。即将开始朗读。"
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "正在准备语音。即将开始朗读。"
+
+msgid "Speaking…"
+msgstr "正在朗读…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "再次按 {shortcut} 即可停止。"
 msgid "Use Stop to end the reading."
 msgstr "使用“停止”结束朗读。"
 
+msgid "Could not read the text"
+msgstr "无法朗读文本"
+
 msgid "The speech engine reported a problem."
 msgstr "语音引擎报告了一个问题。"
-
-msgid "Stopped"
-msgstr "已停止"
 
 msgid "Reading was stopped."
 msgstr "朗读已停止。"
@@ -847,9 +874,6 @@ msgstr "加载中"
 
 msgid "Speaking"
 msgstr "朗读中"
-
-msgid "Error"
-msgstr "错误"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "启动时显示对话框"
 msgid "Let's Start"
 msgstr "让我们开始"
 
-msgid "Unknown"
-msgstr "未知"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "安装已取消：未确认管理员密码。"
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "今天 {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "您的软件源中没有 {packages}。请更新系统（sudo pacman -Syu）后重试。"
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "另一个程序正在安装或更新软件包。请等待其完成后重试。"
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "无法下载软件包。请检查网络连接后重试。"
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "昨天 {time}"
-
-msgid "Select this reading"
-msgstr "选择此朗读"
-
-msgid "(text not kept)"
-msgstr "（未保留文本）"
-
-msgid "Show more"
-msgstr "显示更多"
-
-msgid "Copy text"
-msgstr "复制文本"
-
-msgid "Read again with the current voice"
-msgstr "用当前语音重新朗读"
-
-msgid "More actions"
-msgstr "更多操作"
-
-msgid "Reading stopped before the end"
-msgstr "朗读在结束前停止"
-
-msgid "The engine failed during this reading"
-msgstr "引擎在此次朗读中出错"
-
-msgid "Audio not kept for this reading"
-msgstr "此次朗读未保留音频"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} 与已安装的文件或软件包冲突。请查看详情。"
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} 朗读，{when}"
-
-msgid "Save audio as…"
-msgstr "音频另存为…"
-
-msgid "Open file location"
-msgstr "打开文件位置"
-
-msgid "Delete"
-msgstr "删除"
-
-msgid "Show less"
-msgstr "显示更少"
-
-msgid "Text copied"
-msgstr "文本已复制"
-
-msgid "Save audio as"
-msgstr "音频另存为"
-
-msgid "Audio saved"
-msgstr "音频已保存"
-
-msgid "Could not save the audio"
-msgstr "无法保存音频"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "保存已关闭：新的朗读不会被保留。"
-
-msgid "Turn On"
-msgstr "开启"
-
-msgid "Search text, voice, engine or date…"
-msgstr "搜索文本、语音、引擎或日期…"
-
-msgid "All dates"
-msgstr "所有日期"
-
-msgid "Today"
-msgstr "今天"
-
-msgid "Yesterday"
-msgstr "昨天"
-
-msgid "Last 7 days"
-msgstr "最近 7 天"
-
-msgid "Filter by date"
-msgstr "按日期筛选"
-
-msgid "All engines"
-msgstr "所有引擎"
-
-msgid "Filter by engine"
-msgstr "按引擎筛选"
-
-msgid "Newest first"
-msgstr "最新优先"
-
-msgid "Sort order"
-msgstr "排序方式"
-
-msgid "Show as grid"
-msgstr "以网格显示"
-
-msgid "Select readings"
-msgstr "选择朗读记录"
-
-msgid "Select All"
-msgstr "全选"
-
-msgid "Deselect All"
-msgstr "取消全选"
-
-msgid "Save the selected readings to a folder"
-msgstr "将所选朗读记录保存到文件夹"
-
-msgid "Save selected"
-msgstr "保存所选"
-
-msgid "Delete selected"
-msgstr "删除所选项"
-
-msgid "History entries"
-msgstr "历史条目"
-
-msgid "The history could not be read"
-msgstr "无法读取历史记录"
+msgid "Not enough free disk space to install {packages}."
+msgstr "磁盘可用空间不足，无法安装 {packages}。"
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "请检查文件夹 {folder} 的权限。"
+msgid "{packages} could not be installed. See the details."
+msgstr "无法安装 {packages}。请查看详情。"
 
-msgid "No readings found"
-msgstr "未找到朗读记录"
+msgid "Nothing to install."
+msgstr "没有需要安装的内容。"
 
-msgid "Try other words or another date or engine."
-msgstr "请尝试其他词语、其他日期或引擎。"
+msgid "pkexec is not installed (package polkit)."
+msgstr "未安装 pkexec（polkit 软件包）。"
 
-msgid "Clear Filters"
-msgstr "清除筛选"
-
-msgid "No readings yet"
-msgstr "暂无朗读记录"
+msgid "The installation took too long and was stopped."
+msgstr "安装耗时过长，已被停止。"
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "您收听的所有内容都会连同音频显示在这里。仅存储在本计算机的 {folder} 中。"
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "无法从 AUR 构建 {packages}。请查看详细信息。"
+
+msgid "This key combination is not valid."
+msgstr "此组合键无效。"
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "请将 Ctrl、Alt 或 Super 与其他键组合使用，以免影响正常输入。"
+
+msgid "This key combination is not supported by the desktop."
+msgstr "桌面不支持此组合键。"
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "保存已关闭。开启后可连同音频保留您收听的内容——仅保存在本计算机的 {folder} 中。"
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} 已被以下项目占用：{names}。请选择其他快捷键。"
 
-msgid "Turn On History"
-msgstr "开启历史记录"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "桌面未接受该快捷键。KDE 全局快捷键服务是否正在运行？"
 
-msgid "Oldest first"
-msgstr "最早优先"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "桌面未确认新的快捷键。"
 
-msgid "Show as list"
-msgstr "以列表显示"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "快捷键已保存，但桌面尚未确认。"
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "已选择：{count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "无法在此桌面上注册快捷键。请在系统键盘设置中使用命令 biglinux-tts-speak 添加。"
 
-msgid "Reading deleted"
-msgstr "朗读记录已删除"
+msgid "Extra low quality"
+msgstr "极低质量"
 
-msgid "Undo"
-msgstr "撤销"
+msgid "Low quality"
+msgstr "低质量"
 
-msgid "Delete the selected readings?"
-msgstr "删除所选朗读记录？"
+msgid "Medium quality"
+msgstr "中等质量"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "朗读记录：{count}。其音频和文本文件将被移到回收站。"
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "未安装 Kokoro。请安装 biglinux-kokoro-tts 软件包。"
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "已移到回收站：{count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "缺少 Kokoro 语音模型。请重新安装 biglinux-kokoro-tts 软件包。"
 
-msgid "Save the selected readings"
-msgstr "保存所选朗读记录"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "未找到 Kokoro 语音。请打开语音管理器下载语音。"
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "已保存到 {folder}：{count}"
-
-msgid "No shortcut"
-msgstr "无快捷键"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "此 Kokoro 语音未安装。请打开语音管理器下载。"
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "快捷键：{keys}"
-
-msgid "Piper engine"
-msgstr "Piper 引擎"
-
-msgid "Voice Manager"
-msgstr "语音管理器"
-
-msgid "Search voices by name or language…"
-msgstr "按名称或语言搜索语音…"
-
-msgid "Loading available voices…"
-msgstr "加载可用语音…"
-
-msgid "No Voice Packages Found"
-msgstr "未找到语音包"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "无法从pacman软件库中找到任何TTS语音包。"
-
-msgid "High quality offline voices"
-msgstr "高质量离线语音"
-
-msgid "Neural network voices — natural sounding"
-msgstr "神经网络语音 - 自然听起来"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "轻量级多语言合成器"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "神经文本转语音 - 高质量多语言语音 (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "未知语音：{voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "安装{name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "无效的语音 ID：{voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "语音文件大于预期。"
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "移除 {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "下载不完整（已接收 {received} / {total} 字节）"
 
-msgid "Installed"
-msgstr "已安装"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "删除 {name}？"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "该语音将无法再用于朗读。您可以稍后重新安装。"
-
-msgid "Remove"
-msgstr "移除"
+msgid "empty response"
+msgstr "空响应"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "正在下载 {name}…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "无法下载语音。请检查网络连接后重试。（{error}）"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "正在下载 {name}… {done} / {total} KB"
-
-msgid "Operation timed out"
-msgstr "操作超时"
-
-msgid "pkexec or pacman not found"
-msgstr "未找到 pkexec 或 pacman"
-
-msgid "Download cancelled"
-msgstr "下载已取消"
-
-msgid "Failed"
-msgstr "失败"
-
-msgid "Removal Failed"
-msgstr "删除失败"
-
-msgid "Unknown error"
-msgstr "未知错误"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "下载的语音文件已损坏。请重试。（{error}）"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "播放 {name} 的示例"
-
-msgid "Stop the sample"
-msgstr "停止示例"
-
-msgid "The sample could not be played."
-msgstr "无法播放示例。"
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "磁盘空间不足，无法安装语音（需要 {size} MB）。"
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "无法播放示例：未安装 {program}。"
+msgid "Cannot create user voices directory: {error}"
+msgstr "无法创建用户语音目录：{error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "添加语音失败：{error}"
+
+msgid "Cannot remove base voice"
+msgstr "无法删除基础语音"
+
+msgid "No user voices installed"
+msgstr "未安装用户语音"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "删除语音失败：{error}"
+
+msgid "Read or stop the selected text"
+msgstr "朗读或停止所选文本"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "无法播放音频。请检查是否已安装 alsa-utils（aplay）。"
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} 无法启动。请检查是否已安装。"
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "未安装 RHVoice。请安装 rhvoice 软件包。"
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng 无法朗读此文本。请检查是否已安装 espeak-ng。"
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "所选的 Piper 语音未安装。请在语音管理器中选择其他语音。"
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper 无法朗读此文本。请尝试其他语音。"
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} 在朗读文本时崩溃。"
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} 因错误停止，无法朗读文本。"
+
+msgid "Read the selected text aloud"
+msgstr "朗读所选文本"
+
+msgid "Could not read the text."
+msgstr "无法朗读文本。"
+
+msgid "Reading text"
+msgstr "正在朗读文本"
+
+msgid "Playing…"
+msgstr "正在播放…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "请安装 wl-clipboard（Wayland）或 xclip（X11），以便朗读所选文本。"
+
+msgid "Select some text first, then press the shortcut."
+msgstr "请先选择一些文本，然后按快捷键。"
+
+msgid "No text selected"
+msgstr "未选择文本"
+
+msgid "Read text"
+msgstr "请阅读文本"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Quit"
+msgstr "退出"
+
+msgid "Paused"
+msgstr "已暂停"
+
+msgid "BigLinux Team"
+msgstr "BigLinux 团队"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS 使用本地语音、全局快捷键和精确的播放控制，将所选或输入的文本转换为语音。"
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS 于 2021 年作为网页工具起步，后发展为原生 GTK4 应用程序，拥有多种语音引擎、语音管理和 Rust 音频引擎。"
+
+msgid "Could not register the shortcut."
+msgstr "无法注册快捷键。"
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "选择文本并按 {shortcut} 即可收听"
+
+msgid "Text-to-speech assistant"
+msgstr "文本转语音助手"
+
+msgid "Show settings"
+msgstr "显示设置"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Text narrator"
+msgstr "文本朗读器"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "快捷键未激活 — 请打开高级选项进行修复"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "选择文本并按 {key} 即可朗读"
+
+msgid "Show tray icon"
+msgstr "显示托盘图标"
+
+msgid "Restore Defaults…"
+msgstr "恢复默认设置…"
+
+msgid "Welcome"
+msgstr "欢迎"
+
+msgid "About BigLinux TTS"
+msgstr "关于 BigLinux TTS"
+
+msgid "Main menu"
+msgstr "主菜单"
+
+msgid "Restore settings?"
+msgstr "恢复设置？"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "这将把所有调整恢复为原始默认值。"
+
+msgid "Restore"
+msgstr "恢复"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux 文本转语音 — 朗读所选文本"
+
+msgid "Enable debug logging"
+msgstr "启用调试日志"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language}（{region}）"

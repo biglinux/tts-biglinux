@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux tekstistä puheeksi — Lue valittu teksti ääneen"
+msgid "Piper engine"
+msgstr "Piper-moottori"
 
-msgid "Enable debug logging"
-msgstr "Ota virheenjäljitysloki käyttöön"
+msgid "Voice Manager"
+msgstr "Äänijohtaja"
 
-msgid "Settings"
-msgstr "Asetukset"
+msgid "Search voices by name or language…"
+msgstr "Hae ääniä nimen tai kielen mukaan…"
 
-msgid "Show settings"
-msgstr "Näytä asetukset"
-
-msgid "Back"
-msgstr "Takaisin"
-
-msgid "Text narrator"
-msgstr "Tekstin lukija"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Pikanäppäin ei ole käytössä — korjaa se Lisäasetuksista"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Valitse tekstiä ja lue se ääneen painamalla {key}"
-
-msgid "History"
-msgstr "Historia"
-
-msgid "Loading voice…"
-msgstr "Ladataan ääntä…"
-
-msgid "Speaking…"
-msgstr "Puhutaan…"
-
-msgid "Could not read the text"
-msgstr "Tekstiä ei voitu lukea"
-
-msgid "Show tray icon"
-msgstr "Näytä ilmoitusalueen kuvake"
-
-msgid "Restore Defaults…"
-msgstr "Palauta oletukset…"
-
-msgid "Welcome"
-msgstr "Tervetuloa"
-
-msgid "About BigLinux TTS"
-msgstr "Tietoja BigLinux TTS:stä"
-
-msgid "Quit"
-msgstr "Lopeta"
-
-msgid "Main menu"
-msgstr "Päävalikko"
-
-msgid "Restore settings?"
-msgstr "Palautetaanko asetukset?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Tämä palauttaa kaikki säädöt alkuperäisiin oletusarvoihinsa."
+msgid "Loading available voices…"
+msgstr "Ladataan saatavilla olevia ääniä…"
 
 msgid "Cancel"
 msgstr "Peruuta"
 
-msgid "Restore"
-msgstr "Palauta"
+msgid "No Voice Packages Found"
+msgstr "Äänipaketteja ei löytynyt"
 
-msgid "This key combination is not valid."
-msgstr "Tämä näppäinyhdistelmä ei kelpaa."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Ei voitu löytää mitään TTS-ääni paketteja pacman-repositorioista."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Käytä Ctrl-, Alt- tai Super-näppäintä yhdessä toisen näppäimen kanssa, jotta tavallinen kirjoittaminen ei häiriinny."
+msgid "High quality offline voices"
+msgstr "Korkealaatuiset offline-äänet"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Työpöytä ei tue tätä näppäinyhdistelmää."
+msgid "Neural network voices — natural sounding"
+msgstr "Neuraaliverkkoäänet - luonnollisen kuuloiset"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} on jo käytössä: {names}. Valitse toinen pikanäppäin."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Kevyt monikielinen synnyttäjä"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Työpöytä ei hyväksynyt pikanäppäintä. Onko KDE:n globaalien pikanäppäinten palvelu käynnissä?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Työpöytä ei vahvistanut uutta pikanäppäintä."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Pikanäppäin tallennettiin, mutta työpöytä ei voinut vielä vahvistaa sitä."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Pikanäppäintä ei voitu rekisteröidä tällä työpöydällä. Lisää se järjestelmän näppäimistöasetuksiin komennolla biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Asennus peruttiin: ylläpitäjän salasanaa ei vahvistettu."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neuraalinen TTS — korkealaatuiset monikieliset äänet (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} ei ole saatavilla ohjelmistolähteissäsi. Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Toinen ohjelma asentaa tai päivittää paketteja. Odota, että se valmistuu, ja yritä uudelleen."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Paketteja ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen."
+msgid "Install {name}"
+msgstr "Asenna {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} on ristiriidassa asennettujen tiedostojen tai pakettien kanssa. Katso lisätiedot."
+msgid "Remove {name}"
+msgstr "Poista {name}"
+
+msgid "Installed"
+msgstr "Asennettu"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Vapaata levytilaa ei ole tarpeeksi kohteen {packages} asentamiseen."
+msgid "Remove {name}?"
+msgstr "Poistetaanko {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Ääni ei ole enää käytettävissä lukemiseen. Voit asentaa sen myöhemmin uudelleen."
+
+msgid "Remove"
+msgstr "Poista"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "Kohdetta {packages} ei voitu asentaa. Katso lisätiedot."
-
-msgid "Nothing to install."
-msgstr "Ei mitään asennettavaa."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec-ohjelmaa ei ole asennettu (polkit-paketti)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Asennus kesti liian kauan ja pysäytettiin."
+msgid "Downloading {name}…"
+msgstr "Ladataan {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "Pakettia {packages} ei voitu kääntää AUR:sta. Katso lisätiedot."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Ladataan {name}… {done}/{total} kt"
 
-msgid "Read or stop the selected text"
-msgstr "Lue tai pysäytä valittu teksti"
+msgid "Operation timed out"
+msgstr "Toiminto aikakatkaistiin"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro ei ole asennettuna. Asenna biglinux-kokoro-tts-paketti."
+msgid "pkexec or pacman not found"
+msgstr "pkexec tai pacman ei löytynyt"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Kokoron äänimalli puuttuu. Asenna biglinux-kokoro-tts-paketti uudelleen."
+msgid "Download cancelled"
+msgstr "Lataus peruttu"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Kokoro-ääniä ei löytynyt. Lataa ääni avaamalla Äänten hallinta."
+msgid "Failed"
+msgstr "Epäonnistui"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Tätä Kokoro-ääntä ei ole asennettu. Lataa se avaamalla Äänten hallinta."
+msgid "Removal Failed"
+msgstr "Poisto epäonnistui"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Tuntematon ääni: {voice_id}"
+msgid "Unknown error"
+msgstr "Tuntematon virhe"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Virheellinen äänen tunniste: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Äänitiedosto on odotettua suurempi."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "keskeneräinen lataus ({received}/{total} tavua)"
+msgid "Play a sample of {name}"
+msgstr "Toista näyte äänestä {name}"
 
-msgid "empty response"
-msgstr "tyhjä vastaus"
+msgid "Stop the sample"
+msgstr "Pysäytä näyte"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Ääntä ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Ladattu äänitiedosto on vioittunut. Yritä uudelleen. ({error})"
+msgid "The sample could not be played."
+msgstr "Näytettä ei voitu toistaa."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Levytilaa ei ole tarpeeksi äänen asentamiseen ({size} Mt tarvitaan)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Käyttäjän äänikansiota ei voi luoda: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Äänen lisääminen epäonnistui: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Perusääntä ei voi poistaa"
-
-msgid "No user voices installed"
-msgstr "Käyttäjän ääniä ei ole asennettu"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Äänen poistaminen epäonnistui: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Ääntä ei voitu toistaa. Tarkista, että alsa-utils (aplay) on asennettu."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} ei käynnistynyt. Tarkista, että se on asennettu."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice ei ole asennettuna. Asenna rhvoice-paketti."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng ei voinut lukea tätä tekstiä. Tarkista, että espeak-ng on asennettu."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Valittua Piper-ääntä ei ole asennettu. Valitse toinen ääni Äänten hallinnassa."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper ei voinut lukea tätä tekstiä. Kokeile toista ääntä."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} kaatui tekstiä luettaessa."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} pysähtyi virheeseen eikä voinut lukea tekstiä."
-
-msgid "Extra low quality"
-msgstr "Erittäin matala laatu"
-
-msgid "Low quality"
-msgstr "Matala laatu"
-
-msgid "Medium quality"
-msgstr "Keskitasoinen laatu"
-
-msgid "High quality"
-msgstr "Korkea laatu"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Lue valittu teksti ääneen"
-
-msgid "Could not read the text."
-msgstr "Tekstiä ei voitu lukea."
-
-msgid "Reading text"
-msgstr "Luetaan tekstiä"
-
-msgid "Playing…"
-msgstr "Pelaaminen…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Asenna wl-clipboard (Wayland) tai xclip (X11), jotta valittu teksti voidaan lukea."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Valitse ensin tekstiä ja paina sitten pikanäppäintä."
-
-msgid "No text selected"
-msgstr "Tekstiä ei ole valittu"
-
-msgid "Read text"
-msgstr "Lue teksti"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Näytettä ei voitu toistaa: {program} ei ole asennettu."
 
 msgid "Play"
 msgstr "Soita"
 
-msgid "Pause"
-msgstr "Pysäytä"
-
 msgid "Stop"
 msgstr "Lopeta"
 
-msgid "Paused"
-msgstr "Tauolla"
-
-msgid "BigLinux Team"
-msgstr "BigLinux-tiimi"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS muuttaa valitun tai kirjoitetun tekstin puheeksi paikallisilla äänillä, globaaleilla pikanäppäimillä ja tarkoilla toiston ohjaimilla."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS sai alkunsa verkkopohjaisena työkaluna vuonna 2021 ja kehittyi natiiviksi GTK4-sovellukseksi, jossa on useita puhemoottoreita, äänten hallinta ja Rustilla kirjoitettu äänimoottori."
-
-msgid "Could not register the shortcut."
-msgstr "Pikanäppäintä ei voitu rekisteröidä."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Valitse tekstiä ja kuuntele se painamalla {shortcut}"
-
-msgid "Text-to-speech assistant"
-msgstr "Tekstistä puheeksi -avustaja"
-
 msgid "Playback position"
 msgstr "Toistokohta"
+
+msgid "Pause"
+msgstr "Pysäytä"
+
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Tänään, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Eilen, {time}"
+
+msgid "Select this reading"
+msgstr "Valitse tämä ääneenluku"
+
+msgid "(text not kept)"
+msgstr "(tekstiä ei säilytetty)"
+
+msgid "Show more"
+msgstr "Näytä enemmän"
+
+msgid "Copy text"
+msgstr "Kopioi teksti"
+
+msgid "Read again with the current voice"
+msgstr "Lue uudelleen nykyisellä äänellä"
+
+msgid "More actions"
+msgstr "Lisää toimintoja"
+
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "Error"
+msgstr "Virhe"
+
+msgid "Reading stopped before the end"
+msgstr "Ääneenluku pysähtyi ennen loppua"
+
+msgid "The engine failed during this reading"
+msgstr "Moottori epäonnistui tämän ääneenluvun aikana"
+
+msgid "Audio not kept for this reading"
+msgstr "Tämän ääneenluvun ääntä ei säilytetty"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine}-ääneenluku, {when}"
+
+msgid "Save audio as…"
+msgstr "Tallenna ääni nimellä…"
+
+msgid "Open file location"
+msgstr "Avaa tiedoston sijainti"
+
+msgid "Delete"
+msgstr "Poista"
+
+msgid "Show less"
+msgstr "Näytä vähemmän"
+
+msgid "Text copied"
+msgstr "Teksti kopioitu"
+
+msgid "Save audio as"
+msgstr "Tallenna ääni nimellä"
+
+msgid "Audio saved"
+msgstr "Ääni tallennettu"
+
+msgid "Could not save the audio"
+msgstr "Äänen tallentaminen epäonnistui"
+
+msgid "History"
+msgstr "Historia"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Tallennus on pois päältä: uusia ääneenlukuja ei säilytetä."
+
+msgid "Turn On"
+msgstr "Ota käyttöön"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Hae tekstiä, ääntä, moottoria tai päivämäärää…"
+
+msgid "All dates"
+msgstr "Kaikki päivämäärät"
+
+msgid "Today"
+msgstr "Tänään"
+
+msgid "Yesterday"
+msgstr "Eilen"
+
+msgid "Last 7 days"
+msgstr "Viimeiset 7 päivää"
+
+msgid "Filter by date"
+msgstr "Suodata päivämäärän mukaan"
+
+msgid "All engines"
+msgstr "Kaikki moottorit"
+
+msgid "Filter by engine"
+msgstr "Suodata moottorin mukaan"
+
+msgid "Newest first"
+msgstr "Uusimmat ensin"
+
+msgid "Sort order"
+msgstr "Lajittelujärjestys"
+
+msgid "Show as grid"
+msgstr "Näytä ruudukkona"
+
+msgid "Select readings"
+msgstr "Valitse ääneenlukuja"
+
+msgid "Select All"
+msgstr "Valitse kaikki"
+
+msgid "Deselect All"
+msgstr "Poista valinta kaikista"
+
+msgid "Save the selected readings to a folder"
+msgstr "Tallenna valitut ääneenluvut kansioon"
+
+msgid "Save selected"
+msgstr "Tallenna valitut"
+
+msgid "Delete selected"
+msgstr "Poista valitut"
+
+msgid "History entries"
+msgstr "Historia-kirjaukset"
+
+msgid "The history could not be read"
+msgstr "Historiaa ei voitu lukea"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Tarkista kansion {folder} käyttöoikeudet."
+
+msgid "No readings found"
+msgstr "Ääneenlukuja ei löytynyt"
+
+msgid "Try other words or another date or engine."
+msgstr "Kokeile muita sanoja, toista päivämäärää tai toista moottoria."
+
+msgid "Clear Filters"
+msgstr "Tyhjennä suodattimet"
+
+msgid "No readings yet"
+msgstr "Ei vielä ääneenlukuja"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Kaikki kuuntelemasi näkyy täällä äänineen. Se tallennetaan vain tälle tietokoneelle, kansioon {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Tallennus on pois päältä. Ota se käyttöön säilyttääksesi kuuntelemasi äänineen — vain tällä tietokoneella, kansiossa {folder}."
+
+msgid "Turn On History"
+msgstr "Ota historia käyttöön"
+
+msgid "Oldest first"
+msgstr "Vanhimmat ensin"
+
+msgid "Show as list"
+msgstr "Näytä luettelona"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Valittu: {count}"
+
+msgid "Reading deleted"
+msgstr "Ääneenluku poistettu"
+
+msgid "Undo"
+msgstr "Kumoa"
+
+msgid "Delete the selected readings?"
+msgstr "Poistetaanko valitut ääneenluvut?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Ääneenluvut: {count}. Niiden ääni- ja tekstitiedostot siirretään roskakoriin."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Siirretty roskakoriin: {count}"
+
+msgid "Save the selected readings"
+msgstr "Tallenna valitut ääneenluvut"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Tallennettu kansioon {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Ei pikanäppäintä"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Pikanäppäin: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Asenna ensin {engine}-äänet"
 msgid "Neural"
 msgstr "Neuraalinen"
 
+msgid "High quality"
+msgstr "Korkea laatu"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Ääniä saatavilla: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper ei ole saatavilla"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Piper-äänipakettia ei löytynyt ohjelmistolähteistäsi ({packages}). Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper tarjoaa luonnollisia neuraalisia ääniä. Seuraavat paketit asennetaan:"
@@ -769,12 +790,18 @@ msgstr "Kirjoita teksti kokeillaksesi"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Äänenvoimakkuus on nolla — nostetaan minimitasolle testiä varten"
 
+msgid "Loading voice…"
+msgstr "Ladataan ääntä…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "Valmistellaan ääntä {voice}. Puhe alkaa hetken kuluttua."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Valmistellaan ääntä. Puhe alkaa hetken kuluttua."
+
+msgid "Speaking…"
+msgstr "Puhutaan…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Pysäytä painamalla {shortcut} uudelleen."
 msgid "Use Stop to end the reading."
 msgstr "Lopeta lukeminen Lopeta-painikkeella."
 
+msgid "Could not read the text"
+msgstr "Tekstiä ei voitu lukea"
+
 msgid "The speech engine reported a problem."
 msgstr "Puhemoottori ilmoitti ongelmasta."
-
-msgid "Stopped"
-msgstr "Pysäytetty"
 
 msgid "Reading was stopped."
 msgstr "Lukeminen pysäytettiin."
@@ -847,9 +874,6 @@ msgstr "Ladataan"
 
 msgid "Speaking"
 msgstr "Puhuu"
-
-msgid "Error"
-msgstr "Virhe"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Näytä ikkuna käynnistyksessä"
 msgid "Let's Start"
 msgstr "Aloitetaan"
 
-msgid "Unknown"
-msgstr "Tuntematon"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Asennus peruttiin: ylläpitäjän salasanaa ei vahvistettu."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Tänään, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} ei ole saatavilla ohjelmistolähteissäsi. Päivitä järjestelmä (sudo pacman -Syu) ja yritä uudelleen."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Toinen ohjelma asentaa tai päivittää paketteja. Odota, että se valmistuu, ja yritä uudelleen."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Paketteja ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Eilen, {time}"
-
-msgid "Select this reading"
-msgstr "Valitse tämä ääneenluku"
-
-msgid "(text not kept)"
-msgstr "(tekstiä ei säilytetty)"
-
-msgid "Show more"
-msgstr "Näytä enemmän"
-
-msgid "Copy text"
-msgstr "Kopioi teksti"
-
-msgid "Read again with the current voice"
-msgstr "Lue uudelleen nykyisellä äänellä"
-
-msgid "More actions"
-msgstr "Lisää toimintoja"
-
-msgid "Reading stopped before the end"
-msgstr "Ääneenluku pysähtyi ennen loppua"
-
-msgid "The engine failed during this reading"
-msgstr "Moottori epäonnistui tämän ääneenluvun aikana"
-
-msgid "Audio not kept for this reading"
-msgstr "Tämän ääneenluvun ääntä ei säilytetty"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} on ristiriidassa asennettujen tiedostojen tai pakettien kanssa. Katso lisätiedot."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine}-ääneenluku, {when}"
-
-msgid "Save audio as…"
-msgstr "Tallenna ääni nimellä…"
-
-msgid "Open file location"
-msgstr "Avaa tiedoston sijainti"
-
-msgid "Delete"
-msgstr "Poista"
-
-msgid "Show less"
-msgstr "Näytä vähemmän"
-
-msgid "Text copied"
-msgstr "Teksti kopioitu"
-
-msgid "Save audio as"
-msgstr "Tallenna ääni nimellä"
-
-msgid "Audio saved"
-msgstr "Ääni tallennettu"
-
-msgid "Could not save the audio"
-msgstr "Äänen tallentaminen epäonnistui"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Tallennus on pois päältä: uusia ääneenlukuja ei säilytetä."
-
-msgid "Turn On"
-msgstr "Ota käyttöön"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Hae tekstiä, ääntä, moottoria tai päivämäärää…"
-
-msgid "All dates"
-msgstr "Kaikki päivämäärät"
-
-msgid "Today"
-msgstr "Tänään"
-
-msgid "Yesterday"
-msgstr "Eilen"
-
-msgid "Last 7 days"
-msgstr "Viimeiset 7 päivää"
-
-msgid "Filter by date"
-msgstr "Suodata päivämäärän mukaan"
-
-msgid "All engines"
-msgstr "Kaikki moottorit"
-
-msgid "Filter by engine"
-msgstr "Suodata moottorin mukaan"
-
-msgid "Newest first"
-msgstr "Uusimmat ensin"
-
-msgid "Sort order"
-msgstr "Lajittelujärjestys"
-
-msgid "Show as grid"
-msgstr "Näytä ruudukkona"
-
-msgid "Select readings"
-msgstr "Valitse ääneenlukuja"
-
-msgid "Select All"
-msgstr "Valitse kaikki"
-
-msgid "Deselect All"
-msgstr "Poista valinta kaikista"
-
-msgid "Save the selected readings to a folder"
-msgstr "Tallenna valitut ääneenluvut kansioon"
-
-msgid "Save selected"
-msgstr "Tallenna valitut"
-
-msgid "Delete selected"
-msgstr "Poista valitut"
-
-msgid "History entries"
-msgstr "Historia-kirjaukset"
-
-msgid "The history could not be read"
-msgstr "Historiaa ei voitu lukea"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Vapaata levytilaa ei ole tarpeeksi kohteen {packages} asentamiseen."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Tarkista kansion {folder} käyttöoikeudet."
+msgid "{packages} could not be installed. See the details."
+msgstr "Kohdetta {packages} ei voitu asentaa. Katso lisätiedot."
 
-msgid "No readings found"
-msgstr "Ääneenlukuja ei löytynyt"
+msgid "Nothing to install."
+msgstr "Ei mitään asennettavaa."
 
-msgid "Try other words or another date or engine."
-msgstr "Kokeile muita sanoja, toista päivämäärää tai toista moottoria."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec-ohjelmaa ei ole asennettu (polkit-paketti)."
 
-msgid "Clear Filters"
-msgstr "Tyhjennä suodattimet"
-
-msgid "No readings yet"
-msgstr "Ei vielä ääneenlukuja"
+msgid "The installation took too long and was stopped."
+msgstr "Asennus kesti liian kauan ja pysäytettiin."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Kaikki kuuntelemasi näkyy täällä äänineen. Se tallennetaan vain tälle tietokoneelle, kansioon {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Pakettia {packages} ei voitu kääntää AUR:sta. Katso lisätiedot."
+
+msgid "This key combination is not valid."
+msgstr "Tämä näppäinyhdistelmä ei kelpaa."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Käytä Ctrl-, Alt- tai Super-näppäintä yhdessä toisen näppäimen kanssa, jotta tavallinen kirjoittaminen ei häiriinny."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Työpöytä ei tue tätä näppäinyhdistelmää."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Tallennus on pois päältä. Ota se käyttöön säilyttääksesi kuuntelemasi äänineen — vain tällä tietokoneella, kansiossa {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} on jo käytössä: {names}. Valitse toinen pikanäppäin."
 
-msgid "Turn On History"
-msgstr "Ota historia käyttöön"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Työpöytä ei hyväksynyt pikanäppäintä. Onko KDE:n globaalien pikanäppäinten palvelu käynnissä?"
 
-msgid "Oldest first"
-msgstr "Vanhimmat ensin"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Työpöytä ei vahvistanut uutta pikanäppäintä."
 
-msgid "Show as list"
-msgstr "Näytä luettelona"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Pikanäppäin tallennettiin, mutta työpöytä ei voinut vielä vahvistaa sitä."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Valittu: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Pikanäppäintä ei voitu rekisteröidä tällä työpöydällä. Lisää se järjestelmän näppäimistöasetuksiin komennolla biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Ääneenluku poistettu"
+msgid "Extra low quality"
+msgstr "Erittäin matala laatu"
 
-msgid "Undo"
-msgstr "Kumoa"
+msgid "Low quality"
+msgstr "Matala laatu"
 
-msgid "Delete the selected readings?"
-msgstr "Poistetaanko valitut ääneenluvut?"
+msgid "Medium quality"
+msgstr "Keskitasoinen laatu"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Ääneenluvut: {count}. Niiden ääni- ja tekstitiedostot siirretään roskakoriin."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro ei ole asennettuna. Asenna biglinux-kokoro-tts-paketti."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Siirretty roskakoriin: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoron äänimalli puuttuu. Asenna biglinux-kokoro-tts-paketti uudelleen."
 
-msgid "Save the selected readings"
-msgstr "Tallenna valitut ääneenluvut"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro-ääniä ei löytynyt. Lataa ääni avaamalla Äänten hallinta."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Tallennettu kansioon {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Ei pikanäppäintä"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Tätä Kokoro-ääntä ei ole asennettu. Lataa se avaamalla Äänten hallinta."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Pikanäppäin: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper-moottori"
-
-msgid "Voice Manager"
-msgstr "Äänijohtaja"
-
-msgid "Search voices by name or language…"
-msgstr "Hae ääniä nimen tai kielen mukaan…"
-
-msgid "Loading available voices…"
-msgstr "Ladataan saatavilla olevia ääniä…"
-
-msgid "No Voice Packages Found"
-msgstr "Äänipaketteja ei löytynyt"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Ei voitu löytää mitään TTS-ääni paketteja pacman-repositorioista."
-
-msgid "High quality offline voices"
-msgstr "Korkealaatuiset offline-äänet"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Neuraaliverkkoäänet - luonnollisen kuuloiset"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Kevyt monikielinen synnyttäjä"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neuraalinen TTS — korkealaatuiset monikieliset äänet (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Tuntematon ääni: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Asenna {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Virheellinen äänen tunniste: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Äänitiedosto on odotettua suurempi."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Poista {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "keskeneräinen lataus ({received}/{total} tavua)"
 
-msgid "Installed"
-msgstr "Asennettu"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Poistetaanko {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Ääni ei ole enää käytettävissä lukemiseen. Voit asentaa sen myöhemmin uudelleen."
-
-msgid "Remove"
-msgstr "Poista"
+msgid "empty response"
+msgstr "tyhjä vastaus"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "Ladataan {name}…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Ääntä ei voitu ladata. Tarkista internetyhteys ja yritä uudelleen. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "Ladataan {name}… {done}/{total} kt"
-
-msgid "Operation timed out"
-msgstr "Toiminto aikakatkaistiin"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec tai pacman ei löytynyt"
-
-msgid "Download cancelled"
-msgstr "Lataus peruttu"
-
-msgid "Failed"
-msgstr "Epäonnistui"
-
-msgid "Removal Failed"
-msgstr "Poisto epäonnistui"
-
-msgid "Unknown error"
-msgstr "Tuntematon virhe"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Ladattu äänitiedosto on vioittunut. Yritä uudelleen. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Toista näyte äänestä {name}"
-
-msgid "Stop the sample"
-msgstr "Pysäytä näyte"
-
-msgid "The sample could not be played."
-msgstr "Näytettä ei voitu toistaa."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Levytilaa ei ole tarpeeksi äänen asentamiseen ({size} Mt tarvitaan)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Näytettä ei voitu toistaa: {program} ei ole asennettu."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Käyttäjän äänikansiota ei voi luoda: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Äänen lisääminen epäonnistui: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Perusääntä ei voi poistaa"
+
+msgid "No user voices installed"
+msgstr "Käyttäjän ääniä ei ole asennettu"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Äänen poistaminen epäonnistui: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Lue tai pysäytä valittu teksti"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Ääntä ei voitu toistaa. Tarkista, että alsa-utils (aplay) on asennettu."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} ei käynnistynyt. Tarkista, että se on asennettu."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice ei ole asennettuna. Asenna rhvoice-paketti."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng ei voinut lukea tätä tekstiä. Tarkista, että espeak-ng on asennettu."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Valittua Piper-ääntä ei ole asennettu. Valitse toinen ääni Äänten hallinnassa."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper ei voinut lukea tätä tekstiä. Kokeile toista ääntä."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} kaatui tekstiä luettaessa."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} pysähtyi virheeseen eikä voinut lukea tekstiä."
+
+msgid "Read the selected text aloud"
+msgstr "Lue valittu teksti ääneen"
+
+msgid "Could not read the text."
+msgstr "Tekstiä ei voitu lukea."
+
+msgid "Reading text"
+msgstr "Luetaan tekstiä"
+
+msgid "Playing…"
+msgstr "Pelaaminen…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Asenna wl-clipboard (Wayland) tai xclip (X11), jotta valittu teksti voidaan lukea."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Valitse ensin tekstiä ja paina sitten pikanäppäintä."
+
+msgid "No text selected"
+msgstr "Tekstiä ei ole valittu"
+
+msgid "Read text"
+msgstr "Lue teksti"
+
+msgid "Settings"
+msgstr "Asetukset"
+
+msgid "Quit"
+msgstr "Lopeta"
+
+msgid "Paused"
+msgstr "Tauolla"
+
+msgid "BigLinux Team"
+msgstr "BigLinux-tiimi"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS muuttaa valitun tai kirjoitetun tekstin puheeksi paikallisilla äänillä, globaaleilla pikanäppäimillä ja tarkoilla toiston ohjaimilla."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS sai alkunsa verkkopohjaisena työkaluna vuonna 2021 ja kehittyi natiiviksi GTK4-sovellukseksi, jossa on useita puhemoottoreita, äänten hallinta ja Rustilla kirjoitettu äänimoottori."
+
+msgid "Could not register the shortcut."
+msgstr "Pikanäppäintä ei voitu rekisteröidä."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Valitse tekstiä ja kuuntele se painamalla {shortcut}"
+
+msgid "Text-to-speech assistant"
+msgstr "Tekstistä puheeksi -avustaja"
+
+msgid "Show settings"
+msgstr "Näytä asetukset"
+
+msgid "Back"
+msgstr "Takaisin"
+
+msgid "Text narrator"
+msgstr "Tekstin lukija"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Pikanäppäin ei ole käytössä — korjaa se Lisäasetuksista"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Valitse tekstiä ja lue se ääneen painamalla {key}"
+
+msgid "Show tray icon"
+msgstr "Näytä ilmoitusalueen kuvake"
+
+msgid "Restore Defaults…"
+msgstr "Palauta oletukset…"
+
+msgid "Welcome"
+msgstr "Tervetuloa"
+
+msgid "About BigLinux TTS"
+msgstr "Tietoja BigLinux TTS:stä"
+
+msgid "Main menu"
+msgstr "Päävalikko"
+
+msgid "Restore settings?"
+msgstr "Palautetaanko asetukset?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Tämä palauttaa kaikki säädöt alkuperäisiin oletusarvoihinsa."
+
+msgid "Restore"
+msgstr "Palauta"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux tekstistä puheeksi — Lue valittu teksti ääneen"
+
+msgid "Enable debug logging"
+msgstr "Ota virheenjäljitysloki käyttöön"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux texti-í-tal — Lesa valinn texta upphátt"
+msgid "Piper engine"
+msgstr "Piper-talvél"
 
-msgid "Enable debug logging"
-msgstr "Virkja villuleitarannál"
+msgid "Voice Manager"
+msgstr "Raddstjóri"
 
-msgid "Settings"
-msgstr "Stillingar"
+msgid "Search voices by name or language…"
+msgstr "Leita að röddum eftir nafni eða tungumáli…"
 
-msgid "Show settings"
-msgstr "Sýna stillingar"
-
-msgid "Back"
-msgstr "Til baka"
-
-msgid "Text narrator"
-msgstr "Textalesari"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Flýtilykillinn er ekki virkur — opnaðu Ítarlega valkosti til að laga það"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Veldu texta og ýttu á {key} til að láta lesa hann upphátt"
-
-msgid "History"
-msgstr "Ferill"
-
-msgid "Loading voice…"
-msgstr "Hleð inn rödd…"
-
-msgid "Speaking…"
-msgstr "Talar…"
-
-msgid "Could not read the text"
-msgstr "Ekki tókst að lesa textann"
-
-msgid "Show tray icon"
-msgstr "Sýna kerfisbakkatákn"
-
-msgid "Restore Defaults…"
-msgstr "Endurheimta sjálfgefið…"
-
-msgid "Welcome"
-msgstr "Velkomin"
-
-msgid "About BigLinux TTS"
-msgstr "Um BigLinux TTS"
-
-msgid "Quit"
-msgstr "Hætta"
-
-msgid "Main menu"
-msgstr "Aðalvalmynd"
-
-msgid "Restore settings?"
-msgstr "Endurstilla stillingar?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Þetta mun færa allar stillingar til baka í upprunaleg sjálfgildi."
+msgid "Loading available voices…"
+msgstr "Hlaða aðgengilegum raddum…"
 
 msgid "Cancel"
 msgstr "Hætta við"
 
-msgid "Restore"
-msgstr "Endurstilla"
+msgid "No Voice Packages Found"
+msgstr "Enginupakkar fannst ekki"
 
-msgid "This key combination is not valid."
-msgstr "Þessi lyklasamsetning er ekki gild."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Gat ekki TTS raddpakka frá pacman geymslum."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Notaðu Ctrl, Alt eða Super ásamt öðrum lykli svo venjulegur innsláttur raskist ekki."
+msgid "High quality offline voices"
+msgstr "Hágæðar offline raddir"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Skjáborðið styður ekki þessa lyklasamsetningu."
+msgid "Neural network voices — natural sounding"
+msgstr "Tölvunarfræðileg raddir — náttúrulega hljómandi"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} er þegar í notkun hjá: {names}. Veldu annan flýtilykil."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Léttvigt fjöltyngdur hljóðgervill."
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Skjáborðið samþykkti ekki flýtilykilinn. Er þjónusta KDE fyrir víðværa flýtilykla í gangi?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Skjáborðið staðfesti ekki nýja flýtilykilinn."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Flýtilykillinn var vistaður, en skjáborðið gat ekki staðfest hann enn."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Ekki tókst að skrá flýtilykilinn á þessu skjáborði. Bættu honum við í lyklaborðsstillingum kerfisins með skipuninni biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Hætt var við uppsetninguna: lykilorð kerfisstjóra var ekki staðfest."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "TTS taugur — hágæðamultítyngdar raddir (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} er ekki tiltækt í hugbúnaðarsöfnunum þínum. Uppfærðu kerfið (sudo pacman -Syu) og reyndu aftur."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Annað forrit er að setja upp eða uppfæra pakka. Bíddu þar til því lýkur og reyndu aftur."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Ekki tókst að sækja pakkana. Athugaðu nettenginguna og reyndu aftur."
+msgid "Install {name}"
+msgstr "Settu upp {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} stangast á við uppsettar skrár eða pakka. Sjá nánar."
+msgid "Remove {name}"
+msgstr "Fjarlægðu {name}"
+
+msgid "Installed"
+msgstr "Installdur"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Ekki nægt laust diskpláss til að setja upp {packages}."
+msgid "Remove {name}?"
+msgstr "Fjarlægja {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Röddin verður ekki lengur tiltæk til lestrar. Þú getur sett hana upp aftur síðar."
+
+msgid "Remove"
+msgstr "Fjarlægja"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "Ekki tókst að setja upp {packages}. Sjá nánar."
-
-msgid "Nothing to install."
-msgstr "Ekkert að setja upp."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec er ekki uppsett (pakkinn polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Uppsetningin tók of langan tíma og var stöðvuð."
+msgid "Downloading {name}…"
+msgstr "Sæki {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "Ekki tókst að byggja {packages} úr AUR. Sjá nánar."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Sæki {name}… {done} af {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Lesa eða stöðva valinn texta"
+msgid "Operation timed out"
+msgstr "Aðgerð tímabundið útrunnin"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro er ekki uppsett. Settu upp pakkann biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec eða pacman fannst ekki"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Raddlíkan Kokoro vantar. Settu pakkann biglinux-kokoro-tts upp aftur."
+msgid "Download cancelled"
+msgstr "Hætt við niðurhal"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Engar Kokoro-raddir fundust. Opnaðu Raddstjórnun til að sækja rödd."
+msgid "Failed"
+msgstr "Misheppnað"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Þessi Kokoro-rödd er ekki uppsett. Opnaðu Raddstjórnun til að sækja hana."
+msgid "Removal Failed"
+msgstr "Breyting mistókst"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Óþekkt rödd: {voice_id}"
+msgid "Unknown error"
+msgstr "Ókunnug villa"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Ógilt raddauðkenni: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Raddskráin er stærri en búist var við."
+msgid "OK"
+msgstr "Í lagi"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "ófullgert niðurhal ({received} af {total} bætum)"
+msgid "Play a sample of {name}"
+msgstr "Spila sýnishorn af {name}"
 
-msgid "empty response"
-msgstr "tómt svar"
+msgid "Stop the sample"
+msgstr "Stöðva sýnishornið"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Ekki tókst að sækja röddina. Athugaðu nettenginguna og reyndu aftur. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Sótta raddskráin er skemmd. Reyndu aftur. ({error})"
+msgid "The sample could not be played."
+msgstr "Ekki tókst að spila sýnishornið."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Ekki nægt diskpláss til að setja upp röddina ({size} MB þarf)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Ekki hægt að búa til möppu fyrir notandaraddir: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Mistókst að bæta við rödd: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Ekki hægt að fjarlægja grunnrödd"
-
-msgid "No user voices installed"
-msgstr "Engar notandaraddir uppsettar"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Mistókst að fjarlægja rödd: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Ekki tókst að spila hljóð. Athugaðu hvort alsa-utils (aplay) sé uppsett."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} gat ekki ræst. Athugaðu hvort það sé uppsett."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice er ekki uppsett. Settu upp pakkann rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng gat ekki lesið þennan texta. Athugaðu hvort espeak-ng sé uppsett."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Valda Piper-röddin er ekki uppsett. Veldu aðra rödd í Raddstjórnun."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper gat ekki lesið þennan texta. Prófaðu aðra rödd."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} hrundi við lestur textans."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} stöðvaðist með villu og gat ekki lesið textann."
-
-msgid "Extra low quality"
-msgstr "Mjög lítil gæði"
-
-msgid "Low quality"
-msgstr "Lítil gæði"
-
-msgid "Medium quality"
-msgstr "Miðlungs gæði"
-
-msgid "High quality"
-msgstr "Mikil gæði"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Lesa valinn texta upphátt"
-
-msgid "Could not read the text."
-msgstr "Ekki tókst að lesa textann."
-
-msgid "Reading text"
-msgstr "Les texta"
-
-msgid "Playing…"
-msgstr "Spila…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Settu upp wl-clipboard (Wayland) eða xclip (X11) svo hægt sé að lesa valinn texta."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Veldu fyrst texta og ýttu svo á flýtilykilinn."
-
-msgid "No text selected"
-msgstr "Enginn texti valinn"
-
-msgid "Read text"
-msgstr "Lesa texta"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Ekki tókst að spila sýnishornið: {program} er ekki uppsett."
 
 msgid "Play"
 msgstr "Spila"
 
-msgid "Pause"
-msgstr "Pausa"
-
 msgid "Stop"
 msgstr "Stöðva"
 
-msgid "Paused"
-msgstr "Í bið"
-
-msgid "BigLinux Team"
-msgstr "BigLinux-teymið"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS breytir völdum eða innslegnum texta í tal með staðbundnum röddum, víðværum flýtilyklum og nákvæmum spilunarstýringum."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS hófst sem vefverkfæri árið 2021 og þróaðist í innbyggt GTK4-forrit með mörgum talvélum, raddstjórnun og hljóðvél skrifaðri í Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Ekki tókst að skrá flýtilykilinn."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Veldu texta og ýttu á {shortcut} til að hlusta á hann"
-
-msgid "Text-to-speech assistant"
-msgstr "Tölvutalandi aðstoðarmaður"
-
 msgid "Playback position"
 msgstr "Staða spilunar"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Unknown"
+msgstr "Óþekkt"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Í dag, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Í gær, {time}"
+
+msgid "Select this reading"
+msgstr "Velja þennan upplestur"
+
+msgid "(text not kept)"
+msgstr "(texti ekki geymdur)"
+
+msgid "Show more"
+msgstr "Sýna meira"
+
+msgid "Copy text"
+msgstr "Afrita texta"
+
+msgid "Read again with the current voice"
+msgstr "Lesa aftur upp með núverandi rödd"
+
+msgid "More actions"
+msgstr "Fleiri aðgerðir"
+
+msgid "Stopped"
+msgstr "Stöðvað"
+
+msgid "Error"
+msgstr "Villa"
+
+msgid "Reading stopped before the end"
+msgstr "Upplestur stöðvaður fyrir lokin"
+
+msgid "The engine failed during this reading"
+msgstr "Vélin brást í þessum upplestri"
+
+msgid "Audio not kept for this reading"
+msgstr "Hljóð ekki geymt fyrir þennan upplestur"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "Upplestur með {engine}, {when}"
+
+msgid "Save audio as…"
+msgstr "Vista hljóð sem…"
+
+msgid "Open file location"
+msgstr "Opna skráarstað"
+
+msgid "Delete"
+msgstr "Eyða"
+
+msgid "Show less"
+msgstr "Sýna minna"
+
+msgid "Text copied"
+msgstr "Texti afritaður"
+
+msgid "Save audio as"
+msgstr "Vista hljóð sem"
+
+msgid "Audio saved"
+msgstr "Hljóð vistað"
+
+msgid "Could not save the audio"
+msgstr "Ekki tókst að vista hljóðið"
+
+msgid "History"
+msgstr "Ferill"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Vistun er óvirk: nýir upplestrar eru ekki geymdir."
+
+msgid "Turn On"
+msgstr "Kveikja"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Leita að texta, rödd, vél eða dagsetningu…"
+
+msgid "All dates"
+msgstr "Allar dagsetningar"
+
+msgid "Today"
+msgstr "Í dag"
+
+msgid "Yesterday"
+msgstr "Í gær"
+
+msgid "Last 7 days"
+msgstr "Síðustu 7 dagar"
+
+msgid "Filter by date"
+msgstr "Sía eftir dagsetningu"
+
+msgid "All engines"
+msgstr "Allar vélar"
+
+msgid "Filter by engine"
+msgstr "Sía eftir vél"
+
+msgid "Newest first"
+msgstr "Nýjast fyrst"
+
+msgid "Sort order"
+msgstr "Röðun"
+
+msgid "Show as grid"
+msgstr "Sýna sem reitanet"
+
+msgid "Select readings"
+msgstr "Velja upplestra"
+
+msgid "Select All"
+msgstr "Veljaðu allt"
+
+msgid "Deselect All"
+msgstr "Fellaðu allt"
+
+msgid "Save the selected readings to a folder"
+msgstr "Vista valda upplestra í möppu"
+
+msgid "Save selected"
+msgstr "Vista valið"
+
+msgid "Delete selected"
+msgstr "Eyða valið"
+
+msgid "History entries"
+msgstr "Færslur ferils"
+
+msgid "The history could not be read"
+msgstr "Ekki tókst að lesa ferilinn"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Athugaðu heimildir möppunnar {folder}."
+
+msgid "No readings found"
+msgstr "Engir upplestrar fundust"
+
+msgid "Try other words or another date or engine."
+msgstr "Prófaðu önnur orð, aðra dagsetningu eða aðra vél."
+
+msgid "Clear Filters"
+msgstr "Hreinsa síur"
+
+msgid "No readings yet"
+msgstr "Engir upplestrar enn"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Allt sem þú hlustar á birtist hér, ásamt hljóðinu. Það er aðeins geymt á þessari tölvu, í {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Vistun er óvirk. Kveiktu á henni til að geyma það sem þú hlustar á, ásamt hljóðinu — aðeins á þessari tölvu, í {folder}."
+
+msgid "Turn On History"
+msgstr "Kveikja á ferli"
+
+msgid "Oldest first"
+msgstr "Elst fyrst"
+
+msgid "Show as list"
+msgstr "Sýna sem lista"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Valið: {count}"
+
+msgid "Reading deleted"
+msgstr "Upplestri eytt"
+
+msgid "Undo"
+msgstr "Afturkalla"
+
+msgid "Delete the selected readings?"
+msgstr "Eyða völdum upplestrum?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Upplestrar: {count}. Hljóð- og textaskrár þeirra eru færðar í ruslið."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Fært í ruslið: {count}"
+
+msgid "Save the selected readings"
+msgstr "Vista valda upplestra"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Vistað í {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Enginn flýtilykill"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Flýtilykill: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Settu fyrst upp raddir fyrir {engine}"
 msgid "Neural"
 msgstr "Tauganet"
 
+msgid "High quality"
+msgstr "Mikil gæði"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Tiltækar raddir: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper er ekki tiltækt"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Enginn Piper-raddpakki fannst í hugbúnaðarsöfnunum þínum ({packages}). Uppfærðu kerfið (sudo pacman -Syu) og reyndu aftur."
-
-msgid "OK"
-msgstr "Í lagi"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper býður upp á náttúrulegar tauganetsraddir. Þessir pakkar verða settir upp:"
@@ -769,12 +790,18 @@ msgstr "Sláðu inn texta til að prófa"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Hljóðstyrkur er núll — eykst í lágmark fyrir próf"
 
+msgid "Loading voice…"
+msgstr "Hleð inn rödd…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "Undirbý {voice}. Tal hefst eftir augnablik."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Undirbý röddina. Tal hefst eftir augnablik."
+
+msgid "Speaking…"
+msgstr "Talar…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Ýttu aftur á {shortcut} til að stöðva."
 msgid "Use Stop to end the reading."
 msgstr "Notaðu Stöðva til að ljúka lestrinum."
 
+msgid "Could not read the text"
+msgstr "Ekki tókst að lesa textann"
+
 msgid "The speech engine reported a problem."
 msgstr "Talvélin tilkynnti vandamál."
-
-msgid "Stopped"
-msgstr "Stöðvað"
 
 msgid "Reading was stopped."
 msgstr "Lestur var stöðvaður."
@@ -847,9 +874,6 @@ msgstr "Hleð inn"
 
 msgid "Speaking"
 msgstr "Talar"
-
-msgid "Error"
-msgstr "Villa"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Sýna glugga við ræsingu"
 msgid "Let's Start"
 msgstr "Látum okkur byrja"
 
-msgid "Unknown"
-msgstr "Óþekkt"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Hætt var við uppsetninguna: lykilorð kerfisstjóra var ekki staðfest."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Í dag, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} er ekki tiltækt í hugbúnaðarsöfnunum þínum. Uppfærðu kerfið (sudo pacman -Syu) og reyndu aftur."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Annað forrit er að setja upp eða uppfæra pakka. Bíddu þar til því lýkur og reyndu aftur."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Ekki tókst að sækja pakkana. Athugaðu nettenginguna og reyndu aftur."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Í gær, {time}"
-
-msgid "Select this reading"
-msgstr "Velja þennan upplestur"
-
-msgid "(text not kept)"
-msgstr "(texti ekki geymdur)"
-
-msgid "Show more"
-msgstr "Sýna meira"
-
-msgid "Copy text"
-msgstr "Afrita texta"
-
-msgid "Read again with the current voice"
-msgstr "Lesa aftur upp með núverandi rödd"
-
-msgid "More actions"
-msgstr "Fleiri aðgerðir"
-
-msgid "Reading stopped before the end"
-msgstr "Upplestur stöðvaður fyrir lokin"
-
-msgid "The engine failed during this reading"
-msgstr "Vélin brást í þessum upplestri"
-
-msgid "Audio not kept for this reading"
-msgstr "Hljóð ekki geymt fyrir þennan upplestur"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} stangast á við uppsettar skrár eða pakka. Sjá nánar."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "Upplestur með {engine}, {when}"
-
-msgid "Save audio as…"
-msgstr "Vista hljóð sem…"
-
-msgid "Open file location"
-msgstr "Opna skráarstað"
-
-msgid "Delete"
-msgstr "Eyða"
-
-msgid "Show less"
-msgstr "Sýna minna"
-
-msgid "Text copied"
-msgstr "Texti afritaður"
-
-msgid "Save audio as"
-msgstr "Vista hljóð sem"
-
-msgid "Audio saved"
-msgstr "Hljóð vistað"
-
-msgid "Could not save the audio"
-msgstr "Ekki tókst að vista hljóðið"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Vistun er óvirk: nýir upplestrar eru ekki geymdir."
-
-msgid "Turn On"
-msgstr "Kveikja"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Leita að texta, rödd, vél eða dagsetningu…"
-
-msgid "All dates"
-msgstr "Allar dagsetningar"
-
-msgid "Today"
-msgstr "Í dag"
-
-msgid "Yesterday"
-msgstr "Í gær"
-
-msgid "Last 7 days"
-msgstr "Síðustu 7 dagar"
-
-msgid "Filter by date"
-msgstr "Sía eftir dagsetningu"
-
-msgid "All engines"
-msgstr "Allar vélar"
-
-msgid "Filter by engine"
-msgstr "Sía eftir vél"
-
-msgid "Newest first"
-msgstr "Nýjast fyrst"
-
-msgid "Sort order"
-msgstr "Röðun"
-
-msgid "Show as grid"
-msgstr "Sýna sem reitanet"
-
-msgid "Select readings"
-msgstr "Velja upplestra"
-
-msgid "Select All"
-msgstr "Veljaðu allt"
-
-msgid "Deselect All"
-msgstr "Fellaðu allt"
-
-msgid "Save the selected readings to a folder"
-msgstr "Vista valda upplestra í möppu"
-
-msgid "Save selected"
-msgstr "Vista valið"
-
-msgid "Delete selected"
-msgstr "Eyða valið"
-
-msgid "History entries"
-msgstr "Færslur ferils"
-
-msgid "The history could not be read"
-msgstr "Ekki tókst að lesa ferilinn"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Ekki nægt laust diskpláss til að setja upp {packages}."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Athugaðu heimildir möppunnar {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "Ekki tókst að setja upp {packages}. Sjá nánar."
 
-msgid "No readings found"
-msgstr "Engir upplestrar fundust"
+msgid "Nothing to install."
+msgstr "Ekkert að setja upp."
 
-msgid "Try other words or another date or engine."
-msgstr "Prófaðu önnur orð, aðra dagsetningu eða aðra vél."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec er ekki uppsett (pakkinn polkit)."
 
-msgid "Clear Filters"
-msgstr "Hreinsa síur"
-
-msgid "No readings yet"
-msgstr "Engir upplestrar enn"
+msgid "The installation took too long and was stopped."
+msgstr "Uppsetningin tók of langan tíma og var stöðvuð."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Allt sem þú hlustar á birtist hér, ásamt hljóðinu. Það er aðeins geymt á þessari tölvu, í {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Ekki tókst að byggja {packages} úr AUR. Sjá nánar."
+
+msgid "This key combination is not valid."
+msgstr "Þessi lyklasamsetning er ekki gild."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Notaðu Ctrl, Alt eða Super ásamt öðrum lykli svo venjulegur innsláttur raskist ekki."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Skjáborðið styður ekki þessa lyklasamsetningu."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Vistun er óvirk. Kveiktu á henni til að geyma það sem þú hlustar á, ásamt hljóðinu — aðeins á þessari tölvu, í {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} er þegar í notkun hjá: {names}. Veldu annan flýtilykil."
 
-msgid "Turn On History"
-msgstr "Kveikja á ferli"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Skjáborðið samþykkti ekki flýtilykilinn. Er þjónusta KDE fyrir víðværa flýtilykla í gangi?"
 
-msgid "Oldest first"
-msgstr "Elst fyrst"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Skjáborðið staðfesti ekki nýja flýtilykilinn."
 
-msgid "Show as list"
-msgstr "Sýna sem lista"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Flýtilykillinn var vistaður, en skjáborðið gat ekki staðfest hann enn."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Valið: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Ekki tókst að skrá flýtilykilinn á þessu skjáborði. Bættu honum við í lyklaborðsstillingum kerfisins með skipuninni biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Upplestri eytt"
+msgid "Extra low quality"
+msgstr "Mjög lítil gæði"
 
-msgid "Undo"
-msgstr "Afturkalla"
+msgid "Low quality"
+msgstr "Lítil gæði"
 
-msgid "Delete the selected readings?"
-msgstr "Eyða völdum upplestrum?"
+msgid "Medium quality"
+msgstr "Miðlungs gæði"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Upplestrar: {count}. Hljóð- og textaskrár þeirra eru færðar í ruslið."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro er ekki uppsett. Settu upp pakkann biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Fært í ruslið: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Raddlíkan Kokoro vantar. Settu pakkann biglinux-kokoro-tts upp aftur."
 
-msgid "Save the selected readings"
-msgstr "Vista valda upplestra"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Engar Kokoro-raddir fundust. Opnaðu Raddstjórnun til að sækja rödd."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Vistað í {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Enginn flýtilykill"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Þessi Kokoro-rödd er ekki uppsett. Opnaðu Raddstjórnun til að sækja hana."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Flýtilykill: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper-talvél"
-
-msgid "Voice Manager"
-msgstr "Raddstjóri"
-
-msgid "Search voices by name or language…"
-msgstr "Leita að röddum eftir nafni eða tungumáli…"
-
-msgid "Loading available voices…"
-msgstr "Hlaða aðgengilegum raddum…"
-
-msgid "No Voice Packages Found"
-msgstr "Enginupakkar fannst ekki"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Gat ekki TTS raddpakka frá pacman geymslum."
-
-msgid "High quality offline voices"
-msgstr "Hágæðar offline raddir"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Tölvunarfræðileg raddir — náttúrulega hljómandi"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Léttvigt fjöltyngdur hljóðgervill."
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "TTS taugur — hágæðamultítyngdar raddir (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Óþekkt rödd: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Settu upp {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Ógilt raddauðkenni: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Raddskráin er stærri en búist var við."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Fjarlægðu {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "ófullgert niðurhal ({received} af {total} bætum)"
 
-msgid "Installed"
-msgstr "Installdur"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Fjarlægja {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Röddin verður ekki lengur tiltæk til lestrar. Þú getur sett hana upp aftur síðar."
-
-msgid "Remove"
-msgstr "Fjarlægja"
+msgid "empty response"
+msgstr "tómt svar"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "Sæki {name}…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Ekki tókst að sækja röddina. Athugaðu nettenginguna og reyndu aftur. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "Sæki {name}… {done} af {total} KB"
-
-msgid "Operation timed out"
-msgstr "Aðgerð tímabundið útrunnin"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec eða pacman fannst ekki"
-
-msgid "Download cancelled"
-msgstr "Hætt við niðurhal"
-
-msgid "Failed"
-msgstr "Misheppnað"
-
-msgid "Removal Failed"
-msgstr "Breyting mistókst"
-
-msgid "Unknown error"
-msgstr "Ókunnug villa"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Sótta raddskráin er skemmd. Reyndu aftur. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Spila sýnishorn af {name}"
-
-msgid "Stop the sample"
-msgstr "Stöðva sýnishornið"
-
-msgid "The sample could not be played."
-msgstr "Ekki tókst að spila sýnishornið."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Ekki nægt diskpláss til að setja upp röddina ({size} MB þarf)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Ekki tókst að spila sýnishornið: {program} er ekki uppsett."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Ekki hægt að búa til möppu fyrir notandaraddir: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Mistókst að bæta við rödd: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Ekki hægt að fjarlægja grunnrödd"
+
+msgid "No user voices installed"
+msgstr "Engar notandaraddir uppsettar"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Mistókst að fjarlægja rödd: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Lesa eða stöðva valinn texta"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Ekki tókst að spila hljóð. Athugaðu hvort alsa-utils (aplay) sé uppsett."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} gat ekki ræst. Athugaðu hvort það sé uppsett."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice er ekki uppsett. Settu upp pakkann rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng gat ekki lesið þennan texta. Athugaðu hvort espeak-ng sé uppsett."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Valda Piper-röddin er ekki uppsett. Veldu aðra rödd í Raddstjórnun."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper gat ekki lesið þennan texta. Prófaðu aðra rödd."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} hrundi við lestur textans."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} stöðvaðist með villu og gat ekki lesið textann."
+
+msgid "Read the selected text aloud"
+msgstr "Lesa valinn texta upphátt"
+
+msgid "Could not read the text."
+msgstr "Ekki tókst að lesa textann."
+
+msgid "Reading text"
+msgstr "Les texta"
+
+msgid "Playing…"
+msgstr "Spila…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Settu upp wl-clipboard (Wayland) eða xclip (X11) svo hægt sé að lesa valinn texta."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Veldu fyrst texta og ýttu svo á flýtilykilinn."
+
+msgid "No text selected"
+msgstr "Enginn texti valinn"
+
+msgid "Read text"
+msgstr "Lesa texta"
+
+msgid "Settings"
+msgstr "Stillingar"
+
+msgid "Quit"
+msgstr "Hætta"
+
+msgid "Paused"
+msgstr "Í bið"
+
+msgid "BigLinux Team"
+msgstr "BigLinux-teymið"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS breytir völdum eða innslegnum texta í tal með staðbundnum röddum, víðværum flýtilyklum og nákvæmum spilunarstýringum."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS hófst sem vefverkfæri árið 2021 og þróaðist í innbyggt GTK4-forrit með mörgum talvélum, raddstjórnun og hljóðvél skrifaðri í Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Ekki tókst að skrá flýtilykilinn."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Veldu texta og ýttu á {shortcut} til að hlusta á hann"
+
+msgid "Text-to-speech assistant"
+msgstr "Tölvutalandi aðstoðarmaður"
+
+msgid "Show settings"
+msgstr "Sýna stillingar"
+
+msgid "Back"
+msgstr "Til baka"
+
+msgid "Text narrator"
+msgstr "Textalesari"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Flýtilykillinn er ekki virkur — opnaðu Ítarlega valkosti til að laga það"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Veldu texta og ýttu á {key} til að láta lesa hann upphátt"
+
+msgid "Show tray icon"
+msgstr "Sýna kerfisbakkatákn"
+
+msgid "Restore Defaults…"
+msgstr "Endurheimta sjálfgefið…"
+
+msgid "Welcome"
+msgstr "Velkomin"
+
+msgid "About BigLinux TTS"
+msgstr "Um BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Aðalvalmynd"
+
+msgid "Restore settings?"
+msgstr "Endurstilla stillingar?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Þetta mun færa allar stillingar til baka í upprunaleg sjálfgildi."
+
+msgid "Restore"
+msgstr "Endurstilla"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux texti-í-tal — Lesa valinn texta upphátt"
+
+msgid "Enable debug logging"
+msgstr "Virkja villuleitarannál"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

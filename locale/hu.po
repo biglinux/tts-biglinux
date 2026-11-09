@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux szövegfelolvasó — Kijelölt szöveg felolvasása"
+msgid "Piper engine"
+msgstr "Piper motor"
 
-msgid "Enable debug logging"
-msgstr "Hibakeresési naplózás engedélyezése"
+msgid "Voice Manager"
+msgstr "Hangkezelő"
 
-msgid "Settings"
-msgstr "Beállítások"
+msgid "Search voices by name or language…"
+msgstr "Hangok keresése név vagy nyelv szerint…"
 
-msgid "Show settings"
-msgstr "Beállítások megjelenítése"
-
-msgid "Back"
-msgstr "Vissza"
-
-msgid "Text narrator"
-msgstr "Szövegfelolvasó"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "A gyorsbillentyű nem aktív — a javításhoz nyissa meg a Speciális beállításokat"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Jelöljön ki szöveget, és nyomja meg a(z) {key} billentyűt a felolvasáshoz"
-
-msgid "History"
-msgstr "Előzmények"
-
-msgid "Loading voice…"
-msgstr "Hang betöltése…"
-
-msgid "Speaking…"
-msgstr "Felolvasás…"
-
-msgid "Could not read the text"
-msgstr "Nem sikerült felolvasni a szöveget"
-
-msgid "Show tray icon"
-msgstr "Tálcaikon megjelenítése"
-
-msgid "Restore Defaults…"
-msgstr "Alapértékek visszaállítása…"
-
-msgid "Welcome"
-msgstr "Üdvözöljük"
-
-msgid "About BigLinux TTS"
-msgstr "A BigLinux TTS névjegye"
-
-msgid "Quit"
-msgstr "Kilépés"
-
-msgid "Main menu"
-msgstr "Főmenü"
-
-msgid "Restore settings?"
-msgstr "Visszaállítja a beállításokat?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Ez visszaállítja az összes beállítást az eredeti alapértékekre."
+msgid "Loading available voices…"
+msgstr "Elérhető hangok betöltése…"
 
 msgid "Cancel"
 msgstr "Mégse"
 
-msgid "Restore"
-msgstr "Visszaállítás"
+msgid "No Voice Packages Found"
+msgstr "Nincs hangcsomag található"
 
-msgid "This key combination is not valid."
-msgstr "Ez a billentyűkombináció érvénytelen."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Nem található TTS hangcsomag a pacman tárolókból."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Használja a Ctrl, Alt vagy Super billentyűt egy másik billentyűvel együtt, hogy ne zavarja a normál gépelést."
+msgid "High quality offline voices"
+msgstr "Magas minőségű offline hangok"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Ezt a billentyűkombinációt az asztali környezet nem támogatja."
+msgid "Neural network voices — natural sounding"
+msgstr "Neurális hálózat hangok — természetes hangzású"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "A(z) {shortcut} már használatban van: {names}. Válasszon másik gyorsbillentyűt."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Könnyű, többnyelvű szintetizátor"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Az asztali környezet nem fogadta el a gyorsbillentyűt. Fut a KDE globális gyorsbillentyű-szolgáltatása?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Az asztali környezet nem erősítette meg az új gyorsbillentyűt."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "A gyorsbillentyű mentve, de az asztali környezet még nem tudta megerősíteni."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Nem sikerült regisztrálni a gyorsbillentyűt ebben az asztali környezetben. Adja hozzá a rendszer billentyűzetbeállításaiban a biglinux-tts-speak paranccsal."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "A telepítés megszakadt: a rendszergazdai jelszó nem lett megerősítve."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neurális TTS — magas minőségű többnyelvű hangok (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "A(z) {packages} nem érhető el a tárolókban. Frissítse a rendszert (sudo pacman -Syu), és próbálja újra."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Egy másik program csomagokat telepít vagy frissít. Várja meg, amíg befejeződik, és próbálja újra."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Nem sikerült letölteni a csomagokat. Ellenőrizze az internetkapcsolatot, és próbálja újra."
+msgid "Install {name}"
+msgstr "Telepítse a {name} alkalmazást"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "A(z) {packages} ütközik telepített fájlokkal vagy csomagokkal. Lásd a részleteket."
+msgid "Remove {name}"
+msgstr "Távolítsa el {name}"
+
+msgid "Installed"
+msgstr "Telepítve"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Nincs elég szabad lemezterület a(z) {packages} telepítéséhez."
+msgid "Remove {name}?"
+msgstr "Eltávolítja: {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "A hang többé nem lesz elérhető a felolvasáshoz. Később újra telepítheti."
+
+msgid "Remove"
+msgstr "Eltávolítás"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "A(z) {packages} nem telepíthető. Lásd a részleteket."
-
-msgid "Nothing to install."
-msgstr "Nincs mit telepíteni."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "A pkexec nincs telepítve (polkit csomag)."
-
-msgid "The installation took too long and was stopped."
-msgstr "A telepítés túl sokáig tartott, ezért leállt."
+msgid "Downloading {name}…"
+msgstr "{name} letöltése…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "A(z) {packages} nem fordítható le az AUR-ból. Lásd a részleteket."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} letöltése… {done} / {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Kijelölt szöveg felolvasása vagy leállítása"
+msgid "Operation timed out"
+msgstr "A művelet időtúllépett"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "A Kokoro nincs telepítve. Telepítse a biglinux-kokoro-tts csomagot."
+msgid "pkexec or pacman not found"
+msgstr "pkexec vagy pacman nem található"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "A Kokoro hangmodell hiányzik. Telepítse újra a biglinux-kokoro-tts csomagot."
+msgid "Download cancelled"
+msgstr "Letöltés megszakítva"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Nem található Kokoro hang. Nyissa meg a Hangkezelőt egy hang letöltéséhez."
+msgid "Failed"
+msgstr "Sikertelen"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Ez a Kokoro hang nincs telepítve. Nyissa meg a Hangkezelőt a letöltéséhez."
+msgid "Removal Failed"
+msgstr "Eltávolítás sikertelen"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Ismeretlen hang: {voice_id}"
+msgid "Unknown error"
+msgstr "Ismeretlen hiba"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Érvénytelen hangazonosító: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "A hangfájl a vártnál nagyobb."
+msgid "OK"
+msgstr "Rendben"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "hiányos letöltés ({received} / {total} bájt)"
+msgid "Play a sample of {name}"
+msgstr "{name} hangminta lejátszása"
 
-msgid "empty response"
-msgstr "üres válasz"
+msgid "Stop the sample"
+msgstr "Hangminta leállítása"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Nem sikerült letölteni a hangot. Ellenőrizze az internetkapcsolatot, és próbálja újra. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "A letöltött hangfájl sérült. Próbálja újra. ({error})"
+msgid "The sample could not be played."
+msgstr "A hangmintát nem sikerült lejátszani."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Nincs elég lemezterület a hang telepítéséhez ({size} MB szükséges)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Nem hozható létre a felhasználói hangok könyvtára: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Nem sikerült hozzáadni a hangot: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Az alaphang nem távolítható el"
-
-msgid "No user voices installed"
-msgstr "Nincsenek telepített felhasználói hangok"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Nem sikerült eltávolítani a hangot: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Nem sikerült lejátszani a hangot. Ellenőrizze, hogy az alsa-utils (aplay) telepítve van-e."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "A(z) {engine} nem indult el. Ellenőrizze, hogy telepítve van-e."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "Az RHVoice nincs telepítve. Telepítse az rhvoice csomagot."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "Az espeak-ng nem tudta felolvasni ezt a szöveget. Ellenőrizze, hogy az espeak-ng telepítve van-e."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "A kiválasztott Piper hang nincs telepítve. Válasszon másik hangot a Hangkezelőben."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "A Piper nem tudta felolvasni ezt a szöveget. Próbáljon másik hangot."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "A(z) {engine} összeomlott a szöveg felolvasása közben."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "A(z) {engine} hibával leállt, és nem tudta felolvasni a szöveget."
-
-msgid "Extra low quality"
-msgstr "Nagyon alacsony minőség"
-
-msgid "Low quality"
-msgstr "Alacsony minőség"
-
-msgid "Medium quality"
-msgstr "Közepes minőség"
-
-msgid "High quality"
-msgstr "Magas minőség"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Kijelölt szöveg felolvasása"
-
-msgid "Could not read the text."
-msgstr "Nem sikerült felolvasni a szöveget."
-
-msgid "Reading text"
-msgstr "Szöveg felolvasása"
-
-msgid "Playing…"
-msgstr "Játékban…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Telepítse a wl-clipboard (Wayland) vagy az xclip (X11) csomagot, hogy a kijelölt szöveg felolvasható legyen."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Előbb jelöljön ki szöveget, majd nyomja meg a gyorsbillentyűt."
-
-msgid "No text selected"
-msgstr "Nincs kijelölt szöveg"
-
-msgid "Read text"
-msgstr "Olvasd el a szöveget"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "A hangmintát nem sikerült lejátszani: a(z) {program} nincs telepítve."
 
 msgid "Play"
 msgstr "Játék"
 
-msgid "Pause"
-msgstr "Szüneteltetés"
-
 msgid "Stop"
 msgstr "Leállítás"
 
-msgid "Paused"
-msgstr "Szüneteltetve"
-
-msgid "BigLinux Team"
-msgstr "BigLinux csapat"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "A BigLinux TTS a kijelölt vagy begépelt szöveget beszéddé alakítja helyi hangokkal, globális gyorsbillentyűkkel és pontos lejátszásvezérléssel."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "A BigLinux TTS 2021-ben webes eszközként indult, majd natív GTK4-alkalmazássá fejlődött több beszédmotorral, hangkezeléssel és Rust nyelvű hangmotorral."
-
-msgid "Could not register the shortcut."
-msgstr "Nem sikerült regisztrálni a gyorsbillentyűt."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Jelöljön ki szöveget, és nyomja meg a(z) {shortcut} billentyűt a meghallgatáshoz"
-
-msgid "Text-to-speech assistant"
-msgstr "Szövegfelolvasó asszisztens"
-
 msgid "Playback position"
 msgstr "Lejátszási pozíció"
+
+msgid "Pause"
+msgstr "Szüneteltetés"
+
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Ma, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Tegnap, {time}"
+
+msgid "Select this reading"
+msgstr "Felolvasás kijelölése"
+
+msgid "(text not kept)"
+msgstr "(a szöveg nincs megőrizve)"
+
+msgid "Show more"
+msgstr "Több megjelenítése"
+
+msgid "Copy text"
+msgstr "Szöveg másolása"
+
+msgid "Read again with the current voice"
+msgstr "Újrafelolvasás a jelenlegi hanggal"
+
+msgid "More actions"
+msgstr "További műveletek"
+
+msgid "Stopped"
+msgstr "Leállítva"
+
+msgid "Error"
+msgstr "Hiba"
+
+msgid "Reading stopped before the end"
+msgstr "A felolvasás a vége előtt leállt"
+
+msgid "The engine failed during this reading"
+msgstr "A motor hibába ütközött a felolvasás során"
+
+msgid "Audio not kept for this reading"
+msgstr "A felolvasás hangja nincs megőrizve"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} felolvasás, {when}"
+
+msgid "Save audio as…"
+msgstr "Hang mentése másként…"
+
+msgid "Open file location"
+msgstr "Fájl helyének megnyitása"
+
+msgid "Delete"
+msgstr "Törlés"
+
+msgid "Show less"
+msgstr "Kevesebb megjelenítése"
+
+msgid "Text copied"
+msgstr "Szöveg másolva"
+
+msgid "Save audio as"
+msgstr "Hang mentése másként"
+
+msgid "Audio saved"
+msgstr "Hang mentve"
+
+msgid "Could not save the audio"
+msgstr "A hang mentése sikertelen"
+
+msgid "History"
+msgstr "Előzmények"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "A mentés ki van kapcsolva: az új felolvasások nem maradnak meg."
+
+msgid "Turn On"
+msgstr "Bekapcsolás"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Keresés szövegre, hangra, motorra vagy dátumra…"
+
+msgid "All dates"
+msgstr "Minden dátum"
+
+msgid "Today"
+msgstr "Ma"
+
+msgid "Yesterday"
+msgstr "Tegnap"
+
+msgid "Last 7 days"
+msgstr "Elmúlt 7 nap"
+
+msgid "Filter by date"
+msgstr "Szűrés dátum szerint"
+
+msgid "All engines"
+msgstr "Minden motor"
+
+msgid "Filter by engine"
+msgstr "Szűrés motor szerint"
+
+msgid "Newest first"
+msgstr "Legújabb elöl"
+
+msgid "Sort order"
+msgstr "Rendezési sorrend"
+
+msgid "Show as grid"
+msgstr "Megjelenítés rácsként"
+
+msgid "Select readings"
+msgstr "Felolvasások kijelölése"
+
+msgid "Select All"
+msgstr "Összes kiválasztása"
+
+msgid "Deselect All"
+msgstr "Mindet kijelölés megszüntetése"
+
+msgid "Save the selected readings to a folder"
+msgstr "A kijelölt felolvasások mentése egy mappába"
+
+msgid "Save selected"
+msgstr "Kijelöltek mentése"
+
+msgid "Delete selected"
+msgstr "Kiválasztott törlése"
+
+msgid "History entries"
+msgstr "Előzménybejegyzések"
+
+msgid "The history could not be read"
+msgstr "Az előzmények nem olvashatók be"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Ellenőrizze a(z) {folder} mappa jogosultságait."
+
+msgid "No readings found"
+msgstr "Nem található felolvasás"
+
+msgid "Try other words or another date or engine."
+msgstr "Próbáljon más szavakat, másik dátumot vagy motort."
+
+msgid "Clear Filters"
+msgstr "Szűrők törlése"
+
+msgid "No readings yet"
+msgstr "Még nincsenek felolvasások"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Minden, amit meghallgat, itt jelenik meg a hanggal együtt. Csak ezen a számítógépen tárolódik, itt: {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "A mentés ki van kapcsolva. Kapcsolja be, hogy megőrizze, amit meghallgat, a hanggal együtt — csak ezen a számítógépen, itt: {folder}."
+
+msgid "Turn On History"
+msgstr "Előzmények bekapcsolása"
+
+msgid "Oldest first"
+msgstr "Legrégebbi elöl"
+
+msgid "Show as list"
+msgstr "Megjelenítés listaként"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Kijelölve: {count}"
+
+msgid "Reading deleted"
+msgstr "Felolvasás törölve"
+
+msgid "Undo"
+msgstr "Visszavonás"
+
+msgid "Delete the selected readings?"
+msgstr "Törli a kijelölt felolvasásokat?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Felolvasások: {count}. A hang- és szövegfájljaik a Kukába kerülnek."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Kukába helyezve: {count}"
+
+msgid "Save the selected readings"
+msgstr "A kijelölt felolvasások mentése"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Mentve a(z) {folder} mappába: {count}"
+
+msgid "No shortcut"
+msgstr "Nincs gyorsbillentyű"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Gyorsbillentyű: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Először telepítse a(z) {engine} hangokat"
 msgid "Neural"
 msgstr "Neurális"
 
+msgid "High quality"
+msgstr "Magas minőség"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Elérhető hangok: {count}"
@@ -707,9 +731,6 @@ msgstr "A Piper nem érhető el"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Nem található Piper hangcsomag a tárolókban ({packages}). Frissítse a rendszert (sudo pacman -Syu), és próbálja újra."
-
-msgid "OK"
-msgstr "Rendben"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "A Piper természetes neurális hangokat biztosít. A következő csomagok lesznek telepítve:"
@@ -769,12 +790,18 @@ msgstr "Írjon szöveget a teszteléshez"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "A hangerő nulla — a teszt kedvéért minimumra növelve"
 
+msgid "Loading voice…"
+msgstr "Hang betöltése…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} előkészítése. A beszéd hamarosan indul."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "A hang előkészítése. A beszéd hamarosan indul."
+
+msgid "Speaking…"
+msgstr "Felolvasás…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "A leállításhoz nyomja meg újra a(z) {shortcut} billentyűt."
 msgid "Use Stop to end the reading."
 msgstr "A felolvasás befejezéséhez használja a Leállítás gombot."
 
+msgid "Could not read the text"
+msgstr "Nem sikerült felolvasni a szöveget"
+
 msgid "The speech engine reported a problem."
 msgstr "A beszédmotor hibát jelzett."
-
-msgid "Stopped"
-msgstr "Leállítva"
 
 msgid "Reading was stopped."
 msgstr "A felolvasás leállt."
@@ -847,9 +874,6 @@ msgstr "Betöltés"
 
 msgid "Speaking"
 msgstr "Felolvasás"
-
-msgid "Error"
-msgstr "Hiba"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Párbeszédablak megjelenítése indításkor"
 msgid "Let's Start"
 msgstr "Kezdjük!"
 
-msgid "Unknown"
-msgstr "Ismeretlen"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "A telepítés megszakadt: a rendszergazdai jelszó nem lett megerősítve."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Ma, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "A(z) {packages} nem érhető el a tárolókban. Frissítse a rendszert (sudo pacman -Syu), és próbálja újra."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Egy másik program csomagokat telepít vagy frissít. Várja meg, amíg befejeződik, és próbálja újra."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Nem sikerült letölteni a csomagokat. Ellenőrizze az internetkapcsolatot, és próbálja újra."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Tegnap, {time}"
-
-msgid "Select this reading"
-msgstr "Felolvasás kijelölése"
-
-msgid "(text not kept)"
-msgstr "(a szöveg nincs megőrizve)"
-
-msgid "Show more"
-msgstr "Több megjelenítése"
-
-msgid "Copy text"
-msgstr "Szöveg másolása"
-
-msgid "Read again with the current voice"
-msgstr "Újrafelolvasás a jelenlegi hanggal"
-
-msgid "More actions"
-msgstr "További műveletek"
-
-msgid "Reading stopped before the end"
-msgstr "A felolvasás a vége előtt leállt"
-
-msgid "The engine failed during this reading"
-msgstr "A motor hibába ütközött a felolvasás során"
-
-msgid "Audio not kept for this reading"
-msgstr "A felolvasás hangja nincs megőrizve"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "A(z) {packages} ütközik telepített fájlokkal vagy csomagokkal. Lásd a részleteket."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} felolvasás, {when}"
-
-msgid "Save audio as…"
-msgstr "Hang mentése másként…"
-
-msgid "Open file location"
-msgstr "Fájl helyének megnyitása"
-
-msgid "Delete"
-msgstr "Törlés"
-
-msgid "Show less"
-msgstr "Kevesebb megjelenítése"
-
-msgid "Text copied"
-msgstr "Szöveg másolva"
-
-msgid "Save audio as"
-msgstr "Hang mentése másként"
-
-msgid "Audio saved"
-msgstr "Hang mentve"
-
-msgid "Could not save the audio"
-msgstr "A hang mentése sikertelen"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "A mentés ki van kapcsolva: az új felolvasások nem maradnak meg."
-
-msgid "Turn On"
-msgstr "Bekapcsolás"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Keresés szövegre, hangra, motorra vagy dátumra…"
-
-msgid "All dates"
-msgstr "Minden dátum"
-
-msgid "Today"
-msgstr "Ma"
-
-msgid "Yesterday"
-msgstr "Tegnap"
-
-msgid "Last 7 days"
-msgstr "Elmúlt 7 nap"
-
-msgid "Filter by date"
-msgstr "Szűrés dátum szerint"
-
-msgid "All engines"
-msgstr "Minden motor"
-
-msgid "Filter by engine"
-msgstr "Szűrés motor szerint"
-
-msgid "Newest first"
-msgstr "Legújabb elöl"
-
-msgid "Sort order"
-msgstr "Rendezési sorrend"
-
-msgid "Show as grid"
-msgstr "Megjelenítés rácsként"
-
-msgid "Select readings"
-msgstr "Felolvasások kijelölése"
-
-msgid "Select All"
-msgstr "Összes kiválasztása"
-
-msgid "Deselect All"
-msgstr "Mindet kijelölés megszüntetése"
-
-msgid "Save the selected readings to a folder"
-msgstr "A kijelölt felolvasások mentése egy mappába"
-
-msgid "Save selected"
-msgstr "Kijelöltek mentése"
-
-msgid "Delete selected"
-msgstr "Kiválasztott törlése"
-
-msgid "History entries"
-msgstr "Előzménybejegyzések"
-
-msgid "The history could not be read"
-msgstr "Az előzmények nem olvashatók be"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Nincs elég szabad lemezterület a(z) {packages} telepítéséhez."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Ellenőrizze a(z) {folder} mappa jogosultságait."
+msgid "{packages} could not be installed. See the details."
+msgstr "A(z) {packages} nem telepíthető. Lásd a részleteket."
 
-msgid "No readings found"
-msgstr "Nem található felolvasás"
+msgid "Nothing to install."
+msgstr "Nincs mit telepíteni."
 
-msgid "Try other words or another date or engine."
-msgstr "Próbáljon más szavakat, másik dátumot vagy motort."
+msgid "pkexec is not installed (package polkit)."
+msgstr "A pkexec nincs telepítve (polkit csomag)."
 
-msgid "Clear Filters"
-msgstr "Szűrők törlése"
-
-msgid "No readings yet"
-msgstr "Még nincsenek felolvasások"
+msgid "The installation took too long and was stopped."
+msgstr "A telepítés túl sokáig tartott, ezért leállt."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Minden, amit meghallgat, itt jelenik meg a hanggal együtt. Csak ezen a számítógépen tárolódik, itt: {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "A(z) {packages} nem fordítható le az AUR-ból. Lásd a részleteket."
+
+msgid "This key combination is not valid."
+msgstr "Ez a billentyűkombináció érvénytelen."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Használja a Ctrl, Alt vagy Super billentyűt egy másik billentyűvel együtt, hogy ne zavarja a normál gépelést."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Ezt a billentyűkombinációt az asztali környezet nem támogatja."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "A mentés ki van kapcsolva. Kapcsolja be, hogy megőrizze, amit meghallgat, a hanggal együtt — csak ezen a számítógépen, itt: {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "A(z) {shortcut} már használatban van: {names}. Válasszon másik gyorsbillentyűt."
 
-msgid "Turn On History"
-msgstr "Előzmények bekapcsolása"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Az asztali környezet nem fogadta el a gyorsbillentyűt. Fut a KDE globális gyorsbillentyű-szolgáltatása?"
 
-msgid "Oldest first"
-msgstr "Legrégebbi elöl"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Az asztali környezet nem erősítette meg az új gyorsbillentyűt."
 
-msgid "Show as list"
-msgstr "Megjelenítés listaként"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "A gyorsbillentyű mentve, de az asztali környezet még nem tudta megerősíteni."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Kijelölve: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Nem sikerült regisztrálni a gyorsbillentyűt ebben az asztali környezetben. Adja hozzá a rendszer billentyűzetbeállításaiban a biglinux-tts-speak paranccsal."
 
-msgid "Reading deleted"
-msgstr "Felolvasás törölve"
+msgid "Extra low quality"
+msgstr "Nagyon alacsony minőség"
 
-msgid "Undo"
-msgstr "Visszavonás"
+msgid "Low quality"
+msgstr "Alacsony minőség"
 
-msgid "Delete the selected readings?"
-msgstr "Törli a kijelölt felolvasásokat?"
+msgid "Medium quality"
+msgstr "Közepes minőség"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Felolvasások: {count}. A hang- és szövegfájljaik a Kukába kerülnek."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "A Kokoro nincs telepítve. Telepítse a biglinux-kokoro-tts csomagot."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Kukába helyezve: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "A Kokoro hangmodell hiányzik. Telepítse újra a biglinux-kokoro-tts csomagot."
 
-msgid "Save the selected readings"
-msgstr "A kijelölt felolvasások mentése"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Nem található Kokoro hang. Nyissa meg a Hangkezelőt egy hang letöltéséhez."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Mentve a(z) {folder} mappába: {count}"
-
-msgid "No shortcut"
-msgstr "Nincs gyorsbillentyű"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Ez a Kokoro hang nincs telepítve. Nyissa meg a Hangkezelőt a letöltéséhez."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Gyorsbillentyű: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper motor"
-
-msgid "Voice Manager"
-msgstr "Hangkezelő"
-
-msgid "Search voices by name or language…"
-msgstr "Hangok keresése név vagy nyelv szerint…"
-
-msgid "Loading available voices…"
-msgstr "Elérhető hangok betöltése…"
-
-msgid "No Voice Packages Found"
-msgstr "Nincs hangcsomag található"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Nem található TTS hangcsomag a pacman tárolókból."
-
-msgid "High quality offline voices"
-msgstr "Magas minőségű offline hangok"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Neurális hálózat hangok — természetes hangzású"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Könnyű, többnyelvű szintetizátor"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neurális TTS — magas minőségű többnyelvű hangok (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Ismeretlen hang: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Telepítse a {name} alkalmazást"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Érvénytelen hangazonosító: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "A hangfájl a vártnál nagyobb."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Távolítsa el {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "hiányos letöltés ({received} / {total} bájt)"
 
-msgid "Installed"
-msgstr "Telepítve"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Eltávolítja: {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "A hang többé nem lesz elérhető a felolvasáshoz. Később újra telepítheti."
-
-msgid "Remove"
-msgstr "Eltávolítás"
+msgid "empty response"
+msgstr "üres válasz"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} letöltése…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Nem sikerült letölteni a hangot. Ellenőrizze az internetkapcsolatot, és próbálja újra. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} letöltése… {done} / {total} KB"
-
-msgid "Operation timed out"
-msgstr "A művelet időtúllépett"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec vagy pacman nem található"
-
-msgid "Download cancelled"
-msgstr "Letöltés megszakítva"
-
-msgid "Failed"
-msgstr "Sikertelen"
-
-msgid "Removal Failed"
-msgstr "Eltávolítás sikertelen"
-
-msgid "Unknown error"
-msgstr "Ismeretlen hiba"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "A letöltött hangfájl sérült. Próbálja újra. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "{name} hangminta lejátszása"
-
-msgid "Stop the sample"
-msgstr "Hangminta leállítása"
-
-msgid "The sample could not be played."
-msgstr "A hangmintát nem sikerült lejátszani."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Nincs elég lemezterület a hang telepítéséhez ({size} MB szükséges)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "A hangmintát nem sikerült lejátszani: a(z) {program} nincs telepítve."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Nem hozható létre a felhasználói hangok könyvtára: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Nem sikerült hozzáadni a hangot: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Az alaphang nem távolítható el"
+
+msgid "No user voices installed"
+msgstr "Nincsenek telepített felhasználói hangok"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Nem sikerült eltávolítani a hangot: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Kijelölt szöveg felolvasása vagy leállítása"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Nem sikerült lejátszani a hangot. Ellenőrizze, hogy az alsa-utils (aplay) telepítve van-e."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "A(z) {engine} nem indult el. Ellenőrizze, hogy telepítve van-e."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "Az RHVoice nincs telepítve. Telepítse az rhvoice csomagot."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "Az espeak-ng nem tudta felolvasni ezt a szöveget. Ellenőrizze, hogy az espeak-ng telepítve van-e."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "A kiválasztott Piper hang nincs telepítve. Válasszon másik hangot a Hangkezelőben."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "A Piper nem tudta felolvasni ezt a szöveget. Próbáljon másik hangot."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "A(z) {engine} összeomlott a szöveg felolvasása közben."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "A(z) {engine} hibával leállt, és nem tudta felolvasni a szöveget."
+
+msgid "Read the selected text aloud"
+msgstr "Kijelölt szöveg felolvasása"
+
+msgid "Could not read the text."
+msgstr "Nem sikerült felolvasni a szöveget."
+
+msgid "Reading text"
+msgstr "Szöveg felolvasása"
+
+msgid "Playing…"
+msgstr "Játékban…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Telepítse a wl-clipboard (Wayland) vagy az xclip (X11) csomagot, hogy a kijelölt szöveg felolvasható legyen."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Előbb jelöljön ki szöveget, majd nyomja meg a gyorsbillentyűt."
+
+msgid "No text selected"
+msgstr "Nincs kijelölt szöveg"
+
+msgid "Read text"
+msgstr "Olvasd el a szöveget"
+
+msgid "Settings"
+msgstr "Beállítások"
+
+msgid "Quit"
+msgstr "Kilépés"
+
+msgid "Paused"
+msgstr "Szüneteltetve"
+
+msgid "BigLinux Team"
+msgstr "BigLinux csapat"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "A BigLinux TTS a kijelölt vagy begépelt szöveget beszéddé alakítja helyi hangokkal, globális gyorsbillentyűkkel és pontos lejátszásvezérléssel."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "A BigLinux TTS 2021-ben webes eszközként indult, majd natív GTK4-alkalmazássá fejlődött több beszédmotorral, hangkezeléssel és Rust nyelvű hangmotorral."
+
+msgid "Could not register the shortcut."
+msgstr "Nem sikerült regisztrálni a gyorsbillentyűt."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Jelöljön ki szöveget, és nyomja meg a(z) {shortcut} billentyűt a meghallgatáshoz"
+
+msgid "Text-to-speech assistant"
+msgstr "Szövegfelolvasó asszisztens"
+
+msgid "Show settings"
+msgstr "Beállítások megjelenítése"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "Text narrator"
+msgstr "Szövegfelolvasó"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "A gyorsbillentyű nem aktív — a javításhoz nyissa meg a Speciális beállításokat"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Jelöljön ki szöveget, és nyomja meg a(z) {key} billentyűt a felolvasáshoz"
+
+msgid "Show tray icon"
+msgstr "Tálcaikon megjelenítése"
+
+msgid "Restore Defaults…"
+msgstr "Alapértékek visszaállítása…"
+
+msgid "Welcome"
+msgstr "Üdvözöljük"
+
+msgid "About BigLinux TTS"
+msgstr "A BigLinux TTS névjegye"
+
+msgid "Main menu"
+msgstr "Főmenü"
+
+msgid "Restore settings?"
+msgstr "Visszaállítja a beállításokat?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Ez visszaállítja az összes beállítást az eredeti alapértékekre."
+
+msgid "Restore"
+msgstr "Visszaállítás"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux szövegfelolvasó — Kijelölt szöveg felolvasása"
+
+msgid "Enable debug logging"
+msgstr "Hibakeresési naplózás engedélyezése"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

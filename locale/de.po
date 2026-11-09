@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux Text-zu-Sprache — Markierten Text vorlesen"
+msgid "Piper engine"
+msgstr "Piper-Engine"
 
-msgid "Enable debug logging"
-msgstr "Debug-Protokollierung aktivieren"
+msgid "Voice Manager"
+msgstr "Sprach-Manager"
 
-msgid "Settings"
-msgstr "Einstellungen"
+msgid "Search voices by name or language…"
+msgstr "Stimmen nach Name oder Sprache suchen…"
 
-msgid "Show settings"
-msgstr "Einstellungen anzeigen"
-
-msgid "Back"
-msgstr "Zurück"
-
-msgid "Text narrator"
-msgstr "Textvorleser"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Das Tastenkürzel ist nicht aktiv — öffnen Sie die erweiterten Optionen, um es zu beheben"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Text markieren und {key} drücken, um ihn vorlesen zu lassen"
-
-msgid "History"
-msgstr "Verlauf"
-
-msgid "Loading voice…"
-msgstr "Stimme wird geladen…"
-
-msgid "Speaking…"
-msgstr "Spricht…"
-
-msgid "Could not read the text"
-msgstr "Der Text konnte nicht gelesen werden"
-
-msgid "Show tray icon"
-msgstr "Symbol im Systembereich anzeigen"
-
-msgid "Restore Defaults…"
-msgstr "Standardwerte wiederherstellen…"
-
-msgid "Welcome"
-msgstr "Willkommen"
-
-msgid "About BigLinux TTS"
-msgstr "Über BigLinux TTS"
-
-msgid "Quit"
-msgstr "Beenden"
-
-msgid "Main menu"
-msgstr "Hauptmenü"
-
-msgid "Restore settings?"
-msgstr "Einstellungen zurücksetzen?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Dies setzt alle Einstellungen auf die ursprünglichen Standardwerte zurück."
+msgid "Loading available voices…"
+msgstr "Verfügbare Stimmen werden geladen…"
 
 msgid "Cancel"
 msgstr "Abbrechen"
 
-msgid "Restore"
-msgstr "Wiederherstellen"
+msgid "No Voice Packages Found"
+msgstr "Keine Sprachpakete gefunden"
 
-msgid "This key combination is not valid."
-msgstr "Diese Tastenkombination ist ungültig."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Konnte keine TTS-Sprachpakete in den Pacman-Repos finden."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Verwenden Sie Ctrl, Alt oder Super zusammen mit einer Taste, damit normales Tippen nicht beeinträchtigt wird."
+msgid "High quality offline voices"
+msgstr "Hochwertige Offline-Stimmen"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Diese Tastenkombination wird von der Arbeitsumgebung nicht unterstützt."
+msgid "Neural network voices — natural sounding"
+msgstr "Neuronale Stimmen — natürlicher Klang"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} wird bereits verwendet von: {names}. Wählen Sie ein anderes Tastenkürzel."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Leichter mehrsprachiger Synthesizer"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Die Arbeitsumgebung hat das Tastenkürzel nicht angenommen. Läuft der KDE-Dienst für globale Tastenkürzel?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Die Arbeitsumgebung hat das neue Tastenkürzel nicht bestätigt."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Das Tastenkürzel wurde gespeichert, aber die Arbeitsumgebung konnte es noch nicht bestätigen."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Das Tastenkürzel konnte in dieser Arbeitsumgebung nicht registriert werden. Fügen Sie es in den Tastatureinstellungen des Systems mit dem Befehl biglinux-tts-speak hinzu."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Die Installation wurde abgebrochen: Das Administratorpasswort wurde nicht bestätigt."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neurales TTS — hochwertige mehrsprachige Stimmen (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} ist in Ihren Paketquellen nicht verfügbar. Aktualisieren Sie das System (sudo pacman -Syu) und versuchen Sie es erneut."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Ein anderes Programm installiert oder aktualisiert gerade Pakete. Warten Sie, bis es fertig ist, und versuchen Sie es erneut."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Die Pakete konnten nicht heruntergeladen werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+msgid "Install {name}"
+msgstr "{name} installieren"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} steht in Konflikt mit installierten Dateien oder Paketen. Siehe Details."
+msgid "Remove {name}"
+msgstr "{name} entfernen"
+
+msgid "Installed"
+msgstr "Installiert"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Nicht genug freier Speicherplatz, um {packages} zu installieren."
+msgid "Remove {name}?"
+msgstr "{name} entfernen?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Die Stimme steht dann nicht mehr zum Vorlesen zur Verfügung. Sie können sie später erneut installieren."
+
+msgid "Remove"
+msgstr "Entfernen"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} konnte nicht installiert werden. Siehe Details."
-
-msgid "Nothing to install."
-msgstr "Nichts zu installieren."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec ist nicht installiert (Paket polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Die Installation hat zu lange gedauert und wurde abgebrochen."
+msgid "Downloading {name}…"
+msgstr "{name} wird heruntergeladen…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} konnte nicht aus dem AUR gebaut werden. Siehe Details."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} wird heruntergeladen… {done} von {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Markierten Text vorlesen oder stoppen"
+msgid "Operation timed out"
+msgstr "Zeitüberschreitung der Operation"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro ist nicht installiert. Installieren Sie das Paket biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec oder pacman nicht gefunden"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Das Kokoro-Stimmmodell fehlt. Installieren Sie das Paket biglinux-kokoro-tts neu."
+msgid "Download cancelled"
+msgstr "Download abgebrochen"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Keine Kokoro-Stimmen gefunden. Öffnen Sie die Stimmenverwaltung, um eine Stimme herunterzuladen."
+msgid "Failed"
+msgstr "Fehlgeschlagen"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Diese Kokoro-Stimme ist nicht installiert. Öffnen Sie die Stimmenverwaltung, um sie herunterzuladen."
+msgid "Removal Failed"
+msgstr "Entfernung fehlgeschlagen"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Unbekannte Stimme: {voice_id}"
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Ungültige Stimmen-ID: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Die Stimmdatei ist größer als erwartet."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "unvollständiger Download ({received} von {total} Bytes)"
+msgid "Play a sample of {name}"
+msgstr "Hörprobe von {name} abspielen"
 
-msgid "empty response"
-msgstr "leere Antwort"
+msgid "Stop the sample"
+msgstr "Hörprobe stoppen"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Die Stimme konnte nicht heruntergeladen werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Die heruntergeladene Stimmdatei ist beschädigt. Versuchen Sie es erneut. ({error})"
+msgid "The sample could not be played."
+msgstr "Die Hörprobe konnte nicht abgespielt werden."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Nicht genug Speicherplatz, um die Stimme zu installieren ({size} MB benötigt)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Ordner für Benutzerstimmen kann nicht erstellt werden: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Stimme konnte nicht hinzugefügt werden: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Basisstimme kann nicht entfernt werden"
-
-msgid "No user voices installed"
-msgstr "Keine Benutzerstimmen installiert"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Stimme konnte nicht entfernt werden: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Audio konnte nicht abgespielt werden. Prüfen Sie, ob alsa-utils (aplay) installiert ist."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} konnte nicht gestartet werden. Prüfen Sie, ob es installiert ist."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice ist nicht installiert. Installieren Sie das Paket rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng konnte diesen Text nicht lesen. Prüfen Sie, ob espeak-ng installiert ist."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Die ausgewählte Piper-Stimme ist nicht installiert. Wählen Sie in der Stimmenverwaltung eine andere Stimme."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper konnte diesen Text nicht lesen. Versuchen Sie eine andere Stimme."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} ist beim Lesen des Textes abgestürzt."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} wurde mit einem Fehler beendet und konnte den Text nicht lesen."
-
-msgid "Extra low quality"
-msgstr "Sehr niedrige Qualität"
-
-msgid "Low quality"
-msgstr "Niedrige Qualität"
-
-msgid "Medium quality"
-msgstr "Mittlere Qualität"
-
-msgid "High quality"
-msgstr "Hohe Qualität"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Den markierten Text vorlesen"
-
-msgid "Could not read the text."
-msgstr "Der Text konnte nicht gelesen werden."
-
-msgid "Reading text"
-msgstr "Text wird gelesen"
-
-msgid "Playing…"
-msgstr "Spielen…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Installieren Sie wl-clipboard (Wayland) oder xclip (X11), damit markierter Text gelesen werden kann."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Markieren Sie zuerst Text und drücken Sie dann das Tastenkürzel."
-
-msgid "No text selected"
-msgstr "Kein Text markiert"
-
-msgid "Read text"
-msgstr "Text lesen"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Die Hörprobe konnte nicht abgespielt werden: {program} ist nicht installiert."
 
 msgid "Play"
 msgstr "Spielen"
 
-msgid "Pause"
-msgstr "Pause"
-
 msgid "Stop"
 msgstr "Stopp"
 
-msgid "Paused"
-msgstr "Pausiert"
-
-msgid "BigLinux Team"
-msgstr "BigLinux-Team"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS wandelt markierten oder eingegebenen Text mit lokalen Stimmen, globalen Tastenkürzeln und präziser Wiedergabesteuerung in Sprache um."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS begann 2021 als webbasiertes Werkzeug und entwickelte sich zu einer nativen GTK4-Anwendung mit mehreren Sprach-Engines, Stimmenverwaltung und einer Audio-Engine in Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Das Tastenkürzel konnte nicht registriert werden."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Text markieren und {shortcut} drücken, um ihn anzuhören"
-
-msgid "Text-to-speech assistant"
-msgstr "Text-zu-Sprache-Assistent"
-
 msgid "Playback position"
 msgstr "Wiedergabeposition"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Heute, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Gestern, {time}"
+
+msgid "Select this reading"
+msgstr "Diese Lesung auswählen"
+
+msgid "(text not kept)"
+msgstr "(Text nicht behalten)"
+
+msgid "Show more"
+msgstr "Mehr anzeigen"
+
+msgid "Copy text"
+msgstr "Text kopieren"
+
+msgid "Read again with the current voice"
+msgstr "Mit der aktuellen Stimme erneut vorlesen"
+
+msgid "More actions"
+msgstr "Weitere Aktionen"
+
+msgid "Stopped"
+msgstr "Gestoppt"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Reading stopped before the end"
+msgstr "Lesung vor dem Ende angehalten"
+
+msgid "The engine failed during this reading"
+msgstr "Die Engine ist während dieser Lesung fehlgeschlagen"
+
+msgid "Audio not kept for this reading"
+msgstr "Audio dieser Lesung nicht behalten"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine}-Lesung, {when}"
+
+msgid "Save audio as…"
+msgstr "Audio speichern unter…"
+
+msgid "Open file location"
+msgstr "Dateipfad öffnen"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Show less"
+msgstr "Weniger anzeigen"
+
+msgid "Text copied"
+msgstr "Text kopiert"
+
+msgid "Save audio as"
+msgstr "Audio speichern unter"
+
+msgid "Audio saved"
+msgstr "Audio gespeichert"
+
+msgid "Could not save the audio"
+msgstr "Audio konnte nicht gespeichert werden"
+
+msgid "History"
+msgstr "Verlauf"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Speichern ist aus: Neue Lesungen werden nicht behalten."
+
+msgid "Turn On"
+msgstr "Einschalten"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Text, Stimme, Engine oder Datum suchen…"
+
+msgid "All dates"
+msgstr "Alle Zeiträume"
+
+msgid "Today"
+msgstr "Heute"
+
+msgid "Yesterday"
+msgstr "Gestern"
+
+msgid "Last 7 days"
+msgstr "Letzte 7 Tage"
+
+msgid "Filter by date"
+msgstr "Nach Datum filtern"
+
+msgid "All engines"
+msgstr "Alle Engines"
+
+msgid "Filter by engine"
+msgstr "Nach Engine filtern"
+
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+msgid "Sort order"
+msgstr "Sortierung"
+
+msgid "Show as grid"
+msgstr "Als Raster anzeigen"
+
+msgid "Select readings"
+msgstr "Lesungen auswählen"
+
+msgid "Select All"
+msgstr "Alles auswählen"
+
+msgid "Deselect All"
+msgstr "Alle abwählen"
+
+msgid "Save the selected readings to a folder"
+msgstr "Ausgewählte Lesungen in einem Ordner speichern"
+
+msgid "Save selected"
+msgstr "Auswahl speichern"
+
+msgid "Delete selected"
+msgstr "Ausgewählte löschen"
+
+msgid "History entries"
+msgstr "Verlaufseinträge"
+
+msgid "The history could not be read"
+msgstr "Der Verlauf konnte nicht gelesen werden"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Prüfen Sie die Berechtigungen des Ordners {folder}."
+
+msgid "No readings found"
+msgstr "Keine Lesungen gefunden"
+
+msgid "Try other words or another date or engine."
+msgstr "Versuchen Sie andere Wörter, ein anderes Datum oder eine andere Engine."
+
+msgid "Clear Filters"
+msgstr "Filter zurücksetzen"
+
+msgid "No readings yet"
+msgstr "Noch keine Lesungen"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Alles, was Sie anhören, erscheint hier, mit Audio. Es wird nur auf diesem Computer gespeichert, in {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Speichern ist aus. Schalten Sie es ein, um zu behalten, was Sie anhören, mit Audio – nur auf diesem Computer, in {folder}."
+
+msgid "Turn On History"
+msgstr "Verlauf einschalten"
+
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+msgid "Show as list"
+msgstr "Als Liste anzeigen"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Ausgewählt: {count}"
+
+msgid "Reading deleted"
+msgstr "Lesung gelöscht"
+
+msgid "Undo"
+msgstr "Rückgängig"
+
+msgid "Delete the selected readings?"
+msgstr "Ausgewählte Lesungen löschen?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Lesungen: {count}. Ihre Audio- und Textdateien werden in den Papierkorb verschoben."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "In den Papierkorb verschoben: {count}"
+
+msgid "Save the selected readings"
+msgstr "Ausgewählte Lesungen speichern"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Gespeichert in {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Kein Tastenkürzel"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Tastenkürzel: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Zuerst {engine}-Stimmen installieren"
 msgid "Neural"
 msgstr "Neural"
 
+msgid "High quality"
+msgstr "Hohe Qualität"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Verfügbare Stimmen: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper ist nicht verfügbar"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "In Ihren Paketquellen wurde kein Piper-Stimmpaket gefunden ({packages}). Aktualisieren Sie das System (sudo pacman -Syu) und versuchen Sie es erneut."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper bietet natürliche neuronale Stimmen. Diese Pakete werden installiert:"
@@ -769,12 +790,18 @@ msgstr "Text zum Testen eingeben"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Lautstärke ist auf Null — wird für den Test auf das Minimum erhöht"
 
+msgid "Loading voice…"
+msgstr "Stimme wird geladen…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} wird vorbereitet. Die Sprachausgabe beginnt gleich."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Die Stimme wird vorbereitet. Die Sprachausgabe beginnt gleich."
+
+msgid "Speaking…"
+msgstr "Spricht…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Drücken Sie erneut {shortcut}, um zu stoppen."
 msgid "Use Stop to end the reading."
 msgstr "Verwenden Sie Stopp, um das Vorlesen zu beenden."
 
+msgid "Could not read the text"
+msgstr "Der Text konnte nicht gelesen werden"
+
 msgid "The speech engine reported a problem."
 msgstr "Die Sprach-Engine hat ein Problem gemeldet."
-
-msgid "Stopped"
-msgstr "Gestoppt"
 
 msgid "Reading was stopped."
 msgstr "Das Vorlesen wurde gestoppt."
@@ -847,9 +874,6 @@ msgstr "Wird geladen"
 
 msgid "Speaking"
 msgstr "Spricht"
-
-msgid "Error"
-msgstr "Fehler"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -961,290 +985,266 @@ msgstr "Dialog beim Start anzeigen"
 msgid "Let's Start"
 msgstr "Lass uns anfangen"
 
-msgid "Unknown"
-msgstr "Unbekannt"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Die Installation wurde abgebrochen: Das Administratorpasswort wurde nicht bestätigt."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Heute, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} ist in Ihren Paketquellen nicht verfügbar. Aktualisieren Sie das System (sudo pacman -Syu) und versuchen Sie es erneut."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Ein anderes Programm installiert oder aktualisiert gerade Pakete. Warten Sie, bis es fertig ist, und versuchen Sie es erneut."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Die Pakete konnten nicht heruntergeladen werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Gestern, {time}"
-
-msgid "Select this reading"
-msgstr "Diese Lesung auswählen"
-
-msgid "(text not kept)"
-msgstr "(Text nicht behalten)"
-
-msgid "Show more"
-msgstr "Mehr anzeigen"
-
-msgid "Copy text"
-msgstr "Text kopieren"
-
-msgid "Read again with the current voice"
-msgstr "Mit der aktuellen Stimme erneut vorlesen"
-
-msgid "More actions"
-msgstr "Weitere Aktionen"
-
-msgid "Reading stopped before the end"
-msgstr "Lesung vor dem Ende angehalten"
-
-msgid "The engine failed during this reading"
-msgstr "Die Engine ist während dieser Lesung fehlgeschlagen"
-
-msgid "Audio not kept for this reading"
-msgstr "Audio dieser Lesung nicht behalten"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} steht in Konflikt mit installierten Dateien oder Paketen. Siehe Details."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine}-Lesung, {when}"
-
-msgid "Save audio as…"
-msgstr "Audio speichern unter…"
-
-msgid "Open file location"
-msgstr "Dateipfad öffnen"
-
-msgid "Delete"
-msgstr "Löschen"
-
-msgid "Show less"
-msgstr "Weniger anzeigen"
-
-msgid "Text copied"
-msgstr "Text kopiert"
-
-msgid "Save audio as"
-msgstr "Audio speichern unter"
-
-msgid "Audio saved"
-msgstr "Audio gespeichert"
-
-msgid "Could not save the audio"
-msgstr "Audio konnte nicht gespeichert werden"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Speichern ist aus: Neue Lesungen werden nicht behalten."
-
-msgid "Turn On"
-msgstr "Einschalten"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Text, Stimme, Engine oder Datum suchen…"
-
-msgid "All dates"
-msgstr "Alle Zeiträume"
-
-msgid "Today"
-msgstr "Heute"
-
-msgid "Yesterday"
-msgstr "Gestern"
-
-msgid "Last 7 days"
-msgstr "Letzte 7 Tage"
-
-msgid "Filter by date"
-msgstr "Nach Datum filtern"
-
-msgid "All engines"
-msgstr "Alle Engines"
-
-msgid "Filter by engine"
-msgstr "Nach Engine filtern"
-
-msgid "Newest first"
-msgstr "Neueste zuerst"
-
-msgid "Sort order"
-msgstr "Sortierung"
-
-msgid "Show as grid"
-msgstr "Als Raster anzeigen"
-
-msgid "Select readings"
-msgstr "Lesungen auswählen"
-
-msgid "Select All"
-msgstr "Alles auswählen"
-
-msgid "Deselect All"
-msgstr "Alle abwählen"
-
-msgid "Save the selected readings to a folder"
-msgstr "Ausgewählte Lesungen in einem Ordner speichern"
-
-msgid "Save selected"
-msgstr "Auswahl speichern"
-
-msgid "Delete selected"
-msgstr "Ausgewählte löschen"
-
-msgid "History entries"
-msgstr "Verlaufseinträge"
-
-msgid "The history could not be read"
-msgstr "Der Verlauf konnte nicht gelesen werden"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Nicht genug freier Speicherplatz, um {packages} zu installieren."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Prüfen Sie die Berechtigungen des Ordners {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} konnte nicht installiert werden. Siehe Details."
 
-msgid "No readings found"
-msgstr "Keine Lesungen gefunden"
+msgid "Nothing to install."
+msgstr "Nichts zu installieren."
 
-msgid "Try other words or another date or engine."
-msgstr "Versuchen Sie andere Wörter, ein anderes Datum oder eine andere Engine."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec ist nicht installiert (Paket polkit)."
 
-msgid "Clear Filters"
-msgstr "Filter zurücksetzen"
-
-msgid "No readings yet"
-msgstr "Noch keine Lesungen"
+msgid "The installation took too long and was stopped."
+msgstr "Die Installation hat zu lange gedauert und wurde abgebrochen."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Alles, was Sie anhören, erscheint hier, mit Audio. Es wird nur auf diesem Computer gespeichert, in {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} konnte nicht aus dem AUR gebaut werden. Siehe Details."
+
+msgid "This key combination is not valid."
+msgstr "Diese Tastenkombination ist ungültig."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Verwenden Sie Ctrl, Alt oder Super zusammen mit einer Taste, damit normales Tippen nicht beeinträchtigt wird."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Diese Tastenkombination wird von der Arbeitsumgebung nicht unterstützt."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Speichern ist aus. Schalten Sie es ein, um zu behalten, was Sie anhören, mit Audio – nur auf diesem Computer, in {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} wird bereits verwendet von: {names}. Wählen Sie ein anderes Tastenkürzel."
 
-msgid "Turn On History"
-msgstr "Verlauf einschalten"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Die Arbeitsumgebung hat das Tastenkürzel nicht angenommen. Läuft der KDE-Dienst für globale Tastenkürzel?"
 
-msgid "Oldest first"
-msgstr "Älteste zuerst"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Die Arbeitsumgebung hat das neue Tastenkürzel nicht bestätigt."
 
-msgid "Show as list"
-msgstr "Als Liste anzeigen"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Das Tastenkürzel wurde gespeichert, aber die Arbeitsumgebung konnte es noch nicht bestätigen."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Ausgewählt: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Das Tastenkürzel konnte in dieser Arbeitsumgebung nicht registriert werden. Fügen Sie es in den Tastatureinstellungen des Systems mit dem Befehl biglinux-tts-speak hinzu."
 
-msgid "Reading deleted"
-msgstr "Lesung gelöscht"
+msgid "Extra low quality"
+msgstr "Sehr niedrige Qualität"
 
-msgid "Undo"
-msgstr "Rückgängig"
+msgid "Low quality"
+msgstr "Niedrige Qualität"
 
-msgid "Delete the selected readings?"
-msgstr "Ausgewählte Lesungen löschen?"
+msgid "Medium quality"
+msgstr "Mittlere Qualität"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Lesungen: {count}. Ihre Audio- und Textdateien werden in den Papierkorb verschoben."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro ist nicht installiert. Installieren Sie das Paket biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "In den Papierkorb verschoben: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Das Kokoro-Stimmmodell fehlt. Installieren Sie das Paket biglinux-kokoro-tts neu."
 
-msgid "Save the selected readings"
-msgstr "Ausgewählte Lesungen speichern"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Keine Kokoro-Stimmen gefunden. Öffnen Sie die Stimmenverwaltung, um eine Stimme herunterzuladen."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Gespeichert in {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Kein Tastenkürzel"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Diese Kokoro-Stimme ist nicht installiert. Öffnen Sie die Stimmenverwaltung, um sie herunterzuladen."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Tastenkürzel: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper-Engine"
-
-msgid "Voice Manager"
-msgstr "Sprach-Manager"
-
-msgid "Search voices by name or language…"
-msgstr "Stimmen nach Name oder Sprache suchen…"
-
-msgid "Loading available voices…"
-msgstr "Verfügbare Stimmen werden geladen…"
-
-msgid "No Voice Packages Found"
-msgstr "Keine Sprachpakete gefunden"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Konnte keine TTS-Sprachpakete in den Pacman-Repos finden."
-
-msgid "High quality offline voices"
-msgstr "Hochwertige Offline-Stimmen"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Neuronale Stimmen — natürlicher Klang"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Leichter mehrsprachiger Synthesizer"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neurales TTS — hochwertige mehrsprachige Stimmen (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Unbekannte Stimme: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "{name} installieren"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Ungültige Stimmen-ID: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Die Stimmdatei ist größer als erwartet."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "{name} entfernen"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "unvollständiger Download ({received} von {total} Bytes)"
 
-msgid "Installed"
-msgstr "Installiert"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "{name} entfernen?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Die Stimme steht dann nicht mehr zum Vorlesen zur Verfügung. Sie können sie später erneut installieren."
-
-msgid "Remove"
-msgstr "Entfernen"
+msgid "empty response"
+msgstr "leere Antwort"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} wird heruntergeladen…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Die Stimme konnte nicht heruntergeladen werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} wird heruntergeladen… {done} von {total} KB"
-
-msgid "Operation timed out"
-msgstr "Zeitüberschreitung der Operation"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec oder pacman nicht gefunden"
-
-msgid "Download cancelled"
-msgstr "Download abgebrochen"
-
-msgid "Failed"
-msgstr "Fehlgeschlagen"
-
-msgid "Removal Failed"
-msgstr "Entfernung fehlgeschlagen"
-
-msgid "Unknown error"
-msgstr "Unbekannter Fehler"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Die heruntergeladene Stimmdatei ist beschädigt. Versuchen Sie es erneut. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Hörprobe von {name} abspielen"
-
-msgid "Stop the sample"
-msgstr "Hörprobe stoppen"
-
-msgid "The sample could not be played."
-msgstr "Die Hörprobe konnte nicht abgespielt werden."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Nicht genug Speicherplatz, um die Stimme zu installieren ({size} MB benötigt)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Die Hörprobe konnte nicht abgespielt werden: {program} ist nicht installiert."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Ordner für Benutzerstimmen kann nicht erstellt werden: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Stimme konnte nicht hinzugefügt werden: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Basisstimme kann nicht entfernt werden"
+
+msgid "No user voices installed"
+msgstr "Keine Benutzerstimmen installiert"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Stimme konnte nicht entfernt werden: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Markierten Text vorlesen oder stoppen"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Audio konnte nicht abgespielt werden. Prüfen Sie, ob alsa-utils (aplay) installiert ist."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} konnte nicht gestartet werden. Prüfen Sie, ob es installiert ist."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice ist nicht installiert. Installieren Sie das Paket rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng konnte diesen Text nicht lesen. Prüfen Sie, ob espeak-ng installiert ist."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Die ausgewählte Piper-Stimme ist nicht installiert. Wählen Sie in der Stimmenverwaltung eine andere Stimme."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper konnte diesen Text nicht lesen. Versuchen Sie eine andere Stimme."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} ist beim Lesen des Textes abgestürzt."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} wurde mit einem Fehler beendet und konnte den Text nicht lesen."
+
+msgid "Read the selected text aloud"
+msgstr "Den markierten Text vorlesen"
+
+msgid "Could not read the text."
+msgstr "Der Text konnte nicht gelesen werden."
+
+msgid "Reading text"
+msgstr "Text wird gelesen"
+
+msgid "Playing…"
+msgstr "Spielen…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Installieren Sie wl-clipboard (Wayland) oder xclip (X11), damit markierter Text gelesen werden kann."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Markieren Sie zuerst Text und drücken Sie dann das Tastenkürzel."
+
+msgid "No text selected"
+msgstr "Kein Text markiert"
+
+msgid "Read text"
+msgstr "Text lesen"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Quit"
+msgstr "Beenden"
+
+msgid "Paused"
+msgstr "Pausiert"
+
+msgid "BigLinux Team"
+msgstr "BigLinux-Team"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS wandelt markierten oder eingegebenen Text mit lokalen Stimmen, globalen Tastenkürzeln und präziser Wiedergabesteuerung in Sprache um."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS begann 2021 als webbasiertes Werkzeug und entwickelte sich zu einer nativen GTK4-Anwendung mit mehreren Sprach-Engines, Stimmenverwaltung und einer Audio-Engine in Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Das Tastenkürzel konnte nicht registriert werden."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Text markieren und {shortcut} drücken, um ihn anzuhören"
+
+msgid "Text-to-speech assistant"
+msgstr "Text-zu-Sprache-Assistent"
+
+msgid "Show settings"
+msgstr "Einstellungen anzeigen"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Text narrator"
+msgstr "Textvorleser"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Das Tastenkürzel ist nicht aktiv — öffnen Sie die erweiterten Optionen, um es zu beheben"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Text markieren und {key} drücken, um ihn vorlesen zu lassen"
+
+msgid "Show tray icon"
+msgstr "Symbol im Systembereich anzeigen"
+
+msgid "Restore Defaults…"
+msgstr "Standardwerte wiederherstellen…"
+
+msgid "Welcome"
+msgstr "Willkommen"
+
+msgid "About BigLinux TTS"
+msgstr "Über BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Hauptmenü"
+
+msgid "Restore settings?"
+msgstr "Einstellungen zurücksetzen?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Dies setzt alle Einstellungen auf die ursprünglichen Standardwerte zurück."
+
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Text-zu-Sprache — Markierten Text vorlesen"
+
+msgid "Enable debug logging"
+msgstr "Debug-Protokollierung aktivieren"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

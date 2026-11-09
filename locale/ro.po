@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux text-la-vorbire — Citește cu voce tare textul selectat"
+msgid "Piper engine"
+msgstr "Motorul Piper"
 
-msgid "Enable debug logging"
-msgstr "Activează jurnalizarea de depanare"
+msgid "Voice Manager"
+msgstr "Manager de voce"
 
-msgid "Settings"
-msgstr "Setări"
+msgid "Search voices by name or language…"
+msgstr "Căutați voci după nume sau limbă…"
 
-msgid "Show settings"
-msgstr "Afișează setările"
-
-msgid "Back"
-msgstr "Înapoi"
-
-msgid "Text narrator"
-msgstr "Narator de text"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Scurtătura nu este activă — deschideți Opțiuni avansate pentru a o remedia"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Selectați un text și apăsați {key} pentru a-l citi cu voce tare"
-
-msgid "History"
-msgstr "Istoric"
-
-msgid "Loading voice…"
-msgstr "Se încarcă vocea…"
-
-msgid "Speaking…"
-msgstr "Se vorbește…"
-
-msgid "Could not read the text"
-msgstr "Textul nu a putut fi citit"
-
-msgid "Show tray icon"
-msgstr "Afișează pictograma în tava de sistem"
-
-msgid "Restore Defaults…"
-msgstr "Restabilește valorile implicite…"
-
-msgid "Welcome"
-msgstr "Bine ai venit"
-
-msgid "About BigLinux TTS"
-msgstr "Despre BigLinux TTS"
-
-msgid "Quit"
-msgstr "Ieșire"
-
-msgid "Main menu"
-msgstr "Meniu principal"
-
-msgid "Restore settings?"
-msgstr "Restabiliți setările?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Aceasta va readuce toate ajustările la valorile implicite originale."
+msgid "Loading available voices…"
+msgstr "Încărcarea vocilor disponibile…"
 
 msgid "Cancel"
 msgstr "Anulează"
 
-msgid "Restore"
-msgstr "Restabilește"
+msgid "No Voice Packages Found"
+msgstr "Nu au fost găsite pachete de voce."
 
-msgid "This key combination is not valid."
-msgstr "Această combinație de taste nu este validă."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Nu s-au găsit pachete de voce TTS în repositoarele pacman."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Folosiți Ctrl, Alt sau Super împreună cu o tastă, ca să nu fie afectată tastarea obișnuită."
+msgid "High quality offline voices"
+msgstr "Voci offline de înaltă calitate"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Această combinație de taste nu este acceptată de mediul desktop."
+msgid "Neural network voices — natural sounding"
+msgstr "Voci ale rețelelor neuronale — sunet natural"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} este deja folosită de: {names}. Alegeți altă scurtătură."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Sintetizator ușor multi-lingvistic"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Mediul desktop nu a acceptat scurtătura. Rulează serviciul de scurtături globale KDE?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Mediul desktop nu a confirmat noua scurtătură."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Scurtătura a fost salvată, dar mediul desktop nu a putut-o confirma încă."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Scurtătura nu a putut fi înregistrată în acest mediu desktop. Adăugați-o în setările de tastatură ale sistemului cu comanda biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Instalarea a fost anulată: parola de administrator nu a fost confirmată."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "TTS neural — voci multilingve de înaltă calitate (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} nu este disponibil în depozitele dumneavoastră. Actualizați sistemul (sudo pacman -Syu) și încercați din nou."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Un alt program instalează sau actualizează pachete. Așteptați să termine și încercați din nou."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Pachetele nu au putut fi descărcate. Verificați conexiunea la internet și încercați din nou."
+msgid "Install {name}"
+msgstr "Instalează {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} intră în conflict cu fișiere sau pachete instalate. Consultați detaliile."
+msgid "Remove {name}"
+msgstr "Elimină {name}"
+
+msgid "Installed"
+msgstr "Instalat"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Spațiu liber pe disc insuficient pentru a instala {packages}."
+msgid "Remove {name}?"
+msgstr "Eliminați {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Vocea nu va mai fi disponibilă pentru citire. O puteți instala din nou mai târziu."
+
+msgid "Remove"
+msgstr "Elimină"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} nu a putut fi instalat. Consultați detaliile."
-
-msgid "Nothing to install."
-msgstr "Nimic de instalat."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec nu este instalat (pachetul polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Instalarea a durat prea mult și a fost oprită."
+msgid "Downloading {name}…"
+msgstr "Se descarcă {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} nu a putut fi compilat din AUR. Vezi detaliile."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Se descarcă {name}… {done} din {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Citește sau oprește textul selectat"
+msgid "Operation timed out"
+msgstr "Operațiune expirată"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro nu este instalat. Instalați pachetul biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec sau pacman nu au fost găsite"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Modelul de voce Kokoro lipsește. Reinstalați pachetul biglinux-kokoro-tts."
+msgid "Download cancelled"
+msgstr "Descărcare anulată"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Nu s-au găsit voci Kokoro. Deschideți Managerul de voci pentru a descărca o voce."
+msgid "Failed"
+msgstr "Eșuat"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Această voce Kokoro nu este instalată. Deschideți Managerul de voci pentru a o descărca."
+msgid "Removal Failed"
+msgstr "Eliminare eșuată"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Voce necunoscută: {voice_id}"
+msgid "Unknown error"
+msgstr "Eroare necunoscută"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "ID de voce nevalid: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Fișierul vocii este mai mare decât era de așteptat."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "descărcare incompletă ({received} din {total} octeți)"
+msgid "Play a sample of {name}"
+msgstr "Redă o mostră din {name}"
 
-msgid "empty response"
-msgstr "răspuns gol"
+msgid "Stop the sample"
+msgstr "Oprește mostra"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Vocea nu a putut fi descărcată. Verificați conexiunea la internet și încercați din nou. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Fișierul vocii descărcate este deteriorat. Încercați din nou. ({error})"
+msgid "The sample could not be played."
+msgstr "Mostra nu a putut fi redată."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Spațiu pe disc insuficient pentru instalarea vocii (sunt necesari {size} MB)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Nu se poate crea directorul vocilor utilizatorului: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Adăugarea vocii a eșuat: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Vocea de bază nu poate fi eliminată"
-
-msgid "No user voices installed"
-msgstr "Nicio voce de utilizator instalată"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Eliminarea vocii a eșuat: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Sunetul nu a putut fi redat. Verificați dacă alsa-utils (aplay) este instalat."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} nu a putut porni. Verificați dacă este instalat."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice nu este instalat. Instalați pachetul rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng nu a putut citi acest text. Verificați dacă espeak-ng este instalat."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Vocea Piper selectată nu este instalată. Alegeți altă voce în Managerul de voci."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper nu a putut citi acest text. Încercați altă voce."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} s-a închis neașteptat în timpul citirii textului."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} s-a oprit cu o eroare și nu a putut citi textul."
-
-msgid "Extra low quality"
-msgstr "Calitate foarte scăzută"
-
-msgid "Low quality"
-msgstr "Calitate scăzută"
-
-msgid "Medium quality"
-msgstr "Calitate medie"
-
-msgid "High quality"
-msgstr "Calitate înaltă"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Citește cu voce tare textul selectat"
-
-msgid "Could not read the text."
-msgstr "Textul nu a putut fi citit."
-
-msgid "Reading text"
-msgstr "Se citește textul"
-
-msgid "Playing…"
-msgstr "Se joacă…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Instalați wl-clipboard (Wayland) sau xclip (X11) pentru ca textul selectat să poată fi citit."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Selectați mai întâi un text, apoi apăsați scurtătura."
-
-msgid "No text selected"
-msgstr "Niciun text selectat"
-
-msgid "Read text"
-msgstr "Citiți textul"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Mostra nu a putut fi redată: {program} nu este instalat."
 
 msgid "Play"
 msgstr "Joacă"
 
-msgid "Pause"
-msgstr "Pauză"
-
 msgid "Stop"
 msgstr "Oprire"
 
-msgid "Paused"
-msgstr "În pauză"
-
-msgid "BigLinux Team"
-msgstr "Echipa BigLinux"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS transformă textul selectat sau tastat în vorbire, cu voci locale, scurtături globale și controale precise de redare."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS a început în 2021 ca instrument web și a evoluat într-o aplicație GTK4 nativă, cu mai multe motoare de vorbire, gestionarea vocilor și un motor audio scris în Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Scurtătura nu a putut fi înregistrată."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Selectați un text și apăsați {shortcut} pentru a-l asculta"
-
-msgid "Text-to-speech assistant"
-msgstr "Asistent text-la-vorbire"
-
 msgid "Playback position"
 msgstr "Poziția redării"
+
+msgid "Pause"
+msgstr "Pauză"
+
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Azi, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Ieri, {time}"
+
+msgid "Select this reading"
+msgstr "Selectează această citire"
+
+msgid "(text not kept)"
+msgstr "(text nepăstrat)"
+
+msgid "Show more"
+msgstr "Afișează mai mult"
+
+msgid "Copy text"
+msgstr "Copiază textul"
+
+msgid "Read again with the current voice"
+msgstr "Citește din nou cu vocea curentă"
+
+msgid "More actions"
+msgstr "Mai multe acțiuni"
+
+msgid "Stopped"
+msgstr "Oprit"
+
+msgid "Error"
+msgstr "Eroare"
+
+msgid "Reading stopped before the end"
+msgstr "Citire oprită înainte de final"
+
+msgid "The engine failed during this reading"
+msgstr "Motorul a eșuat în timpul acestei citiri"
+
+msgid "Audio not kept for this reading"
+msgstr "Audio nepăstrat pentru această citire"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "Citire cu {engine}, {when}"
+
+msgid "Save audio as…"
+msgstr "Salvează audio ca…"
+
+msgid "Open file location"
+msgstr "Deschide locația fișierului"
+
+msgid "Delete"
+msgstr "Șterge"
+
+msgid "Show less"
+msgstr "Afișează mai puțin"
+
+msgid "Text copied"
+msgstr "Text copiat"
+
+msgid "Save audio as"
+msgstr "Salvează audio ca"
+
+msgid "Audio saved"
+msgstr "Audio salvat"
+
+msgid "Could not save the audio"
+msgstr "Nu s-a putut salva audio"
+
+msgid "History"
+msgstr "Istoric"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Salvarea este oprită: citirile noi nu sunt păstrate."
+
+msgid "Turn On"
+msgstr "Pornește"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Căutați text, voce, motor sau dată…"
+
+msgid "All dates"
+msgstr "Orice dată"
+
+msgid "Today"
+msgstr "Azi"
+
+msgid "Yesterday"
+msgstr "Ieri"
+
+msgid "Last 7 days"
+msgstr "Ultimele 7 zile"
+
+msgid "Filter by date"
+msgstr "Filtrează după dată"
+
+msgid "All engines"
+msgstr "Toate motoarele"
+
+msgid "Filter by engine"
+msgstr "Filtrează după motor"
+
+msgid "Newest first"
+msgstr "Cele mai noi întâi"
+
+msgid "Sort order"
+msgstr "Ordine de sortare"
+
+msgid "Show as grid"
+msgstr "Afișează ca grilă"
+
+msgid "Select readings"
+msgstr "Selectează citiri"
+
+msgid "Select All"
+msgstr "Selectați tot"
+
+msgid "Deselect All"
+msgstr "Deselectează tot"
+
+msgid "Save the selected readings to a folder"
+msgstr "Salvează citirile selectate într-un dosar"
+
+msgid "Save selected"
+msgstr "Salvează selecția"
+
+msgid "Delete selected"
+msgstr "Șterge selecția"
+
+msgid "History entries"
+msgstr "Intrări în istoric"
+
+msgid "The history could not be read"
+msgstr "Istoricul nu a putut fi citit"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Verificați permisiunile dosarului {folder}."
+
+msgid "No readings found"
+msgstr "Nu s-au găsit citiri"
+
+msgid "Try other words or another date or engine."
+msgstr "Încercați alte cuvinte, altă dată sau alt motor."
+
+msgid "Clear Filters"
+msgstr "Golește filtrele"
+
+msgid "No readings yet"
+msgstr "Încă nu există citiri"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Tot ce ascultați va apărea aici, cu audio. Este stocat doar pe acest calculator, în {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Salvarea este oprită. Porniți-o pentru a păstra ce ascultați, cu audio — doar pe acest calculator, în {folder}."
+
+msgid "Turn On History"
+msgstr "Pornește istoricul"
+
+msgid "Oldest first"
+msgstr "Cele mai vechi întâi"
+
+msgid "Show as list"
+msgstr "Afișează ca listă"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Selectate: {count}"
+
+msgid "Reading deleted"
+msgstr "Citire ștearsă"
+
+msgid "Undo"
+msgstr "Anulează"
+
+msgid "Delete the selected readings?"
+msgstr "Ștergeți citirile selectate?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Citiri: {count}. Fișierele lor audio și text sunt mutate la coșul de gunoi."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Mutate la coșul de gunoi: {count}"
+
+msgid "Save the selected readings"
+msgstr "Salvează citirile selectate"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Salvate în {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Nicio scurtătură"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Scurtătură: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Instalați mai întâi vocile {engine}"
 msgid "Neural"
 msgstr "Neural"
 
+msgid "High quality"
+msgstr "Calitate înaltă"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Voci disponibile: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper nu este disponibil"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Nu s-a găsit niciun pachet de voci Piper în depozitele dumneavoastră ({packages}). Actualizați sistemul (sudo pacman -Syu) și încercați din nou."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper oferă voci neurale naturale. Vor fi instalate aceste pachete:"
@@ -769,12 +790,18 @@ msgstr "Introduceți text pentru testare"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Volumul este la zero — creșterea la minim pentru test."
 
+msgid "Loading voice…"
+msgstr "Se încarcă vocea…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "Se pregătește {voice}. Vorbirea începe imediat."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Se pregătește vocea. Vorbirea începe imediat."
+
+msgid "Speaking…"
+msgstr "Se vorbește…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Apăsați din nou {shortcut} pentru a opri."
 msgid "Use Stop to end the reading."
 msgstr "Folosiți Oprire pentru a încheia citirea."
 
+msgid "Could not read the text"
+msgstr "Textul nu a putut fi citit"
+
 msgid "The speech engine reported a problem."
 msgstr "Motorul de vorbire a raportat o problemă."
-
-msgid "Stopped"
-msgstr "Oprit"
 
 msgid "Reading was stopped."
 msgstr "Citirea a fost oprită."
@@ -847,9 +874,6 @@ msgstr "Se încarcă"
 
 msgid "Speaking"
 msgstr "Vorbește"
-
-msgid "Error"
-msgstr "Eroare"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Afișează dialogul la pornire"
 msgid "Let's Start"
 msgstr "Să începem"
 
-msgid "Unknown"
-msgstr "Necunoscut"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Instalarea a fost anulată: parola de administrator nu a fost confirmată."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Azi, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} nu este disponibil în depozitele dumneavoastră. Actualizați sistemul (sudo pacman -Syu) și încercați din nou."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Un alt program instalează sau actualizează pachete. Așteptați să termine și încercați din nou."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Pachetele nu au putut fi descărcate. Verificați conexiunea la internet și încercați din nou."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Ieri, {time}"
-
-msgid "Select this reading"
-msgstr "Selectează această citire"
-
-msgid "(text not kept)"
-msgstr "(text nepăstrat)"
-
-msgid "Show more"
-msgstr "Afișează mai mult"
-
-msgid "Copy text"
-msgstr "Copiază textul"
-
-msgid "Read again with the current voice"
-msgstr "Citește din nou cu vocea curentă"
-
-msgid "More actions"
-msgstr "Mai multe acțiuni"
-
-msgid "Reading stopped before the end"
-msgstr "Citire oprită înainte de final"
-
-msgid "The engine failed during this reading"
-msgstr "Motorul a eșuat în timpul acestei citiri"
-
-msgid "Audio not kept for this reading"
-msgstr "Audio nepăstrat pentru această citire"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} intră în conflict cu fișiere sau pachete instalate. Consultați detaliile."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "Citire cu {engine}, {when}"
-
-msgid "Save audio as…"
-msgstr "Salvează audio ca…"
-
-msgid "Open file location"
-msgstr "Deschide locația fișierului"
-
-msgid "Delete"
-msgstr "Șterge"
-
-msgid "Show less"
-msgstr "Afișează mai puțin"
-
-msgid "Text copied"
-msgstr "Text copiat"
-
-msgid "Save audio as"
-msgstr "Salvează audio ca"
-
-msgid "Audio saved"
-msgstr "Audio salvat"
-
-msgid "Could not save the audio"
-msgstr "Nu s-a putut salva audio"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Salvarea este oprită: citirile noi nu sunt păstrate."
-
-msgid "Turn On"
-msgstr "Pornește"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Căutați text, voce, motor sau dată…"
-
-msgid "All dates"
-msgstr "Orice dată"
-
-msgid "Today"
-msgstr "Azi"
-
-msgid "Yesterday"
-msgstr "Ieri"
-
-msgid "Last 7 days"
-msgstr "Ultimele 7 zile"
-
-msgid "Filter by date"
-msgstr "Filtrează după dată"
-
-msgid "All engines"
-msgstr "Toate motoarele"
-
-msgid "Filter by engine"
-msgstr "Filtrează după motor"
-
-msgid "Newest first"
-msgstr "Cele mai noi întâi"
-
-msgid "Sort order"
-msgstr "Ordine de sortare"
-
-msgid "Show as grid"
-msgstr "Afișează ca grilă"
-
-msgid "Select readings"
-msgstr "Selectează citiri"
-
-msgid "Select All"
-msgstr "Selectați tot"
-
-msgid "Deselect All"
-msgstr "Deselectează tot"
-
-msgid "Save the selected readings to a folder"
-msgstr "Salvează citirile selectate într-un dosar"
-
-msgid "Save selected"
-msgstr "Salvează selecția"
-
-msgid "Delete selected"
-msgstr "Șterge selecția"
-
-msgid "History entries"
-msgstr "Intrări în istoric"
-
-msgid "The history could not be read"
-msgstr "Istoricul nu a putut fi citit"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Spațiu liber pe disc insuficient pentru a instala {packages}."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Verificați permisiunile dosarului {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} nu a putut fi instalat. Consultați detaliile."
 
-msgid "No readings found"
-msgstr "Nu s-au găsit citiri"
+msgid "Nothing to install."
+msgstr "Nimic de instalat."
 
-msgid "Try other words or another date or engine."
-msgstr "Încercați alte cuvinte, altă dată sau alt motor."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec nu este instalat (pachetul polkit)."
 
-msgid "Clear Filters"
-msgstr "Golește filtrele"
-
-msgid "No readings yet"
-msgstr "Încă nu există citiri"
+msgid "The installation took too long and was stopped."
+msgstr "Instalarea a durat prea mult și a fost oprită."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Tot ce ascultați va apărea aici, cu audio. Este stocat doar pe acest calculator, în {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} nu a putut fi compilat din AUR. Vezi detaliile."
+
+msgid "This key combination is not valid."
+msgstr "Această combinație de taste nu este validă."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Folosiți Ctrl, Alt sau Super împreună cu o tastă, ca să nu fie afectată tastarea obișnuită."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Această combinație de taste nu este acceptată de mediul desktop."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Salvarea este oprită. Porniți-o pentru a păstra ce ascultați, cu audio — doar pe acest calculator, în {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} este deja folosită de: {names}. Alegeți altă scurtătură."
 
-msgid "Turn On History"
-msgstr "Pornește istoricul"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Mediul desktop nu a acceptat scurtătura. Rulează serviciul de scurtături globale KDE?"
 
-msgid "Oldest first"
-msgstr "Cele mai vechi întâi"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Mediul desktop nu a confirmat noua scurtătură."
 
-msgid "Show as list"
-msgstr "Afișează ca listă"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Scurtătura a fost salvată, dar mediul desktop nu a putut-o confirma încă."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Selectate: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Scurtătura nu a putut fi înregistrată în acest mediu desktop. Adăugați-o în setările de tastatură ale sistemului cu comanda biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Citire ștearsă"
+msgid "Extra low quality"
+msgstr "Calitate foarte scăzută"
 
-msgid "Undo"
-msgstr "Anulează"
+msgid "Low quality"
+msgstr "Calitate scăzută"
 
-msgid "Delete the selected readings?"
-msgstr "Ștergeți citirile selectate?"
+msgid "Medium quality"
+msgstr "Calitate medie"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Citiri: {count}. Fișierele lor audio și text sunt mutate la coșul de gunoi."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro nu este instalat. Instalați pachetul biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Mutate la coșul de gunoi: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Modelul de voce Kokoro lipsește. Reinstalați pachetul biglinux-kokoro-tts."
 
-msgid "Save the selected readings"
-msgstr "Salvează citirile selectate"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Nu s-au găsit voci Kokoro. Deschideți Managerul de voci pentru a descărca o voce."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Salvate în {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Nicio scurtătură"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Această voce Kokoro nu este instalată. Deschideți Managerul de voci pentru a o descărca."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Scurtătură: {keys}"
-
-msgid "Piper engine"
-msgstr "Motorul Piper"
-
-msgid "Voice Manager"
-msgstr "Manager de voce"
-
-msgid "Search voices by name or language…"
-msgstr "Căutați voci după nume sau limbă…"
-
-msgid "Loading available voices…"
-msgstr "Încărcarea vocilor disponibile…"
-
-msgid "No Voice Packages Found"
-msgstr "Nu au fost găsite pachete de voce."
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Nu s-au găsit pachete de voce TTS în repositoarele pacman."
-
-msgid "High quality offline voices"
-msgstr "Voci offline de înaltă calitate"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Voci ale rețelelor neuronale — sunet natural"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Sintetizator ușor multi-lingvistic"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "TTS neural — voci multilingve de înaltă calitate (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Voce necunoscută: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Instalează {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "ID de voce nevalid: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Fișierul vocii este mai mare decât era de așteptat."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Elimină {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "descărcare incompletă ({received} din {total} octeți)"
 
-msgid "Installed"
-msgstr "Instalat"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Eliminați {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Vocea nu va mai fi disponibilă pentru citire. O puteți instala din nou mai târziu."
-
-msgid "Remove"
-msgstr "Elimină"
+msgid "empty response"
+msgstr "răspuns gol"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "Se descarcă {name}…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Vocea nu a putut fi descărcată. Verificați conexiunea la internet și încercați din nou. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "Se descarcă {name}… {done} din {total} KB"
-
-msgid "Operation timed out"
-msgstr "Operațiune expirată"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec sau pacman nu au fost găsite"
-
-msgid "Download cancelled"
-msgstr "Descărcare anulată"
-
-msgid "Failed"
-msgstr "Eșuat"
-
-msgid "Removal Failed"
-msgstr "Eliminare eșuată"
-
-msgid "Unknown error"
-msgstr "Eroare necunoscută"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Fișierul vocii descărcate este deteriorat. Încercați din nou. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Redă o mostră din {name}"
-
-msgid "Stop the sample"
-msgstr "Oprește mostra"
-
-msgid "The sample could not be played."
-msgstr "Mostra nu a putut fi redată."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Spațiu pe disc insuficient pentru instalarea vocii (sunt necesari {size} MB)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Mostra nu a putut fi redată: {program} nu este instalat."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Nu se poate crea directorul vocilor utilizatorului: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Adăugarea vocii a eșuat: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Vocea de bază nu poate fi eliminată"
+
+msgid "No user voices installed"
+msgstr "Nicio voce de utilizator instalată"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Eliminarea vocii a eșuat: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Citește sau oprește textul selectat"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Sunetul nu a putut fi redat. Verificați dacă alsa-utils (aplay) este instalat."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} nu a putut porni. Verificați dacă este instalat."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice nu este instalat. Instalați pachetul rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng nu a putut citi acest text. Verificați dacă espeak-ng este instalat."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Vocea Piper selectată nu este instalată. Alegeți altă voce în Managerul de voci."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper nu a putut citi acest text. Încercați altă voce."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} s-a închis neașteptat în timpul citirii textului."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} s-a oprit cu o eroare și nu a putut citi textul."
+
+msgid "Read the selected text aloud"
+msgstr "Citește cu voce tare textul selectat"
+
+msgid "Could not read the text."
+msgstr "Textul nu a putut fi citit."
+
+msgid "Reading text"
+msgstr "Se citește textul"
+
+msgid "Playing…"
+msgstr "Se joacă…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Instalați wl-clipboard (Wayland) sau xclip (X11) pentru ca textul selectat să poată fi citit."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Selectați mai întâi un text, apoi apăsați scurtătura."
+
+msgid "No text selected"
+msgstr "Niciun text selectat"
+
+msgid "Read text"
+msgstr "Citiți textul"
+
+msgid "Settings"
+msgstr "Setări"
+
+msgid "Quit"
+msgstr "Ieșire"
+
+msgid "Paused"
+msgstr "În pauză"
+
+msgid "BigLinux Team"
+msgstr "Echipa BigLinux"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS transformă textul selectat sau tastat în vorbire, cu voci locale, scurtături globale și controale precise de redare."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS a început în 2021 ca instrument web și a evoluat într-o aplicație GTK4 nativă, cu mai multe motoare de vorbire, gestionarea vocilor și un motor audio scris în Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Scurtătura nu a putut fi înregistrată."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Selectați un text și apăsați {shortcut} pentru a-l asculta"
+
+msgid "Text-to-speech assistant"
+msgstr "Asistent text-la-vorbire"
+
+msgid "Show settings"
+msgstr "Afișează setările"
+
+msgid "Back"
+msgstr "Înapoi"
+
+msgid "Text narrator"
+msgstr "Narator de text"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Scurtătura nu este activă — deschideți Opțiuni avansate pentru a o remedia"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Selectați un text și apăsați {key} pentru a-l citi cu voce tare"
+
+msgid "Show tray icon"
+msgstr "Afișează pictograma în tava de sistem"
+
+msgid "Restore Defaults…"
+msgstr "Restabilește valorile implicite…"
+
+msgid "Welcome"
+msgstr "Bine ai venit"
+
+msgid "About BigLinux TTS"
+msgstr "Despre BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Meniu principal"
+
+msgid "Restore settings?"
+msgstr "Restabiliți setările?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Aceasta va readuce toate ajustările la valorile implicite originale."
+
+msgid "Restore"
+msgstr "Restabilește"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux text-la-vorbire — Citește cu voce tare textul selectat"
+
+msgid "Enable debug logging"
+msgstr "Activează jurnalizarea de depanare"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"
