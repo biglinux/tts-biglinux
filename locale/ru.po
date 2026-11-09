@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux Text-to-Speech — чтение выделенного текста вслух"
+msgid "Piper engine"
+msgstr "Движок Piper"
 
-msgid "Enable debug logging"
-msgstr "Включить отладочный журнал"
+msgid "Voice Manager"
+msgstr "Менеджер голосов"
 
-msgid "Settings"
-msgstr "Настройки"
+msgid "Search voices by name or language…"
+msgstr "Поиск голосов по имени или языку…"
 
-msgid "Show settings"
-msgstr "Показать настройки"
-
-msgid "Back"
-msgstr "Назад"
-
-msgid "Text narrator"
-msgstr "Чтец текста"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Сочетание клавиш не активно — откройте «Дополнительные опции», чтобы исправить"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Выделите текст и нажмите {key}, чтобы прочитать его вслух"
-
-msgid "History"
-msgstr "История"
-
-msgid "Loading voice…"
-msgstr "Загрузка голоса…"
-
-msgid "Speaking…"
-msgstr "Чтение…"
-
-msgid "Could not read the text"
-msgstr "Не удалось прочитать текст"
-
-msgid "Show tray icon"
-msgstr "Показывать значок в трее"
-
-msgid "Restore Defaults…"
-msgstr "Восстановить по умолчанию…"
-
-msgid "Welcome"
-msgstr "Добро пожаловать"
-
-msgid "About BigLinux TTS"
-msgstr "О BigLinux TTS"
-
-msgid "Quit"
-msgstr "Выход"
-
-msgid "Main menu"
-msgstr "Главное меню"
-
-msgid "Restore settings?"
-msgstr "Сбросить настройки?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Все настройки будут возвращены к значениям по умолчанию."
+msgid "Loading available voices…"
+msgstr "Загрузка доступных голосов…"
 
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid "Restore"
-msgstr "Сбросить"
+msgid "No Voice Packages Found"
+msgstr "Голосовые пакеты не найдены"
 
-msgid "This key combination is not valid."
-msgstr "Это сочетание клавиш недопустимо."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Не удалось найти пакеты TTS в репозиториях pacman."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Используйте Ctrl, Alt или Super вместе с клавишей, чтобы не мешать обычному набору текста."
+msgid "High quality offline voices"
+msgstr "Качественные офлайн голоса"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Это сочетание клавиш не поддерживается рабочим окружением."
+msgid "Neural network voices — natural sounding"
+msgstr "Нейронные голоса — естественное звучание"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} уже используется: {names}. Выберите другое сочетание клавиш."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Легкий многоязычный синтезатор"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Рабочее окружение не приняло сочетание клавиш. Запущена ли служба глобальных сочетаний клавиш KDE?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Рабочее окружение не подтвердило новое сочетание клавиш."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Сочетание клавиш сохранено, но рабочее окружение пока не смогло его подтвердить."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Не удалось зарегистрировать сочетание клавиш в этом рабочем окружении. Добавьте его в системных настройках клавиатуры с командой biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Установка отменена: пароль администратора не подтверждён."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Нейронный TTS — высококачественные многоязычные голоса (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} недоступен в ваших репозиториях. Обновите систему (sudo pacman -Syu) и повторите попытку."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Другая программа устанавливает или обновляет пакеты. Дождитесь её завершения и повторите попытку."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Не удалось загрузить пакеты. Проверьте подключение к интернету и повторите попытку."
+msgid "Install {name}"
+msgstr "Установить {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} конфликтует с установленными файлами или пакетами. См. подробности."
+msgid "Remove {name}"
+msgstr "Удалить {name}"
+
+msgid "Installed"
+msgstr "Установлено"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Недостаточно свободного места на диске для установки {packages}."
+msgid "Remove {name}?"
+msgstr "Удалить {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Голос больше не будет доступен для чтения. Позже его можно установить снова."
+
+msgid "Remove"
+msgstr "Удалить"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "Не удалось установить {packages}. См. подробности."
-
-msgid "Nothing to install."
-msgstr "Нечего устанавливать."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec не установлен (пакет polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Установка заняла слишком много времени и была остановлена."
+msgid "Downloading {name}…"
+msgstr "Загрузка {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "Не удалось собрать {packages} из AUR. См. подробности."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Загрузка {name}… {done} из {total} КБ"
 
-msgid "Read or stop the selected text"
-msgstr "Прочитать выделенный текст или остановить чтение"
+msgid "Operation timed out"
+msgstr "Тайм-аут операции"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro не установлен. Установите пакет biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec или pacman не найдены"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Отсутствует голосовая модель Kokoro. Переустановите пакет biglinux-kokoro-tts."
+msgid "Download cancelled"
+msgstr "Загрузка отменена"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Голоса Kokoro не найдены. Откройте менеджер голосов, чтобы загрузить голос."
+msgid "Failed"
+msgstr "Ошибка"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Этот голос Kokoro не установлен. Откройте менеджер голосов, чтобы загрузить его."
+msgid "Removal Failed"
+msgstr "Ошибка удаления"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Неизвестный голос: {voice_id}"
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Недопустимый идентификатор голоса: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Файл голоса больше ожидаемого."
+msgid "OK"
+msgstr "ОК"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "неполная загрузка ({received} из {total} байт)"
+msgid "Play a sample of {name}"
+msgstr "Воспроизвести образец {name}"
 
-msgid "empty response"
-msgstr "пустой ответ"
+msgid "Stop the sample"
+msgstr "Остановить образец"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Не удалось загрузить голос. Проверьте подключение к интернету и повторите попытку. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Загруженный файл голоса повреждён. Повторите попытку. ({error})"
+msgid "The sample could not be played."
+msgstr "Не удалось воспроизвести образец."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Недостаточно места на диске для установки голоса (требуется {size} МБ)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Не удалось создать каталог пользовательских голосов: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Не удалось добавить голос: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Невозможно удалить базовый голос"
-
-msgid "No user voices installed"
-msgstr "Пользовательские голоса не установлены"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Не удалось удалить голос: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Не удалось воспроизвести звук. Убедитесь, что установлен alsa-utils (aplay)."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "Не удалось запустить {engine}. Убедитесь, что он установлен."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice не установлен. Установите пакет rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng не смог прочитать этот текст. Убедитесь, что espeak-ng установлен."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Выбранный голос Piper не установлен. Выберите другой голос в менеджере голосов."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper не смог прочитать этот текст. Попробуйте другой голос."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} аварийно завершил работу во время чтения текста."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} остановился с ошибкой и не смог прочитать текст."
-
-msgid "Extra low quality"
-msgstr "Очень низкое качество"
-
-msgid "Low quality"
-msgstr "Низкое качество"
-
-msgid "Medium quality"
-msgstr "Среднее качество"
-
-msgid "High quality"
-msgstr "Высокое качество"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Прочитать выделенный текст вслух"
-
-msgid "Could not read the text."
-msgstr "Не удалось прочитать текст."
-
-msgid "Reading text"
-msgstr "Чтение текста"
-
-msgid "Playing…"
-msgstr "Играет…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Установите wl-clipboard (Wayland) или xclip (X11), чтобы можно было читать выделенный текст."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Сначала выделите текст, затем нажмите сочетание клавиш."
-
-msgid "No text selected"
-msgstr "Текст не выделен"
-
-msgid "Read text"
-msgstr "Читать текст"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Не удалось воспроизвести образец: {program} не установлен."
 
 msgid "Play"
 msgstr "Играть"
 
-msgid "Pause"
-msgstr "Пауза"
-
 msgid "Stop"
 msgstr "Стоп"
 
-msgid "Paused"
-msgstr "Приостановлено"
-
-msgid "BigLinux Team"
-msgstr "Команда BigLinux"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS превращает выделенный или введённый текст в речь с помощью локальных голосов, глобальных сочетаний клавиш и точного управления воспроизведением."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS появился в 2021 году как веб-инструмент и превратился в нативное приложение GTK4 с несколькими речевыми движками, управлением голосами и аудиодвижком на Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Не удалось зарегистрировать сочетание клавиш."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Выделите текст и нажмите {shortcut}, чтобы прослушать его"
-
-msgid "Text-to-speech assistant"
-msgstr "Помощник синтеза речи"
-
 msgid "Playback position"
 msgstr "Позиция воспроизведения"
+
+msgid "Pause"
+msgstr "Пауза"
+
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Сегодня, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Вчера, {time}"
+
+msgid "Select this reading"
+msgstr "Выбрать это чтение"
+
+msgid "(text not kept)"
+msgstr "(текст не сохранён)"
+
+msgid "Show more"
+msgstr "Показать больше"
+
+msgid "Copy text"
+msgstr "Копировать текст"
+
+msgid "Read again with the current voice"
+msgstr "Прочитать снова текущим голосом"
+
+msgid "More actions"
+msgstr "Другие действия"
+
+msgid "Stopped"
+msgstr "Остановлено"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "Reading stopped before the end"
+msgstr "Чтение остановлено до конца"
+
+msgid "The engine failed during this reading"
+msgstr "Во время этого чтения произошёл сбой движка"
+
+msgid "Audio not kept for this reading"
+msgstr "Аудио этого чтения не сохранено"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "Чтение {engine}, {when}"
+
+msgid "Save audio as…"
+msgstr "Сохранить аудио как…"
+
+msgid "Open file location"
+msgstr "Открыть расположение файла"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Show less"
+msgstr "Показать меньше"
+
+msgid "Text copied"
+msgstr "Текст скопирован"
+
+msgid "Save audio as"
+msgstr "Сохранить аудио как"
+
+msgid "Audio saved"
+msgstr "Аудио сохранено"
+
+msgid "Could not save the audio"
+msgstr "Не удалось сохранить аудио"
+
+msgid "History"
+msgstr "История"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Сохранение выключено: новые чтения не сохраняются."
+
+msgid "Turn On"
+msgstr "Включить"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Поиск по тексту, голосу, движку или дате…"
+
+msgid "All dates"
+msgstr "Все даты"
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "Yesterday"
+msgstr "Вчера"
+
+msgid "Last 7 days"
+msgstr "Последние 7 дней"
+
+msgid "Filter by date"
+msgstr "Фильтр по дате"
+
+msgid "All engines"
+msgstr "Все движки"
+
+msgid "Filter by engine"
+msgstr "Фильтр по движку"
+
+msgid "Newest first"
+msgstr "Сначала новые"
+
+msgid "Sort order"
+msgstr "Порядок сортировки"
+
+msgid "Show as grid"
+msgstr "Показать сеткой"
+
+msgid "Select readings"
+msgstr "Выбрать чтения"
+
+msgid "Select All"
+msgstr "Выбрать все"
+
+msgid "Deselect All"
+msgstr "Снять выделение со всех"
+
+msgid "Save the selected readings to a folder"
+msgstr "Сохранить выбранные чтения в папку"
+
+msgid "Save selected"
+msgstr "Сохранить выбранные"
+
+msgid "Delete selected"
+msgstr "Удалить выбранное"
+
+msgid "History entries"
+msgstr "Записи истории"
+
+msgid "The history could not be read"
+msgstr "Не удалось прочитать историю"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Проверьте права доступа к папке {folder}."
+
+msgid "No readings found"
+msgstr "Чтения не найдены"
+
+msgid "Try other words or another date or engine."
+msgstr "Попробуйте другие слова, другую дату или движок."
+
+msgid "Clear Filters"
+msgstr "Сбросить фильтры"
+
+msgid "No readings yet"
+msgstr "Пока нет чтений"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Всё, что вы слушаете, появится здесь вместе с аудио. Хранится только на этом компьютере, в {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Сохранение выключено. Включите его, чтобы сохранять то, что вы слушаете, вместе с аудио — только на этом компьютере, в {folder}."
+
+msgid "Turn On History"
+msgstr "Включить историю"
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "Show as list"
+msgstr "Показать списком"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Выбрано: {count}"
+
+msgid "Reading deleted"
+msgstr "Чтение удалено"
+
+msgid "Undo"
+msgstr "Отменить"
+
+msgid "Delete the selected readings?"
+msgstr "Удалить выбранные чтения?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Чтения: {count}. Их аудио- и текстовые файлы будут перемещены в корзину."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Перемещено в корзину: {count}"
+
+msgid "Save the selected readings"
+msgstr "Сохранить выбранные чтения"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Сохранено в {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Без сочетания клавиш"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Сочетание клавиш: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Сначала установите голоса {engine}"
 msgid "Neural"
 msgstr "Нейросетевой"
 
+msgid "High quality"
+msgstr "Высокое качество"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Доступно голосов: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper недоступен"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "В ваших репозиториях не найден пакет голосов Piper ({packages}). Обновите систему (sudo pacman -Syu) и повторите попытку."
-
-msgid "OK"
-msgstr "ОК"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper предоставляет естественные нейросетевые голоса. Будут установлены следующие пакеты:"
@@ -769,12 +790,18 @@ msgstr "Введите текст для теста"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Громкость на нуле — повышение для теста"
 
+msgid "Loading voice…"
+msgstr "Загрузка голоса…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "Подготовка голоса {voice}. Речь начнётся через мгновение."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Подготовка голоса. Речь начнётся через мгновение."
+
+msgid "Speaking…"
+msgstr "Чтение…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Нажмите {shortcut} ещё раз, чтобы остановить
 msgid "Use Stop to end the reading."
 msgstr "Нажмите «Стоп», чтобы завершить чтение."
 
+msgid "Could not read the text"
+msgstr "Не удалось прочитать текст"
+
 msgid "The speech engine reported a problem."
 msgstr "Речевой движок сообщил о проблеме."
-
-msgid "Stopped"
-msgstr "Остановлено"
 
 msgid "Reading was stopped."
 msgstr "Чтение остановлено."
@@ -847,9 +874,6 @@ msgstr "Загрузка"
 
 msgid "Speaking"
 msgstr "Чтение"
-
-msgid "Error"
-msgstr "Ошибка"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -961,290 +985,266 @@ msgstr "Показывать диалог при запуске"
 msgid "Let's Start"
 msgstr "Начать"
 
-msgid "Unknown"
-msgstr "Неизвестно"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Установка отменена: пароль администратора не подтверждён."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Сегодня, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} недоступен в ваших репозиториях. Обновите систему (sudo pacman -Syu) и повторите попытку."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Другая программа устанавливает или обновляет пакеты. Дождитесь её завершения и повторите попытку."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Не удалось загрузить пакеты. Проверьте подключение к интернету и повторите попытку."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Вчера, {time}"
-
-msgid "Select this reading"
-msgstr "Выбрать это чтение"
-
-msgid "(text not kept)"
-msgstr "(текст не сохранён)"
-
-msgid "Show more"
-msgstr "Показать больше"
-
-msgid "Copy text"
-msgstr "Копировать текст"
-
-msgid "Read again with the current voice"
-msgstr "Прочитать снова текущим голосом"
-
-msgid "More actions"
-msgstr "Другие действия"
-
-msgid "Reading stopped before the end"
-msgstr "Чтение остановлено до конца"
-
-msgid "The engine failed during this reading"
-msgstr "Во время этого чтения произошёл сбой движка"
-
-msgid "Audio not kept for this reading"
-msgstr "Аудио этого чтения не сохранено"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} конфликтует с установленными файлами или пакетами. См. подробности."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "Чтение {engine}, {when}"
-
-msgid "Save audio as…"
-msgstr "Сохранить аудио как…"
-
-msgid "Open file location"
-msgstr "Открыть расположение файла"
-
-msgid "Delete"
-msgstr "Удалить"
-
-msgid "Show less"
-msgstr "Показать меньше"
-
-msgid "Text copied"
-msgstr "Текст скопирован"
-
-msgid "Save audio as"
-msgstr "Сохранить аудио как"
-
-msgid "Audio saved"
-msgstr "Аудио сохранено"
-
-msgid "Could not save the audio"
-msgstr "Не удалось сохранить аудио"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Сохранение выключено: новые чтения не сохраняются."
-
-msgid "Turn On"
-msgstr "Включить"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Поиск по тексту, голосу, движку или дате…"
-
-msgid "All dates"
-msgstr "Все даты"
-
-msgid "Today"
-msgstr "Сегодня"
-
-msgid "Yesterday"
-msgstr "Вчера"
-
-msgid "Last 7 days"
-msgstr "Последние 7 дней"
-
-msgid "Filter by date"
-msgstr "Фильтр по дате"
-
-msgid "All engines"
-msgstr "Все движки"
-
-msgid "Filter by engine"
-msgstr "Фильтр по движку"
-
-msgid "Newest first"
-msgstr "Сначала новые"
-
-msgid "Sort order"
-msgstr "Порядок сортировки"
-
-msgid "Show as grid"
-msgstr "Показать сеткой"
-
-msgid "Select readings"
-msgstr "Выбрать чтения"
-
-msgid "Select All"
-msgstr "Выбрать все"
-
-msgid "Deselect All"
-msgstr "Снять выделение со всех"
-
-msgid "Save the selected readings to a folder"
-msgstr "Сохранить выбранные чтения в папку"
-
-msgid "Save selected"
-msgstr "Сохранить выбранные"
-
-msgid "Delete selected"
-msgstr "Удалить выбранное"
-
-msgid "History entries"
-msgstr "Записи истории"
-
-msgid "The history could not be read"
-msgstr "Не удалось прочитать историю"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Недостаточно свободного места на диске для установки {packages}."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Проверьте права доступа к папке {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "Не удалось установить {packages}. См. подробности."
 
-msgid "No readings found"
-msgstr "Чтения не найдены"
+msgid "Nothing to install."
+msgstr "Нечего устанавливать."
 
-msgid "Try other words or another date or engine."
-msgstr "Попробуйте другие слова, другую дату или движок."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec не установлен (пакет polkit)."
 
-msgid "Clear Filters"
-msgstr "Сбросить фильтры"
-
-msgid "No readings yet"
-msgstr "Пока нет чтений"
+msgid "The installation took too long and was stopped."
+msgstr "Установка заняла слишком много времени и была остановлена."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Всё, что вы слушаете, появится здесь вместе с аудио. Хранится только на этом компьютере, в {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Не удалось собрать {packages} из AUR. См. подробности."
+
+msgid "This key combination is not valid."
+msgstr "Это сочетание клавиш недопустимо."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Используйте Ctrl, Alt или Super вместе с клавишей, чтобы не мешать обычному набору текста."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Это сочетание клавиш не поддерживается рабочим окружением."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Сохранение выключено. Включите его, чтобы сохранять то, что вы слушаете, вместе с аудио — только на этом компьютере, в {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} уже используется: {names}. Выберите другое сочетание клавиш."
 
-msgid "Turn On History"
-msgstr "Включить историю"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Рабочее окружение не приняло сочетание клавиш. Запущена ли служба глобальных сочетаний клавиш KDE?"
 
-msgid "Oldest first"
-msgstr "Сначала старые"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Рабочее окружение не подтвердило новое сочетание клавиш."
 
-msgid "Show as list"
-msgstr "Показать списком"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Сочетание клавиш сохранено, но рабочее окружение пока не смогло его подтвердить."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Выбрано: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Не удалось зарегистрировать сочетание клавиш в этом рабочем окружении. Добавьте его в системных настройках клавиатуры с командой biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Чтение удалено"
+msgid "Extra low quality"
+msgstr "Очень низкое качество"
 
-msgid "Undo"
-msgstr "Отменить"
+msgid "Low quality"
+msgstr "Низкое качество"
 
-msgid "Delete the selected readings?"
-msgstr "Удалить выбранные чтения?"
+msgid "Medium quality"
+msgstr "Среднее качество"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Чтения: {count}. Их аудио- и текстовые файлы будут перемещены в корзину."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro не установлен. Установите пакет biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Перемещено в корзину: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Отсутствует голосовая модель Kokoro. Переустановите пакет biglinux-kokoro-tts."
 
-msgid "Save the selected readings"
-msgstr "Сохранить выбранные чтения"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Голоса Kokoro не найдены. Откройте менеджер голосов, чтобы загрузить голос."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Сохранено в {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Без сочетания клавиш"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Этот голос Kokoro не установлен. Откройте менеджер голосов, чтобы загрузить его."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Сочетание клавиш: {keys}"
-
-msgid "Piper engine"
-msgstr "Движок Piper"
-
-msgid "Voice Manager"
-msgstr "Менеджер голосов"
-
-msgid "Search voices by name or language…"
-msgstr "Поиск голосов по имени или языку…"
-
-msgid "Loading available voices…"
-msgstr "Загрузка доступных голосов…"
-
-msgid "No Voice Packages Found"
-msgstr "Голосовые пакеты не найдены"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Не удалось найти пакеты TTS в репозиториях pacman."
-
-msgid "High quality offline voices"
-msgstr "Качественные офлайн голоса"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Нейронные голоса — естественное звучание"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Легкий многоязычный синтезатор"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Нейронный TTS — высококачественные многоязычные голоса (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Неизвестный голос: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Установить {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Недопустимый идентификатор голоса: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Файл голоса больше ожидаемого."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Удалить {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "неполная загрузка ({received} из {total} байт)"
 
-msgid "Installed"
-msgstr "Установлено"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Удалить {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Голос больше не будет доступен для чтения. Позже его можно установить снова."
-
-msgid "Remove"
-msgstr "Удалить"
+msgid "empty response"
+msgstr "пустой ответ"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "Загрузка {name}…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Не удалось загрузить голос. Проверьте подключение к интернету и повторите попытку. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "Загрузка {name}… {done} из {total} КБ"
-
-msgid "Operation timed out"
-msgstr "Тайм-аут операции"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec или pacman не найдены"
-
-msgid "Download cancelled"
-msgstr "Загрузка отменена"
-
-msgid "Failed"
-msgstr "Ошибка"
-
-msgid "Removal Failed"
-msgstr "Ошибка удаления"
-
-msgid "Unknown error"
-msgstr "Неизвестная ошибка"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Загруженный файл голоса повреждён. Повторите попытку. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Воспроизвести образец {name}"
-
-msgid "Stop the sample"
-msgstr "Остановить образец"
-
-msgid "The sample could not be played."
-msgstr "Не удалось воспроизвести образец."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Недостаточно места на диске для установки голоса (требуется {size} МБ)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Не удалось воспроизвести образец: {program} не установлен."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Не удалось создать каталог пользовательских голосов: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Не удалось добавить голос: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Невозможно удалить базовый голос"
+
+msgid "No user voices installed"
+msgstr "Пользовательские голоса не установлены"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Не удалось удалить голос: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Прочитать выделенный текст или остановить чтение"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Не удалось воспроизвести звук. Убедитесь, что установлен alsa-utils (aplay)."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "Не удалось запустить {engine}. Убедитесь, что он установлен."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice не установлен. Установите пакет rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng не смог прочитать этот текст. Убедитесь, что espeak-ng установлен."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Выбранный голос Piper не установлен. Выберите другой голос в менеджере голосов."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper не смог прочитать этот текст. Попробуйте другой голос."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} аварийно завершил работу во время чтения текста."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} остановился с ошибкой и не смог прочитать текст."
+
+msgid "Read the selected text aloud"
+msgstr "Прочитать выделенный текст вслух"
+
+msgid "Could not read the text."
+msgstr "Не удалось прочитать текст."
+
+msgid "Reading text"
+msgstr "Чтение текста"
+
+msgid "Playing…"
+msgstr "Играет…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Установите wl-clipboard (Wayland) или xclip (X11), чтобы можно было читать выделенный текст."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Сначала выделите текст, затем нажмите сочетание клавиш."
+
+msgid "No text selected"
+msgstr "Текст не выделен"
+
+msgid "Read text"
+msgstr "Читать текст"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Quit"
+msgstr "Выход"
+
+msgid "Paused"
+msgstr "Приостановлено"
+
+msgid "BigLinux Team"
+msgstr "Команда BigLinux"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS превращает выделенный или введённый текст в речь с помощью локальных голосов, глобальных сочетаний клавиш и точного управления воспроизведением."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS появился в 2021 году как веб-инструмент и превратился в нативное приложение GTK4 с несколькими речевыми движками, управлением голосами и аудиодвижком на Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Не удалось зарегистрировать сочетание клавиш."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Выделите текст и нажмите {shortcut}, чтобы прослушать его"
+
+msgid "Text-to-speech assistant"
+msgstr "Помощник синтеза речи"
+
+msgid "Show settings"
+msgstr "Показать настройки"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Text narrator"
+msgstr "Чтец текста"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Сочетание клавиш не активно — откройте «Дополнительные опции», чтобы исправить"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Выделите текст и нажмите {key}, чтобы прочитать его вслух"
+
+msgid "Show tray icon"
+msgstr "Показывать значок в трее"
+
+msgid "Restore Defaults…"
+msgstr "Восстановить по умолчанию…"
+
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+msgid "About BigLinux TTS"
+msgstr "О BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "Restore settings?"
+msgstr "Сбросить настройки?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Все настройки будут возвращены к значениям по умолчанию."
+
+msgid "Restore"
+msgstr "Сбросить"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Text-to-Speech — чтение выделенного текста вслух"
+
+msgid "Enable debug logging"
+msgstr "Включить отладочный журнал"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

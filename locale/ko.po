@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux 텍스트 음성 변환 — 선택한 텍스트를 소리 내어 읽기"
+msgid "Piper engine"
+msgstr "Piper 엔진"
 
-msgid "Enable debug logging"
-msgstr "디버그 로그 사용"
+msgid "Voice Manager"
+msgstr "음성 관리자"
 
-msgid "Settings"
-msgstr "설정"
+msgid "Search voices by name or language…"
+msgstr "이름 또는 언어로 음성 검색…"
 
-msgid "Show settings"
-msgstr "설정 표시"
-
-msgid "Back"
-msgstr "뒤로"
-
-msgid "Text narrator"
-msgstr "텍스트 낭독기"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "단축키가 활성화되지 않았습니다 — 고급 옵션을 열어 해결하세요"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "텍스트를 선택하고 {key} 키를 눌러 소리 내어 읽기"
-
-msgid "History"
-msgstr "기록"
-
-msgid "Loading voice…"
-msgstr "음성 불러오는 중…"
-
-msgid "Speaking…"
-msgstr "읽는 중…"
-
-msgid "Could not read the text"
-msgstr "텍스트를 읽을 수 없습니다"
-
-msgid "Show tray icon"
-msgstr "트레이 아이콘 표시"
-
-msgid "Restore Defaults…"
-msgstr "기본값 복원…"
-
-msgid "Welcome"
-msgstr "환영합니다"
-
-msgid "About BigLinux TTS"
-msgstr "BigLinux TTS 정보"
-
-msgid "Quit"
-msgstr "종료"
-
-msgid "Main menu"
-msgstr "기본 메뉴"
-
-msgid "Restore settings?"
-msgstr "설정을 복원하시겠습니까?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "모든 조정이 원래 기본값으로 돌아갑니다."
+msgid "Loading available voices…"
+msgstr "사용 가능한 음성을 로드하는 중…"
 
 msgid "Cancel"
 msgstr "취소"
 
-msgid "Restore"
-msgstr "복원"
+msgid "No Voice Packages Found"
+msgstr "음성 패키지가 없습니다."
 
-msgid "This key combination is not valid."
-msgstr "유효하지 않은 키 조합입니다."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "pacman 저장소에서 TTS 음성 패키지를 찾을 수 없습니다."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "일반 입력에 영향을 주지 않도록 Ctrl, Alt 또는 Super를 다른 키와 함께 사용하세요."
+msgid "High quality offline voices"
+msgstr "고품질 오프라인 음성"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "데스크톱에서 지원하지 않는 키 조합입니다."
+msgid "Neural network voices — natural sounding"
+msgstr "신경망 음성 — 자연스러운 소리"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut}은(는) 이미 사용 중입니다: {names}. 다른 단축키를 선택하세요."
+msgid "Lightweight multi-language synthesizer"
+msgstr "경량 다국어 합성기"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "데스크톱이 단축키를 받아들이지 않았습니다. KDE 전역 단축키 서비스가 실행 중인가요?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "데스크톱이 새 단축키를 확인하지 않았습니다."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "단축키가 저장되었지만 데스크톱에서 아직 확인하지 못했습니다."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "이 데스크톱에서 단축키를 등록할 수 없습니다. 시스템 키보드 설정에서 biglinux-tts-speak 명령으로 추가하세요."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "설치가 취소되었습니다: 관리자 암호가 확인되지 않았습니다."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "신경 TTS — 고품질 다국어 음성 (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages}을(를) 저장소에서 사용할 수 없습니다. 시스템을 업데이트(sudo pacman -Syu)한 후 다시 시도하세요."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "다른 프로그램이 패키지를 설치하거나 업데이트하고 있습니다. 완료될 때까지 기다린 후 다시 시도하세요."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "패키지를 다운로드할 수 없습니다. 인터넷 연결을 확인하고 다시 시도하세요."
+msgid "Install {name}"
+msgstr "{name} 설치"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages}이(가) 설치된 파일 또는 패키지와 충돌합니다. 자세한 내용을 확인하세요."
+msgid "Remove {name}"
+msgstr "{name}을(를) 제거하세요."
+
+msgid "Installed"
+msgstr "설치됨"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "{packages}을(를) 설치할 디스크 여유 공간이 부족합니다."
+msgid "Remove {name}?"
+msgstr "{name}을(를) 제거할까요?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "이 음성은 더 이상 읽기에 사용할 수 없습니다. 나중에 다시 설치할 수 있습니다."
+
+msgid "Remove"
+msgstr "제거하다"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages}을(를) 설치할 수 없습니다. 자세한 내용을 확인하세요."
-
-msgid "Nothing to install."
-msgstr "설치할 항목이 없습니다."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec가 설치되어 있지 않습니다(polkit 패키지)."
-
-msgid "The installation took too long and was stopped."
-msgstr "설치 시간이 너무 오래 걸려 중지되었습니다."
+msgid "Downloading {name}…"
+msgstr "{name} 다운로드 중…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "AUR에서 {packages}을(를) 빌드할 수 없습니다. 세부 정보를 확인하세요."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} 다운로드 중… {done}/{total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "선택한 텍스트 읽기 또는 중지"
+msgid "Operation timed out"
+msgstr "작업 시간이 초과되었습니다."
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro가 설치되어 있지 않습니다. biglinux-kokoro-tts 패키지를 설치하세요."
+msgid "pkexec or pacman not found"
+msgstr "pkexec 또는 pacman을 찾을 수 없습니다."
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Kokoro 음성 모델이 없습니다. biglinux-kokoro-tts 패키지를 다시 설치하세요."
+msgid "Download cancelled"
+msgstr "다운로드 취소됨"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Kokoro 음성을 찾을 수 없습니다. 음성 관리자를 열어 음성을 다운로드하세요."
+msgid "Failed"
+msgstr "실패했습니다."
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "이 Kokoro 음성은 설치되어 있지 않습니다. 음성 관리자를 열어 다운로드하세요."
+msgid "Removal Failed"
+msgstr "제거 실패"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "알 수 없는 음성: {voice_id}"
+msgid "Unknown error"
+msgstr "알 수 없는 오류"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "잘못된 음성 ID: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "음성 파일이 예상보다 큽니다."
+msgid "OK"
+msgstr "알겠습니다."
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "다운로드가 완료되지 않음({total}바이트 중 {received}바이트)"
+msgid "Play a sample of {name}"
+msgstr "{name} 샘플 재생"
 
-msgid "empty response"
-msgstr "빈 응답"
+msgid "Stop the sample"
+msgstr "샘플 중지"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "음성을 다운로드할 수 없습니다. 인터넷 연결을 확인하고 다시 시도하세요. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "다운로드한 음성 파일이 손상되었습니다. 다시 시도하세요. ({error})"
+msgid "The sample could not be played."
+msgstr "샘플을 재생할 수 없습니다."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "음성을 설치할 디스크 공간이 부족합니다({size} MB 필요)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "사용자 음성 디렉터리를 만들 수 없음: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "음성을 추가하지 못함: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "기본 음성은 제거할 수 없음"
-
-msgid "No user voices installed"
-msgstr "설치된 사용자 음성 없음"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "음성을 제거하지 못함: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "오디오를 재생할 수 없습니다. alsa-utils(aplay)가 설치되어 있는지 확인하세요."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine}을(를) 시작할 수 없습니다. 설치되어 있는지 확인하세요."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice가 설치되어 있지 않습니다. rhvoice 패키지를 설치하세요."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng가 이 텍스트를 읽을 수 없습니다. espeak-ng가 설치되어 있는지 확인하세요."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "선택한 Piper 음성이 설치되어 있지 않습니다. 음성 관리자에서 다른 음성을 선택하세요."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper가 이 텍스트를 읽을 수 없습니다. 다른 음성을 사용해 보세요."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "텍스트를 읽는 중 {engine}이(가) 비정상 종료되었습니다."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine}이(가) 오류로 중지되어 텍스트를 읽을 수 없습니다."
-
-msgid "Extra low quality"
-msgstr "매우 낮은 품질"
-
-msgid "Low quality"
-msgstr "낮은 품질"
-
-msgid "Medium quality"
-msgstr "중간 품질"
-
-msgid "High quality"
-msgstr "높은 품질"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "선택한 텍스트를 소리 내어 읽기"
-
-msgid "Could not read the text."
-msgstr "텍스트를 읽을 수 없습니다."
-
-msgid "Reading text"
-msgstr "텍스트 읽는 중"
-
-msgid "Playing…"
-msgstr "재생 중…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "선택한 텍스트를 읽으려면 wl-clipboard(Wayland) 또는 xclip(X11)을 설치하세요."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "먼저 텍스트를 선택한 다음 단축키를 누르세요."
-
-msgid "No text selected"
-msgstr "선택된 텍스트 없음"
-
-msgid "Read text"
-msgstr "텍스트를 읽으세요."
+msgid "The sample could not be played: {program} is not installed."
+msgstr "샘플을 재생할 수 없습니다: {program}이(가) 설치되어 있지 않습니다."
 
 msgid "Play"
 msgstr "재생"
 
-msgid "Pause"
-msgstr "일시 정지"
-
 msgid "Stop"
 msgstr "중지"
 
-msgid "Paused"
-msgstr "일시 정지됨"
-
-msgid "BigLinux Team"
-msgstr "BigLinux 팀"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS는 로컬 음성, 전역 단축키, 정밀한 재생 제어로 선택하거나 입력한 텍스트를 음성으로 변환합니다."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS는 2021년 웹 기반 도구로 시작하여 여러 음성 엔진, 음성 관리, Rust 오디오 엔진을 갖춘 네이티브 GTK4 애플리케이션으로 발전했습니다."
-
-msgid "Could not register the shortcut."
-msgstr "단축키를 등록할 수 없습니다."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "텍스트를 선택하고 {shortcut} 키를 눌러 들어 보세요"
-
-msgid "Text-to-speech assistant"
-msgstr "텍스트 음성 변환 도우미"
-
 msgid "Playback position"
 msgstr "재생 위치"
+
+msgid "Pause"
+msgstr "일시 정지"
+
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "오늘, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "어제, {time}"
+
+msgid "Select this reading"
+msgstr "이 읽기 선택"
+
+msgid "(text not kept)"
+msgstr "(텍스트 보관 안 함)"
+
+msgid "Show more"
+msgstr "더 보기"
+
+msgid "Copy text"
+msgstr "텍스트 복사"
+
+msgid "Read again with the current voice"
+msgstr "현재 음성으로 다시 읽기"
+
+msgid "More actions"
+msgstr "추가 작업"
+
+msgid "Stopped"
+msgstr "중지됨"
+
+msgid "Error"
+msgstr "오류"
+
+msgid "Reading stopped before the end"
+msgstr "끝나기 전에 읽기가 중지됨"
+
+msgid "The engine failed during this reading"
+msgstr "이 읽기 중 엔진이 실패했습니다"
+
+msgid "Audio not kept for this reading"
+msgstr "이 읽기의 오디오는 보관되지 않았습니다"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} 읽기, {when}"
+
+msgid "Save audio as…"
+msgstr "다른 이름으로 오디오 저장…"
+
+msgid "Open file location"
+msgstr "파일 위치 열기"
+
+msgid "Delete"
+msgstr "삭제"
+
+msgid "Show less"
+msgstr "간단히 보기"
+
+msgid "Text copied"
+msgstr "텍스트 복사됨"
+
+msgid "Save audio as"
+msgstr "다른 이름으로 오디오 저장"
+
+msgid "Audio saved"
+msgstr "오디오 저장됨"
+
+msgid "Could not save the audio"
+msgstr "오디오를 저장할 수 없습니다"
+
+msgid "History"
+msgstr "기록"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "저장이 꺼져 있습니다: 새 읽기는 보관되지 않습니다."
+
+msgid "Turn On"
+msgstr "켜기"
+
+msgid "Search text, voice, engine or date…"
+msgstr "텍스트, 음성, 엔진 또는 날짜 검색…"
+
+msgid "All dates"
+msgstr "모든 날짜"
+
+msgid "Today"
+msgstr "오늘"
+
+msgid "Yesterday"
+msgstr "어제"
+
+msgid "Last 7 days"
+msgstr "최근 7일"
+
+msgid "Filter by date"
+msgstr "날짜로 필터"
+
+msgid "All engines"
+msgstr "모든 엔진"
+
+msgid "Filter by engine"
+msgstr "엔진으로 필터"
+
+msgid "Newest first"
+msgstr "최신순"
+
+msgid "Sort order"
+msgstr "정렬 순서"
+
+msgid "Show as grid"
+msgstr "격자로 보기"
+
+msgid "Select readings"
+msgstr "읽기 선택"
+
+msgid "Select All"
+msgstr "모두 선택"
+
+msgid "Deselect All"
+msgstr "모두 선택 해제"
+
+msgid "Save the selected readings to a folder"
+msgstr "선택한 읽기를 폴더에 저장"
+
+msgid "Save selected"
+msgstr "선택 항목 저장"
+
+msgid "Delete selected"
+msgstr "선택한 항목 삭제"
+
+msgid "History entries"
+msgstr "기록 항목"
+
+msgid "The history could not be read"
+msgstr "기록을 읽을 수 없습니다"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "{folder} 폴더의 권한을 확인하십시오."
+
+msgid "No readings found"
+msgstr "읽기를 찾을 수 없음"
+
+msgid "Try other words or another date or engine."
+msgstr "다른 단어나 다른 날짜 또는 엔진으로 시도해 보십시오."
+
+msgid "Clear Filters"
+msgstr "필터 지우기"
+
+msgid "No readings yet"
+msgstr "아직 읽기 없음"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "듣는 모든 내용이 오디오와 함께 여기에 표시됩니다. 이 컴퓨터의 {folder}에만 저장됩니다."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "저장이 꺼져 있습니다. 켜면 듣는 내용을 오디오와 함께 보관합니다 — 이 컴퓨터의 {folder}에만 저장됩니다."
+
+msgid "Turn On History"
+msgstr "기록 켜기"
+
+msgid "Oldest first"
+msgstr "오래된 순"
+
+msgid "Show as list"
+msgstr "목록으로 보기"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "선택됨: {count}"
+
+msgid "Reading deleted"
+msgstr "읽기 삭제됨"
+
+msgid "Undo"
+msgstr "실행 취소"
+
+msgid "Delete the selected readings?"
+msgstr "선택한 읽기를 삭제하시겠습니까?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "읽기: {count}. 오디오 및 텍스트 파일은 휴지통으로 이동됩니다."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "휴지통으로 이동됨: {count}"
+
+msgid "Save the selected readings"
+msgstr "선택한 읽기 저장"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "{folder}에 저장됨: {count}"
+
+msgid "No shortcut"
+msgstr "단축키 없음"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "단축키: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "먼저 {engine} 음성을 설치하세요"
 msgid "Neural"
 msgstr "신경망"
 
+msgid "High quality"
+msgstr "높은 품질"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "사용 가능한 음성: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper를 사용할 수 없음"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "저장소에서 Piper 음성 패키지를 찾을 수 없습니다({packages}). 시스템을 업데이트(sudo pacman -Syu)한 후 다시 시도하세요."
-
-msgid "OK"
-msgstr "알겠습니다."
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper는 자연스러운 신경망 음성을 제공합니다. 다음 패키지가 설치됩니다:"
@@ -769,12 +790,18 @@ msgstr "테스트할 텍스트를 입력하세요"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "볼륨이 0입니다 — 테스트를 위해 최소로 증가합니다."
 
+msgid "Loading voice…"
+msgstr "음성 불러오는 중…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} 준비 중입니다. 잠시 후 읽기가 시작됩니다."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "음성을 준비하는 중입니다. 잠시 후 읽기가 시작됩니다."
+
+msgid "Speaking…"
+msgstr "읽는 중…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "중지하려면 {shortcut}을(를) 다시 누르세요."
 msgid "Use Stop to end the reading."
 msgstr "읽기를 끝내려면 중지를 사용하세요."
 
+msgid "Could not read the text"
+msgstr "텍스트를 읽을 수 없습니다"
+
 msgid "The speech engine reported a problem."
 msgstr "음성 엔진에서 문제가 보고되었습니다."
-
-msgid "Stopped"
-msgstr "중지됨"
 
 msgid "Reading was stopped."
 msgstr "읽기가 중지되었습니다."
@@ -847,9 +874,6 @@ msgstr "불러오는 중"
 
 msgid "Speaking"
 msgstr "읽는 중"
-
-msgid "Error"
-msgstr "오류"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "시작 시 대화 상자 표시"
 msgid "Let's Start"
 msgstr "시작합시다"
 
-msgid "Unknown"
-msgstr "알 수 없음"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "설치가 취소되었습니다: 관리자 암호가 확인되지 않았습니다."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "오늘, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages}을(를) 저장소에서 사용할 수 없습니다. 시스템을 업데이트(sudo pacman -Syu)한 후 다시 시도하세요."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "다른 프로그램이 패키지를 설치하거나 업데이트하고 있습니다. 완료될 때까지 기다린 후 다시 시도하세요."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "패키지를 다운로드할 수 없습니다. 인터넷 연결을 확인하고 다시 시도하세요."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "어제, {time}"
-
-msgid "Select this reading"
-msgstr "이 읽기 선택"
-
-msgid "(text not kept)"
-msgstr "(텍스트 보관 안 함)"
-
-msgid "Show more"
-msgstr "더 보기"
-
-msgid "Copy text"
-msgstr "텍스트 복사"
-
-msgid "Read again with the current voice"
-msgstr "현재 음성으로 다시 읽기"
-
-msgid "More actions"
-msgstr "추가 작업"
-
-msgid "Reading stopped before the end"
-msgstr "끝나기 전에 읽기가 중지됨"
-
-msgid "The engine failed during this reading"
-msgstr "이 읽기 중 엔진이 실패했습니다"
-
-msgid "Audio not kept for this reading"
-msgstr "이 읽기의 오디오는 보관되지 않았습니다"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages}이(가) 설치된 파일 또는 패키지와 충돌합니다. 자세한 내용을 확인하세요."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} 읽기, {when}"
-
-msgid "Save audio as…"
-msgstr "다른 이름으로 오디오 저장…"
-
-msgid "Open file location"
-msgstr "파일 위치 열기"
-
-msgid "Delete"
-msgstr "삭제"
-
-msgid "Show less"
-msgstr "간단히 보기"
-
-msgid "Text copied"
-msgstr "텍스트 복사됨"
-
-msgid "Save audio as"
-msgstr "다른 이름으로 오디오 저장"
-
-msgid "Audio saved"
-msgstr "오디오 저장됨"
-
-msgid "Could not save the audio"
-msgstr "오디오를 저장할 수 없습니다"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "저장이 꺼져 있습니다: 새 읽기는 보관되지 않습니다."
-
-msgid "Turn On"
-msgstr "켜기"
-
-msgid "Search text, voice, engine or date…"
-msgstr "텍스트, 음성, 엔진 또는 날짜 검색…"
-
-msgid "All dates"
-msgstr "모든 날짜"
-
-msgid "Today"
-msgstr "오늘"
-
-msgid "Yesterday"
-msgstr "어제"
-
-msgid "Last 7 days"
-msgstr "최근 7일"
-
-msgid "Filter by date"
-msgstr "날짜로 필터"
-
-msgid "All engines"
-msgstr "모든 엔진"
-
-msgid "Filter by engine"
-msgstr "엔진으로 필터"
-
-msgid "Newest first"
-msgstr "최신순"
-
-msgid "Sort order"
-msgstr "정렬 순서"
-
-msgid "Show as grid"
-msgstr "격자로 보기"
-
-msgid "Select readings"
-msgstr "읽기 선택"
-
-msgid "Select All"
-msgstr "모두 선택"
-
-msgid "Deselect All"
-msgstr "모두 선택 해제"
-
-msgid "Save the selected readings to a folder"
-msgstr "선택한 읽기를 폴더에 저장"
-
-msgid "Save selected"
-msgstr "선택 항목 저장"
-
-msgid "Delete selected"
-msgstr "선택한 항목 삭제"
-
-msgid "History entries"
-msgstr "기록 항목"
-
-msgid "The history could not be read"
-msgstr "기록을 읽을 수 없습니다"
+msgid "Not enough free disk space to install {packages}."
+msgstr "{packages}을(를) 설치할 디스크 여유 공간이 부족합니다."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "{folder} 폴더의 권한을 확인하십시오."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages}을(를) 설치할 수 없습니다. 자세한 내용을 확인하세요."
 
-msgid "No readings found"
-msgstr "읽기를 찾을 수 없음"
+msgid "Nothing to install."
+msgstr "설치할 항목이 없습니다."
 
-msgid "Try other words or another date or engine."
-msgstr "다른 단어나 다른 날짜 또는 엔진으로 시도해 보십시오."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec가 설치되어 있지 않습니다(polkit 패키지)."
 
-msgid "Clear Filters"
-msgstr "필터 지우기"
-
-msgid "No readings yet"
-msgstr "아직 읽기 없음"
+msgid "The installation took too long and was stopped."
+msgstr "설치 시간이 너무 오래 걸려 중지되었습니다."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "듣는 모든 내용이 오디오와 함께 여기에 표시됩니다. 이 컴퓨터의 {folder}에만 저장됩니다."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "AUR에서 {packages}을(를) 빌드할 수 없습니다. 세부 정보를 확인하세요."
+
+msgid "This key combination is not valid."
+msgstr "유효하지 않은 키 조합입니다."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "일반 입력에 영향을 주지 않도록 Ctrl, Alt 또는 Super를 다른 키와 함께 사용하세요."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "데스크톱에서 지원하지 않는 키 조합입니다."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "저장이 꺼져 있습니다. 켜면 듣는 내용을 오디오와 함께 보관합니다 — 이 컴퓨터의 {folder}에만 저장됩니다."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut}은(는) 이미 사용 중입니다: {names}. 다른 단축키를 선택하세요."
 
-msgid "Turn On History"
-msgstr "기록 켜기"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "데스크톱이 단축키를 받아들이지 않았습니다. KDE 전역 단축키 서비스가 실행 중인가요?"
 
-msgid "Oldest first"
-msgstr "오래된 순"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "데스크톱이 새 단축키를 확인하지 않았습니다."
 
-msgid "Show as list"
-msgstr "목록으로 보기"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "단축키가 저장되었지만 데스크톱에서 아직 확인하지 못했습니다."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "선택됨: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "이 데스크톱에서 단축키를 등록할 수 없습니다. 시스템 키보드 설정에서 biglinux-tts-speak 명령으로 추가하세요."
 
-msgid "Reading deleted"
-msgstr "읽기 삭제됨"
+msgid "Extra low quality"
+msgstr "매우 낮은 품질"
 
-msgid "Undo"
-msgstr "실행 취소"
+msgid "Low quality"
+msgstr "낮은 품질"
 
-msgid "Delete the selected readings?"
-msgstr "선택한 읽기를 삭제하시겠습니까?"
+msgid "Medium quality"
+msgstr "중간 품질"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "읽기: {count}. 오디오 및 텍스트 파일은 휴지통으로 이동됩니다."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro가 설치되어 있지 않습니다. biglinux-kokoro-tts 패키지를 설치하세요."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "휴지통으로 이동됨: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoro 음성 모델이 없습니다. biglinux-kokoro-tts 패키지를 다시 설치하세요."
 
-msgid "Save the selected readings"
-msgstr "선택한 읽기 저장"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro 음성을 찾을 수 없습니다. 음성 관리자를 열어 음성을 다운로드하세요."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "{folder}에 저장됨: {count}"
-
-msgid "No shortcut"
-msgstr "단축키 없음"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "이 Kokoro 음성은 설치되어 있지 않습니다. 음성 관리자를 열어 다운로드하세요."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "단축키: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper 엔진"
-
-msgid "Voice Manager"
-msgstr "음성 관리자"
-
-msgid "Search voices by name or language…"
-msgstr "이름 또는 언어로 음성 검색…"
-
-msgid "Loading available voices…"
-msgstr "사용 가능한 음성을 로드하는 중…"
-
-msgid "No Voice Packages Found"
-msgstr "음성 패키지가 없습니다."
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "pacman 저장소에서 TTS 음성 패키지를 찾을 수 없습니다."
-
-msgid "High quality offline voices"
-msgstr "고품질 오프라인 음성"
-
-msgid "Neural network voices — natural sounding"
-msgstr "신경망 음성 — 자연스러운 소리"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "경량 다국어 합성기"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "신경 TTS — 고품질 다국어 음성 (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "알 수 없는 음성: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "{name} 설치"
+msgid "Invalid voice id: {voice_id}"
+msgstr "잘못된 음성 ID: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "음성 파일이 예상보다 큽니다."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "{name}을(를) 제거하세요."
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "다운로드가 완료되지 않음({total}바이트 중 {received}바이트)"
 
-msgid "Installed"
-msgstr "설치됨"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "{name}을(를) 제거할까요?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "이 음성은 더 이상 읽기에 사용할 수 없습니다. 나중에 다시 설치할 수 있습니다."
-
-msgid "Remove"
-msgstr "제거하다"
+msgid "empty response"
+msgstr "빈 응답"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} 다운로드 중…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "음성을 다운로드할 수 없습니다. 인터넷 연결을 확인하고 다시 시도하세요. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} 다운로드 중… {done}/{total} KB"
-
-msgid "Operation timed out"
-msgstr "작업 시간이 초과되었습니다."
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec 또는 pacman을 찾을 수 없습니다."
-
-msgid "Download cancelled"
-msgstr "다운로드 취소됨"
-
-msgid "Failed"
-msgstr "실패했습니다."
-
-msgid "Removal Failed"
-msgstr "제거 실패"
-
-msgid "Unknown error"
-msgstr "알 수 없는 오류"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "다운로드한 음성 파일이 손상되었습니다. 다시 시도하세요. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "{name} 샘플 재생"
-
-msgid "Stop the sample"
-msgstr "샘플 중지"
-
-msgid "The sample could not be played."
-msgstr "샘플을 재생할 수 없습니다."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "음성을 설치할 디스크 공간이 부족합니다({size} MB 필요)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "샘플을 재생할 수 없습니다: {program}이(가) 설치되어 있지 않습니다."
+msgid "Cannot create user voices directory: {error}"
+msgstr "사용자 음성 디렉터리를 만들 수 없음: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "음성을 추가하지 못함: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "기본 음성은 제거할 수 없음"
+
+msgid "No user voices installed"
+msgstr "설치된 사용자 음성 없음"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "음성을 제거하지 못함: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "선택한 텍스트 읽기 또는 중지"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "오디오를 재생할 수 없습니다. alsa-utils(aplay)가 설치되어 있는지 확인하세요."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine}을(를) 시작할 수 없습니다. 설치되어 있는지 확인하세요."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice가 설치되어 있지 않습니다. rhvoice 패키지를 설치하세요."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng가 이 텍스트를 읽을 수 없습니다. espeak-ng가 설치되어 있는지 확인하세요."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "선택한 Piper 음성이 설치되어 있지 않습니다. 음성 관리자에서 다른 음성을 선택하세요."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper가 이 텍스트를 읽을 수 없습니다. 다른 음성을 사용해 보세요."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "텍스트를 읽는 중 {engine}이(가) 비정상 종료되었습니다."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine}이(가) 오류로 중지되어 텍스트를 읽을 수 없습니다."
+
+msgid "Read the selected text aloud"
+msgstr "선택한 텍스트를 소리 내어 읽기"
+
+msgid "Could not read the text."
+msgstr "텍스트를 읽을 수 없습니다."
+
+msgid "Reading text"
+msgstr "텍스트 읽는 중"
+
+msgid "Playing…"
+msgstr "재생 중…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "선택한 텍스트를 읽으려면 wl-clipboard(Wayland) 또는 xclip(X11)을 설치하세요."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "먼저 텍스트를 선택한 다음 단축키를 누르세요."
+
+msgid "No text selected"
+msgstr "선택된 텍스트 없음"
+
+msgid "Read text"
+msgstr "텍스트를 읽으세요."
+
+msgid "Settings"
+msgstr "설정"
+
+msgid "Quit"
+msgstr "종료"
+
+msgid "Paused"
+msgstr "일시 정지됨"
+
+msgid "BigLinux Team"
+msgstr "BigLinux 팀"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS는 로컬 음성, 전역 단축키, 정밀한 재생 제어로 선택하거나 입력한 텍스트를 음성으로 변환합니다."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS는 2021년 웹 기반 도구로 시작하여 여러 음성 엔진, 음성 관리, Rust 오디오 엔진을 갖춘 네이티브 GTK4 애플리케이션으로 발전했습니다."
+
+msgid "Could not register the shortcut."
+msgstr "단축키를 등록할 수 없습니다."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "텍스트를 선택하고 {shortcut} 키를 눌러 들어 보세요"
+
+msgid "Text-to-speech assistant"
+msgstr "텍스트 음성 변환 도우미"
+
+msgid "Show settings"
+msgstr "설정 표시"
+
+msgid "Back"
+msgstr "뒤로"
+
+msgid "Text narrator"
+msgstr "텍스트 낭독기"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "단축키가 활성화되지 않았습니다 — 고급 옵션을 열어 해결하세요"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "텍스트를 선택하고 {key} 키를 눌러 소리 내어 읽기"
+
+msgid "Show tray icon"
+msgstr "트레이 아이콘 표시"
+
+msgid "Restore Defaults…"
+msgstr "기본값 복원…"
+
+msgid "Welcome"
+msgstr "환영합니다"
+
+msgid "About BigLinux TTS"
+msgstr "BigLinux TTS 정보"
+
+msgid "Main menu"
+msgstr "기본 메뉴"
+
+msgid "Restore settings?"
+msgstr "설정을 복원하시겠습니까?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "모든 조정이 원래 기본값으로 돌아갑니다."
+
+msgid "Restore"
+msgstr "복원"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux 텍스트 음성 변환 — 선택한 텍스트를 소리 내어 읽기"
+
+msgid "Enable debug logging"
+msgstr "디버그 로그 사용"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

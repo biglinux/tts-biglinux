@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux テキスト読み上げ — 選択したテキストを読み上げる"
+msgid "Piper engine"
+msgstr "Piper エンジン"
 
-msgid "Enable debug logging"
-msgstr "デバッグログを有効にする"
+msgid "Voice Manager"
+msgstr "ボイスマネージャー"
 
-msgid "Settings"
-msgstr "設定"
+msgid "Search voices by name or language…"
+msgstr "名前または言語で音声を検索…"
 
-msgid "Show settings"
-msgstr "設定を表示"
-
-msgid "Back"
-msgstr "戻る"
-
-msgid "Text narrator"
-msgstr "テキスト読み上げ"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "ショートカットが有効になっていません — 詳細オプションを開いて修正してください"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "テキストを選択して {key} を押すと読み上げます"
-
-msgid "History"
-msgstr "履歴"
-
-msgid "Loading voice…"
-msgstr "音声を読み込み中…"
-
-msgid "Speaking…"
-msgstr "読み上げ中…"
-
-msgid "Could not read the text"
-msgstr "テキストを読み取れませんでした"
-
-msgid "Show tray icon"
-msgstr "トレイアイコンを表示"
-
-msgid "Restore Defaults…"
-msgstr "デフォルトに戻す…"
-
-msgid "Welcome"
-msgstr "ようこそ"
-
-msgid "About BigLinux TTS"
-msgstr "BigLinux TTS について"
-
-msgid "Quit"
-msgstr "終了"
-
-msgid "Main menu"
-msgstr "メインメニュー"
-
-msgid "Restore settings?"
-msgstr "設定を復元しますか？"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "すべての設定を元のデフォルト値に戻します。"
+msgid "Loading available voices…"
+msgstr "利用可能な音声を読み込んでいます…"
 
 msgid "Cancel"
 msgstr "キャンセル"
 
-msgid "Restore"
-msgstr "復元"
+msgid "No Voice Packages Found"
+msgstr "音声パッケージが見つかりませんでした。"
 
-msgid "This key combination is not valid."
-msgstr "このキーの組み合わせは無効です。"
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "pacmanリポジトリからTTS音声パッケージが見つかりませんでした。"
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "通常の入力に影響しないよう、Ctrl、Alt、Super のいずれかとキーを組み合わせてください。"
+msgid "High quality offline voices"
+msgstr "高品質のオフライン音声"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "このキーの組み合わせはデスクトップでサポートされていません。"
+msgid "Neural network voices — natural sounding"
+msgstr "ニューラルネットワーク音声 - 自然な音声"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} は次で使用されています: {names}。別のショートカットを選択してください。"
+msgid "Lightweight multi-language synthesizer"
+msgstr "軽量マルチ言語合成器"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "デスクトップがショートカットを受け付けませんでした。KDE グローバルショートカットサービスは実行中ですか？"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "デスクトップが新しいショートカットを確認しませんでした。"
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "ショートカットは保存されましたが、デスクトップでまだ確認できません。"
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "このデスクトップではショートカットを登録できませんでした。システムのキーボード設定で、コマンド biglinux-tts-speak を使って追加してください。"
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "インストールはキャンセルされました: 管理者パスワードが確認されませんでした。"
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "ニューラルTTS — 高品質の多言語音声 (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} はリポジトリにありません。システムを更新（sudo pacman -Syu）して、もう一度お試しください。"
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "別のプログラムがパッケージをインストールまたは更新しています。完了するまで待ってから、もう一度お試しください。"
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "パッケージをダウンロードできませんでした。インターネット接続を確認して、もう一度お試しください。"
+msgid "Install {name}"
+msgstr "{name}をインストールします。"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} はインストール済みのファイルまたはパッケージと競合しています。詳細を確認してください。"
+msgid "Remove {name}"
+msgstr "{name}を削除します。"
+
+msgid "Installed"
+msgstr "インストール済み"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "{packages} をインストールするための空きディスク容量が足りません。"
+msgid "Remove {name}?"
+msgstr "{name} を削除しますか？"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "この音声は読み上げに使用できなくなります。後で再インストールできます。"
+
+msgid "Remove"
+msgstr "削除"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} をインストールできませんでした。詳細を確認してください。"
-
-msgid "Nothing to install."
-msgstr "インストールするものはありません。"
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec がインストールされていません（polkit パッケージ）。"
-
-msgid "The installation took too long and was stopped."
-msgstr "インストールに時間がかかりすぎたため、中止されました。"
+msgid "Downloading {name}…"
+msgstr "{name} をダウンロード中…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} を AUR からビルドできませんでした。詳細を確認してください。"
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} をダウンロード中… {done} / {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "選択したテキストを読み上げる／停止する"
+msgid "Operation timed out"
+msgstr "操作がタイムアウトしました"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro がインストールされていません。biglinux-kokoro-tts パッケージをインストールしてください。"
+msgid "pkexec or pacman not found"
+msgstr "pkexec または pacman が見つかりません。"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Kokoro の音声モデルが見つかりません。biglinux-kokoro-tts パッケージを再インストールしてください。"
+msgid "Download cancelled"
+msgstr "ダウンロードをキャンセルしました"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Kokoro の音声が見つかりません。音声マネージャーを開いて音声をダウンロードしてください。"
+msgid "Failed"
+msgstr "失敗しました"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "この Kokoro 音声はインストールされていません。音声マネージャーを開いてダウンロードしてください。"
+msgid "Removal Failed"
+msgstr "削除に失敗しました"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "不明な音声: {voice_id}"
+msgid "Unknown error"
+msgstr "不明なエラー"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "無効な音声 ID: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "音声ファイルが想定より大きいです。"
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "ダウンロードが不完全です（{total} バイト中 {received} バイト）"
+msgid "Play a sample of {name}"
+msgstr "{name} のサンプルを再生"
 
-msgid "empty response"
-msgstr "空の応答"
+msgid "Stop the sample"
+msgstr "サンプルを停止"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "音声をダウンロードできませんでした。インターネット接続を確認して、もう一度お試しください。（{error}）"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "ダウンロードした音声ファイルが破損しています。もう一度お試しください。（{error}）"
+msgid "The sample could not be played."
+msgstr "サンプルを再生できませんでした。"
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "音声をインストールするためのディスク容量が足りません（{size} MB 必要）。"
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "ユーザー音声ディレクトリを作成できません: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "音声を追加できませんでした: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "基本音声は削除できません"
-
-msgid "No user voices installed"
-msgstr "ユーザー音声がインストールされていません"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "音声を削除できませんでした: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "オーディオを再生できませんでした。alsa-utils（aplay）がインストールされているか確認してください。"
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} を起動できませんでした。インストールされているか確認してください。"
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice がインストールされていません。rhvoice パッケージをインストールしてください。"
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng はこのテキストを読み上げられませんでした。espeak-ng がインストールされているか確認してください。"
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "選択した Piper 音声はインストールされていません。音声マネージャーで別の音声を選択してください。"
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper はこのテキストを読み上げられませんでした。別の音声をお試しください。"
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "テキストの読み上げ中に {engine} がクラッシュしました。"
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} がエラーで停止し、テキストを読み上げられませんでした。"
-
-msgid "Extra low quality"
-msgstr "超低品質"
-
-msgid "Low quality"
-msgstr "低品質"
-
-msgid "Medium quality"
-msgstr "中品質"
-
-msgid "High quality"
-msgstr "高品質"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language}（{region}）"
-
-msgid "Read the selected text aloud"
-msgstr "選択したテキストを読み上げる"
-
-msgid "Could not read the text."
-msgstr "テキストを読み取れませんでした。"
-
-msgid "Reading text"
-msgstr "テキストを読み上げ中"
-
-msgid "Playing…"
-msgstr "再生中…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "選択したテキストを読み上げるには、wl-clipboard（Wayland）または xclip（X11）をインストールしてください。"
-
-msgid "Select some text first, then press the shortcut."
-msgstr "先にテキストを選択してから、ショートカットを押してください。"
-
-msgid "No text selected"
-msgstr "テキストが選択されていません"
-
-msgid "Read text"
-msgstr "テキストを読み取ります"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "サンプルを再生できませんでした: {program} がインストールされていません。"
 
 msgid "Play"
 msgstr "再生"
 
-msgid "Pause"
-msgstr "一時停止"
-
 msgid "Stop"
 msgstr "停止"
 
-msgid "Paused"
-msgstr "一時停止中"
-
-msgid "BigLinux Team"
-msgstr "BigLinux チーム"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS は、選択または入力したテキストを、ローカル音声、グローバルショートカット、精密な再生コントロールで音声に変換します。"
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS は 2021 年にウェブベースのツールとして始まり、複数の音声エンジン、音声管理、Rust 製オーディオエンジンを備えたネイティブ GTK4 アプリケーションへと進化しました。"
-
-msgid "Could not register the shortcut."
-msgstr "ショートカットを登録できませんでした。"
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "テキストを選択して {shortcut} を押すと読み上げます"
-
-msgid "Text-to-speech assistant"
-msgstr "テキスト読み上げアシスタント"
-
 msgid "Playback position"
 msgstr "再生位置"
+
+msgid "Pause"
+msgstr "一時停止"
+
+msgid "Unknown"
+msgstr "不明"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "今日 {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "昨日 {time}"
+
+msgid "Select this reading"
+msgstr "この読み上げを選択"
+
+msgid "(text not kept)"
+msgstr "（テキストは保持されていません）"
+
+msgid "Show more"
+msgstr "もっと見る"
+
+msgid "Copy text"
+msgstr "テキストをコピー"
+
+msgid "Read again with the current voice"
+msgstr "現在の音声でもう一度読み上げ"
+
+msgid "More actions"
+msgstr "その他の操作"
+
+msgid "Stopped"
+msgstr "停止"
+
+msgid "Error"
+msgstr "エラー"
+
+msgid "Reading stopped before the end"
+msgstr "読み上げが途中で停止しました"
+
+msgid "The engine failed during this reading"
+msgstr "この読み上げ中にエンジンが失敗しました"
+
+msgid "Audio not kept for this reading"
+msgstr "この読み上げのオーディオは保持されていません"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} の読み上げ、{when}"
+
+msgid "Save audio as…"
+msgstr "名前を付けてオーディオを保存…"
+
+msgid "Open file location"
+msgstr "ファイルの場所を開く"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Show less"
+msgstr "表示を減らす"
+
+msgid "Text copied"
+msgstr "テキストをコピーしました"
+
+msgid "Save audio as"
+msgstr "名前を付けてオーディオを保存"
+
+msgid "Audio saved"
+msgstr "オーディオを保存しました"
+
+msgid "Could not save the audio"
+msgstr "オーディオを保存できませんでした"
+
+msgid "History"
+msgstr "履歴"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "保存はオフです: 新しい読み上げは保持されません。"
+
+msgid "Turn On"
+msgstr "オンにする"
+
+msgid "Search text, voice, engine or date…"
+msgstr "テキスト、音声、エンジン、日付で検索…"
+
+msgid "All dates"
+msgstr "すべての日付"
+
+msgid "Today"
+msgstr "今日"
+
+msgid "Yesterday"
+msgstr "昨日"
+
+msgid "Last 7 days"
+msgstr "過去 7 日間"
+
+msgid "Filter by date"
+msgstr "日付で絞り込む"
+
+msgid "All engines"
+msgstr "すべてのエンジン"
+
+msgid "Filter by engine"
+msgstr "エンジンで絞り込む"
+
+msgid "Newest first"
+msgstr "新しい順"
+
+msgid "Sort order"
+msgstr "並べ替え順"
+
+msgid "Show as grid"
+msgstr "グリッドで表示"
+
+msgid "Select readings"
+msgstr "読み上げを選択"
+
+msgid "Select All"
+msgstr "すべて選択"
+
+msgid "Deselect All"
+msgstr "すべて選択解除"
+
+msgid "Save the selected readings to a folder"
+msgstr "選択した読み上げをフォルダーに保存"
+
+msgid "Save selected"
+msgstr "選択項目を保存"
+
+msgid "Delete selected"
+msgstr "選択した項目を削除"
+
+msgid "History entries"
+msgstr "履歴エントリ"
+
+msgid "The history could not be read"
+msgstr "履歴を読み込めませんでした"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "フォルダー {folder} のアクセス権を確認してください。"
+
+msgid "No readings found"
+msgstr "読み上げが見つかりません"
+
+msgid "Try other words or another date or engine."
+msgstr "別の語句、日付、またはエンジンをお試しください。"
+
+msgid "Clear Filters"
+msgstr "フィルターをクリア"
+
+msgid "No readings yet"
+msgstr "読み上げはまだありません"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "聞いたものはすべて、オーディオと一緒にここに表示されます。このコンピューターの {folder} にのみ保存されます。"
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "保存はオフです。オンにすると、聞いたものをオーディオと一緒に保持します — このコンピューターの {folder} にのみ保存されます。"
+
+msgid "Turn On History"
+msgstr "履歴をオンにする"
+
+msgid "Oldest first"
+msgstr "古い順"
+
+msgid "Show as list"
+msgstr "リストで表示"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "選択済み: {count}"
+
+msgid "Reading deleted"
+msgstr "読み上げを削除しました"
+
+msgid "Undo"
+msgstr "元に戻す"
+
+msgid "Delete the selected readings?"
+msgstr "選択した読み上げを削除しますか?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "読み上げ: {count}。オーディオファイルとテキストファイルはゴミ箱に移動されます。"
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "ゴミ箱に移動: {count}"
+
+msgid "Save the selected readings"
+msgstr "選択した読み上げを保存"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "{folder} に保存: {count}"
+
+msgid "No shortcut"
+msgstr "ショートカットなし"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "ショートカット: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "先に{engine}の音声をインストールしてください"
 msgid "Neural"
 msgstr "ニューラル"
 
+msgid "High quality"
+msgstr "高品質"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "利用可能な音声: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper は利用できません"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "リポジトリに Piper 音声パッケージが見つかりませんでした（{packages}）。システムを更新（sudo pacman -Syu）して、もう一度お試しください。"
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper は自然なニューラル音声を提供します。次のパッケージがインストールされます:"
@@ -769,12 +790,18 @@ msgstr "テスト用のテキストを入力してください"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "音量はゼロです — テストのために最小に増加します"
 
+msgid "Loading voice…"
+msgstr "音声を読み込み中…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} を準備中です。まもなく読み上げが始まります。"
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "音声を準備中です。まもなく読み上げが始まります。"
+
+msgid "Speaking…"
+msgstr "読み上げ中…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "もう一度 {shortcut} を押すと停止します。"
 msgid "Use Stop to end the reading."
 msgstr "読み上げを終了するには「停止」を使用してください。"
 
+msgid "Could not read the text"
+msgstr "テキストを読み取れませんでした"
+
 msgid "The speech engine reported a problem."
 msgstr "音声エンジンが問題を報告しました。"
-
-msgid "Stopped"
-msgstr "停止"
 
 msgid "Reading was stopped."
 msgstr "読み上げを停止しました。"
@@ -847,9 +874,6 @@ msgstr "読み込み中"
 
 msgid "Speaking"
 msgstr "読み上げ中"
-
-msgid "Error"
-msgstr "エラー"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "起動時にダイアログを表示"
 msgid "Let's Start"
 msgstr "始めましょう"
 
-msgid "Unknown"
-msgstr "不明"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "インストールはキャンセルされました: 管理者パスワードが確認されませんでした。"
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "今日 {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} はリポジトリにありません。システムを更新（sudo pacman -Syu）して、もう一度お試しください。"
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "別のプログラムがパッケージをインストールまたは更新しています。完了するまで待ってから、もう一度お試しください。"
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "パッケージをダウンロードできませんでした。インターネット接続を確認して、もう一度お試しください。"
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "昨日 {time}"
-
-msgid "Select this reading"
-msgstr "この読み上げを選択"
-
-msgid "(text not kept)"
-msgstr "（テキストは保持されていません）"
-
-msgid "Show more"
-msgstr "もっと見る"
-
-msgid "Copy text"
-msgstr "テキストをコピー"
-
-msgid "Read again with the current voice"
-msgstr "現在の音声でもう一度読み上げ"
-
-msgid "More actions"
-msgstr "その他の操作"
-
-msgid "Reading stopped before the end"
-msgstr "読み上げが途中で停止しました"
-
-msgid "The engine failed during this reading"
-msgstr "この読み上げ中にエンジンが失敗しました"
-
-msgid "Audio not kept for this reading"
-msgstr "この読み上げのオーディオは保持されていません"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} はインストール済みのファイルまたはパッケージと競合しています。詳細を確認してください。"
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} の読み上げ、{when}"
-
-msgid "Save audio as…"
-msgstr "名前を付けてオーディオを保存…"
-
-msgid "Open file location"
-msgstr "ファイルの場所を開く"
-
-msgid "Delete"
-msgstr "削除"
-
-msgid "Show less"
-msgstr "表示を減らす"
-
-msgid "Text copied"
-msgstr "テキストをコピーしました"
-
-msgid "Save audio as"
-msgstr "名前を付けてオーディオを保存"
-
-msgid "Audio saved"
-msgstr "オーディオを保存しました"
-
-msgid "Could not save the audio"
-msgstr "オーディオを保存できませんでした"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "保存はオフです: 新しい読み上げは保持されません。"
-
-msgid "Turn On"
-msgstr "オンにする"
-
-msgid "Search text, voice, engine or date…"
-msgstr "テキスト、音声、エンジン、日付で検索…"
-
-msgid "All dates"
-msgstr "すべての日付"
-
-msgid "Today"
-msgstr "今日"
-
-msgid "Yesterday"
-msgstr "昨日"
-
-msgid "Last 7 days"
-msgstr "過去 7 日間"
-
-msgid "Filter by date"
-msgstr "日付で絞り込む"
-
-msgid "All engines"
-msgstr "すべてのエンジン"
-
-msgid "Filter by engine"
-msgstr "エンジンで絞り込む"
-
-msgid "Newest first"
-msgstr "新しい順"
-
-msgid "Sort order"
-msgstr "並べ替え順"
-
-msgid "Show as grid"
-msgstr "グリッドで表示"
-
-msgid "Select readings"
-msgstr "読み上げを選択"
-
-msgid "Select All"
-msgstr "すべて選択"
-
-msgid "Deselect All"
-msgstr "すべて選択解除"
-
-msgid "Save the selected readings to a folder"
-msgstr "選択した読み上げをフォルダーに保存"
-
-msgid "Save selected"
-msgstr "選択項目を保存"
-
-msgid "Delete selected"
-msgstr "選択した項目を削除"
-
-msgid "History entries"
-msgstr "履歴エントリ"
-
-msgid "The history could not be read"
-msgstr "履歴を読み込めませんでした"
+msgid "Not enough free disk space to install {packages}."
+msgstr "{packages} をインストールするための空きディスク容量が足りません。"
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "フォルダー {folder} のアクセス権を確認してください。"
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} をインストールできませんでした。詳細を確認してください。"
 
-msgid "No readings found"
-msgstr "読み上げが見つかりません"
+msgid "Nothing to install."
+msgstr "インストールするものはありません。"
 
-msgid "Try other words or another date or engine."
-msgstr "別の語句、日付、またはエンジンをお試しください。"
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec がインストールされていません（polkit パッケージ）。"
 
-msgid "Clear Filters"
-msgstr "フィルターをクリア"
-
-msgid "No readings yet"
-msgstr "読み上げはまだありません"
+msgid "The installation took too long and was stopped."
+msgstr "インストールに時間がかかりすぎたため、中止されました。"
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "聞いたものはすべて、オーディオと一緒にここに表示されます。このコンピューターの {folder} にのみ保存されます。"
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} を AUR からビルドできませんでした。詳細を確認してください。"
+
+msgid "This key combination is not valid."
+msgstr "このキーの組み合わせは無効です。"
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "通常の入力に影響しないよう、Ctrl、Alt、Super のいずれかとキーを組み合わせてください。"
+
+msgid "This key combination is not supported by the desktop."
+msgstr "このキーの組み合わせはデスクトップでサポートされていません。"
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "保存はオフです。オンにすると、聞いたものをオーディオと一緒に保持します — このコンピューターの {folder} にのみ保存されます。"
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} は次で使用されています: {names}。別のショートカットを選択してください。"
 
-msgid "Turn On History"
-msgstr "履歴をオンにする"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "デスクトップがショートカットを受け付けませんでした。KDE グローバルショートカットサービスは実行中ですか？"
 
-msgid "Oldest first"
-msgstr "古い順"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "デスクトップが新しいショートカットを確認しませんでした。"
 
-msgid "Show as list"
-msgstr "リストで表示"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "ショートカットは保存されましたが、デスクトップでまだ確認できません。"
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "選択済み: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "このデスクトップではショートカットを登録できませんでした。システムのキーボード設定で、コマンド biglinux-tts-speak を使って追加してください。"
 
-msgid "Reading deleted"
-msgstr "読み上げを削除しました"
+msgid "Extra low quality"
+msgstr "超低品質"
 
-msgid "Undo"
-msgstr "元に戻す"
+msgid "Low quality"
+msgstr "低品質"
 
-msgid "Delete the selected readings?"
-msgstr "選択した読み上げを削除しますか?"
+msgid "Medium quality"
+msgstr "中品質"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "読み上げ: {count}。オーディオファイルとテキストファイルはゴミ箱に移動されます。"
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro がインストールされていません。biglinux-kokoro-tts パッケージをインストールしてください。"
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "ゴミ箱に移動: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoro の音声モデルが見つかりません。biglinux-kokoro-tts パッケージを再インストールしてください。"
 
-msgid "Save the selected readings"
-msgstr "選択した読み上げを保存"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro の音声が見つかりません。音声マネージャーを開いて音声をダウンロードしてください。"
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "{folder} に保存: {count}"
-
-msgid "No shortcut"
-msgstr "ショートカットなし"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "この Kokoro 音声はインストールされていません。音声マネージャーを開いてダウンロードしてください。"
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "ショートカット: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper エンジン"
-
-msgid "Voice Manager"
-msgstr "ボイスマネージャー"
-
-msgid "Search voices by name or language…"
-msgstr "名前または言語で音声を検索…"
-
-msgid "Loading available voices…"
-msgstr "利用可能な音声を読み込んでいます…"
-
-msgid "No Voice Packages Found"
-msgstr "音声パッケージが見つかりませんでした。"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "pacmanリポジトリからTTS音声パッケージが見つかりませんでした。"
-
-msgid "High quality offline voices"
-msgstr "高品質のオフライン音声"
-
-msgid "Neural network voices — natural sounding"
-msgstr "ニューラルネットワーク音声 - 自然な音声"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "軽量マルチ言語合成器"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "ニューラルTTS — 高品質の多言語音声 (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "不明な音声: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "{name}をインストールします。"
+msgid "Invalid voice id: {voice_id}"
+msgstr "無効な音声 ID: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "音声ファイルが想定より大きいです。"
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "{name}を削除します。"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "ダウンロードが不完全です（{total} バイト中 {received} バイト）"
 
-msgid "Installed"
-msgstr "インストール済み"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "{name} を削除しますか？"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "この音声は読み上げに使用できなくなります。後で再インストールできます。"
-
-msgid "Remove"
-msgstr "削除"
+msgid "empty response"
+msgstr "空の応答"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} をダウンロード中…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "音声をダウンロードできませんでした。インターネット接続を確認して、もう一度お試しください。（{error}）"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} をダウンロード中… {done} / {total} KB"
-
-msgid "Operation timed out"
-msgstr "操作がタイムアウトしました"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec または pacman が見つかりません。"
-
-msgid "Download cancelled"
-msgstr "ダウンロードをキャンセルしました"
-
-msgid "Failed"
-msgstr "失敗しました"
-
-msgid "Removal Failed"
-msgstr "削除に失敗しました"
-
-msgid "Unknown error"
-msgstr "不明なエラー"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "ダウンロードした音声ファイルが破損しています。もう一度お試しください。（{error}）"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "{name} のサンプルを再生"
-
-msgid "Stop the sample"
-msgstr "サンプルを停止"
-
-msgid "The sample could not be played."
-msgstr "サンプルを再生できませんでした。"
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "音声をインストールするためのディスク容量が足りません（{size} MB 必要）。"
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "サンプルを再生できませんでした: {program} がインストールされていません。"
+msgid "Cannot create user voices directory: {error}"
+msgstr "ユーザー音声ディレクトリを作成できません: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "音声を追加できませんでした: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "基本音声は削除できません"
+
+msgid "No user voices installed"
+msgstr "ユーザー音声がインストールされていません"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "音声を削除できませんでした: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "選択したテキストを読み上げる／停止する"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "オーディオを再生できませんでした。alsa-utils（aplay）がインストールされているか確認してください。"
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} を起動できませんでした。インストールされているか確認してください。"
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice がインストールされていません。rhvoice パッケージをインストールしてください。"
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng はこのテキストを読み上げられませんでした。espeak-ng がインストールされているか確認してください。"
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "選択した Piper 音声はインストールされていません。音声マネージャーで別の音声を選択してください。"
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper はこのテキストを読み上げられませんでした。別の音声をお試しください。"
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "テキストの読み上げ中に {engine} がクラッシュしました。"
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} がエラーで停止し、テキストを読み上げられませんでした。"
+
+msgid "Read the selected text aloud"
+msgstr "選択したテキストを読み上げる"
+
+msgid "Could not read the text."
+msgstr "テキストを読み取れませんでした。"
+
+msgid "Reading text"
+msgstr "テキストを読み上げ中"
+
+msgid "Playing…"
+msgstr "再生中…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "選択したテキストを読み上げるには、wl-clipboard（Wayland）または xclip（X11）をインストールしてください。"
+
+msgid "Select some text first, then press the shortcut."
+msgstr "先にテキストを選択してから、ショートカットを押してください。"
+
+msgid "No text selected"
+msgstr "テキストが選択されていません"
+
+msgid "Read text"
+msgstr "テキストを読み取ります"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Quit"
+msgstr "終了"
+
+msgid "Paused"
+msgstr "一時停止中"
+
+msgid "BigLinux Team"
+msgstr "BigLinux チーム"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS は、選択または入力したテキストを、ローカル音声、グローバルショートカット、精密な再生コントロールで音声に変換します。"
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS は 2021 年にウェブベースのツールとして始まり、複数の音声エンジン、音声管理、Rust 製オーディオエンジンを備えたネイティブ GTK4 アプリケーションへと進化しました。"
+
+msgid "Could not register the shortcut."
+msgstr "ショートカットを登録できませんでした。"
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "テキストを選択して {shortcut} を押すと読み上げます"
+
+msgid "Text-to-speech assistant"
+msgstr "テキスト読み上げアシスタント"
+
+msgid "Show settings"
+msgstr "設定を表示"
+
+msgid "Back"
+msgstr "戻る"
+
+msgid "Text narrator"
+msgstr "テキスト読み上げ"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "ショートカットが有効になっていません — 詳細オプションを開いて修正してください"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "テキストを選択して {key} を押すと読み上げます"
+
+msgid "Show tray icon"
+msgstr "トレイアイコンを表示"
+
+msgid "Restore Defaults…"
+msgstr "デフォルトに戻す…"
+
+msgid "Welcome"
+msgstr "ようこそ"
+
+msgid "About BigLinux TTS"
+msgstr "BigLinux TTS について"
+
+msgid "Main menu"
+msgstr "メインメニュー"
+
+msgid "Restore settings?"
+msgstr "設定を復元しますか？"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "すべての設定を元のデフォルト値に戻します。"
+
+msgid "Restore"
+msgstr "復元"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux テキスト読み上げ — 選択したテキストを読み上げる"
+
+msgid "Enable debug logging"
+msgstr "デバッグログを有効にする"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language}（{region}）"

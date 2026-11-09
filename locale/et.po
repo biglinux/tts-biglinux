@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux tekstist kõneks — loe valitud tekst ette"
+msgid "Piper engine"
+msgstr "Piper-mootor"
 
-msgid "Enable debug logging"
-msgstr "Luba silumislogi"
+msgid "Voice Manager"
+msgstr "Hääletusjuht"
 
-msgid "Settings"
-msgstr "Seaded"
+msgid "Search voices by name or language…"
+msgstr "Otsi hääli nime või keele järgi…"
 
-msgid "Show settings"
-msgstr "Näita seadeid"
-
-msgid "Back"
-msgstr "Tagasi"
-
-msgid "Text narrator"
-msgstr "Teksti ettelugeja"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Kiirklahv pole aktiivne — ava parandamiseks Täpsemad valikud"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Vali tekst ja vajuta {key}, et see ette lugeda"
-
-msgid "History"
-msgstr "Ajalugu"
-
-msgid "Loading voice…"
-msgstr "Hääle laadimine…"
-
-msgid "Speaking…"
-msgstr "Rääkimine…"
-
-msgid "Could not read the text"
-msgstr "Teksti ei õnnestunud lugeda"
-
-msgid "Show tray icon"
-msgstr "Näita salveikooni"
-
-msgid "Restore Defaults…"
-msgstr "Taasta vaikeväärtused…"
-
-msgid "Welcome"
-msgstr "Tere tulemast"
-
-msgid "About BigLinux TTS"
-msgstr "BigLinux TTS teave"
-
-msgid "Quit"
-msgstr "Välju"
-
-msgid "Main menu"
-msgstr "Peamenüü"
-
-msgid "Restore settings?"
-msgstr "Taastada seaded?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "See taastab kõik kohandused algsete vaikeseadeteni."
+msgid "Loading available voices…"
+msgstr "Laadimine saadaval hääli…"
 
 msgid "Cancel"
 msgstr "Tühista"
 
-msgid "Restore"
-msgstr "Taasta"
+msgid "No Voice Packages Found"
+msgstr "Häältpakette ei leitud"
 
-msgid "This key combination is not valid."
-msgstr "See klahvikombinatsioon pole sobiv."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Pacman'i hoidlatest ei leitud ühtegi TTS häälepaketti."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Kasuta Ctrl-, Alt- või Super-klahvi koos mõne teise klahviga, et tavaline trükkimine ei häiruks."
+msgid "High quality offline voices"
+msgstr "Kvaliteetsed offline hääled"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Töölaud ei toeta seda klahvikombinatsiooni."
+msgid "Neural network voices — natural sounding"
+msgstr "Neuraalvõrgu hääled — loomulikult kõlavad"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} on juba kasutusel: {names}. Vali teine kiirklahv."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Kerge mitmekeelne sünteesija"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Töölaud ei aktsepteerinud kiirklahvi. Kas KDE globaalsete kiirklahvide teenus töötab?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Töölaud ei kinnitanud uut kiirklahvi."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Kiirklahv salvestati, kuid töölaud ei suutnud seda veel kinnitada."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Kiirklahvi ei õnnestunud sellel töölaual registreerida. Lisa see süsteemi klaviatuuriseadetes käsuga biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Paigaldamine katkestati: administraatori parooli ei kinnitatud."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neuraalne TTS — kõrge kvaliteediga mitmekeelsed hääled (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} pole sinu tarkvarahoidlates saadaval. Uuenda süsteemi (sudo pacman -Syu) ja proovi uuesti."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Mõni teine programm paigaldab või uuendab pakette. Oota, kuni see lõpetab, ja proovi uuesti."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Pakette ei õnnestunud alla laadida. Kontrolli internetiühendust ja proovi uuesti."
+msgid "Install {name}"
+msgstr "Installige {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} on vastuolus paigaldatud failide või pakettidega. Vaata üksikasju."
+msgid "Remove {name}"
+msgstr "Eemalda {name}"
+
+msgid "Installed"
+msgstr "Paigaldatud"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "{packages} paigaldamiseks pole piisavalt vaba kettaruumi."
+msgid "Remove {name}?"
+msgstr "Kas eemaldada {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Hääl pole enam lugemiseks saadaval. Saad selle hiljem uuesti paigaldada."
+
+msgid "Remove"
+msgstr "Eemalda"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} paigaldamine ebaõnnestus. Vaata üksikasju."
-
-msgid "Nothing to install."
-msgstr "Pole midagi paigaldada."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec pole paigaldatud (pakett polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Paigaldamine võttis liiga kaua aega ja peatati."
+msgid "Downloading {name}…"
+msgstr "{name} allalaadimine…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "Paketti {packages} ei õnnestunud AUR-ist ehitada. Vaadake üksikasju."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} allalaadimine… {done} / {total} kB"
 
-msgid "Read or stop the selected text"
-msgstr "Loe või peata valitud tekst"
+msgid "Operation timed out"
+msgstr "Toiming aeg lõppes."
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro pole paigaldatud. Paigalda pakett biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec või pacman ei leitud"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Kokoro häälemudel puudub. Paigalda pakett biglinux-kokoro-tts uuesti."
+msgid "Download cancelled"
+msgstr "Allalaadimine katkestati"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Kokoro hääli ei leitud. Hääle allalaadimiseks ava häältehaldur."
+msgid "Failed"
+msgstr "Eba."
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "See Kokoro hääl pole paigaldatud. Selle allalaadimiseks ava häältehaldur."
+msgid "Removal Failed"
+msgstr "Eemaldamine ebaõnnestus"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Tundmatu hääl: {voice_id}"
+msgid "Unknown error"
+msgstr "Tundmatu viga"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Vigane hääle ID: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Häälefail on oodatust suurem."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "mittetäielik allalaadimine ({received} / {total} baiti)"
+msgid "Play a sample of {name}"
+msgstr "Esita hääle {name} näidis"
 
-msgid "empty response"
-msgstr "tühi vastus"
+msgid "Stop the sample"
+msgstr "Peata näidis"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Häält ei õnnestunud alla laadida. Kontrolli internetiühendust ja proovi uuesti. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Allalaaditud häälefail on vigane. Proovi uuesti. ({error})"
+msgid "The sample could not be played."
+msgstr "Näidist ei õnnestunud esitada."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Hääle paigaldamiseks pole piisavalt kettaruumi (vaja on {size} MB)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Kasutaja häälte kausta ei saa luua: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Hääle lisamine ebaõnnestus: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Põhihäält ei saa eemaldada"
-
-msgid "No user voices installed"
-msgstr "Kasutaja hääli pole paigaldatud"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Hääle eemaldamine ebaõnnestus: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Heli ei õnnestunud esitada. Kontrolli, et alsa-utils (aplay) oleks paigaldatud."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} ei käivitunud. Kontrolli, et see oleks paigaldatud."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice pole paigaldatud. Paigalda pakett rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng ei suutnud seda teksti lugeda. Kontrolli, et espeak-ng oleks paigaldatud."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Valitud Piper-hääl pole paigaldatud. Vali häältehalduris mõni teine hääl."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper ei suutnud seda teksti lugeda. Proovi mõnda teist häält."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} jooksis teksti lugemisel kokku."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} peatus veaga ega suutnud teksti lugeda."
-
-msgid "Extra low quality"
-msgstr "Eriti madal kvaliteet"
-
-msgid "Low quality"
-msgstr "Madal kvaliteet"
-
-msgid "Medium quality"
-msgstr "Keskmine kvaliteet"
-
-msgid "High quality"
-msgstr "Kõrge kvaliteet"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Loe valitud tekst ette"
-
-msgid "Could not read the text."
-msgstr "Teksti ei õnnestunud lugeda."
-
-msgid "Reading text"
-msgstr "Teksti lugemine"
-
-msgid "Playing…"
-msgstr "Mängib…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Paigalda wl-clipboard (Wayland) või xclip (X11), et valitud teksti saaks lugeda."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Vali esmalt tekst ja vajuta siis kiirklahvi."
-
-msgid "No text selected"
-msgstr "Teksti pole valitud"
-
-msgid "Read text"
-msgstr "Lugege teksti"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Näidist ei õnnestunud esitada: {program} pole paigaldatud."
 
 msgid "Play"
 msgstr "Mängi"
 
-msgid "Pause"
-msgstr "Pausi"
-
 msgid "Stop"
 msgstr "Peata"
 
-msgid "Paused"
-msgstr "Pausil"
-
-msgid "BigLinux Team"
-msgstr "BigLinuxi meeskond"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS muudab valitud või sisestatud teksti kõneks kohalike häälte, globaalsete kiirklahvide ja täpsete taasesitusnuppudega."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS sai alguse veebipõhise tööriistana 2021. aastal ja arenes natiivseks GTK4 rakenduseks, millel on mitu kõnemootorit, häältehaldus ja Rustis kirjutatud helimootor."
-
-msgid "Could not register the shortcut."
-msgstr "Kiirklahvi ei õnnestunud registreerida."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Vali tekst ja vajuta {shortcut}, et seda kuulata"
-
-msgid "Text-to-speech assistant"
-msgstr "Tekstist kõneks abiline"
-
 msgid "Playback position"
 msgstr "Esitamise asukoht"
+
+msgid "Pause"
+msgstr "Pausi"
+
+msgid "Unknown"
+msgstr "Tundmatu"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Täna, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Eile, {time}"
+
+msgid "Select this reading"
+msgstr "Vali see ettelugemine"
+
+msgid "(text not kept)"
+msgstr "(teksti ei säilitatud)"
+
+msgid "Show more"
+msgstr "Näita rohkem"
+
+msgid "Copy text"
+msgstr "Kopeeri tekst"
+
+msgid "Read again with the current voice"
+msgstr "Loe uuesti praeguse häälega"
+
+msgid "More actions"
+msgstr "Rohkem toiminguid"
+
+msgid "Stopped"
+msgstr "Peatatud"
+
+msgid "Error"
+msgstr "Viga"
+
+msgid "Reading stopped before the end"
+msgstr "Ettelugemine peatati enne lõppu"
+
+msgid "The engine failed during this reading"
+msgstr "Mootor ebaõnnestus selle ettelugemise ajal"
+
+msgid "Audio not kept for this reading"
+msgstr "Selle ettelugemise heli ei säilitatud"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} ettelugemine, {when}"
+
+msgid "Save audio as…"
+msgstr "Salvesta heli kui…"
+
+msgid "Open file location"
+msgstr "Ava asukoht"
+
+msgid "Delete"
+msgstr "Kustuta"
+
+msgid "Show less"
+msgstr "Näita vähem"
+
+msgid "Text copied"
+msgstr "Tekst kopeeritud"
+
+msgid "Save audio as"
+msgstr "Salvesta heli kui"
+
+msgid "Audio saved"
+msgstr "Heli salvestatud"
+
+msgid "Could not save the audio"
+msgstr "Heli salvestamine ebaõnnestus"
+
+msgid "History"
+msgstr "Ajalugu"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Salvestamine on väljas: uusi ettelugemisi ei säilitata."
+
+msgid "Turn On"
+msgstr "Lülita sisse"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Otsi teksti, häält, mootorit või kuupäeva…"
+
+msgid "All dates"
+msgstr "Kõik kuupäevad"
+
+msgid "Today"
+msgstr "Täna"
+
+msgid "Yesterday"
+msgstr "Eile"
+
+msgid "Last 7 days"
+msgstr "Viimased 7 päeva"
+
+msgid "Filter by date"
+msgstr "Filtreeri kuupäeva järgi"
+
+msgid "All engines"
+msgstr "Kõik mootorid"
+
+msgid "Filter by engine"
+msgstr "Filtreeri mootori järgi"
+
+msgid "Newest first"
+msgstr "Uuemad eespool"
+
+msgid "Sort order"
+msgstr "Sortimisjärjestus"
+
+msgid "Show as grid"
+msgstr "Näita ruudustikuna"
+
+msgid "Select readings"
+msgstr "Vali ettelugemised"
+
+msgid "Select All"
+msgstr "Vali kõik"
+
+msgid "Deselect All"
+msgstr "Tühista kõik"
+
+msgid "Save the selected readings to a folder"
+msgstr "Salvesta valitud ettelugemised kausta"
+
+msgid "Save selected"
+msgstr "Salvesta valitud"
+
+msgid "Delete selected"
+msgstr "Kustuta valitud"
+
+msgid "History entries"
+msgstr "Ajaloo kirjed"
+
+msgid "The history could not be read"
+msgstr "Ajalugu ei õnnestunud lugeda"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Kontrolli kausta {folder} õigusi."
+
+msgid "No readings found"
+msgstr "Ettelugemisi ei leitud"
+
+msgid "Try other words or another date or engine."
+msgstr "Proovi teisi sõnu, muud kuupäeva või muud mootorit."
+
+msgid "Clear Filters"
+msgstr "Tühjenda filtrid"
+
+msgid "No readings yet"
+msgstr "Ettelugemisi veel pole"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Kõik, mida kuulad, ilmub siia koos heliga. Seda hoitakse ainult selles arvutis, kaustas {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Salvestamine on väljas. Lülita see sisse, et säilitada kõike, mida kuulad, koos heliga — ainult selles arvutis, kaustas {folder}."
+
+msgid "Turn On History"
+msgstr "Lülita ajalugu sisse"
+
+msgid "Oldest first"
+msgstr "Vanemad eespool"
+
+msgid "Show as list"
+msgstr "Näita loendina"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Valitud: {count}"
+
+msgid "Reading deleted"
+msgstr "Ettelugemine kustutatud"
+
+msgid "Undo"
+msgstr "Võta tagasi"
+
+msgid "Delete the selected readings?"
+msgstr "Kas kustutada valitud ettelugemised?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Ettelugemised: {count}. Nende heli- ja tekstifailid teisaldatakse prügikasti."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Teisaldatud prügikasti: {count}"
+
+msgid "Save the selected readings"
+msgstr "Salvesta valitud ettelugemised"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Salvestatud kausta {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Kiirklahv puudub"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Kiirklahv: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Paigaldage esmalt {engine} hääled"
 msgid "Neural"
 msgstr "Neuraalne"
 
+msgid "High quality"
+msgstr "Kõrge kvaliteet"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Saadaolevaid hääli: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper pole saadaval"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Sinu tarkvarahoidlatest ei leitud ühtegi Piper-häälepaketti ({packages}). Uuenda süsteemi (sudo pacman -Syu) ja proovi uuesti."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper pakub loomulikke neuraalseid hääli. Paigaldatakse järgmised paketid:"
@@ -769,12 +790,18 @@ msgstr "Sisestage tekst testimiseks"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Heli on null — tõstmine miinimumini testi jaoks"
 
+msgid "Loading voice…"
+msgstr "Hääle laadimine…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} ettevalmistamine. Kõne algab hetke pärast."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Hääle ettevalmistamine. Kõne algab hetke pärast."
+
+msgid "Speaking…"
+msgstr "Rääkimine…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Peatamiseks vajuta uuesti {shortcut}."
 msgid "Use Stop to end the reading."
 msgstr "Lugemise lõpetamiseks kasuta nuppu Peata."
 
+msgid "Could not read the text"
+msgstr "Teksti ei õnnestunud lugeda"
+
 msgid "The speech engine reported a problem."
 msgstr "Kõnemootor teatas probleemist."
-
-msgid "Stopped"
-msgstr "Peatatud"
 
 msgid "Reading was stopped."
 msgstr "Lugemine peatati."
@@ -847,9 +874,6 @@ msgstr "Laadimine"
 
 msgid "Speaking"
 msgstr "Rääkimine"
-
-msgid "Error"
-msgstr "Viga"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Näita dialoogi käivitamisel"
 msgid "Let's Start"
 msgstr "Alustame"
 
-msgid "Unknown"
-msgstr "Tundmatu"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Paigaldamine katkestati: administraatori parooli ei kinnitatud."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Täna, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} pole sinu tarkvarahoidlates saadaval. Uuenda süsteemi (sudo pacman -Syu) ja proovi uuesti."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Mõni teine programm paigaldab või uuendab pakette. Oota, kuni see lõpetab, ja proovi uuesti."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Pakette ei õnnestunud alla laadida. Kontrolli internetiühendust ja proovi uuesti."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Eile, {time}"
-
-msgid "Select this reading"
-msgstr "Vali see ettelugemine"
-
-msgid "(text not kept)"
-msgstr "(teksti ei säilitatud)"
-
-msgid "Show more"
-msgstr "Näita rohkem"
-
-msgid "Copy text"
-msgstr "Kopeeri tekst"
-
-msgid "Read again with the current voice"
-msgstr "Loe uuesti praeguse häälega"
-
-msgid "More actions"
-msgstr "Rohkem toiminguid"
-
-msgid "Reading stopped before the end"
-msgstr "Ettelugemine peatati enne lõppu"
-
-msgid "The engine failed during this reading"
-msgstr "Mootor ebaõnnestus selle ettelugemise ajal"
-
-msgid "Audio not kept for this reading"
-msgstr "Selle ettelugemise heli ei säilitatud"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} on vastuolus paigaldatud failide või pakettidega. Vaata üksikasju."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} ettelugemine, {when}"
-
-msgid "Save audio as…"
-msgstr "Salvesta heli kui…"
-
-msgid "Open file location"
-msgstr "Ava asukoht"
-
-msgid "Delete"
-msgstr "Kustuta"
-
-msgid "Show less"
-msgstr "Näita vähem"
-
-msgid "Text copied"
-msgstr "Tekst kopeeritud"
-
-msgid "Save audio as"
-msgstr "Salvesta heli kui"
-
-msgid "Audio saved"
-msgstr "Heli salvestatud"
-
-msgid "Could not save the audio"
-msgstr "Heli salvestamine ebaõnnestus"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Salvestamine on väljas: uusi ettelugemisi ei säilitata."
-
-msgid "Turn On"
-msgstr "Lülita sisse"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Otsi teksti, häält, mootorit või kuupäeva…"
-
-msgid "All dates"
-msgstr "Kõik kuupäevad"
-
-msgid "Today"
-msgstr "Täna"
-
-msgid "Yesterday"
-msgstr "Eile"
-
-msgid "Last 7 days"
-msgstr "Viimased 7 päeva"
-
-msgid "Filter by date"
-msgstr "Filtreeri kuupäeva järgi"
-
-msgid "All engines"
-msgstr "Kõik mootorid"
-
-msgid "Filter by engine"
-msgstr "Filtreeri mootori järgi"
-
-msgid "Newest first"
-msgstr "Uuemad eespool"
-
-msgid "Sort order"
-msgstr "Sortimisjärjestus"
-
-msgid "Show as grid"
-msgstr "Näita ruudustikuna"
-
-msgid "Select readings"
-msgstr "Vali ettelugemised"
-
-msgid "Select All"
-msgstr "Vali kõik"
-
-msgid "Deselect All"
-msgstr "Tühista kõik"
-
-msgid "Save the selected readings to a folder"
-msgstr "Salvesta valitud ettelugemised kausta"
-
-msgid "Save selected"
-msgstr "Salvesta valitud"
-
-msgid "Delete selected"
-msgstr "Kustuta valitud"
-
-msgid "History entries"
-msgstr "Ajaloo kirjed"
-
-msgid "The history could not be read"
-msgstr "Ajalugu ei õnnestunud lugeda"
+msgid "Not enough free disk space to install {packages}."
+msgstr "{packages} paigaldamiseks pole piisavalt vaba kettaruumi."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Kontrolli kausta {folder} õigusi."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} paigaldamine ebaõnnestus. Vaata üksikasju."
 
-msgid "No readings found"
-msgstr "Ettelugemisi ei leitud"
+msgid "Nothing to install."
+msgstr "Pole midagi paigaldada."
 
-msgid "Try other words or another date or engine."
-msgstr "Proovi teisi sõnu, muud kuupäeva või muud mootorit."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec pole paigaldatud (pakett polkit)."
 
-msgid "Clear Filters"
-msgstr "Tühjenda filtrid"
-
-msgid "No readings yet"
-msgstr "Ettelugemisi veel pole"
+msgid "The installation took too long and was stopped."
+msgstr "Paigaldamine võttis liiga kaua aega ja peatati."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Kõik, mida kuulad, ilmub siia koos heliga. Seda hoitakse ainult selles arvutis, kaustas {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "Paketti {packages} ei õnnestunud AUR-ist ehitada. Vaadake üksikasju."
+
+msgid "This key combination is not valid."
+msgstr "See klahvikombinatsioon pole sobiv."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Kasuta Ctrl-, Alt- või Super-klahvi koos mõne teise klahviga, et tavaline trükkimine ei häiruks."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Töölaud ei toeta seda klahvikombinatsiooni."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Salvestamine on väljas. Lülita see sisse, et säilitada kõike, mida kuulad, koos heliga — ainult selles arvutis, kaustas {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} on juba kasutusel: {names}. Vali teine kiirklahv."
 
-msgid "Turn On History"
-msgstr "Lülita ajalugu sisse"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Töölaud ei aktsepteerinud kiirklahvi. Kas KDE globaalsete kiirklahvide teenus töötab?"
 
-msgid "Oldest first"
-msgstr "Vanemad eespool"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Töölaud ei kinnitanud uut kiirklahvi."
 
-msgid "Show as list"
-msgstr "Näita loendina"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Kiirklahv salvestati, kuid töölaud ei suutnud seda veel kinnitada."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Valitud: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Kiirklahvi ei õnnestunud sellel töölaual registreerida. Lisa see süsteemi klaviatuuriseadetes käsuga biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Ettelugemine kustutatud"
+msgid "Extra low quality"
+msgstr "Eriti madal kvaliteet"
 
-msgid "Undo"
-msgstr "Võta tagasi"
+msgid "Low quality"
+msgstr "Madal kvaliteet"
 
-msgid "Delete the selected readings?"
-msgstr "Kas kustutada valitud ettelugemised?"
+msgid "Medium quality"
+msgstr "Keskmine kvaliteet"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Ettelugemised: {count}. Nende heli- ja tekstifailid teisaldatakse prügikasti."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro pole paigaldatud. Paigalda pakett biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Teisaldatud prügikasti: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoro häälemudel puudub. Paigalda pakett biglinux-kokoro-tts uuesti."
 
-msgid "Save the selected readings"
-msgstr "Salvesta valitud ettelugemised"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro hääli ei leitud. Hääle allalaadimiseks ava häältehaldur."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Salvestatud kausta {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Kiirklahv puudub"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "See Kokoro hääl pole paigaldatud. Selle allalaadimiseks ava häältehaldur."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Kiirklahv: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper-mootor"
-
-msgid "Voice Manager"
-msgstr "Hääletusjuht"
-
-msgid "Search voices by name or language…"
-msgstr "Otsi hääli nime või keele järgi…"
-
-msgid "Loading available voices…"
-msgstr "Laadimine saadaval hääli…"
-
-msgid "No Voice Packages Found"
-msgstr "Häältpakette ei leitud"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Pacman'i hoidlatest ei leitud ühtegi TTS häälepaketti."
-
-msgid "High quality offline voices"
-msgstr "Kvaliteetsed offline hääled"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Neuraalvõrgu hääled — loomulikult kõlavad"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Kerge mitmekeelne sünteesija"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neuraalne TTS — kõrge kvaliteediga mitmekeelsed hääled (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Tundmatu hääl: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Installige {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Vigane hääle ID: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Häälefail on oodatust suurem."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Eemalda {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "mittetäielik allalaadimine ({received} / {total} baiti)"
 
-msgid "Installed"
-msgstr "Paigaldatud"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Kas eemaldada {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Hääl pole enam lugemiseks saadaval. Saad selle hiljem uuesti paigaldada."
-
-msgid "Remove"
-msgstr "Eemalda"
+msgid "empty response"
+msgstr "tühi vastus"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} allalaadimine…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Häält ei õnnestunud alla laadida. Kontrolli internetiühendust ja proovi uuesti. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} allalaadimine… {done} / {total} kB"
-
-msgid "Operation timed out"
-msgstr "Toiming aeg lõppes."
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec või pacman ei leitud"
-
-msgid "Download cancelled"
-msgstr "Allalaadimine katkestati"
-
-msgid "Failed"
-msgstr "Eba."
-
-msgid "Removal Failed"
-msgstr "Eemaldamine ebaõnnestus"
-
-msgid "Unknown error"
-msgstr "Tundmatu viga"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Allalaaditud häälefail on vigane. Proovi uuesti. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Esita hääle {name} näidis"
-
-msgid "Stop the sample"
-msgstr "Peata näidis"
-
-msgid "The sample could not be played."
-msgstr "Näidist ei õnnestunud esitada."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Hääle paigaldamiseks pole piisavalt kettaruumi (vaja on {size} MB)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Näidist ei õnnestunud esitada: {program} pole paigaldatud."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Kasutaja häälte kausta ei saa luua: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Hääle lisamine ebaõnnestus: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Põhihäält ei saa eemaldada"
+
+msgid "No user voices installed"
+msgstr "Kasutaja hääli pole paigaldatud"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Hääle eemaldamine ebaõnnestus: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Loe või peata valitud tekst"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Heli ei õnnestunud esitada. Kontrolli, et alsa-utils (aplay) oleks paigaldatud."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} ei käivitunud. Kontrolli, et see oleks paigaldatud."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice pole paigaldatud. Paigalda pakett rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng ei suutnud seda teksti lugeda. Kontrolli, et espeak-ng oleks paigaldatud."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Valitud Piper-hääl pole paigaldatud. Vali häältehalduris mõni teine hääl."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper ei suutnud seda teksti lugeda. Proovi mõnda teist häält."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} jooksis teksti lugemisel kokku."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} peatus veaga ega suutnud teksti lugeda."
+
+msgid "Read the selected text aloud"
+msgstr "Loe valitud tekst ette"
+
+msgid "Could not read the text."
+msgstr "Teksti ei õnnestunud lugeda."
+
+msgid "Reading text"
+msgstr "Teksti lugemine"
+
+msgid "Playing…"
+msgstr "Mängib…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Paigalda wl-clipboard (Wayland) või xclip (X11), et valitud teksti saaks lugeda."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Vali esmalt tekst ja vajuta siis kiirklahvi."
+
+msgid "No text selected"
+msgstr "Teksti pole valitud"
+
+msgid "Read text"
+msgstr "Lugege teksti"
+
+msgid "Settings"
+msgstr "Seaded"
+
+msgid "Quit"
+msgstr "Välju"
+
+msgid "Paused"
+msgstr "Pausil"
+
+msgid "BigLinux Team"
+msgstr "BigLinuxi meeskond"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS muudab valitud või sisestatud teksti kõneks kohalike häälte, globaalsete kiirklahvide ja täpsete taasesitusnuppudega."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS sai alguse veebipõhise tööriistana 2021. aastal ja arenes natiivseks GTK4 rakenduseks, millel on mitu kõnemootorit, häältehaldus ja Rustis kirjutatud helimootor."
+
+msgid "Could not register the shortcut."
+msgstr "Kiirklahvi ei õnnestunud registreerida."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Vali tekst ja vajuta {shortcut}, et seda kuulata"
+
+msgid "Text-to-speech assistant"
+msgstr "Tekstist kõneks abiline"
+
+msgid "Show settings"
+msgstr "Näita seadeid"
+
+msgid "Back"
+msgstr "Tagasi"
+
+msgid "Text narrator"
+msgstr "Teksti ettelugeja"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Kiirklahv pole aktiivne — ava parandamiseks Täpsemad valikud"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Vali tekst ja vajuta {key}, et see ette lugeda"
+
+msgid "Show tray icon"
+msgstr "Näita salveikooni"
+
+msgid "Restore Defaults…"
+msgstr "Taasta vaikeväärtused…"
+
+msgid "Welcome"
+msgstr "Tere tulemast"
+
+msgid "About BigLinux TTS"
+msgstr "BigLinux TTS teave"
+
+msgid "Main menu"
+msgstr "Peamenüü"
+
+msgid "Restore settings?"
+msgstr "Taastada seaded?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "See taastab kõik kohandused algsete vaikeseadeteni."
+
+msgid "Restore"
+msgstr "Taasta"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux tekstist kõneks — loe valitud tekst ette"
+
+msgid "Enable debug logging"
+msgstr "Luba silumislogi"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

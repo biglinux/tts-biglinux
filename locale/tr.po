@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux Metinden Konuşmaya — Seçili metni sesli oku"
+msgid "Piper engine"
+msgstr "Piper motoru"
 
-msgid "Enable debug logging"
-msgstr "Hata ayıklama günlüğünü etkinleştir"
+msgid "Voice Manager"
+msgstr "Ses Yöneticisi"
 
-msgid "Settings"
-msgstr "Ayarlar"
+msgid "Search voices by name or language…"
+msgstr "Sesleri ada veya dile göre ara…"
 
-msgid "Show settings"
-msgstr "Ayarları göster"
-
-msgid "Back"
-msgstr "Geri"
-
-msgid "Text narrator"
-msgstr "Metin anlatıcı"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Kısayol etkin değil — düzeltmek için Gelişmiş seçenekler'i açın"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Sesli okumak için metni seçin ve {key} tuşlarına basın"
-
-msgid "History"
-msgstr "Geçmiş"
-
-msgid "Loading voice…"
-msgstr "Ses yükleniyor…"
-
-msgid "Speaking…"
-msgstr "Konuşuyor…"
-
-msgid "Could not read the text"
-msgstr "Metin okunamadı"
-
-msgid "Show tray icon"
-msgstr "Sistem tepsisi simgesini göster"
-
-msgid "Restore Defaults…"
-msgstr "Varsayılanları Geri Yükle…"
-
-msgid "Welcome"
-msgstr "Hoş geldiniz"
-
-msgid "About BigLinux TTS"
-msgstr "BigLinux TTS Hakkında"
-
-msgid "Quit"
-msgstr "Çıkış"
-
-msgid "Main menu"
-msgstr "Ana menü"
-
-msgid "Restore settings?"
-msgstr "Ayarlar geri yüklensin mi?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Bu, tüm ayarları orijinal varsayılan değerlerine döndürecektir."
+msgid "Loading available voices…"
+msgstr "Mevcut sesler yükleniyor…"
 
 msgid "Cancel"
 msgstr "İptal"
 
-msgid "Restore"
-msgstr "Geri yükle"
+msgid "No Voice Packages Found"
+msgstr "Ses Paketleri Bulunamadı"
 
-msgid "This key combination is not valid."
-msgstr "Bu tuş birleşimi geçerli değil."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Pacman depolarından herhangi bir TTS ses paketi bulunamadı."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Normal yazmanın etkilenmemesi için Ctrl, Alt veya Super tuşunu başka bir tuşla birlikte kullanın."
+msgid "High quality offline voices"
+msgstr "Yüksek kaliteli çevrimdışı sesler"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Bu tuş birleşimi masaüstü tarafından desteklenmiyor."
+msgid "Neural network voices — natural sounding"
+msgstr "Sinir ağı sesleri — doğal sesli"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} zaten şunlar tarafından kullanılıyor: {names}. Başka bir kısayol seçin."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Hafif çok dilli sentezleyici"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Masaüstü kısayolu kabul etmedi. KDE genel kısayollar hizmeti çalışıyor mu?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Masaüstü yeni kısayolu onaylamadı."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Kısayol kaydedildi, ancak masaüstü henüz onaylayamadı."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Kısayol bu masaüstünde kaydedilemedi. biglinux-tts-speak komutuyla sistem klavye ayarlarına ekleyin."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Kurulum iptal edildi: yönetici parolası onaylanmadı."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Nöral TTS — yüksek kaliteli çok dilli sesler (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} depolarınızda mevcut değil. Sistemi güncelleyin (sudo pacman -Syu) ve yeniden deneyin."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Başka bir program paket kuruyor veya güncelliyor. Bitmesini bekleyip yeniden deneyin."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Paketler indirilemedi. İnternet bağlantınızı denetleyip yeniden deneyin."
+msgid "Install {name}"
+msgstr "{name} yükle"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages}, kurulu dosyalar veya paketlerle çakışıyor. Ayrıntılara bakın."
+msgid "Remove {name}"
+msgstr "{name} kaldırın"
+
+msgid "Installed"
+msgstr "Yüklendi"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "{packages} kurulumu için yeterli boş disk alanı yok."
+msgid "Remove {name}?"
+msgstr "{name} kaldırılsın mı?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Ses artık okuma için kullanılamayacak. Daha sonra yeniden kurabilirsiniz."
+
+msgid "Remove"
+msgstr "Kaldır"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} kurulamadı. Ayrıntılara bakın."
-
-msgid "Nothing to install."
-msgstr "Kurulacak bir şey yok."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec kurulu değil (polkit paketi)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Kurulum çok uzun sürdü ve durduruldu."
+msgid "Downloading {name}…"
+msgstr "{name} indiriliyor…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} AUR'dan derlenemedi. Ayrıntılara bakın."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} indiriliyor… {done} / {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Seçili metni oku veya durdur"
+msgid "Operation timed out"
+msgstr "İşlem zaman aşımına uğradı."
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro kurulu değil. biglinux-kokoro-tts paketini kurun."
+msgid "pkexec or pacman not found"
+msgstr "pkexec veya pacman bulunamadı"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Kokoro ses modeli eksik. biglinux-kokoro-tts paketini yeniden kurun."
+msgid "Download cancelled"
+msgstr "İndirme iptal edildi"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Kokoro sesi bulunamadı. Ses indirmek için Ses Yöneticisi'ni açın."
+msgid "Failed"
+msgstr "Başarısız oldu"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Bu Kokoro sesi kurulu değil. İndirmek için Ses Yöneticisi'ni açın."
+msgid "Removal Failed"
+msgstr "Kaldırma Başarısız oldu"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Bilinmeyen ses: {voice_id}"
+msgid "Unknown error"
+msgstr "Bilinmeyen hata"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Geçersiz ses kimliği: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Ses dosyası beklenenden büyük."
+msgid "OK"
+msgstr "Tamam"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "eksik indirme ({received} / {total} bayt)"
+msgid "Play a sample of {name}"
+msgstr "{name} örneğini çal"
 
-msgid "empty response"
-msgstr "boş yanıt"
+msgid "Stop the sample"
+msgstr "Örneği durdur"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Ses indirilemedi. İnternet bağlantınızı denetleyip yeniden deneyin. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "İndirilen ses dosyası bozuk. Yeniden deneyin. ({error})"
+msgid "The sample could not be played."
+msgstr "Örnek çalınamadı."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Sesi kurmak için yeterli disk alanı yok ({size} MB gerekli)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Kullanıcı sesleri dizini oluşturulamıyor: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Ses eklenemedi: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Temel ses kaldırılamaz"
-
-msgid "No user voices installed"
-msgstr "Kurulu kullanıcı sesi yok"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Ses kaldırılamadı: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Ses çalınamadı. alsa-utils (aplay) paketinin kurulu olduğunu denetleyin."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} başlatılamadı. Kurulu olduğunu denetleyin."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice kurulu değil. rhvoice paketini kurun."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng bu metni okuyamadı. espeak-ng'nin kurulu olduğunu denetleyin."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Seçili Piper sesi kurulu değil. Ses Yöneticisi'nde başka bir ses seçin."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper bu metni okuyamadı. Başka bir ses deneyin."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} metni okurken çöktü."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} bir hatayla durdu ve metni okuyamadı."
-
-msgid "Extra low quality"
-msgstr "Çok düşük kalite"
-
-msgid "Low quality"
-msgstr "Düşük kalite"
-
-msgid "Medium quality"
-msgstr "Orta kalite"
-
-msgid "High quality"
-msgstr "Yüksek kalite"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Seçili metni sesli oku"
-
-msgid "Could not read the text."
-msgstr "Metin okunamadı."
-
-msgid "Reading text"
-msgstr "Metin okunuyor"
-
-msgid "Playing…"
-msgstr "Oynuyor…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Seçili metnin okunabilmesi için wl-clipboard (Wayland) veya xclip (X11) kurun."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Önce bir metin seçin, ardından kısayola basın."
-
-msgid "No text selected"
-msgstr "Seçili metin yok"
-
-msgid "Read text"
-msgstr "Metin oku"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Örnek çalınamadı: {program} kurulu değil."
 
 msgid "Play"
 msgstr "Oyna"
 
-msgid "Pause"
-msgstr "Duraklat"
-
 msgid "Stop"
 msgstr "Durdur"
 
-msgid "Paused"
-msgstr "Duraklatıldı"
-
-msgid "BigLinux Team"
-msgstr "BigLinux Ekibi"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS, seçili veya yazılan metni yerel sesler, genel kısayollar ve hassas oynatma denetimleriyle konuşmaya dönüştürür."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS, 2021'de web tabanlı bir araç olarak başladı ve birden çok konuşma motoru, ses yönetimi ve Rust ile yazılmış bir ses motoru içeren yerel bir GTK4 uygulamasına dönüştü."
-
-msgid "Could not register the shortcut."
-msgstr "Kısayol kaydedilemedi."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Dinlemek için metni seçin ve {shortcut} tuşlarına basın"
-
-msgid "Text-to-speech assistant"
-msgstr "Metinden sese asistan"
-
 msgid "Playback position"
 msgstr "Oynatma konumu"
+
+msgid "Pause"
+msgstr "Duraklat"
+
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Bugün, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Dün, {time}"
+
+msgid "Select this reading"
+msgstr "Bu okumayı seç"
+
+msgid "(text not kept)"
+msgstr "(metin saklanmadı)"
+
+msgid "Show more"
+msgstr "Daha fazla göster"
+
+msgid "Copy text"
+msgstr "Metni kopyala"
+
+msgid "Read again with the current voice"
+msgstr "Geçerli sesle yeniden oku"
+
+msgid "More actions"
+msgstr "Diğer eylemler"
+
+msgid "Stopped"
+msgstr "Durduruldu"
+
+msgid "Error"
+msgstr "Hata"
+
+msgid "Reading stopped before the end"
+msgstr "Okuma sona ermeden durduruldu"
+
+msgid "The engine failed during this reading"
+msgstr "Bu okuma sırasında motor başarısız oldu"
+
+msgid "Audio not kept for this reading"
+msgstr "Bu okumanın sesi saklanmadı"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "{engine} okuması, {when}"
+
+msgid "Save audio as…"
+msgstr "Sesi farklı kaydet…"
+
+msgid "Open file location"
+msgstr "Dosya konumunu aç"
+
+msgid "Delete"
+msgstr "Sil."
+
+msgid "Show less"
+msgstr "Daha az göster"
+
+msgid "Text copied"
+msgstr "Metin kopyalandı"
+
+msgid "Save audio as"
+msgstr "Sesi farklı kaydet"
+
+msgid "Audio saved"
+msgstr "Ses kaydedildi"
+
+msgid "Could not save the audio"
+msgstr "Ses kaydedilemedi"
+
+msgid "History"
+msgstr "Geçmiş"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Kaydetme kapalı: yeni okumalar saklanmıyor."
+
+msgid "Turn On"
+msgstr "Aç"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Metin, ses, motor veya tarih ara…"
+
+msgid "All dates"
+msgstr "Tüm tarihler"
+
+msgid "Today"
+msgstr "Bugün"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+msgid "Last 7 days"
+msgstr "Son 7 gün"
+
+msgid "Filter by date"
+msgstr "Tarihe göre süz"
+
+msgid "All engines"
+msgstr "Tüm motorlar"
+
+msgid "Filter by engine"
+msgstr "Motora göre süz"
+
+msgid "Newest first"
+msgstr "Önce en yeni"
+
+msgid "Sort order"
+msgstr "Sıralama düzeni"
+
+msgid "Show as grid"
+msgstr "Izgara olarak göster"
+
+msgid "Select readings"
+msgstr "Okumaları seç"
+
+msgid "Select All"
+msgstr "Tümünü Seç"
+
+msgid "Deselect All"
+msgstr "Tümünü Seçme Dışında Bırak"
+
+msgid "Save the selected readings to a folder"
+msgstr "Seçili okumaları bir klasöre kaydet"
+
+msgid "Save selected"
+msgstr "Seçilenleri kaydet"
+
+msgid "Delete selected"
+msgstr "Seçilenleri sil"
+
+msgid "History entries"
+msgstr "Geçmiş kayıtları"
+
+msgid "The history could not be read"
+msgstr "Geçmiş okunamadı"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "{folder} klasörünün izinlerini denetleyin."
+
+msgid "No readings found"
+msgstr "Okuma bulunamadı"
+
+msgid "Try other words or another date or engine."
+msgstr "Başka sözcükler ya da başka bir tarih veya motor deneyin."
+
+msgid "Clear Filters"
+msgstr "Süzgeçleri temizle"
+
+msgid "No readings yet"
+msgstr "Henüz okuma yok"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Dinlediğiniz her şey sesiyle birlikte burada görünür. Yalnızca bu bilgisayarda, {folder} içinde saklanır."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Kaydetme kapalı. Dinlediklerinizi sesiyle birlikte saklamak için açın — yalnızca bu bilgisayarda, {folder} içinde."
+
+msgid "Turn On History"
+msgstr "Geçmişi aç"
+
+msgid "Oldest first"
+msgstr "Önce en eski"
+
+msgid "Show as list"
+msgstr "Liste olarak göster"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Seçili: {count}"
+
+msgid "Reading deleted"
+msgstr "Okuma silindi"
+
+msgid "Undo"
+msgstr "Geri al"
+
+msgid "Delete the selected readings?"
+msgstr "Seçili okumalar silinsin mi?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Okumalar: {count}. Ses ve metin dosyaları Çöp Kutusuna taşınır."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Çöp Kutusuna taşındı: {count}"
+
+msgid "Save the selected readings"
+msgstr "Seçili okumaları kaydet"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "{folder} konumuna kaydedildi: {count}"
+
+msgid "No shortcut"
+msgstr "Kısayol yok"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Kısayol: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Önce {engine} seslerini yükleyin"
 msgid "Neural"
 msgstr "Sinirsel"
 
+msgid "High quality"
+msgstr "Yüksek kalite"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Kullanılabilir sesler: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper kullanılamıyor"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Depolarınızda Piper ses paketi bulunamadı ({packages}). Sistemi güncelleyin (sudo pacman -Syu) ve yeniden deneyin."
-
-msgid "OK"
-msgstr "Tamam"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper doğal sinirsel sesler sunar. Şu paketler kurulacak:"
@@ -769,12 +790,18 @@ msgstr "Test etmek için metin yazın"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Ses seviyesi sıfır — test için minimuma artırılıyor."
 
+msgid "Loading voice…"
+msgstr "Ses yükleniyor…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} hazırlanıyor. Konuşma birazdan başlayacak."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Ses hazırlanıyor. Konuşma birazdan başlayacak."
+
+msgid "Speaking…"
+msgstr "Konuşuyor…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Durdurmak için {shortcut} tuşlarına yeniden basın."
 msgid "Use Stop to end the reading."
 msgstr "Okumayı bitirmek için Durdur'u kullanın."
 
+msgid "Could not read the text"
+msgstr "Metin okunamadı"
+
 msgid "The speech engine reported a problem."
 msgstr "Konuşma motoru bir sorun bildirdi."
-
-msgid "Stopped"
-msgstr "Durduruldu"
 
 msgid "Reading was stopped."
 msgstr "Okuma durduruldu."
@@ -847,9 +874,6 @@ msgstr "Yükleniyor"
 
 msgid "Speaking"
 msgstr "Konuşuyor"
-
-msgid "Error"
-msgstr "Hata"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Başlangıçta iletişim kutusunu göster"
 msgid "Let's Start"
 msgstr "Başlayalım"
 
-msgid "Unknown"
-msgstr "Bilinmiyor"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Kurulum iptal edildi: yönetici parolası onaylanmadı."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Bugün, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} depolarınızda mevcut değil. Sistemi güncelleyin (sudo pacman -Syu) ve yeniden deneyin."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Başka bir program paket kuruyor veya güncelliyor. Bitmesini bekleyip yeniden deneyin."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Paketler indirilemedi. İnternet bağlantınızı denetleyip yeniden deneyin."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Dün, {time}"
-
-msgid "Select this reading"
-msgstr "Bu okumayı seç"
-
-msgid "(text not kept)"
-msgstr "(metin saklanmadı)"
-
-msgid "Show more"
-msgstr "Daha fazla göster"
-
-msgid "Copy text"
-msgstr "Metni kopyala"
-
-msgid "Read again with the current voice"
-msgstr "Geçerli sesle yeniden oku"
-
-msgid "More actions"
-msgstr "Diğer eylemler"
-
-msgid "Reading stopped before the end"
-msgstr "Okuma sona ermeden durduruldu"
-
-msgid "The engine failed during this reading"
-msgstr "Bu okuma sırasında motor başarısız oldu"
-
-msgid "Audio not kept for this reading"
-msgstr "Bu okumanın sesi saklanmadı"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages}, kurulu dosyalar veya paketlerle çakışıyor. Ayrıntılara bakın."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "{engine} okuması, {when}"
-
-msgid "Save audio as…"
-msgstr "Sesi farklı kaydet…"
-
-msgid "Open file location"
-msgstr "Dosya konumunu aç"
-
-msgid "Delete"
-msgstr "Sil."
-
-msgid "Show less"
-msgstr "Daha az göster"
-
-msgid "Text copied"
-msgstr "Metin kopyalandı"
-
-msgid "Save audio as"
-msgstr "Sesi farklı kaydet"
-
-msgid "Audio saved"
-msgstr "Ses kaydedildi"
-
-msgid "Could not save the audio"
-msgstr "Ses kaydedilemedi"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Kaydetme kapalı: yeni okumalar saklanmıyor."
-
-msgid "Turn On"
-msgstr "Aç"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Metin, ses, motor veya tarih ara…"
-
-msgid "All dates"
-msgstr "Tüm tarihler"
-
-msgid "Today"
-msgstr "Bugün"
-
-msgid "Yesterday"
-msgstr "Dün"
-
-msgid "Last 7 days"
-msgstr "Son 7 gün"
-
-msgid "Filter by date"
-msgstr "Tarihe göre süz"
-
-msgid "All engines"
-msgstr "Tüm motorlar"
-
-msgid "Filter by engine"
-msgstr "Motora göre süz"
-
-msgid "Newest first"
-msgstr "Önce en yeni"
-
-msgid "Sort order"
-msgstr "Sıralama düzeni"
-
-msgid "Show as grid"
-msgstr "Izgara olarak göster"
-
-msgid "Select readings"
-msgstr "Okumaları seç"
-
-msgid "Select All"
-msgstr "Tümünü Seç"
-
-msgid "Deselect All"
-msgstr "Tümünü Seçme Dışında Bırak"
-
-msgid "Save the selected readings to a folder"
-msgstr "Seçili okumaları bir klasöre kaydet"
-
-msgid "Save selected"
-msgstr "Seçilenleri kaydet"
-
-msgid "Delete selected"
-msgstr "Seçilenleri sil"
-
-msgid "History entries"
-msgstr "Geçmiş kayıtları"
-
-msgid "The history could not be read"
-msgstr "Geçmiş okunamadı"
+msgid "Not enough free disk space to install {packages}."
+msgstr "{packages} kurulumu için yeterli boş disk alanı yok."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "{folder} klasörünün izinlerini denetleyin."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} kurulamadı. Ayrıntılara bakın."
 
-msgid "No readings found"
-msgstr "Okuma bulunamadı"
+msgid "Nothing to install."
+msgstr "Kurulacak bir şey yok."
 
-msgid "Try other words or another date or engine."
-msgstr "Başka sözcükler ya da başka bir tarih veya motor deneyin."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec kurulu değil (polkit paketi)."
 
-msgid "Clear Filters"
-msgstr "Süzgeçleri temizle"
-
-msgid "No readings yet"
-msgstr "Henüz okuma yok"
+msgid "The installation took too long and was stopped."
+msgstr "Kurulum çok uzun sürdü ve durduruldu."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Dinlediğiniz her şey sesiyle birlikte burada görünür. Yalnızca bu bilgisayarda, {folder} içinde saklanır."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} AUR'dan derlenemedi. Ayrıntılara bakın."
+
+msgid "This key combination is not valid."
+msgstr "Bu tuş birleşimi geçerli değil."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Normal yazmanın etkilenmemesi için Ctrl, Alt veya Super tuşunu başka bir tuşla birlikte kullanın."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Bu tuş birleşimi masaüstü tarafından desteklenmiyor."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Kaydetme kapalı. Dinlediklerinizi sesiyle birlikte saklamak için açın — yalnızca bu bilgisayarda, {folder} içinde."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} zaten şunlar tarafından kullanılıyor: {names}. Başka bir kısayol seçin."
 
-msgid "Turn On History"
-msgstr "Geçmişi aç"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Masaüstü kısayolu kabul etmedi. KDE genel kısayollar hizmeti çalışıyor mu?"
 
-msgid "Oldest first"
-msgstr "Önce en eski"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Masaüstü yeni kısayolu onaylamadı."
 
-msgid "Show as list"
-msgstr "Liste olarak göster"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Kısayol kaydedildi, ancak masaüstü henüz onaylayamadı."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Seçili: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Kısayol bu masaüstünde kaydedilemedi. biglinux-tts-speak komutuyla sistem klavye ayarlarına ekleyin."
 
-msgid "Reading deleted"
-msgstr "Okuma silindi"
+msgid "Extra low quality"
+msgstr "Çok düşük kalite"
 
-msgid "Undo"
-msgstr "Geri al"
+msgid "Low quality"
+msgstr "Düşük kalite"
 
-msgid "Delete the selected readings?"
-msgstr "Seçili okumalar silinsin mi?"
+msgid "Medium quality"
+msgstr "Orta kalite"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Okumalar: {count}. Ses ve metin dosyaları Çöp Kutusuna taşınır."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro kurulu değil. biglinux-kokoro-tts paketini kurun."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Çöp Kutusuna taşındı: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Kokoro ses modeli eksik. biglinux-kokoro-tts paketini yeniden kurun."
 
-msgid "Save the selected readings"
-msgstr "Seçili okumaları kaydet"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Kokoro sesi bulunamadı. Ses indirmek için Ses Yöneticisi'ni açın."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "{folder} konumuna kaydedildi: {count}"
-
-msgid "No shortcut"
-msgstr "Kısayol yok"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Bu Kokoro sesi kurulu değil. İndirmek için Ses Yöneticisi'ni açın."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Kısayol: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper motoru"
-
-msgid "Voice Manager"
-msgstr "Ses Yöneticisi"
-
-msgid "Search voices by name or language…"
-msgstr "Sesleri ada veya dile göre ara…"
-
-msgid "Loading available voices…"
-msgstr "Mevcut sesler yükleniyor…"
-
-msgid "No Voice Packages Found"
-msgstr "Ses Paketleri Bulunamadı"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Pacman depolarından herhangi bir TTS ses paketi bulunamadı."
-
-msgid "High quality offline voices"
-msgstr "Yüksek kaliteli çevrimdışı sesler"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Sinir ağı sesleri — doğal sesli"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Hafif çok dilli sentezleyici"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Nöral TTS — yüksek kaliteli çok dilli sesler (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Bilinmeyen ses: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "{name} yükle"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Geçersiz ses kimliği: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Ses dosyası beklenenden büyük."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "{name} kaldırın"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "eksik indirme ({received} / {total} bayt)"
 
-msgid "Installed"
-msgstr "Yüklendi"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "{name} kaldırılsın mı?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Ses artık okuma için kullanılamayacak. Daha sonra yeniden kurabilirsiniz."
-
-msgid "Remove"
-msgstr "Kaldır"
+msgid "empty response"
+msgstr "boş yanıt"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} indiriliyor…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Ses indirilemedi. İnternet bağlantınızı denetleyip yeniden deneyin. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} indiriliyor… {done} / {total} KB"
-
-msgid "Operation timed out"
-msgstr "İşlem zaman aşımına uğradı."
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec veya pacman bulunamadı"
-
-msgid "Download cancelled"
-msgstr "İndirme iptal edildi"
-
-msgid "Failed"
-msgstr "Başarısız oldu"
-
-msgid "Removal Failed"
-msgstr "Kaldırma Başarısız oldu"
-
-msgid "Unknown error"
-msgstr "Bilinmeyen hata"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "İndirilen ses dosyası bozuk. Yeniden deneyin. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "{name} örneğini çal"
-
-msgid "Stop the sample"
-msgstr "Örneği durdur"
-
-msgid "The sample could not be played."
-msgstr "Örnek çalınamadı."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Sesi kurmak için yeterli disk alanı yok ({size} MB gerekli)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Örnek çalınamadı: {program} kurulu değil."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Kullanıcı sesleri dizini oluşturulamıyor: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Ses eklenemedi: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Temel ses kaldırılamaz"
+
+msgid "No user voices installed"
+msgstr "Kurulu kullanıcı sesi yok"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Ses kaldırılamadı: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Seçili metni oku veya durdur"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Ses çalınamadı. alsa-utils (aplay) paketinin kurulu olduğunu denetleyin."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} başlatılamadı. Kurulu olduğunu denetleyin."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice kurulu değil. rhvoice paketini kurun."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng bu metni okuyamadı. espeak-ng'nin kurulu olduğunu denetleyin."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Seçili Piper sesi kurulu değil. Ses Yöneticisi'nde başka bir ses seçin."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper bu metni okuyamadı. Başka bir ses deneyin."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} metni okurken çöktü."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} bir hatayla durdu ve metni okuyamadı."
+
+msgid "Read the selected text aloud"
+msgstr "Seçili metni sesli oku"
+
+msgid "Could not read the text."
+msgstr "Metin okunamadı."
+
+msgid "Reading text"
+msgstr "Metin okunuyor"
+
+msgid "Playing…"
+msgstr "Oynuyor…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Seçili metnin okunabilmesi için wl-clipboard (Wayland) veya xclip (X11) kurun."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Önce bir metin seçin, ardından kısayola basın."
+
+msgid "No text selected"
+msgstr "Seçili metin yok"
+
+msgid "Read text"
+msgstr "Metin oku"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Quit"
+msgstr "Çıkış"
+
+msgid "Paused"
+msgstr "Duraklatıldı"
+
+msgid "BigLinux Team"
+msgstr "BigLinux Ekibi"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS, seçili veya yazılan metni yerel sesler, genel kısayollar ve hassas oynatma denetimleriyle konuşmaya dönüştürür."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS, 2021'de web tabanlı bir araç olarak başladı ve birden çok konuşma motoru, ses yönetimi ve Rust ile yazılmış bir ses motoru içeren yerel bir GTK4 uygulamasına dönüştü."
+
+msgid "Could not register the shortcut."
+msgstr "Kısayol kaydedilemedi."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Dinlemek için metni seçin ve {shortcut} tuşlarına basın"
+
+msgid "Text-to-speech assistant"
+msgstr "Metinden sese asistan"
+
+msgid "Show settings"
+msgstr "Ayarları göster"
+
+msgid "Back"
+msgstr "Geri"
+
+msgid "Text narrator"
+msgstr "Metin anlatıcı"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Kısayol etkin değil — düzeltmek için Gelişmiş seçenekler'i açın"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Sesli okumak için metni seçin ve {key} tuşlarına basın"
+
+msgid "Show tray icon"
+msgstr "Sistem tepsisi simgesini göster"
+
+msgid "Restore Defaults…"
+msgstr "Varsayılanları Geri Yükle…"
+
+msgid "Welcome"
+msgstr "Hoş geldiniz"
+
+msgid "About BigLinux TTS"
+msgstr "BigLinux TTS Hakkında"
+
+msgid "Main menu"
+msgstr "Ana menü"
+
+msgid "Restore settings?"
+msgstr "Ayarlar geri yüklensin mi?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Bu, tüm ayarları orijinal varsayılan değerlerine döndürecektir."
+
+msgid "Restore"
+msgstr "Geri yükle"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Metinden Konuşmaya — Seçili metni sesli oku"
+
+msgid "Enable debug logging"
+msgstr "Hata ayıklama günlüğünü etkinleştir"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

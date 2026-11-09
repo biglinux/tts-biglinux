@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux Text-to-Speech — čtení vybraného textu nahlas"
+msgid "Piper engine"
+msgstr "Engine Piper"
 
-msgid "Enable debug logging"
-msgstr "Zapnout ladicí protokolování"
+msgid "Voice Manager"
+msgstr "Správce hlasu"
 
-msgid "Settings"
-msgstr "Nastavení"
+msgid "Search voices by name or language…"
+msgstr "Hledat hlasy podle názvu nebo jazyka…"
 
-msgid "Show settings"
-msgstr "Zobrazit nastavení"
-
-msgid "Back"
-msgstr "Zpět"
-
-msgid "Text narrator"
-msgstr "Předčítač textu"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "Klávesová zkratka není aktivní — opravte ji v Pokročilých možnostech"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Vyberte text a stiskněte {key} pro přečtení nahlas"
-
-msgid "History"
-msgstr "Historie"
-
-msgid "Loading voice…"
-msgstr "Načítání hlasu…"
-
-msgid "Speaking…"
-msgstr "Čtení…"
-
-msgid "Could not read the text"
-msgstr "Text nelze přečíst"
-
-msgid "Show tray icon"
-msgstr "Zobrazit ikonu v oznamovací oblasti"
-
-msgid "Restore Defaults…"
-msgstr "Obnovit výchozí…"
-
-msgid "Welcome"
-msgstr "Vítejte"
-
-msgid "About BigLinux TTS"
-msgstr "O aplikaci BigLinux TTS"
-
-msgid "Quit"
-msgstr "Ukončit"
-
-msgid "Main menu"
-msgstr "Hlavní nabídka"
-
-msgid "Restore settings?"
-msgstr "Obnovit nastavení?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Tímto se vrátí všechny úpravy na původní výchozí hodnoty."
+msgid "Loading available voices…"
+msgstr "Načítání dostupných hlasů…"
 
 msgid "Cancel"
 msgstr "Zrušit"
 
-msgid "Restore"
-msgstr "Obnovit"
+msgid "No Voice Packages Found"
+msgstr "Nebyly nalezeny žádné hlasové balíčky."
 
-msgid "This key combination is not valid."
-msgstr "Tato kombinace kláves není platná."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Nebyly nalezeny žádné balíčky TTS hlasů v repozitářích pacman."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Použijte Ctrl, Alt nebo Super spolu s klávesou, aby nebylo ovlivněno běžné psaní."
+msgid "High quality offline voices"
+msgstr "Hlasové syntézy vysoké kvality pro offline použití"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Tato kombinace kláves není pracovním prostředím podporována."
+msgid "Neural network voices — natural sounding"
+msgstr "Hlasové modely neuronových sítí — přirozeně znějící"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} již používá: {names}. Zvolte jinou klávesovou zkratku."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Lehký vícejazyčný syntetizátor"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "Pracovní prostředí nepřijalo klávesovou zkratku. Běží služba globálních klávesových zkratek KDE?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "Pracovní prostředí nepotvrdilo novou klávesovou zkratku."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "Klávesová zkratka byla uložena, ale pracovní prostředí ji zatím nemohlo potvrdit."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Klávesovou zkratku nelze v tomto pracovním prostředí zaregistrovat. Přidejte ji v systémovém nastavení klávesnice s příkazem biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "Instalace byla zrušena: heslo správce nebylo potvrzeno."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neurální TTS — vysoce kvalitní vícejazyčné hlasy (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} není ve vašich repozitářích k dispozici. Aktualizujte systém (sudo pacman -Syu) a zkuste to znovu."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Jiný program instaluje nebo aktualizuje balíčky. Počkejte, až skončí, a zkuste to znovu."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "Balíčky nelze stáhnout. Zkontrolujte připojení k internetu a zkuste to znovu."
+msgid "Install {name}"
+msgstr "Nainstalujte {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} je v konfliktu s nainstalovanými soubory nebo balíčky. Viz podrobnosti."
+msgid "Remove {name}"
+msgstr "Odstranit {name}"
+
+msgid "Installed"
+msgstr "Nainstalováno"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Nedostatek volného místa na disku pro instalaci {packages}."
+msgid "Remove {name}?"
+msgstr "Odebrat {name}?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "Hlas už nebude k dispozici pro čtení. Později jej můžete znovu nainstalovat."
+
+msgid "Remove"
+msgstr "Odstranit"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} nelze nainstalovat. Viz podrobnosti."
-
-msgid "Nothing to install."
-msgstr "Není co instalovat."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec není nainstalován (balíček polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "Instalace trvala příliš dlouho a byla zastavena."
+msgid "Downloading {name}…"
+msgstr "Stahování {name}…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} se nepodařilo sestavit z AUR. Podívejte se na podrobnosti."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "Stahování {name}… {done} z {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Přečíst vybraný text nebo zastavit čtení"
+msgid "Operation timed out"
+msgstr "Čas operace vypršel"
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro není nainstalováno. Nainstalujte balíček biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec nebo pacman nenalezen"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Chybí hlasový model Kokoro. Přeinstalujte balíček biglinux-kokoro-tts."
+msgid "Download cancelled"
+msgstr "Stahování zrušeno"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Nebyly nalezeny žádné hlasy Kokoro. Otevřete Správce hlasů a stáhněte hlas."
+msgid "Failed"
+msgstr "Selhalo"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Tento hlas Kokoro není nainstalován. Otevřete Správce hlasů a stáhněte jej."
+msgid "Removal Failed"
+msgstr "Odstranění se nezdařilo"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Neznámý hlas: {voice_id}"
+msgid "Unknown error"
+msgstr "Neznámá chyba"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Neplatné ID hlasu: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Soubor hlasu je větší, než se očekávalo."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "neúplné stahování ({received} z {total} bajtů)"
+msgid "Play a sample of {name}"
+msgstr "Přehrát ukázku {name}"
 
-msgid "empty response"
-msgstr "prázdná odpověď"
+msgid "Stop the sample"
+msgstr "Zastavit ukázku"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Hlas nelze stáhnout. Zkontrolujte připojení k internetu a zkuste to znovu. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Stažený soubor hlasu je poškozený. Zkuste to znovu. ({error})"
+msgid "The sample could not be played."
+msgstr "Ukázku nelze přehrát."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Nedostatek místa na disku pro instalaci hlasu (potřeba {size} MB)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Nelze vytvořit adresář uživatelských hlasů: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Nepodařilo se přidat hlas: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Základní hlas nelze odebrat"
-
-msgid "No user voices installed"
-msgstr "Nejsou nainstalovány žádné uživatelské hlasy"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Nepodařilo se odebrat hlas: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Zvuk nelze přehrát. Zkontrolujte, zda je nainstalován alsa-utils (aplay)."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} nelze spustit. Zkontrolujte, zda je nainstalován."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice není nainstalován. Nainstalujte balíček rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng nemohl přečíst tento text. Zkontrolujte, zda je espeak-ng nainstalován."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "Vybraný hlas Piper není nainstalován. Zvolte jiný hlas ve Správci hlasů."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper nemohl přečíst tento text. Zkuste jiný hlas."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} během čtení textu spadl."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} se zastavil s chybou a nemohl přečíst text."
-
-msgid "Extra low quality"
-msgstr "Velmi nízká kvalita"
-
-msgid "Low quality"
-msgstr "Nízká kvalita"
-
-msgid "Medium quality"
-msgstr "Střední kvalita"
-
-msgid "High quality"
-msgstr "Vysoká kvalita"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "Přečíst vybraný text nahlas"
-
-msgid "Could not read the text."
-msgstr "Text nelze přečíst."
-
-msgid "Reading text"
-msgstr "Čtení textu"
-
-msgid "Playing…"
-msgstr "Hraní…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Nainstalujte wl-clipboard (Wayland) nebo xclip (X11), aby bylo možné číst vybraný text."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Nejprve vyberte text a poté stiskněte klávesovou zkratku."
-
-msgid "No text selected"
-msgstr "Není vybrán žádný text"
-
-msgid "Read text"
-msgstr "Přečtěte si text"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Ukázku nelze přehrát: {program} není nainstalován."
 
 msgid "Play"
 msgstr "Hrajte"
 
-msgid "Pause"
-msgstr "Pozastavit"
-
 msgid "Stop"
 msgstr "Zastavit"
 
-msgid "Paused"
-msgstr "Pozastaveno"
-
-msgid "BigLinux Team"
-msgstr "Tým BigLinux"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS převádí vybraný nebo napsaný text na řeč pomocí místních hlasů, globálních klávesových zkratek a přesného ovládání přehrávání."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS vznikl v roce 2021 jako webový nástroj a vyvinul se v nativní aplikaci GTK4 s několika řečovými enginy, správou hlasů a zvukovým enginem v jazyce Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Klávesovou zkratku nelze zaregistrovat."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Vyberte text a stiskněte {shortcut}, abyste jej slyšeli"
-
-msgid "Text-to-speech assistant"
-msgstr "Asistent pro převod textu na řeč"
-
 msgid "Playback position"
 msgstr "Pozice přehrávání"
+
+msgid "Pause"
+msgstr "Pozastavit"
+
+msgid "Unknown"
+msgstr "Neznámé"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Dnes, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Včera, {time}"
+
+msgid "Select this reading"
+msgstr "Vybrat toto čtení"
+
+msgid "(text not kept)"
+msgstr "(text nebyl uchován)"
+
+msgid "Show more"
+msgstr "Zobrazit více"
+
+msgid "Copy text"
+msgstr "Kopírovat text"
+
+msgid "Read again with the current voice"
+msgstr "Přečíst znovu aktuálním hlasem"
+
+msgid "More actions"
+msgstr "Další akce"
+
+msgid "Stopped"
+msgstr "Zastaveno"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Reading stopped before the end"
+msgstr "Čtení zastaveno před koncem"
+
+msgid "The engine failed during this reading"
+msgstr "Engine během tohoto čtení selhal"
+
+msgid "Audio not kept for this reading"
+msgstr "Zvuk tohoto čtení nebyl uchován"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "Čtení {engine}, {when}"
+
+msgid "Save audio as…"
+msgstr "Uložit zvuk jako…"
+
+msgid "Open file location"
+msgstr "Otevřít umístění souboru"
+
+msgid "Delete"
+msgstr "Smazat"
+
+msgid "Show less"
+msgstr "Zobrazit méně"
+
+msgid "Text copied"
+msgstr "Text zkopírován"
+
+msgid "Save audio as"
+msgstr "Uložit zvuk jako"
+
+msgid "Audio saved"
+msgstr "Zvuk uložen"
+
+msgid "Could not save the audio"
+msgstr "Zvuk nelze uložit"
+
+msgid "History"
+msgstr "Historie"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Ukládání je vypnuto: nová čtení se neuchovávají."
+
+msgid "Turn On"
+msgstr "Zapnout"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Hledat text, hlas, engine nebo datum…"
+
+msgid "All dates"
+msgstr "Libovolné datum"
+
+msgid "Today"
+msgstr "Dnes"
+
+msgid "Yesterday"
+msgstr "Včera"
+
+msgid "Last 7 days"
+msgstr "Posledních 7 dní"
+
+msgid "Filter by date"
+msgstr "Filtrovat podle data"
+
+msgid "All engines"
+msgstr "Všechny enginy"
+
+msgid "Filter by engine"
+msgstr "Filtrovat podle enginu"
+
+msgid "Newest first"
+msgstr "Nejnovější první"
+
+msgid "Sort order"
+msgstr "Pořadí řazení"
+
+msgid "Show as grid"
+msgstr "Zobrazit jako mřížku"
+
+msgid "Select readings"
+msgstr "Vybrat čtení"
+
+msgid "Select All"
+msgstr "Vybrat vše"
+
+msgid "Deselect All"
+msgstr "Zrušit výběr všeho"
+
+msgid "Save the selected readings to a folder"
+msgstr "Uložit vybraná čtení do složky"
+
+msgid "Save selected"
+msgstr "Uložit vybrané"
+
+msgid "Delete selected"
+msgstr "Smazat vybrané"
+
+msgid "History entries"
+msgstr "Historie záznamy"
+
+msgid "The history could not be read"
+msgstr "Historii nelze načíst"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Zkontrolujte oprávnění složky {folder}."
+
+msgid "No readings found"
+msgstr "Nenalezena žádná čtení"
+
+msgid "Try other words or another date or engine."
+msgstr "Zkuste jiná slova, jiné datum nebo jiný engine."
+
+msgid "Clear Filters"
+msgstr "Vymazat filtry"
+
+msgid "No readings yet"
+msgstr "Zatím žádná čtení"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Vše, co posloucháte, se zobrazí zde, včetně zvuku. Ukládá se pouze na tomto počítači, v {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Ukládání je vypnuto. Zapněte je, abyste uchovali, co posloucháte, včetně zvuku — pouze na tomto počítači, v {folder}."
+
+msgid "Turn On History"
+msgstr "Zapnout historii"
+
+msgid "Oldest first"
+msgstr "Nejstarší první"
+
+msgid "Show as list"
+msgstr "Zobrazit jako seznam"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Vybráno: {count}"
+
+msgid "Reading deleted"
+msgstr "Čtení smazáno"
+
+msgid "Undo"
+msgstr "Zpět"
+
+msgid "Delete the selected readings?"
+msgstr "Smazat vybraná čtení?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Čtení: {count}. Jejich zvukové a textové soubory budou přesunuty do koše."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Přesunuto do koše: {count}"
+
+msgid "Save the selected readings"
+msgstr "Uložit vybraná čtení"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Uloženo do {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Bez klávesové zkratky"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Klávesová zkratka: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Nejprve nainstalujte hlasy {engine}"
 msgid "Neural"
 msgstr "Neurální"
 
+msgid "High quality"
+msgstr "Vysoká kvalita"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Dostupné hlasy: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper není k dispozici"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Ve vašich repozitářích nebyl nalezen žádný balíček hlasů Piper ({packages}). Aktualizujte systém (sudo pacman -Syu) a zkuste to znovu."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper poskytuje přirozené neurální hlasy. Budou nainstalovány tyto balíčky:"
@@ -769,12 +790,18 @@ msgstr "Zadejte text pro testování"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Hlasitost je na nule — zvyšuje se na minimum pro test."
 
+msgid "Loading voice…"
+msgstr "Načítání hlasu…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "Příprava hlasu {voice}. Řeč za okamžik začne."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "Příprava hlasu. Řeč za okamžik začne."
+
+msgid "Speaking…"
+msgstr "Čtení…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Stiskněte znovu {shortcut} pro zastavení."
 msgid "Use Stop to end the reading."
 msgstr "Čtení ukončíte tlačítkem Zastavit."
 
+msgid "Could not read the text"
+msgstr "Text nelze přečíst"
+
 msgid "The speech engine reported a problem."
 msgstr "Řečový engine nahlásil problém."
-
-msgid "Stopped"
-msgstr "Zastaveno"
 
 msgid "Reading was stopped."
 msgstr "Čtení bylo zastaveno."
@@ -847,9 +874,6 @@ msgstr "Načítání"
 
 msgid "Speaking"
 msgstr "Čtení"
-
-msgid "Error"
-msgstr "Chyba"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -953,290 +977,266 @@ msgstr "Zobrazit dialog při spuštění"
 msgid "Let's Start"
 msgstr "Začněme"
 
-msgid "Unknown"
-msgstr "Neznámé"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "Instalace byla zrušena: heslo správce nebylo potvrzeno."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Dnes, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} není ve vašich repozitářích k dispozici. Aktualizujte systém (sudo pacman -Syu) a zkuste to znovu."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Jiný program instaluje nebo aktualizuje balíčky. Počkejte, až skončí, a zkuste to znovu."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "Balíčky nelze stáhnout. Zkontrolujte připojení k internetu a zkuste to znovu."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Včera, {time}"
-
-msgid "Select this reading"
-msgstr "Vybrat toto čtení"
-
-msgid "(text not kept)"
-msgstr "(text nebyl uchován)"
-
-msgid "Show more"
-msgstr "Zobrazit více"
-
-msgid "Copy text"
-msgstr "Kopírovat text"
-
-msgid "Read again with the current voice"
-msgstr "Přečíst znovu aktuálním hlasem"
-
-msgid "More actions"
-msgstr "Další akce"
-
-msgid "Reading stopped before the end"
-msgstr "Čtení zastaveno před koncem"
-
-msgid "The engine failed during this reading"
-msgstr "Engine během tohoto čtení selhal"
-
-msgid "Audio not kept for this reading"
-msgstr "Zvuk tohoto čtení nebyl uchován"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} je v konfliktu s nainstalovanými soubory nebo balíčky. Viz podrobnosti."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "Čtení {engine}, {when}"
-
-msgid "Save audio as…"
-msgstr "Uložit zvuk jako…"
-
-msgid "Open file location"
-msgstr "Otevřít umístění souboru"
-
-msgid "Delete"
-msgstr "Smazat"
-
-msgid "Show less"
-msgstr "Zobrazit méně"
-
-msgid "Text copied"
-msgstr "Text zkopírován"
-
-msgid "Save audio as"
-msgstr "Uložit zvuk jako"
-
-msgid "Audio saved"
-msgstr "Zvuk uložen"
-
-msgid "Could not save the audio"
-msgstr "Zvuk nelze uložit"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Ukládání je vypnuto: nová čtení se neuchovávají."
-
-msgid "Turn On"
-msgstr "Zapnout"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Hledat text, hlas, engine nebo datum…"
-
-msgid "All dates"
-msgstr "Libovolné datum"
-
-msgid "Today"
-msgstr "Dnes"
-
-msgid "Yesterday"
-msgstr "Včera"
-
-msgid "Last 7 days"
-msgstr "Posledních 7 dní"
-
-msgid "Filter by date"
-msgstr "Filtrovat podle data"
-
-msgid "All engines"
-msgstr "Všechny enginy"
-
-msgid "Filter by engine"
-msgstr "Filtrovat podle enginu"
-
-msgid "Newest first"
-msgstr "Nejnovější první"
-
-msgid "Sort order"
-msgstr "Pořadí řazení"
-
-msgid "Show as grid"
-msgstr "Zobrazit jako mřížku"
-
-msgid "Select readings"
-msgstr "Vybrat čtení"
-
-msgid "Select All"
-msgstr "Vybrat vše"
-
-msgid "Deselect All"
-msgstr "Zrušit výběr všeho"
-
-msgid "Save the selected readings to a folder"
-msgstr "Uložit vybraná čtení do složky"
-
-msgid "Save selected"
-msgstr "Uložit vybrané"
-
-msgid "Delete selected"
-msgstr "Smazat vybrané"
-
-msgid "History entries"
-msgstr "Historie záznamy"
-
-msgid "The history could not be read"
-msgstr "Historii nelze načíst"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Nedostatek volného místa na disku pro instalaci {packages}."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Zkontrolujte oprávnění složky {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} nelze nainstalovat. Viz podrobnosti."
 
-msgid "No readings found"
-msgstr "Nenalezena žádná čtení"
+msgid "Nothing to install."
+msgstr "Není co instalovat."
 
-msgid "Try other words or another date or engine."
-msgstr "Zkuste jiná slova, jiné datum nebo jiný engine."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec není nainstalován (balíček polkit)."
 
-msgid "Clear Filters"
-msgstr "Vymazat filtry"
-
-msgid "No readings yet"
-msgstr "Zatím žádná čtení"
+msgid "The installation took too long and was stopped."
+msgstr "Instalace trvala příliš dlouho a byla zastavena."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Vše, co posloucháte, se zobrazí zde, včetně zvuku. Ukládá se pouze na tomto počítači, v {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} se nepodařilo sestavit z AUR. Podívejte se na podrobnosti."
+
+msgid "This key combination is not valid."
+msgstr "Tato kombinace kláves není platná."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Použijte Ctrl, Alt nebo Super spolu s klávesou, aby nebylo ovlivněno běžné psaní."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Tato kombinace kláves není pracovním prostředím podporována."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Ukládání je vypnuto. Zapněte je, abyste uchovali, co posloucháte, včetně zvuku — pouze na tomto počítači, v {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} již používá: {names}. Zvolte jinou klávesovou zkratku."
 
-msgid "Turn On History"
-msgstr "Zapnout historii"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "Pracovní prostředí nepřijalo klávesovou zkratku. Běží služba globálních klávesových zkratek KDE?"
 
-msgid "Oldest first"
-msgstr "Nejstarší první"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "Pracovní prostředí nepotvrdilo novou klávesovou zkratku."
 
-msgid "Show as list"
-msgstr "Zobrazit jako seznam"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "Klávesová zkratka byla uložena, ale pracovní prostředí ji zatím nemohlo potvrdit."
+
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Klávesovou zkratku nelze v tomto pracovním prostředí zaregistrovat. Přidejte ji v systémovém nastavení klávesnice s příkazem biglinux-tts-speak."
+
+msgid "Extra low quality"
+msgstr "Velmi nízká kvalita"
+
+msgid "Low quality"
+msgstr "Nízká kvalita"
+
+msgid "Medium quality"
+msgstr "Střední kvalita"
+
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro není nainstalováno. Nainstalujte balíček biglinux-kokoro-tts."
+
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Chybí hlasový model Kokoro. Přeinstalujte balíček biglinux-kokoro-tts."
+
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Nebyly nalezeny žádné hlasy Kokoro. Otevřete Správce hlasů a stáhněte hlas."
+
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Tento hlas Kokoro není nainstalován. Otevřete Správce hlasů a stáhněte jej."
 
 #, python-brace-format
-msgid "Selected: {count}"
-msgstr "Vybráno: {count}"
+msgid "Unknown voice: {voice_id}"
+msgstr "Neznámý hlas: {voice_id}"
 
-msgid "Reading deleted"
-msgstr "Čtení smazáno"
+#, python-brace-format
+msgid "Invalid voice id: {voice_id}"
+msgstr "Neplatné ID hlasu: {voice_id}"
 
-msgid "Undo"
+msgid "The voice file is larger than expected."
+msgstr "Soubor hlasu je větší, než se očekávalo."
+
+#, python-brace-format
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "neúplné stahování ({received} z {total} bajtů)"
+
+msgid "empty response"
+msgstr "prázdná odpověď"
+
+#, python-brace-format
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Hlas nelze stáhnout. Zkontrolujte připojení k internetu a zkuste to znovu. ({error})"
+
+#, python-brace-format
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Stažený soubor hlasu je poškozený. Zkuste to znovu. ({error})"
+
+#, python-brace-format
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Nedostatek místa na disku pro instalaci hlasu (potřeba {size} MB)."
+
+#, python-brace-format
+msgid "Cannot create user voices directory: {error}"
+msgstr "Nelze vytvořit adresář uživatelských hlasů: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Nepodařilo se přidat hlas: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Základní hlas nelze odebrat"
+
+msgid "No user voices installed"
+msgstr "Nejsou nainstalovány žádné uživatelské hlasy"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Nepodařilo se odebrat hlas: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Přečíst vybraný text nebo zastavit čtení"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Zvuk nelze přehrát. Zkontrolujte, zda je nainstalován alsa-utils (aplay)."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} nelze spustit. Zkontrolujte, zda je nainstalován."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice není nainstalován. Nainstalujte balíček rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng nemohl přečíst tento text. Zkontrolujte, zda je espeak-ng nainstalován."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "Vybraný hlas Piper není nainstalován. Zvolte jiný hlas ve Správci hlasů."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper nemohl přečíst tento text. Zkuste jiný hlas."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} během čtení textu spadl."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} se zastavil s chybou a nemohl přečíst text."
+
+msgid "Read the selected text aloud"
+msgstr "Přečíst vybraný text nahlas"
+
+msgid "Could not read the text."
+msgstr "Text nelze přečíst."
+
+msgid "Reading text"
+msgstr "Čtení textu"
+
+msgid "Playing…"
+msgstr "Hraní…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Nainstalujte wl-clipboard (Wayland) nebo xclip (X11), aby bylo možné číst vybraný text."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Nejprve vyberte text a poté stiskněte klávesovou zkratku."
+
+msgid "No text selected"
+msgstr "Není vybrán žádný text"
+
+msgid "Read text"
+msgstr "Přečtěte si text"
+
+msgid "Settings"
+msgstr "Nastavení"
+
+msgid "Quit"
+msgstr "Ukončit"
+
+msgid "Paused"
+msgstr "Pozastaveno"
+
+msgid "BigLinux Team"
+msgstr "Tým BigLinux"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS převádí vybraný nebo napsaný text na řeč pomocí místních hlasů, globálních klávesových zkratek a přesného ovládání přehrávání."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS vznikl v roce 2021 jako webový nástroj a vyvinul se v nativní aplikaci GTK4 s několika řečovými enginy, správou hlasů a zvukovým enginem v jazyce Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Klávesovou zkratku nelze zaregistrovat."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Vyberte text a stiskněte {shortcut}, abyste jej slyšeli"
+
+msgid "Text-to-speech assistant"
+msgstr "Asistent pro převod textu na řeč"
+
+msgid "Show settings"
+msgstr "Zobrazit nastavení"
+
+msgid "Back"
 msgstr "Zpět"
 
-msgid "Delete the selected readings?"
-msgstr "Smazat vybraná čtení?"
+msgid "Text narrator"
+msgstr "Předčítač textu"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "Klávesová zkratka není aktivní — opravte ji v Pokročilých možnostech"
 
 #, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Čtení: {count}. Jejich zvukové a textové soubory budou přesunuty do koše."
+msgid "Select text and press {key} to read it aloud"
+msgstr "Vyberte text a stiskněte {key} pro přečtení nahlas"
+
+msgid "Show tray icon"
+msgstr "Zobrazit ikonu v oznamovací oblasti"
+
+msgid "Restore Defaults…"
+msgstr "Obnovit výchozí…"
+
+msgid "Welcome"
+msgstr "Vítejte"
+
+msgid "About BigLinux TTS"
+msgstr "O aplikaci BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Hlavní nabídka"
+
+msgid "Restore settings?"
+msgstr "Obnovit nastavení?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Tímto se vrátí všechny úpravy na původní výchozí hodnoty."
+
+msgid "Restore"
+msgstr "Obnovit"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Text-to-Speech — čtení vybraného textu nahlas"
+
+msgid "Enable debug logging"
+msgstr "Zapnout ladicí protokolování"
 
 #, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Přesunuto do koše: {count}"
-
-msgid "Save the selected readings"
-msgstr "Uložit vybraná čtení"
-
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Uloženo do {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Bez klávesové zkratky"
-
-#, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Klávesová zkratka: {keys}"
-
-msgid "Piper engine"
-msgstr "Engine Piper"
-
-msgid "Voice Manager"
-msgstr "Správce hlasu"
-
-msgid "Search voices by name or language…"
-msgstr "Hledat hlasy podle názvu nebo jazyka…"
-
-msgid "Loading available voices…"
-msgstr "Načítání dostupných hlasů…"
-
-msgid "No Voice Packages Found"
-msgstr "Nebyly nalezeny žádné hlasové balíčky."
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Nebyly nalezeny žádné balíčky TTS hlasů v repozitářích pacman."
-
-msgid "High quality offline voices"
-msgstr "Hlasové syntézy vysoké kvality pro offline použití"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Hlasové modely neuronových sítí — přirozeně znějící"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Lehký vícejazyčný syntetizátor"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neurální TTS — vysoce kvalitní vícejazyčné hlasy (82M)"
-
-#, python-brace-format
-msgid "Install {name}"
-msgstr "Nainstalujte {name}"
-
-#, python-brace-format
-msgid "Remove {name}"
-msgstr "Odstranit {name}"
-
-msgid "Installed"
-msgstr "Nainstalováno"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "Odebrat {name}?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "Hlas už nebude k dispozici pro čtení. Později jej můžete znovu nainstalovat."
-
-msgid "Remove"
-msgstr "Odstranit"
-
-#, python-brace-format
-msgid "Downloading {name}…"
-msgstr "Stahování {name}…"
-
-#, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "Stahování {name}… {done} z {total} KB"
-
-msgid "Operation timed out"
-msgstr "Čas operace vypršel"
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec nebo pacman nenalezen"
-
-msgid "Download cancelled"
-msgstr "Stahování zrušeno"
-
-msgid "Failed"
-msgstr "Selhalo"
-
-msgid "Removal Failed"
-msgstr "Odstranění se nezdařilo"
-
-msgid "Unknown error"
-msgstr "Neznámá chyba"
-
-#, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Přehrát ukázku {name}"
-
-msgid "Stop the sample"
-msgstr "Zastavit ukázku"
-
-msgid "The sample could not be played."
-msgstr "Ukázku nelze přehrát."
-
-#, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Ukázku nelze přehrát: {program} není nainstalován."
+msgid "{language} ({region})"
+msgstr "{language} ({region})"

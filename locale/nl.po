@@ -14,299 +14,320 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "BigLinux Text-to-Speech — Read selected text aloud"
-msgstr "BigLinux Tekst-naar-spraak — Geselecteerde tekst voorlezen"
+msgid "Piper engine"
+msgstr "Piper-engine"
 
-msgid "Enable debug logging"
-msgstr "Debuglogboek inschakelen"
+msgid "Voice Manager"
+msgstr "Stembeheerder"
 
-msgid "Settings"
-msgstr "Instellingen"
+msgid "Search voices by name or language…"
+msgstr "Stemmen zoeken op naam of taal…"
 
-msgid "Show settings"
-msgstr "Instellingen tonen"
-
-msgid "Back"
-msgstr "Terug"
-
-msgid "Text narrator"
-msgstr "Voorlezer"
-
-msgid "The shortcut is not active — open Advanced options to fix it"
-msgstr "De sneltoets is niet actief — open Geavanceerde opties om dit op te lossen"
-
-#, python-brace-format
-msgid "Select text and press {key} to read it aloud"
-msgstr "Selecteer tekst en druk op {key} om deze voor te laten lezen"
-
-msgid "History"
-msgstr "Geschiedenis"
-
-msgid "Loading voice…"
-msgstr "Stem laden…"
-
-msgid "Speaking…"
-msgstr "Spreken…"
-
-msgid "Could not read the text"
-msgstr "Kan de tekst niet lezen"
-
-msgid "Show tray icon"
-msgstr "Pictogram in systeemvak tonen"
-
-msgid "Restore Defaults…"
-msgstr "Standaardwaarden herstellen…"
-
-msgid "Welcome"
-msgstr "Welkom"
-
-msgid "About BigLinux TTS"
-msgstr "Over BigLinux TTS"
-
-msgid "Quit"
-msgstr "Afsluiten"
-
-msgid "Main menu"
-msgstr "Hoofdmenu"
-
-msgid "Restore settings?"
-msgstr "Instellingen herstellen?"
-
-msgid "This will return all adjustments to their original defaults."
-msgstr "Dit zal alle aanpassingen terugzetten naar de oorspronkelijke standaardwaarden."
+msgid "Loading available voices…"
+msgstr "Beschikbare stemmen laden…"
 
 msgid "Cancel"
 msgstr "Annuleren"
 
-msgid "Restore"
-msgstr "Herstellen"
+msgid "No Voice Packages Found"
+msgstr "Geen spraakpakketten gevonden"
 
-msgid "This key combination is not valid."
-msgstr "Deze toetscombinatie is ongeldig."
+msgid "Could not find any TTS voice packages from pacman repositories."
+msgstr "Kon kon TTS-stem pakketten gevonden in de pacman-repositories."
 
-msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
-msgstr "Gebruik Ctrl, Alt of Super samen met een toets, zodat normaal typen niet wordt beïnvloed."
+msgid "High quality offline voices"
+msgstr "Hoge kwaliteit offline stemmen"
 
-msgid "This key combination is not supported by the desktop."
-msgstr "Deze toetscombinatie wordt niet ondersteund door de desktop."
+msgid "Neural network voices — natural sounding"
+msgstr "Neurale netwerkstemmen - natuurlijk klinkend"
 
-#, python-brace-format
-msgid "{shortcut} is already used by: {names}. Choose another shortcut."
-msgstr "{shortcut} wordt al gebruikt door: {names}. Kies een andere sneltoets."
+msgid "Lightweight multi-language synthesizer"
+msgstr "Lichte meertalige synthesizer"
 
-msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
-msgstr "De desktop heeft de sneltoets niet geaccepteerd. Draait de KDE-dienst voor globale sneltoetsen?"
-
-msgid "The desktop did not confirm the new shortcut."
-msgstr "De desktop heeft de nieuwe sneltoets niet bevestigd."
-
-msgid "The shortcut was saved, but the desktop could not confirm it yet."
-msgstr "De sneltoets is opgeslagen, maar de desktop kon hem nog niet bevestigen."
-
-msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
-msgstr "Kan de sneltoets niet registreren op deze desktop. Voeg hem toe in de toetsenbordinstellingen van het systeem met de opdracht biglinux-tts-speak."
-
-msgid "The installation was cancelled: the administrator password was not confirmed."
-msgstr "De installatie is geannuleerd: het beheerderswachtwoord is niet bevestigd."
+msgid "Neural TTS — high quality multilingual voices (82M)"
+msgstr "Neurale TTS - hoogwaardige meertalige stemmen (82M)"
 
 #, python-brace-format
-msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
-msgstr "{packages} is niet beschikbaar in uw repository's. Werk het systeem bij (sudo pacman -Syu) en probeer het opnieuw."
-
-msgid "Another program is installing or updating packages. Wait for it to finish and try again."
-msgstr "Een ander programma is pakketten aan het installeren of bijwerken. Wacht tot het klaar is en probeer het opnieuw."
-
-msgid "The packages could not be downloaded. Check your internet connection and try again."
-msgstr "De pakketten konden niet worden gedownload. Controleer uw internetverbinding en probeer het opnieuw."
+msgid "Install {name}"
+msgstr "Installeer {name}"
 
 #, python-brace-format
-msgid "{packages} conflicts with installed files or packages. See the details."
-msgstr "{packages} conflicteert met geïnstalleerde bestanden of pakketten. Zie de details."
+msgid "Remove {name}"
+msgstr "Verwijder {name}"
+
+msgid "Installed"
+msgstr "Geïnstalleerd"
 
 #, python-brace-format
-msgid "Not enough free disk space to install {packages}."
-msgstr "Onvoldoende vrije schijfruimte om {packages} te installeren."
+msgid "Remove {name}?"
+msgstr "{name} verwijderen?"
+
+msgid "The voice will no longer be available for reading. You can install it again later."
+msgstr "De stem is dan niet meer beschikbaar om voor te lezen. U kunt hem later opnieuw installeren."
+
+msgid "Remove"
+msgstr "Verwijderen"
 
 #, python-brace-format
-msgid "{packages} could not be installed. See the details."
-msgstr "{packages} kon niet worden geïnstalleerd. Zie de details."
-
-msgid "Nothing to install."
-msgstr "Niets te installeren."
-
-msgid "pkexec is not installed (package polkit)."
-msgstr "pkexec is niet geïnstalleerd (pakket polkit)."
-
-msgid "The installation took too long and was stopped."
-msgstr "De installatie duurde te lang en is gestopt."
+msgid "Downloading {name}…"
+msgstr "{name} downloaden…"
 
 #, python-brace-format
-msgid "{packages} could not be built from the AUR. See the details."
-msgstr "{packages} kon niet vanuit de AUR worden gebouwd. Zie de details."
+msgid "Downloading {name}… {done} of {total} KB"
+msgstr "{name} downloaden… {done} van {total} KB"
 
-msgid "Read or stop the selected text"
-msgstr "Geselecteerde tekst voorlezen of stoppen"
+msgid "Operation timed out"
+msgstr "De bewerking is verlopen."
 
-msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
-msgstr "Kokoro is niet geïnstalleerd. Installeer het pakket biglinux-kokoro-tts."
+msgid "pkexec or pacman not found"
+msgstr "pkexec of pacman niet gevonden"
 
-msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
-msgstr "Het Kokoro-stemmodel ontbreekt. Installeer het pakket biglinux-kokoro-tts opnieuw."
+msgid "Download cancelled"
+msgstr "Download geannuleerd"
 
-msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
-msgstr "Geen Kokoro-stemmen gevonden. Open Stembeheer om een stem te downloaden."
+msgid "Failed"
+msgstr "Mislukt"
 
-msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
-msgstr "Deze Kokoro-stem is niet geïnstalleerd. Open Stembeheer om hem te downloaden."
+msgid "Removal Failed"
+msgstr "Verwijdering mislukt"
 
-#, python-brace-format
-msgid "Unknown voice: {voice_id}"
-msgstr "Onbekende stem: {voice_id}"
+msgid "Unknown error"
+msgstr "Onbekende fout"
 
-#, python-brace-format
-msgid "Invalid voice id: {voice_id}"
-msgstr "Ongeldige stem-ID: {voice_id}"
-
-msgid "The voice file is larger than expected."
-msgstr "Het stembestand is groter dan verwacht."
+msgid "OK"
+msgstr "OK"
 
 #, python-brace-format
-msgid "incomplete download ({received} of {total} bytes)"
-msgstr "onvolledige download ({received} van {total} bytes)"
+msgid "Play a sample of {name}"
+msgstr "Een fragment van {name} afspelen"
 
-msgid "empty response"
-msgstr "leeg antwoord"
+msgid "Stop the sample"
+msgstr "Het fragment stoppen"
 
-#, python-brace-format
-msgid "Could not download the voice. Check your internet connection and try again. ({error})"
-msgstr "Kan de stem niet downloaden. Controleer uw internetverbinding en probeer het opnieuw. ({error})"
-
-#, python-brace-format
-msgid "The downloaded voice file is damaged. Try again. ({error})"
-msgstr "Het gedownloade stembestand is beschadigd. Probeer het opnieuw. ({error})"
+msgid "The sample could not be played."
+msgstr "Het fragment kon niet worden afgespeeld."
 
 #, python-brace-format
-msgid "Not enough disk space to install the voice ({size} MB needed)."
-msgstr "Onvoldoende schijfruimte om de stem te installeren ({size} MB nodig)."
-
-#, python-brace-format
-msgid "Cannot create user voices directory: {error}"
-msgstr "Kan de map voor gebruikersstemmen niet aanmaken: {error}"
-
-#, python-brace-format
-msgid "Failed to add voice: {error}"
-msgstr "Kan stem niet toevoegen: {error}"
-
-msgid "Cannot remove base voice"
-msgstr "Kan basisstem niet verwijderen"
-
-msgid "No user voices installed"
-msgstr "Geen gebruikersstemmen geïnstalleerd"
-
-#, python-brace-format
-msgid "Failed to remove voice: {error}"
-msgstr "Kan stem niet verwijderen: {error}"
-
-msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
-msgstr "Kan audio niet afspelen. Controleer of alsa-utils (aplay) is geïnstalleerd."
-
-#, python-brace-format
-msgid "{engine} could not start. Check that it is installed."
-msgstr "{engine} kon niet starten. Controleer of het is geïnstalleerd."
-
-msgid "RHVoice is not installed. Install the rhvoice package."
-msgstr "RHVoice is niet geïnstalleerd. Installeer het pakket rhvoice."
-
-msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
-msgstr "espeak-ng kon deze tekst niet lezen. Controleer of espeak-ng is geïnstalleerd."
-
-msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
-msgstr "De geselecteerde Piper-stem is niet geïnstalleerd. Kies een andere stem in Stembeheer."
-
-msgid "Piper could not read this text. Try another voice."
-msgstr "Piper kon deze tekst niet lezen. Probeer een andere stem."
-
-#, python-brace-format
-msgid "{engine} crashed while reading the text."
-msgstr "{engine} is gecrasht tijdens het lezen van de tekst."
-
-#, python-brace-format
-msgid "{engine} stopped with an error and could not read the text."
-msgstr "{engine} is gestopt met een fout en kon de tekst niet lezen."
-
-msgid "Extra low quality"
-msgstr "Zeer lage kwaliteit"
-
-msgid "Low quality"
-msgstr "Lage kwaliteit"
-
-msgid "Medium quality"
-msgstr "Gemiddelde kwaliteit"
-
-msgid "High quality"
-msgstr "Hoge kwaliteit"
-
-#, python-brace-format
-msgid "{language} ({region})"
-msgstr "{language} ({region})"
-
-msgid "Read the selected text aloud"
-msgstr "De geselecteerde tekst voorlezen"
-
-msgid "Could not read the text."
-msgstr "Kan de tekst niet lezen."
-
-msgid "Reading text"
-msgstr "Tekst wordt gelezen"
-
-msgid "Playing…"
-msgstr "Spelen…"
-
-msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
-msgstr "Installeer wl-clipboard (Wayland) of xclip (X11) zodat geselecteerde tekst kan worden gelezen."
-
-msgid "Select some text first, then press the shortcut."
-msgstr "Selecteer eerst tekst en druk dan op de sneltoets."
-
-msgid "No text selected"
-msgstr "Geen tekst geselecteerd"
-
-msgid "Read text"
-msgstr "Lees tekst"
+msgid "The sample could not be played: {program} is not installed."
+msgstr "Het fragment kon niet worden afgespeeld: {program} is niet geïnstalleerd."
 
 msgid "Play"
 msgstr "Afspelen"
 
-msgid "Pause"
-msgstr "Pauze"
-
 msgid "Stop"
 msgstr "Stoppen"
 
-msgid "Paused"
-msgstr "Gepauzeerd"
-
-msgid "BigLinux Team"
-msgstr "BigLinux-team"
-
-msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
-msgstr "BigLinux TTS zet geselecteerde of getypte tekst om in spraak met lokale stemmen, globale sneltoetsen en nauwkeurige afspeelbediening."
-
-msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
-msgstr "BigLinux TTS begon in 2021 als webtool en groeide uit tot een native GTK4-toepassing met meerdere spraakengines, stembeheer en een audio-engine in Rust."
-
-msgid "Could not register the shortcut."
-msgstr "Kan de sneltoets niet registreren."
-
-#, python-brace-format
-msgid "Select text and press {shortcut} to hear it"
-msgstr "Selecteer tekst en druk op {shortcut} om ernaar te luisteren"
-
-msgid "Text-to-speech assistant"
-msgstr "Tekst-naar-spraak-assistent"
-
 msgid "Playback position"
 msgstr "Afspeelpositie"
+
+msgid "Pause"
+msgstr "Pauze"
+
+msgid "Unknown"
+msgstr "Onbekend"
+
+#, python-brace-format
+msgid "Today, {time}"
+msgstr "Vandaag, {time}"
+
+#, python-brace-format
+msgid "Yesterday, {time}"
+msgstr "Gisteren, {time}"
+
+msgid "Select this reading"
+msgstr "Deze voorlezing selecteren"
+
+msgid "(text not kept)"
+msgstr "(tekst niet bewaard)"
+
+msgid "Show more"
+msgstr "Meer tonen"
+
+msgid "Copy text"
+msgstr "Tekst kopiëren"
+
+msgid "Read again with the current voice"
+msgstr "Opnieuw voorlezen met de huidige stem"
+
+msgid "More actions"
+msgstr "Meer acties"
+
+msgid "Stopped"
+msgstr "Gestopt"
+
+msgid "Error"
+msgstr "Fout"
+
+msgid "Reading stopped before the end"
+msgstr "Voorlezen gestopt vóór het einde"
+
+msgid "The engine failed during this reading"
+msgstr "De engine faalde tijdens deze voorlezing"
+
+msgid "Audio not kept for this reading"
+msgstr "Audio van deze voorlezing niet bewaard"
+
+#, python-brace-format
+msgid "{engine} reading, {when}"
+msgstr "Voorlezing met {engine}, {when}"
+
+msgid "Save audio as…"
+msgstr "Audio opslaan als…"
+
+msgid "Open file location"
+msgstr "Bestandlocatie openen"
+
+msgid "Delete"
+msgstr "Verwijderen"
+
+msgid "Show less"
+msgstr "Minder tonen"
+
+msgid "Text copied"
+msgstr "Tekst gekopieerd"
+
+msgid "Save audio as"
+msgstr "Audio opslaan als"
+
+msgid "Audio saved"
+msgstr "Audio opgeslagen"
+
+msgid "Could not save the audio"
+msgstr "Kon de audio niet opslaan"
+
+msgid "History"
+msgstr "Geschiedenis"
+
+msgid "Saving is off: new readings are not kept."
+msgstr "Opslaan staat uit: nieuwe voorlezingen worden niet bewaard."
+
+msgid "Turn On"
+msgstr "Inschakelen"
+
+msgid "Search text, voice, engine or date…"
+msgstr "Zoek tekst, stem, engine of datum…"
+
+msgid "All dates"
+msgstr "Alle datums"
+
+msgid "Today"
+msgstr "Vandaag"
+
+msgid "Yesterday"
+msgstr "Gisteren"
+
+msgid "Last 7 days"
+msgstr "Laatste 7 dagen"
+
+msgid "Filter by date"
+msgstr "Filteren op datum"
+
+msgid "All engines"
+msgstr "Alle engines"
+
+msgid "Filter by engine"
+msgstr "Filteren op engine"
+
+msgid "Newest first"
+msgstr "Nieuwste eerst"
+
+msgid "Sort order"
+msgstr "Sorteervolgorde"
+
+msgid "Show as grid"
+msgstr "Als raster tonen"
+
+msgid "Select readings"
+msgstr "Voorlezingen selecteren"
+
+msgid "Select All"
+msgstr "Alles selecteren"
+
+msgid "Deselect All"
+msgstr "Deselecteer alles"
+
+msgid "Save the selected readings to a folder"
+msgstr "De geselecteerde voorlezingen in een map opslaan"
+
+msgid "Save selected"
+msgstr "Selectie opslaan"
+
+msgid "Delete selected"
+msgstr "Verwijder geselecteerd"
+
+msgid "History entries"
+msgstr "Geschiedenisitems"
+
+msgid "The history could not be read"
+msgstr "De geschiedenis kon niet worden gelezen"
+
+#, python-brace-format
+msgid "Check the permissions of the folder {folder}."
+msgstr "Controleer de rechten van de map {folder}."
+
+msgid "No readings found"
+msgstr "Geen voorlezingen gevonden"
+
+msgid "Try other words or another date or engine."
+msgstr "Probeer andere woorden of een andere datum of engine."
+
+msgid "Clear Filters"
+msgstr "Filters wissen"
+
+msgid "No readings yet"
+msgstr "Nog geen voorlezingen"
+
+#, python-brace-format
+msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
+msgstr "Alles waar u naar luistert, verschijnt hier, met de audio. Het wordt alleen op deze computer opgeslagen, in {folder}."
+
+#, python-brace-format
+msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
+msgstr "Opslaan staat uit. Schakel het in om te bewaren waar u naar luistert, met de audio — alleen op deze computer, in {folder}."
+
+msgid "Turn On History"
+msgstr "Geschiedenis inschakelen"
+
+msgid "Oldest first"
+msgstr "Oudste eerst"
+
+msgid "Show as list"
+msgstr "Als lijst tonen"
+
+#, python-brace-format
+msgid "Selected: {count}"
+msgstr "Geselecteerd: {count}"
+
+msgid "Reading deleted"
+msgstr "Voorlezing verwijderd"
+
+msgid "Undo"
+msgstr "Ongedaan maken"
+
+msgid "Delete the selected readings?"
+msgstr "Geselecteerde voorlezingen verwijderen?"
+
+#, python-brace-format
+msgid "Readings: {count}. Their audio and text files are moved to the Trash."
+msgstr "Voorlezingen: {count}. Hun audio- en tekstbestanden worden naar de prullenbak verplaatst."
+
+#, python-brace-format
+msgid "Moved to the Trash: {count}"
+msgstr "Naar de prullenbak verplaatst: {count}"
+
+msgid "Save the selected readings"
+msgstr "De geselecteerde voorlezingen opslaan"
+
+#, python-brace-format
+msgid "Saved to {folder}: {count}"
+msgstr "Opgeslagen in {folder}: {count}"
+
+msgid "No shortcut"
+msgstr "Geen sneltoets"
+
+#, python-brace-format
+msgid "Shortcut: {keys}"
+msgstr "Sneltoets: {keys}"
 
 msgid "BigLinux TTS"
 msgstr "BigLinux TTS"
@@ -672,6 +693,9 @@ msgstr "Installeer eerst stemmen voor {engine}"
 msgid "Neural"
 msgstr "Neuraal"
 
+msgid "High quality"
+msgstr "Hoge kwaliteit"
+
 #, python-brace-format
 msgid "Voices available: {count}"
 msgstr "Beschikbare stemmen: {count}"
@@ -707,9 +731,6 @@ msgstr "Piper is niet beschikbaar"
 #, python-brace-format
 msgid "No Piper voice package was found in your repositories ({packages}). Update the system (sudo pacman -Syu) and try again."
 msgstr "Er is geen Piper-stempakket gevonden in uw repository's ({packages}). Werk het systeem bij (sudo pacman -Syu) en probeer het opnieuw."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Piper provides natural neural voices. These packages will be installed:"
 msgstr "Piper biedt natuurlijke neurale stemmen. De volgende pakketten worden geïnstalleerd:"
@@ -769,12 +790,18 @@ msgstr "Voer tekst in om te testen"
 msgid "Volume is at zero — increasing to minimum for test"
 msgstr "Volume is op nul — verhogen naar minimum voor test"
 
+msgid "Loading voice…"
+msgstr "Stem laden…"
+
 #, python-brace-format
 msgid "Preparing {voice}. Speech starts in a moment."
 msgstr "{voice} wordt voorbereid. Het voorlezen begint zo."
 
 msgid "Preparing the voice. Speech starts in a moment."
 msgstr "De stem wordt voorbereid. Het voorlezen begint zo."
+
+msgid "Speaking…"
+msgstr "Spreken…"
 
 #, python-brace-format
 msgid "Press {shortcut} again to stop."
@@ -783,11 +810,11 @@ msgstr "Druk nogmaals op {shortcut} om te stoppen."
 msgid "Use Stop to end the reading."
 msgstr "Gebruik Stoppen om het voorlezen te beëindigen."
 
+msgid "Could not read the text"
+msgstr "Kan de tekst niet lezen"
+
 msgid "The speech engine reported a problem."
 msgstr "De spraakengine heeft een probleem gemeld."
-
-msgid "Stopped"
-msgstr "Gestopt"
 
 msgid "Reading was stopped."
 msgstr "Het voorlezen is gestopt."
@@ -847,9 +874,6 @@ msgstr "Laden"
 
 msgid "Speaking"
 msgstr "Spreekt"
-
-msgid "Error"
-msgstr "Fout"
 
 #, python-brace-format
 msgid "{engine}: {state}"
@@ -955,290 +979,266 @@ msgstr "Dialoogvenster tonen bij opstarten"
 msgid "Let's Start"
 msgstr "Laten we beginnen"
 
-msgid "Unknown"
-msgstr "Onbekend"
+msgid "The installation was cancelled: the administrator password was not confirmed."
+msgstr "De installatie is geannuleerd: het beheerderswachtwoord is niet bevestigd."
 
 #, python-brace-format
-msgid "Today, {time}"
-msgstr "Vandaag, {time}"
+msgid "{packages} is not available in your repositories. Update the system (sudo pacman -Syu) and try again."
+msgstr "{packages} is niet beschikbaar in uw repository's. Werk het systeem bij (sudo pacman -Syu) en probeer het opnieuw."
+
+msgid "Another program is installing or updating packages. Wait for it to finish and try again."
+msgstr "Een ander programma is pakketten aan het installeren of bijwerken. Wacht tot het klaar is en probeer het opnieuw."
+
+msgid "The packages could not be downloaded. Check your internet connection and try again."
+msgstr "De pakketten konden niet worden gedownload. Controleer uw internetverbinding en probeer het opnieuw."
 
 #, python-brace-format
-msgid "Yesterday, {time}"
-msgstr "Gisteren, {time}"
-
-msgid "Select this reading"
-msgstr "Deze voorlezing selecteren"
-
-msgid "(text not kept)"
-msgstr "(tekst niet bewaard)"
-
-msgid "Show more"
-msgstr "Meer tonen"
-
-msgid "Copy text"
-msgstr "Tekst kopiëren"
-
-msgid "Read again with the current voice"
-msgstr "Opnieuw voorlezen met de huidige stem"
-
-msgid "More actions"
-msgstr "Meer acties"
-
-msgid "Reading stopped before the end"
-msgstr "Voorlezen gestopt vóór het einde"
-
-msgid "The engine failed during this reading"
-msgstr "De engine faalde tijdens deze voorlezing"
-
-msgid "Audio not kept for this reading"
-msgstr "Audio van deze voorlezing niet bewaard"
+msgid "{packages} conflicts with installed files or packages. See the details."
+msgstr "{packages} conflicteert met geïnstalleerde bestanden of pakketten. Zie de details."
 
 #, python-brace-format
-msgid "{engine} reading, {when}"
-msgstr "Voorlezing met {engine}, {when}"
-
-msgid "Save audio as…"
-msgstr "Audio opslaan als…"
-
-msgid "Open file location"
-msgstr "Bestandlocatie openen"
-
-msgid "Delete"
-msgstr "Verwijderen"
-
-msgid "Show less"
-msgstr "Minder tonen"
-
-msgid "Text copied"
-msgstr "Tekst gekopieerd"
-
-msgid "Save audio as"
-msgstr "Audio opslaan als"
-
-msgid "Audio saved"
-msgstr "Audio opgeslagen"
-
-msgid "Could not save the audio"
-msgstr "Kon de audio niet opslaan"
-
-msgid "Saving is off: new readings are not kept."
-msgstr "Opslaan staat uit: nieuwe voorlezingen worden niet bewaard."
-
-msgid "Turn On"
-msgstr "Inschakelen"
-
-msgid "Search text, voice, engine or date…"
-msgstr "Zoek tekst, stem, engine of datum…"
-
-msgid "All dates"
-msgstr "Alle datums"
-
-msgid "Today"
-msgstr "Vandaag"
-
-msgid "Yesterday"
-msgstr "Gisteren"
-
-msgid "Last 7 days"
-msgstr "Laatste 7 dagen"
-
-msgid "Filter by date"
-msgstr "Filteren op datum"
-
-msgid "All engines"
-msgstr "Alle engines"
-
-msgid "Filter by engine"
-msgstr "Filteren op engine"
-
-msgid "Newest first"
-msgstr "Nieuwste eerst"
-
-msgid "Sort order"
-msgstr "Sorteervolgorde"
-
-msgid "Show as grid"
-msgstr "Als raster tonen"
-
-msgid "Select readings"
-msgstr "Voorlezingen selecteren"
-
-msgid "Select All"
-msgstr "Alles selecteren"
-
-msgid "Deselect All"
-msgstr "Deselecteer alles"
-
-msgid "Save the selected readings to a folder"
-msgstr "De geselecteerde voorlezingen in een map opslaan"
-
-msgid "Save selected"
-msgstr "Selectie opslaan"
-
-msgid "Delete selected"
-msgstr "Verwijder geselecteerd"
-
-msgid "History entries"
-msgstr "Geschiedenisitems"
-
-msgid "The history could not be read"
-msgstr "De geschiedenis kon niet worden gelezen"
+msgid "Not enough free disk space to install {packages}."
+msgstr "Onvoldoende vrije schijfruimte om {packages} te installeren."
 
 #, python-brace-format
-msgid "Check the permissions of the folder {folder}."
-msgstr "Controleer de rechten van de map {folder}."
+msgid "{packages} could not be installed. See the details."
+msgstr "{packages} kon niet worden geïnstalleerd. Zie de details."
 
-msgid "No readings found"
-msgstr "Geen voorlezingen gevonden"
+msgid "Nothing to install."
+msgstr "Niets te installeren."
 
-msgid "Try other words or another date or engine."
-msgstr "Probeer andere woorden of een andere datum of engine."
+msgid "pkexec is not installed (package polkit)."
+msgstr "pkexec is niet geïnstalleerd (pakket polkit)."
 
-msgid "Clear Filters"
-msgstr "Filters wissen"
-
-msgid "No readings yet"
-msgstr "Nog geen voorlezingen"
+msgid "The installation took too long and was stopped."
+msgstr "De installatie duurde te lang en is gestopt."
 
 #, python-brace-format
-msgid "Everything you listen to will appear here, with its audio. It is stored only on this computer, in {folder}."
-msgstr "Alles waar u naar luistert, verschijnt hier, met de audio. Het wordt alleen op deze computer opgeslagen, in {folder}."
+msgid "{packages} could not be built from the AUR. See the details."
+msgstr "{packages} kon niet vanuit de AUR worden gebouwd. Zie de details."
+
+msgid "This key combination is not valid."
+msgstr "Deze toetscombinatie is ongeldig."
+
+msgid "Use Ctrl, Alt or Super together with a key, so normal typing is not affected."
+msgstr "Gebruik Ctrl, Alt of Super samen met een toets, zodat normaal typen niet wordt beïnvloed."
+
+msgid "This key combination is not supported by the desktop."
+msgstr "Deze toetscombinatie wordt niet ondersteund door de desktop."
 
 #, python-brace-format
-msgid "Saving is off. Turn it on to keep what you listen to, with its audio — only on this computer, in {folder}."
-msgstr "Opslaan staat uit. Schakel het in om te bewaren waar u naar luistert, met de audio — alleen op deze computer, in {folder}."
+msgid "{shortcut} is already used by: {names}. Choose another shortcut."
+msgstr "{shortcut} wordt al gebruikt door: {names}. Kies een andere sneltoets."
 
-msgid "Turn On History"
-msgstr "Geschiedenis inschakelen"
+msgid "The desktop did not accept the shortcut. Is the KDE global shortcuts service running?"
+msgstr "De desktop heeft de sneltoets niet geaccepteerd. Draait de KDE-dienst voor globale sneltoetsen?"
 
-msgid "Oldest first"
-msgstr "Oudste eerst"
+msgid "The desktop did not confirm the new shortcut."
+msgstr "De desktop heeft de nieuwe sneltoets niet bevestigd."
 
-msgid "Show as list"
-msgstr "Als lijst tonen"
+msgid "The shortcut was saved, but the desktop could not confirm it yet."
+msgstr "De sneltoets is opgeslagen, maar de desktop kon hem nog niet bevestigen."
 
-#, python-brace-format
-msgid "Selected: {count}"
-msgstr "Geselecteerd: {count}"
+msgid "Could not register the shortcut on this desktop. Add it in the system keyboard settings with the command biglinux-tts-speak."
+msgstr "Kan de sneltoets niet registreren op deze desktop. Voeg hem toe in de toetsenbordinstellingen van het systeem met de opdracht biglinux-tts-speak."
 
-msgid "Reading deleted"
-msgstr "Voorlezing verwijderd"
+msgid "Extra low quality"
+msgstr "Zeer lage kwaliteit"
 
-msgid "Undo"
-msgstr "Ongedaan maken"
+msgid "Low quality"
+msgstr "Lage kwaliteit"
 
-msgid "Delete the selected readings?"
-msgstr "Geselecteerde voorlezingen verwijderen?"
+msgid "Medium quality"
+msgstr "Gemiddelde kwaliteit"
 
-#, python-brace-format
-msgid "Readings: {count}. Their audio and text files are moved to the Trash."
-msgstr "Voorlezingen: {count}. Hun audio- en tekstbestanden worden naar de prullenbak verplaatst."
+msgid "Kokoro is not installed. Install the biglinux-kokoro-tts package."
+msgstr "Kokoro is niet geïnstalleerd. Installeer het pakket biglinux-kokoro-tts."
 
-#, python-brace-format
-msgid "Moved to the Trash: {count}"
-msgstr "Naar de prullenbak verplaatst: {count}"
+msgid "The Kokoro voice model is missing. Reinstall the biglinux-kokoro-tts package."
+msgstr "Het Kokoro-stemmodel ontbreekt. Installeer het pakket biglinux-kokoro-tts opnieuw."
 
-msgid "Save the selected readings"
-msgstr "De geselecteerde voorlezingen opslaan"
+msgid "No Kokoro voices were found. Open the Voice Manager to download a voice."
+msgstr "Geen Kokoro-stemmen gevonden. Open Stembeheer om een stem te downloaden."
 
-#, python-brace-format
-msgid "Saved to {folder}: {count}"
-msgstr "Opgeslagen in {folder}: {count}"
-
-msgid "No shortcut"
-msgstr "Geen sneltoets"
+msgid "This Kokoro voice is not installed. Open the Voice Manager to download it."
+msgstr "Deze Kokoro-stem is niet geïnstalleerd. Open Stembeheer om hem te downloaden."
 
 #, python-brace-format
-msgid "Shortcut: {keys}"
-msgstr "Sneltoets: {keys}"
-
-msgid "Piper engine"
-msgstr "Piper-engine"
-
-msgid "Voice Manager"
-msgstr "Stembeheerder"
-
-msgid "Search voices by name or language…"
-msgstr "Stemmen zoeken op naam of taal…"
-
-msgid "Loading available voices…"
-msgstr "Beschikbare stemmen laden…"
-
-msgid "No Voice Packages Found"
-msgstr "Geen spraakpakketten gevonden"
-
-msgid "Could not find any TTS voice packages from pacman repositories."
-msgstr "Kon kon TTS-stem pakketten gevonden in de pacman-repositories."
-
-msgid "High quality offline voices"
-msgstr "Hoge kwaliteit offline stemmen"
-
-msgid "Neural network voices — natural sounding"
-msgstr "Neurale netwerkstemmen - natuurlijk klinkend"
-
-msgid "Lightweight multi-language synthesizer"
-msgstr "Lichte meertalige synthesizer"
-
-msgid "Neural TTS — high quality multilingual voices (82M)"
-msgstr "Neurale TTS - hoogwaardige meertalige stemmen (82M)"
+msgid "Unknown voice: {voice_id}"
+msgstr "Onbekende stem: {voice_id}"
 
 #, python-brace-format
-msgid "Install {name}"
-msgstr "Installeer {name}"
+msgid "Invalid voice id: {voice_id}"
+msgstr "Ongeldige stem-ID: {voice_id}"
+
+msgid "The voice file is larger than expected."
+msgstr "Het stembestand is groter dan verwacht."
 
 #, python-brace-format
-msgid "Remove {name}"
-msgstr "Verwijder {name}"
+msgid "incomplete download ({received} of {total} bytes)"
+msgstr "onvolledige download ({received} van {total} bytes)"
 
-msgid "Installed"
-msgstr "Geïnstalleerd"
-
-#, python-brace-format
-msgid "Remove {name}?"
-msgstr "{name} verwijderen?"
-
-msgid "The voice will no longer be available for reading. You can install it again later."
-msgstr "De stem is dan niet meer beschikbaar om voor te lezen. U kunt hem later opnieuw installeren."
-
-msgid "Remove"
-msgstr "Verwijderen"
+msgid "empty response"
+msgstr "leeg antwoord"
 
 #, python-brace-format
-msgid "Downloading {name}…"
-msgstr "{name} downloaden…"
+msgid "Could not download the voice. Check your internet connection and try again. ({error})"
+msgstr "Kan de stem niet downloaden. Controleer uw internetverbinding en probeer het opnieuw. ({error})"
 
 #, python-brace-format
-msgid "Downloading {name}… {done} of {total} KB"
-msgstr "{name} downloaden… {done} van {total} KB"
-
-msgid "Operation timed out"
-msgstr "De bewerking is verlopen."
-
-msgid "pkexec or pacman not found"
-msgstr "pkexec of pacman niet gevonden"
-
-msgid "Download cancelled"
-msgstr "Download geannuleerd"
-
-msgid "Failed"
-msgstr "Mislukt"
-
-msgid "Removal Failed"
-msgstr "Verwijdering mislukt"
-
-msgid "Unknown error"
-msgstr "Onbekende fout"
+msgid "The downloaded voice file is damaged. Try again. ({error})"
+msgstr "Het gedownloade stembestand is beschadigd. Probeer het opnieuw. ({error})"
 
 #, python-brace-format
-msgid "Play a sample of {name}"
-msgstr "Een fragment van {name} afspelen"
-
-msgid "Stop the sample"
-msgstr "Het fragment stoppen"
-
-msgid "The sample could not be played."
-msgstr "Het fragment kon niet worden afgespeeld."
+msgid "Not enough disk space to install the voice ({size} MB needed)."
+msgstr "Onvoldoende schijfruimte om de stem te installeren ({size} MB nodig)."
 
 #, python-brace-format
-msgid "The sample could not be played: {program} is not installed."
-msgstr "Het fragment kon niet worden afgespeeld: {program} is niet geïnstalleerd."
+msgid "Cannot create user voices directory: {error}"
+msgstr "Kan de map voor gebruikersstemmen niet aanmaken: {error}"
+
+#, python-brace-format
+msgid "Failed to add voice: {error}"
+msgstr "Kan stem niet toevoegen: {error}"
+
+msgid "Cannot remove base voice"
+msgstr "Kan basisstem niet verwijderen"
+
+msgid "No user voices installed"
+msgstr "Geen gebruikersstemmen geïnstalleerd"
+
+#, python-brace-format
+msgid "Failed to remove voice: {error}"
+msgstr "Kan stem niet verwijderen: {error}"
+
+msgid "Read or stop the selected text"
+msgstr "Geselecteerde tekst voorlezen of stoppen"
+
+msgid "Could not play audio. Check that alsa-utils (aplay) is installed."
+msgstr "Kan audio niet afspelen. Controleer of alsa-utils (aplay) is geïnstalleerd."
+
+#, python-brace-format
+msgid "{engine} could not start. Check that it is installed."
+msgstr "{engine} kon niet starten. Controleer of het is geïnstalleerd."
+
+msgid "RHVoice is not installed. Install the rhvoice package."
+msgstr "RHVoice is niet geïnstalleerd. Installeer het pakket rhvoice."
+
+msgid "espeak-ng could not read this text. Check that espeak-ng is installed."
+msgstr "espeak-ng kon deze tekst niet lezen. Controleer of espeak-ng is geïnstalleerd."
+
+msgid "The selected Piper voice is not installed. Choose another voice in the Voice Manager."
+msgstr "De geselecteerde Piper-stem is niet geïnstalleerd. Kies een andere stem in Stembeheer."
+
+msgid "Piper could not read this text. Try another voice."
+msgstr "Piper kon deze tekst niet lezen. Probeer een andere stem."
+
+#, python-brace-format
+msgid "{engine} crashed while reading the text."
+msgstr "{engine} is gecrasht tijdens het lezen van de tekst."
+
+#, python-brace-format
+msgid "{engine} stopped with an error and could not read the text."
+msgstr "{engine} is gestopt met een fout en kon de tekst niet lezen."
+
+msgid "Read the selected text aloud"
+msgstr "De geselecteerde tekst voorlezen"
+
+msgid "Could not read the text."
+msgstr "Kan de tekst niet lezen."
+
+msgid "Reading text"
+msgstr "Tekst wordt gelezen"
+
+msgid "Playing…"
+msgstr "Spelen…"
+
+msgid "Install wl-clipboard (Wayland) or xclip (X11) so selected text can be read."
+msgstr "Installeer wl-clipboard (Wayland) of xclip (X11) zodat geselecteerde tekst kan worden gelezen."
+
+msgid "Select some text first, then press the shortcut."
+msgstr "Selecteer eerst tekst en druk dan op de sneltoets."
+
+msgid "No text selected"
+msgstr "Geen tekst geselecteerd"
+
+msgid "Read text"
+msgstr "Lees tekst"
+
+msgid "Settings"
+msgstr "Instellingen"
+
+msgid "Quit"
+msgstr "Afsluiten"
+
+msgid "Paused"
+msgstr "Gepauzeerd"
+
+msgid "BigLinux Team"
+msgstr "BigLinux-team"
+
+msgid "BigLinux TTS turns selected or typed text into speech with local voices, global shortcuts and precise playback controls."
+msgstr "BigLinux TTS zet geselecteerde of getypte tekst om in spraak met lokale stemmen, globale sneltoetsen en nauwkeurige afspeelbediening."
+
+msgid "BigLinux TTS began as a web-based tool in 2021 and evolved into a native GTK4 application with multiple speech engines, voice management and a Rust audio engine."
+msgstr "BigLinux TTS begon in 2021 als webtool en groeide uit tot een native GTK4-toepassing met meerdere spraakengines, stembeheer en een audio-engine in Rust."
+
+msgid "Could not register the shortcut."
+msgstr "Kan de sneltoets niet registreren."
+
+#, python-brace-format
+msgid "Select text and press {shortcut} to hear it"
+msgstr "Selecteer tekst en druk op {shortcut} om ernaar te luisteren"
+
+msgid "Text-to-speech assistant"
+msgstr "Tekst-naar-spraak-assistent"
+
+msgid "Show settings"
+msgstr "Instellingen tonen"
+
+msgid "Back"
+msgstr "Terug"
+
+msgid "Text narrator"
+msgstr "Voorlezer"
+
+msgid "The shortcut is not active — open Advanced options to fix it"
+msgstr "De sneltoets is niet actief — open Geavanceerde opties om dit op te lossen"
+
+#, python-brace-format
+msgid "Select text and press {key} to read it aloud"
+msgstr "Selecteer tekst en druk op {key} om deze voor te laten lezen"
+
+msgid "Show tray icon"
+msgstr "Pictogram in systeemvak tonen"
+
+msgid "Restore Defaults…"
+msgstr "Standaardwaarden herstellen…"
+
+msgid "Welcome"
+msgstr "Welkom"
+
+msgid "About BigLinux TTS"
+msgstr "Over BigLinux TTS"
+
+msgid "Main menu"
+msgstr "Hoofdmenu"
+
+msgid "Restore settings?"
+msgstr "Instellingen herstellen?"
+
+msgid "This will return all adjustments to their original defaults."
+msgstr "Dit zal alle aanpassingen terugzetten naar de oorspronkelijke standaardwaarden."
+
+msgid "Restore"
+msgstr "Herstellen"
+
+msgid "BigLinux Text-to-Speech — Read selected text aloud"
+msgstr "BigLinux Tekst-naar-spraak — Geselecteerde tekst voorlezen"
+
+msgid "Enable debug logging"
+msgstr "Debuglogboek inschakelen"
+
+#, python-brace-format
+msgid "{language} ({region})"
+msgstr "{language} ({region})"
